@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yryz.writer.modules.demo.dao.persistence.DemoDao">    
+<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,comment_value,comment_name,comment_type,create_date,last_update_date,create_user_id,last_update_user_id
+    </sql>
+    
+    <select id="findConfigByName" resultType="com.yryz.demo.api.demo.entity.Config">
+        select <include refid="Base_Column_List"/> from yryz_config T where T.comment_name=#{commentName}
+    </select>
+</mapper>

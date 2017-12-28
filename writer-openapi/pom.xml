@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.yryz.writer</groupId>
+    <artifactId>writer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>writer-openapi</artifactId>
+  <packaging>war</packaging>
+  
+   <dependencies>
+      <dependency>
+  	    <groupId>com.yryz.writer</groupId>
+  	    <artifactId>writer-common</artifactId>
+  	    <version>${project.version}</version>
+  	  </dependency>
+   
+      <dependency>
+          <groupId>com.yryz.writer</groupId>
+          <artifactId>writer-demo-api</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+   
+      <!-- servlet、jsp setting -->
+      <dependency>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+          <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>org.aspectj</groupId>
+          <artifactId>aspectjrt</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>org.aspectj</groupId>
+          <artifactId>aspectjweaver</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+      </dependency>
+
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+      </dependency>
+
+  </dependencies>
+  
+  <properties>
+	<component.version>1.0-SNAPSHOT</component.version>
+	<jetty.version>6.1.26</jetty.version>
+	<cat.version>1.4.0</cat.version>
+  </properties>
+
+  <build>
+    <finalName>writer-openapi</finalName>
+  </build>
+</project>
