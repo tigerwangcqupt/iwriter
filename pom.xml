@@ -199,6 +199,7 @@
   	<module>writer-config</module>
   	<module>writer-common</module>
   	<module>writer-openapi</module>
+    <module>writer-user</module>
   	<module>writer-demo</module>
   </modules>
 </project>
