@@ -9,7 +9,7 @@
 
     <dubbo:application name="${dubbo.application.name}"/>
     
-    <dubbo:protocol name="dubbo" port="20980"/>
+    <dubbo:protocol name="dubbo" port="21011"/>
 
     <dubbo:registry id="yryz-new" address="${dubbo.registry.address}" file="${dubbo.registry.file}"/>
 

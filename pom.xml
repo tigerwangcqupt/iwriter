@@ -199,7 +199,8 @@
   	<module>writer-config</module>
   	<module>writer-common</module>
   	<module>writer-openapi</module>
-  
-  	<module>writer-demo</module>
+    <module>writer-event</module>
+    <module>writer-article</module>
+    <module>writer-user</module>
   </modules>
 </project>

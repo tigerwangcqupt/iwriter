@@ -10,7 +10,7 @@ public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -1599925460585783120L;
 
-    protected Integer revision;
+    //protected Integer revision;
     protected String createUserId;
     protected Date createDate;
     protected String lastUpdateUserId;
@@ -19,20 +19,13 @@ public abstract class BaseEntity implements Serializable {
     /**
      * 租户ID
      */
-    private  String tenantId;
+    //private  String tenantId;
 
     /**
      * 功能枚举
      */
     private  String moduleEnum;
 
-    public Integer getRevision() {
-        return revision;
-    }
-
-    public void setRevision(Integer revision) {
-        this.revision = revision;
-    }
 
     public String getCreateUserId() {
         return createUserId;
@@ -64,14 +57,6 @@ public abstract class BaseEntity implements Serializable {
 
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
     }
 
     public String getModuleEnum() {
