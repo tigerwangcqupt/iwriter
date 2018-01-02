@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>writer-config-service</artifactId>
-
+	<packaging>war</packaging>
 	<name>writer-config-service</name>
 	<url>http://maven.apache.org</url>
 

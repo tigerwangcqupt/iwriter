@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.draft.dao.persistence.DraftDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.draft.entity.Draft">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="draft_type" property="draftType" jdbcType="TINYINT"/>
+		<result column="task_flag" property="taskFlag" jdbcType="TINYINT"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+		<result column="content_html" property="contentHtml" jdbcType="VARCHAR"/>
+		<result column="video_url" property="videoUrl" jdbcType="VARCHAR"/>
+		<result column="cover_img_url" property="coverImgUrl" jdbcType="VARCHAR"/>
+		<result column="description" property="description" jdbcType="VARCHAR"/>
+		<result column="app_id" property="appId" jdbcType="BIGINT"/>
+		<result column="app_name" property="appName" jdbcType="VARCHAR"/>
+		<result column="classify_name" property="classifyName" jdbcType="VARCHAR"/>
+		<result column="label_name" property="labelName" jdbcType="VARCHAR"/>
+		<result column="draft_status" property="draftStatus" jdbcType="TINYINT"/>
+		<result column="reason" property="reason" jdbcType="VARCHAR"/>
+		<result column="suggest" property="suggest" jdbcType="VARCHAR"/>
+		<result column="draft_fee" property="draftFee" jdbcType="DECIMAL"/>
+		<result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,draft_type,task_flag,title,content_html,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
+    </sql>
+
+     <!-- 查询Draft详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_draft
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除Draft-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_draft
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增Draft-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.draft.entity.Draft">
+	    insert into yryz_draft (kid,draft_type,task_flag,title,content_html,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{draftType,jdbcType=TINYINT}
+				,#{taskFlag,jdbcType=TINYINT}
+				,#{title,jdbcType=VARCHAR}
+				,#{contentHtml,jdbcType=VARCHAR}
+				,#{videoUrl,jdbcType=VARCHAR}
+				,#{coverImgUrl,jdbcType=VARCHAR}
+				,#{description,jdbcType=VARCHAR}
+				,#{appId,jdbcType=BIGINT}
+				,#{appName,jdbcType=VARCHAR}
+				,#{classifyName,jdbcType=VARCHAR}
+				,#{labelName,jdbcType=VARCHAR}
+				,#{draftStatus,jdbcType=TINYINT}
+				,#{reason,jdbcType=VARCHAR}
+				,#{suggest,jdbcType=VARCHAR}
+				,#{draftFee,jdbcType=DECIMAL}
+				,#{moduleEnum,jdbcType=VARCHAR}
+				,#{createUserId,jdbcType=VARCHAR}
+			,NOW()
+				,#{lastUpdateUserId,jdbcType=VARCHAR}
+			,NOW()
+				,#{delFlag,jdbcType=TINYINT}
+				,#{shelveFlag,jdbcType=TINYINT}
+	    )
+	</insert>
+	
+	<!--按需新增Draft-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.draft.entity.Draft">
+	    insert into yryz_draft 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="draftType != null">
+			draft_type,
+	    </if>
+        <if test="taskFlag != null">
+			task_flag,
+	    </if>
+        <if test="title != null and title != ''">
+			title,
+	    </if>
+        <if test="contentHtml != null and contentHtml != ''">
+			content_html,
+	    </if>
+        <if test="videoUrl != null and videoUrl != ''">
+			video_url,
+	    </if>
+        <if test="coverImgUrl != null and coverImgUrl != ''">
+			cover_img_url,
+	    </if>
+        <if test="description != null and description != ''">
+			description,
+	    </if>
+        <if test="appId != null">
+			app_id,
+	    </if>
+        <if test="appName != null and appName != ''">
+			app_name,
+	    </if>
+        <if test="classifyName != null and classifyName != ''">
+			classify_name,
+	    </if>
+        <if test="labelName != null and labelName != ''">
+			label_name,
+	    </if>
+        <if test="draftStatus != null">
+			draft_status,
+	    </if>
+        <if test="reason != null and reason != ''">
+			reason,
+	    </if>
+        <if test="suggest != null and suggest != ''">
+			suggest,
+	    </if>
+        <if test="draftFee != null">
+			draft_fee,
+	    </if>
+        <if test="moduleEnum != null and moduleEnum != ''">
+			module_enum,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			last_update_user_id,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+        <if test="delFlag != null">
+			del_flag,
+	    </if>
+        <if test="shelveFlag != null">
+			shelve_flag,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="draftType != null">
+			#{draftType,jdbcType=TINYINT},
+	    </if>
+        <if test="taskFlag != null">
+			#{taskFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="title != null and title != ''">
+			#{title,jdbcType=VARCHAR},
+	    </if>
+        <if test="contentHtml != null and contentHtml != ''">
+			#{contentHtml,jdbcType=VARCHAR},
+	    </if>
+        <if test="videoUrl != null and videoUrl != ''">
+			#{videoUrl,jdbcType=VARCHAR},
+	    </if>
+        <if test="coverImgUrl != null and coverImgUrl != ''">
+			#{coverImgUrl,jdbcType=VARCHAR},
+	    </if>
+        <if test="description != null and description != ''">
+			#{description,jdbcType=VARCHAR},
+	    </if>
+        <if test="appId != null">
+			#{appId,jdbcType=BIGINT},
+	    </if>
+        <if test="appName != null and appName != ''">
+			#{appName,jdbcType=VARCHAR},
+	    </if>
+        <if test="classifyName != null and classifyName != ''">
+			#{classifyName,jdbcType=VARCHAR},
+	    </if>
+        <if test="labelName != null and labelName != ''">
+			#{labelName,jdbcType=VARCHAR},
+	    </if>
+        <if test="draftStatus != null">
+			#{draftStatus,jdbcType=TINYINT},
+	    </if>
+        <if test="reason != null and reason != ''">
+			#{reason,jdbcType=VARCHAR},
+	    </if>
+        <if test="suggest != null and suggest != ''">
+			#{suggest,jdbcType=VARCHAR},
+	    </if>
+        <if test="draftFee != null">
+			#{draftFee,jdbcType=DECIMAL},
+	    </if>
+        <if test="moduleEnum != null and moduleEnum != ''">
+			#{moduleEnum,jdbcType=VARCHAR},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			#{lastUpdateUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="delFlag != null">
+			#{delFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="shelveFlag != null">
+			#{shelveFlag,jdbcType=TINYINT},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改Draft-->   
+    <update id="update" parameterType="com.yryz.writer.modules.draft.entity.Draft">
+        update yryz_draft
+        <set>
+             <if test="draftType != null">
+    			draft_type = #{draftType,jdbcType=TINYINT},
+    		</if>
+             <if test="taskFlag != null">
+    			task_flag = #{taskFlag,jdbcType=TINYINT},
+    		</if>
+            <if test="title != null and title != ''">
+    			title = #{title,jdbcType=VARCHAR},
+    		</if>
+            <if test="contentHtml != null and contentHtml != ''">
+    			content_html = #{contentHtml,jdbcType=VARCHAR},
+    		</if>
+            <if test="videoUrl != null and videoUrl != ''">
+    			video_url = #{videoUrl,jdbcType=VARCHAR},
+    		</if>
+            <if test="coverImgUrl != null and coverImgUrl != ''">
+    			cover_img_url = #{coverImgUrl,jdbcType=VARCHAR},
+    		</if>
+            <if test="description != null and description != ''">
+    			description = #{description,jdbcType=VARCHAR},
+    		</if>
+             <if test="appId != null">
+    			app_id = #{appId,jdbcType=BIGINT},
+    		</if>
+            <if test="appName != null and appName != ''">
+    			app_name = #{appName,jdbcType=VARCHAR},
+    		</if>
+            <if test="classifyName != null and classifyName != ''">
+    			classify_name = #{classifyName,jdbcType=VARCHAR},
+    		</if>
+            <if test="labelName != null and labelName != ''">
+    			label_name = #{labelName,jdbcType=VARCHAR},
+    		</if>
+             <if test="draftStatus != null">
+    			draft_status = #{draftStatus,jdbcType=TINYINT},
+    		</if>
+            <if test="reason != null and reason != ''">
+    			reason = #{reason,jdbcType=VARCHAR},
+    		</if>
+            <if test="suggest != null and suggest != ''">
+    			suggest = #{suggest,jdbcType=VARCHAR},
+    		</if>
+             <if test="draftFee != null">
+    			draft_fee = #{draftFee,jdbcType=DECIMAL},
+    		</if>
+            <if test="moduleEnum != null and moduleEnum != ''">
+    			module_enum = #{moduleEnum,jdbcType=VARCHAR},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="delFlag != null">
+    			del_flag = #{delFlag,jdbcType=TINYINT},
+    		</if>
+             <if test="shelveFlag != null">
+    			shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询Draft列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_draft where del_flag = 0
+
+    </select>
+    
+</mapper>
