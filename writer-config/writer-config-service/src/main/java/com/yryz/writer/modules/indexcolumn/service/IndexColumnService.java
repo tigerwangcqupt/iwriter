@@ -2,7 +2,6 @@ package com.yryz.writer.modules.indexcolumn.service;
 
 import com.yryz.common.service.BaseService;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
-import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
 import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 import org.springframework.stereotype.Repository;
 

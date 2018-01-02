@@ -1,7 +1,6 @@
 package com.yryz.writer.indexColumn;
 
 import com.yryz.component.rpc.RpcResponse;
-import com.yryz.component.rpc.dto.PageList;
 
 
 import com.yryz.writer.modules.indexcolumn.IndexColumnApi;
@@ -31,6 +30,7 @@ public class IndexColumnController {
    @RequestMapping(value="/list", method = RequestMethod.GET)
    public RpcResponse<List<IndexColumnVo>> list(IndexColumnDto indexColumnDto) {
 //        return indexColumnApi.list(indexColumnDto);
+
       return indexColumnApi.list();
    }
 

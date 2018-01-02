@@ -1,7 +1,6 @@
 package com.yryz.writer.modules.indexcolumn.service.impl;
 
 import com.yryz.common.utils.PageUtils;
-import com.github.pagehelper.PageInfo;
 import com.yryz.common.dao.BaseDao;
 import com.yryz.common.service.BaseServiceImpl;
 import com.yryz.common.web.PageModel;

@@ -1,6 +1,5 @@
 package com.yryz.writer.modules.indexcolumn.vo;
 import java.io.Serializable;
-import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
 
 /**
  * @ClassName: IndexColumnVo
