@@ -2,9 +2,9 @@ package com.yryz.writer.modules.indexcolumn;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
-import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
+import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 
 import java.util.List;
 
