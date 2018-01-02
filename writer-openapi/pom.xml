@@ -12,18 +12,6 @@
   <packaging>war</packaging>
   
    <dependencies>
-      <dependency>
-  	    <groupId>com.yryz.writer</groupId>
-  	    <artifactId>writer-common</artifactId>
-  	    <version>${project.version}</version>
-  	  </dependency>
-   
-      <dependency>
-          <groupId>com.yryz.writer</groupId>
-          <artifactId>writer-demo-api</artifactId>
-          <version>${project.version}</version>
-      </dependency>
-   
       <!-- servlet、jsp setting -->
       <dependency>
           <groupId>javax.servlet</groupId>
@@ -50,6 +38,18 @@
           <groupId>com.fasterxml.jackson.core</groupId>
           <artifactId>jackson-databind</artifactId>
       </dependency>
+
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-common</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-event-api</artifactId>
+           <version>${project.version}</version>
+       </dependency>
 
        <dependency>
            <groupId>com.yryz.writer</groupId>
