@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.indexcolumn.dao.persistence.IndexColumnDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.indexcolumn.entity.IndexColumn">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="item_name" property="itemName" jdbcType="VARCHAR"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,item_name,url,create_user_id,create_date,last_update_date
+    </sql>
+
+     <!-- 查询IndexColumn详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_writer_index_column
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除IndexColumn-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_writer_index_column
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增IndexColumn-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.indexcolumn.entity.IndexColumn">
+	    insert into yryz_writer_index_column (kid,item_name,url,create_user_id,create_date,last_update_date)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{itemName,jdbcType=VARCHAR}
+				,#{url,jdbcType=VARCHAR}
+				,#{createUserId,jdbcType=VARCHAR}
+			,NOW()
+			,NOW()
+	    )
+	</insert>
+	
+	<!--按需新增IndexColumn-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.indexcolumn.entity.IndexColumn">
+	    insert into yryz_writer_index_column 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="itemName != null and itemName != ''">
+			item_name,
+	    </if>
+        <if test="url != null and url != ''">
+			url,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="itemName != null and itemName != ''">
+			#{itemName,jdbcType=VARCHAR},
+	    </if>
+        <if test="url != null and url != ''">
+			#{url,jdbcType=VARCHAR},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改IndexColumn-->   
+    <update id="update" parameterType="com.yryz.writer.modules.indexcolumn.entity.IndexColumn">
+        update yryz_writer_index_column
+        <set>
+            <if test="itemName != null and itemName != ''">
+    			item_name = #{itemName,jdbcType=VARCHAR},
+    		</if>
+            <if test="url != null and url != ''">
+    			url = #{url,jdbcType=VARCHAR},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询IndexColumn列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_writer_index_column where del_flag = 0
+
+    </select>
+    
+</mapper>
