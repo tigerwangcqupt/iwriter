@@ -10,5 +10,7 @@
     <!-- bank -->
     <dubbo:reference id="bankApi"
                      interface="com.yryz.writer.modules.bank.BankApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
+    <dubbo:reference id="indexColumnApi"
+                     interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
 
 </beans>

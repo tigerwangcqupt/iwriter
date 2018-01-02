@@ -6,6 +6,8 @@ import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
 
+import java.util.List;
+
 /**
  * 
  * @ClassName: IndexColumnApi
@@ -36,5 +38,11 @@ public interface IndexColumnApi {
     * @return
     * */
     RpcResponse<PageList<IndexColumnVo>> list(IndexColumnDto indexColumnDto);
+
+	/**
+	 * 获取IndexColumn列表
+	 * @return
+	 * */
+	RpcResponse<List<IndexColumnVo>> list();
 
 }

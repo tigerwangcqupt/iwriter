@@ -3,16 +3,17 @@ package com.yryz.writer.indexColumn;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
-import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
-import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
-import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
-import com.yryz.writer.modules.indexcolumn.IndexColumnApi;
 
+import com.yryz.writer.modules.indexcolumn.IndexColumnApi;
+import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
+import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("services/app/v1/indexColumn")
@@ -28,8 +29,9 @@ public class IndexColumnController {
 
    @ResponseBody
    @RequestMapping(value="/list", method = RequestMethod.GET)
-   public RpcResponse<PageList<IndexColumnVo>> list(IndexColumnDto indexColumnDto) {
-        return indexColumnApi.list(indexColumnDto);
+   public RpcResponse<List<IndexColumnVo>> list(IndexColumnDto indexColumnDto) {
+//        return indexColumnApi.list(indexColumnDto);
+      return indexColumnApi.list();
    }
 
 }

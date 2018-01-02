@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
 
+import java.util.List;
+
 /**
  * 
   * @ClassName: IndexColumnService
@@ -23,4 +25,9 @@ public interface IndexColumnService extends BaseService {
 
    IndexColumnVo detail(Long indexColumnId);
 
+   /**
+    * 查询未删除的全部栏目
+    * @return
+    */
+   public List<IndexColumnVo> selectAll();
 }

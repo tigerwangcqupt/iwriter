@@ -6,6 +6,8 @@ import com.yryz.common.dao.BaseDao;
 import com.yryz.common.service.BaseServiceImpl;
 import com.yryz.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import java.util.List;
 
 @Service
 public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColumnService {
+
+    private static final Logger logger = LoggerFactory.getLogger(IndexColumnServiceImpl.class);
 
     @Autowired
     private IndexColumnDao indexColumnDao;
@@ -44,11 +48,42 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
 
 
     public IndexColumnVo detail(Long indexColumnId) {
-        IndexColumn indexColumn = indexColumnDao.selectByKid(IndexColumn.class,indexColumnId);
+        IndexColumn indexColumn = indexColumnDao.selectByKid(IndexColumn.class, indexColumnId);
         IndexColumnVo indexColumnVo = new IndexColumnVo();
         if (indexColumnVo != null) {
             //IndexColumn to IndexColumnVo
         }
         return indexColumnVo;
     }
+
+    /**
+     *
+     * @return
+     */
+    public List<IndexColumnVo> selectAll(){
+        List<IndexColumnVo> voList = new ArrayList<IndexColumnVo>();
+        try {
+            IndexColumnDto indexColumnDto = new IndexColumnDto();
+            List<IndexColumn> list = indexColumnDao.selectList(indexColumnDto);
+            if(list != null && list.size() > 0) {
+                for(IndexColumn indexColumn : list){
+                    if (indexColumn == null) continue;
+                    IndexColumnVo indexColumnVo = new IndexColumnVo();
+                    indexColumnVo.setColumnName(indexColumn.getItemName());
+                    indexColumnVo.setColumnUrl(indexColumn.getUrl());
+                    indexColumnVo.setTipsNum("0");
+                    //IndexColumn to IndexColumnVo
+                    voList.add(indexColumnVo);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("查询操作失败", e);
+            //抛出异常回滚数据
+//            throw new QsourceException(ExceptionEnum.SysException.getCode(),
+//                    ExceptionEnum.SysException.getMsg(),
+//                    ExceptionEnum.SysException.getErrorMsg());
+        }
+        return voList;
+    }
+
  }

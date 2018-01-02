@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 首页栏目服务提供者
  */
@@ -67,5 +69,15 @@ public class IndexColumnProvider implements IndexColumnApi {
        		 return ResponseModel.returnException(e);
         }
     }
+
+	@Override
+	public RpcResponse<List<IndexColumnVo>> list() {
+		try {
+			return ResponseModel.returnListSuccess(indexColumnService.selectAll());
+		} catch (Exception e) {
+			logger.error("获取IndexColumn列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
 
 }

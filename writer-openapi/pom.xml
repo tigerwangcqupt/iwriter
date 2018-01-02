@@ -57,7 +57,18 @@
            <version>${project.version}</version>
        </dependency>
 
-  </dependencies>
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-config-api</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-config-api</artifactId>
+           <version>1.0-SNAPSHOT</version>
+       </dependency>
+
+   </dependencies>
   
   <properties>
 	<component.version>1.0-SNAPSHOT</component.version>
