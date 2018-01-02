@@ -10,4 +10,6 @@
 
     <dubbo:service interface="com.yryz.writer.modules.articleshare.ArticleShareApi" ref="articleShareProvider" />
 
+    <dubbo:service interface="com.yryz.writer.modules.articlefavorite.ArticleFavoriteApi" ref="articleFavoriteProvider" />
+
 </beans>
