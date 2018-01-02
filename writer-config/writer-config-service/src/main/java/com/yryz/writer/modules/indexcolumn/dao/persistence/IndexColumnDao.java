@@ -1,8 +1,9 @@
 package com.yryz.writer.modules.indexcolumn.dao.persistence;
 
-import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
-import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
+
 import com.yryz.common.dao.BaseDao;
+import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
+import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

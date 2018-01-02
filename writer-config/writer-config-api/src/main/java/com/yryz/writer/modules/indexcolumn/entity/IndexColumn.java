@@ -1,7 +1,7 @@
 package com.yryz.writer.modules.indexcolumn.entity;
 
 import com.yryz.common.entity.GenericEntity;
-import java.util.Date;
+
 /**
  * 
   * @ClassName: IndexColumn
