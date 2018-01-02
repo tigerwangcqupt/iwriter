@@ -1,7 +1,6 @@
-package com.yryz.writer.indexColumn;
+package com.yryz.openapi.index.web;
 
 import com.yryz.component.rpc.RpcResponse;
-
 import com.yryz.writer.modules.indexcolumn.IndexColumnApi;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
