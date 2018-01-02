@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.bank.dao.persistence.BankDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.bank.entity.Bank">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+		<result column="user_name" property="userName" jdbcType="VARCHAR"/>
+		<result column="user_cart" property="userCart" jdbcType="VARCHAR"/>
+		<result column="user_bank_cart" property="userBankCart" jdbcType="VARCHAR"/>
+		<result column="user_trade_bank_cart" property="userTradeBankCart" jdbcType="VARCHAR"/>
+		<result column="provice" property="provice" jdbcType="VARCHAR"/>
+		<result column="city" property="city" jdbcType="VARCHAR"/>
+		<result column="user_account_open_bank" property="userAccountOpenBank" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,module_enum,create_date,last_update_date,create_user_id,last_update_user_id,del_flag,user_name,user_cart,user_bank_cart,user_trade_bank_cart,provice,city,user_account_open_bank
+    </sql>
+
+     <!-- 查询Bank详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_bank
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除Bank-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_bank
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增Bank-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.bank.entity.Bank">
+	    insert into yryz_bank (kid,module_enum,create_date,last_update_date,create_user_id,last_update_user_id,del_flag,user_name,user_cart,user_bank_cart,user_trade_bank_cart,provice,city,user_account_open_bank)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{moduleEnum,jdbcType=VARCHAR}
+			,NOW()
+			,NOW()
+				,#{createUserId,jdbcType=VARCHAR}
+				,#{lastUpdateUserId,jdbcType=VARCHAR}
+				,#{delFlag,jdbcType=TINYINT}
+				,#{userName,jdbcType=VARCHAR}
+				,#{userCart,jdbcType=VARCHAR}
+				,#{userBankCart,jdbcType=VARCHAR}
+				,#{userTradeBankCart,jdbcType=VARCHAR}
+				,#{provice,jdbcType=VARCHAR}
+				,#{city,jdbcType=VARCHAR}
+				,#{userAccountOpenBank,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<!--按需新增Bank-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.bank.entity.Bank">
+	    insert into yryz_bank 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="moduleEnum != null and moduleEnum != ''">
+			module_enum,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			last_update_user_id,
+	    </if>
+        <if test="delFlag != null">
+			del_flag,
+	    </if>
+        <if test="userName != null and userName != ''">
+			user_name,
+	    </if>
+        <if test="userCart != null and userCart != ''">
+			user_cart,
+	    </if>
+        <if test="userBankCart != null and userBankCart != ''">
+			user_bank_cart,
+	    </if>
+        <if test="userTradeBankCart != null and userTradeBankCart != ''">
+			user_trade_bank_cart,
+	    </if>
+        <if test="provice != null and provice != ''">
+			provice,
+	    </if>
+        <if test="city != null and city != ''">
+			city,
+	    </if>
+        <if test="userAccountOpenBank != null and userAccountOpenBank != ''">
+			user_account_open_bank,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="moduleEnum != null and moduleEnum != ''">
+			#{moduleEnum,jdbcType=VARCHAR},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			#{lastUpdateUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="delFlag != null">
+			#{delFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="userName != null and userName != ''">
+			#{userName,jdbcType=VARCHAR},
+	    </if>
+        <if test="userCart != null and userCart != ''">
+			#{userCart,jdbcType=VARCHAR},
+	    </if>
+        <if test="userBankCart != null and userBankCart != ''">
+			#{userBankCart,jdbcType=VARCHAR},
+	    </if>
+        <if test="userTradeBankCart != null and userTradeBankCart != ''">
+			#{userTradeBankCart,jdbcType=VARCHAR},
+	    </if>
+        <if test="provice != null and provice != ''">
+			#{provice,jdbcType=VARCHAR},
+	    </if>
+        <if test="city != null and city != ''">
+			#{city,jdbcType=VARCHAR},
+	    </if>
+        <if test="userAccountOpenBank != null and userAccountOpenBank != ''">
+			#{userAccountOpenBank,jdbcType=VARCHAR},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改Bank-->   
+    <update id="update" parameterType="com.yryz.writer.modules.bank.entity.Bank">
+        update yryz_bank
+        <set>
+            <if test="moduleEnum != null and moduleEnum != ''">
+    			module_enum = #{moduleEnum,jdbcType=VARCHAR},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+    		</if>
+             <if test="delFlag != null">
+    			del_flag = #{delFlag,jdbcType=TINYINT},
+    		</if>
+            <if test="userName != null and userName != ''">
+    			user_name = #{userName,jdbcType=VARCHAR},
+    		</if>
+            <if test="userCart != null and userCart != ''">
+    			user_cart = #{userCart,jdbcType=VARCHAR},
+    		</if>
+            <if test="userBankCart != null and userBankCart != ''">
+    			user_bank_cart = #{userBankCart,jdbcType=VARCHAR},
+    		</if>
+            <if test="userTradeBankCart != null and userTradeBankCart != ''">
+    			user_trade_bank_cart = #{userTradeBankCart,jdbcType=VARCHAR},
+    		</if>
+            <if test="provice != null and provice != ''">
+    			provice = #{provice,jdbcType=VARCHAR},
+    		</if>
+            <if test="city != null and city != ''">
+    			city = #{city,jdbcType=VARCHAR},
+    		</if>
+            <if test="userAccountOpenBank != null and userAccountOpenBank != ''">
+    			user_account_open_bank = #{userAccountOpenBank,jdbcType=VARCHAR},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询Bank列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.bank.dto.BankDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_bank where del_flag = 0
+
+    </select>
+    
+</mapper>

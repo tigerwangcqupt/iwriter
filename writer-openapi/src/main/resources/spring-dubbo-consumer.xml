@@ -7,8 +7,8 @@
 	http://code.alibabatech.com/schema/dubbo
     http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
 
-    <!-- demo -->
-    <dubbo:reference id="testDemo"
-                     interface="com.yryz.demo.api.demo.TestDemo" registry="yryz-new" check="false" timeout="10000" retries="0"/>
+    <!-- bank -->
+    <dubbo:reference id="bankApi"
+                     interface="com.yryz.writer.modules.bank.BankApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
 
 </beans>

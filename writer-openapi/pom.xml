@@ -51,6 +51,12 @@
           <artifactId>jackson-databind</artifactId>
       </dependency>
 
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-user-api</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+
   </dependencies>
   
   <properties>
