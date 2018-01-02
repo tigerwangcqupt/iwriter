@@ -12,25 +12,6 @@
   <packaging>war</packaging>
   
    <dependencies>
-   
-       <dependency>
-           <groupId>com.yryz.writer</groupId>
-           <artifactId>writer-config-api</artifactId>
-           <version>${project.version}</version>
-       </dependency>
-       
-      <dependency>
-  	    <groupId>com.yryz.writer</groupId>
-  	    <artifactId>writer-common</artifactId>
-  	    <version>${project.version}</version>
-  	  </dependency>
-   
-      <dependency>
-          <groupId>com.yryz.writer</groupId>
-          <artifactId>writer-demo-api</artifactId>
-          <version>${project.version}</version>
-      </dependency>
-   
       <!-- servlet、jsp setting -->
       <dependency>
           <groupId>javax.servlet</groupId>
@@ -60,11 +41,34 @@
 
        <dependency>
            <groupId>com.yryz.writer</groupId>
-           <artifactId>writer-user-api</artifactId>
+           <artifactId>writer-common</artifactId>
            <version>${project.version}</version>
        </dependency>
 
-  </dependencies>
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-event-api</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-user-api</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-config-api</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-article-api</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+
+   </dependencies>
   
   <properties>
 	<component.version>1.0-SNAPSHOT</component.version>
