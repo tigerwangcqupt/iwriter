@@ -7,7 +7,9 @@
 	    http://code.alibabatech.com/schema/dubbo
 	    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <dubbo:service interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" ref="indexColumnProvider" />
+    <dubbo:service interface="com.yryz.writer.modules.province.ProvinceApi" ref="provinceProvider" />
+    
+    <dubbo:service interface="com.yryz.writer.modules.city.CityApi" ref="cityProvider" /> 
 
 
 </beans>

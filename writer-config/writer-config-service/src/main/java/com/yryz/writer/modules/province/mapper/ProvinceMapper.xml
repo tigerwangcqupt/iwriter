@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.province.dao.persistence.ProvinceDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.province.entity.Province">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="province_code" property="provinceCode" jdbcType="VARCHAR"/>
+		<result column="province_name" property="provinceName" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,province_code,province_name
+    </sql>
+
+     <!-- 查询Province详情 -->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_province
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除Province-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+   	 	delete from yryz_province
+    	where id = #{id,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增Province-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.province.entity.Province">
+	    insert into yryz_province (province_code,province_name)
+	    values (
+	    	#{provinceCode,jdbcType=VARCHAR}
+				,#{provinceName,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<!--按需新增Province-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.province.entity.Province">
+	    insert into yryz_province 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+			id,
+	    </if>
+        <if test="provinceCode != null and provinceCode != ''">
+			province_code,
+	    </if>
+        <if test="provinceName != null and provinceName != ''">
+			province_name,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+			#{id,jdbcType=BIGINT},
+	    </if>
+        <if test="provinceCode != null and provinceCode != ''">
+			#{provinceCode,jdbcType=VARCHAR},
+	    </if>
+        <if test="provinceName != null and provinceName != ''">
+			#{provinceName,jdbcType=VARCHAR},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改Province-->   
+    <update id="updateByPrimaryKeySelective" parameterType="com.yryz.writer.modules.province.entity.Province">
+        update yryz_province
+        <set>
+             <if test="id != null">
+    			id = #{id,jdbcType=BIGINT},
+    		</if>
+            <if test="provinceCode != null and provinceCode != ''">
+    			province_code = #{provinceCode,jdbcType=VARCHAR},
+    		</if>
+            <if test="provinceName != null and provinceName != ''">
+    			province_name = #{provinceName,jdbcType=VARCHAR},
+    		</if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询Province列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.province.dto.ProvinceDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_province
+    </select>
+    
+    <!-- 查询所有省 -->
+    <select id="queryAllProvinces" resultType="com.yryz.writer.modules.province.vo.ProvinceVo">
+        select
+        id,province_code,province_name
+        from yryz_province
+    </select>
+    
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.city.dao.persistence.CityDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.qshop.modules.city.entity.City">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+		<result column="city_name" property="cityName" jdbcType="VARCHAR"/>
+		<result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,city_code,city_name,parent_id
+    </sql>
+
+     <!-- 查询City详情 -->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from qshop_city
+        where  id = #{id,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除City-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+   	 	delete from qshop_city
+    	where id = #{id,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增City-->
+    <insert id="insert"  parameterType="com.yryz.qshop.modules.city.entity.City">
+	    insert into qshop_city (city_code,city_name,parent_id)
+	    values (
+	    	#{cityCode,jdbcType=VARCHAR}
+				,#{cityName,jdbcType=VARCHAR}
+				,#{parentId,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<!--按需新增City-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.qshop.modules.city.entity.City">
+	    insert into qshop_city 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+			id,
+	    </if>
+        <if test="cityCode != null and cityCode != ''">
+			city_code,
+	    </if>
+        <if test="cityName != null and cityName != ''">
+			city_name,
+	    </if>
+        <if test="parentId != null and parentId != ''">
+			parent_id,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+			#{id,jdbcType=BIGINT},
+	    </if>
+        <if test="cityCode != null and cityCode != ''">
+			#{cityCode,jdbcType=VARCHAR},
+	    </if>
+        <if test="cityName != null and cityName != ''">
+			#{cityName,jdbcType=VARCHAR},
+	    </if>
+        <if test="parentId != null and parentId != ''">
+			#{parentId,jdbcType=VARCHAR},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改City-->   
+    <update id="updateByPrimaryKeySelective" parameterType="com.yryz.qshop.modules.city.entity.City">
+        update qshop_city
+        <set>
+             <if test="id != null">
+    			id = #{id,jdbcType=BIGINT},
+    		</if>
+            <if test="cityCode != null and cityCode != ''">
+    			city_code = #{cityCode,jdbcType=VARCHAR},
+    		</if>
+            <if test="cityName != null and cityName != ''">
+    			city_name = #{cityName,jdbcType=VARCHAR},
+    		</if>
+            <if test="parentId != null and parentId != ''">
+    			parent_id = #{parentId,jdbcType=VARCHAR},
+    		</if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询City列表 -->
+    <select id="selectList" parameterType="com.yryz.qshop.modules.city.dto.CityDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from qshop_city
+    </select>
+    
+     <!-- 查询City列表 -->
+    <select id="selectCitysByPid" parameterType="java.lang.String" resultType="com.yryz.qshop.modules.city.vo.CityVo">
+        select
+        <include refid="Base_Column_List"/>
+        from qshop_city where 1=1
+        <if test="provinceCode != null and provinceCode != ''">
+    		and parent_id = #{provinceCode,jdbcType=VARCHAR}
+    	</if>
+    </select>
+    
+</mapper>
