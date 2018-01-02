@@ -10,9 +10,8 @@
 
     <dubbo:service interface="com.yryz.writer.modules.province.ProvinceApi" ref="provinceProvider" />
     
-    <!--
     <dubbo:service interface="com.yryz.writer.modules.city.CityApi" ref="cityProvider" /> 
--->
+
     <dubbo:service interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" ref="indexColumnProvider" />
 
 

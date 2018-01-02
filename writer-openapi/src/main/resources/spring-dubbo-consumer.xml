@@ -16,9 +16,9 @@
                      interface="com.yryz.writer.modules.province.ProvinceApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
                       
     <!-- city -->
-  <!--   <dubbo:reference id="cityApi"
+    <dubbo:reference id="cityApi"
                      interface="com.yryz.writer.modules.city.CityApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
- -->
+ 
     <dubbo:reference id="indexColumnApi"
                      interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
     <dubbo:reference id="draftApi"
