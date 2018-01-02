@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.province.dao.persistence.ProvinceDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.province.entity.Province">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="province_code" property="provinceCode" jdbcType="VARCHAR"/>
+		<result column="province_name" property="provinceName" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,province_code,province_name
+    </sql>
+
+    
+    
+    <!-- 查询所有省 -->
+    <select id="queryAllProvinces" resultType="com.yryz.writer.modules.province.vo.ProvinceVo">
+        select
+        id,province_code,province_name
+        from yryz_province
+    </select>
+    
+</mapper>
