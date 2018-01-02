@@ -8,6 +8,6 @@
 	    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 
-
+    <dubbo:service interface="com.yryz.writer.modules.articleshare.ArticleShareApi" ref="articleShareProvider" />
 
 </beans>
