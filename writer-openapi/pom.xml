@@ -12,6 +12,13 @@
   <packaging>war</packaging>
   
    <dependencies>
+   
+       <dependency>
+           <groupId>com.yryz.writer</groupId>
+           <artifactId>writer-config-api</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+       
       <dependency>
   	    <groupId>com.yryz.writer</groupId>
   	    <artifactId>writer-common</artifactId>

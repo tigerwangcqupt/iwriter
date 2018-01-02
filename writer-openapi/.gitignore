@@ -31,3 +31,4 @@
 /.settings/*
 */.settings/
 *.log.*
+/target/
