@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("services/app/v1/writer")
 public class WriterController {
+	
    @Autowired
    private WriterApi writerApi;
 

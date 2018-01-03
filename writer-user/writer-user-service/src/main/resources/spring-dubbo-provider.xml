@@ -9,8 +9,7 @@
 
     <dubbo:service interface="com.yryz.writer.modules.bank.BankApi" ref="bankProvider" />
     <dubbo:service interface="com.yryz.writer.modules.fans.FansApi" ref="fansProvider" />
-   <!-- <dubbo:service interface="com.yryz.writer.modules.writer.WriterApi" ref="writerProvider" />
-    <dubbo:service interface="com.yryz.writer.modules.writer.WriterAuditApi" ref="writerAuditProvider" />-->
+    <dubbo:service interface="com.yryz.writer.modules.writer.WriterApi" ref="writerProvider" />
 
 
 </beans>
