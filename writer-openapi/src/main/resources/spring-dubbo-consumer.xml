@@ -16,6 +16,11 @@
                      interface="com.yryz.writer.modules.writer.WriterApi" registry="yryz-new" check="false"
                      timeout="10000" retries="0"/>
                      
+    <!-- writer audit -->
+    <dubbo:reference id="writerAuditApi"
+                     interface="com.yryz.writer.modules.writer.WriterAuditApi" registry="yryz-new" check="false"
+                     timeout="10000" retries="0"/>
+                     
     <!-- province -->
     <dubbo:reference id="provinceApi"
                      interface="com.yryz.writer.modules.province.ProvinceApi" registry="yryz-new" check="false"
