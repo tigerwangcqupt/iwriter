@@ -22,7 +22,9 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,content,shelve_flag,del_flag,recommend,create_date,last_update_date,create_user_id,last_update_user_id
+	<sql id="Base_Column_List">id,kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,
+content,shelve_flag,del_flag,recommend,create_date,last_update_date,
+create_user_id,last_update_user_id,comment_user_nickname, article_title
     </sql>
 
      <!-- 查询ArticleComment详情 -->
@@ -221,25 +223,18 @@
 	<select id="selectListByWriter" parameterType="com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto" >
 		SELECT
 		<include refid="Base_Column_List"/>
-		<![CDATA[
 		FROM
-			yryz_articlecomment ,
-			(
-				SELECT
-					ya.id AS articleId
-				FROM
-					yryz_writer yw
-				INNER JOIN yryz_article ya ON yw.kid = ya.create_user_id
-				WHERE
-					ya.del_flag=0 and ya.shelve_flag = 0
-					and yw.kid = #{custId}
-			) ar
-		WHERE
-			article_id = ar.articleId
-			AND comment_type = 0
+			yryz_articlecomment
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			comment_type = 0
 			AND shelve_flag = 0
 			AND del_flag = 0
-			]]>
+			<if test="custId != null and custId != ''">
+				AND writer_id = #{custId}
+			</if>
+				ORDER BY kid DESC
+		</trim>
+
 	</select>
 
 </mapper>

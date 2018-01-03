@@ -65,7 +65,16 @@ public class ArticleComment extends GenericEntity{
 	 * 推荐状态 0非推荐 1 推荐
 	 */	 
     private  Integer recommend;
-    
+
+	/**
+	 * 评论用户的昵称
+	 */
+	private String commentUserNickname;
+
+	/**
+	 * 文章标题
+	 */
+	private String articleTitle;
 
 	public Long getTargetId() {
 		return this.targetId;
@@ -138,5 +147,21 @@ public class ArticleComment extends GenericEntity{
 	public void setRecommend(Integer recommend) {
 		this.recommend = recommend;
 	}
-		
+
+	public String getCommentUserNickname() {
+		return commentUserNickname;
+	}
+
+	public void setCommentUserNickname(String commentUserNickname) {
+		this.commentUserNickname = commentUserNickname;
+	}
+
+	public void setArticleTitle(String articleTitle) {
+		this.articleTitle = articleTitle;
+	}
+
+	public String getArticleTitle() {
+
+		return articleTitle;
+	}
 }

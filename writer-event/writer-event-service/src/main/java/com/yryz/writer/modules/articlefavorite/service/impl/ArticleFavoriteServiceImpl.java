@@ -51,4 +51,19 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
         }
         return articleFavoriteVo;
     }
- }
+
+    @Override
+    public PageList<ArticleFavoriteVo> selectListByWriter(ArticleFavoriteDto articleFavoriteDto) {
+        PageUtils.startPage(articleFavoriteDto.getCurrentPage(), articleFavoriteDto.getPageSize());
+        List<ArticleFavorite> list = articleFavoriteDao.selectListByWriter(articleFavoriteDto);
+        List<ArticleFavoriteVo> articleFavoriteVoList = new ArrayList <ArticleFavoriteVo>();
+        if(list != null && list.size() > 0) {
+            for(ArticleFavorite articleFavorite : list){
+                ArticleFavoriteVo articleFavoriteVo = new ArticleFavoriteVo();
+                //ArticleFavorite to ArticleFavoriteVo
+                articleFavoriteVoList.add(articleFavoriteVo);
+            }
+        }
+        return new PageModel<ArticleFavoriteVo>().getPageList(articleFavoriteVoList);
+    }
+}

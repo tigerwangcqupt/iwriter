@@ -24,4 +24,5 @@
     <dubbo:registry id="yryz-new" address="${dubbo.registry.address}" file="${dubbo.registry.file}"/>
 
     <import resource="spring-dubbo-provider.xml"/>
+    <import resource="spring-dubbo-consumer.xml"/>
 </beans>

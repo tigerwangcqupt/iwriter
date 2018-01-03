@@ -37,4 +37,10 @@ public interface ArticleFavoriteApi {
     * */
     RpcResponse<PageList<ArticleFavoriteVo>> list(ArticleFavoriteDto articleFavoriteDto);
 
+	/**
+	 * 查询写手文章的全部收藏列表
+	 * @param articleFavoriteDto
+	 * @return
+	 * */
+	RpcResponse<PageList<ArticleFavoriteVo>> listByWriter(ArticleFavoriteDto articleFavoriteDto);
 }

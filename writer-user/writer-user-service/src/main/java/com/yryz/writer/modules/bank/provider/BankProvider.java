@@ -2,15 +2,20 @@ package com.yryz.writer.modules.bank.provider;
 import com.yryz.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+
 import com.yryz.writer.modules.bank.BankApi;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.service.BankService;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.bank.dto.BankDto;
+import com.yryz.writer.modules.id.api.IdAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class BankProvider implements BankApi {
@@ -19,6 +24,9 @@ public class BankProvider implements BankApi {
 
 	@Autowired
 	private BankService bankService;
+
+    @Autowired
+	private IdAPI idAPI;
 
 	/**
 	*  获取Bank明细
@@ -62,5 +70,23 @@ public class BankProvider implements BankApi {
        		 return ResponseModel.returnException(e);
         }
     }
+
+	/**
+	 * 添加银行卡
+	 * @param bank
+	 * @return
+	 */
+	@Override
+	public RpcResponse<Map> insertBank(Bank bank) {
+		try {
+			Long kid  = idAPI.getId("yryz_bank");
+			bank.setKid(kid);
+			bankService.insert(bank);
+			return ResponseModel.returnObjectSuccess(null);
+		} catch (Exception e) {
+			logger.error("保存bank失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
 
 }

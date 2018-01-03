@@ -31,3 +31,5 @@
 /.settings/*
 */.settings/
 *.log.*
+/writer-config/writer-config-service/target/
+/writer-event/writer-event-api/target/
