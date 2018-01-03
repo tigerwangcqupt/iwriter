@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yryz.writer.modules.writer.dao.WriterDao">
+<mapper namespace="com.yryz.writer.modules.writer.dao.persistence.WriterDao">
 
 	<!--BaseResultMap-->
     <resultMap id="BaseResultMap" type="com.yryz.writer.modules.writer.entity.Writer">
-		<result column="id" property="id" jdbcType="BIGINT"/>
-		<id column="kid" property="kid" jdbcType="BIGINT"/>
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
 		<result column="account" property="account" jdbcType="VARCHAR"/>
 		<result column="pwd" property="pwd" jdbcType="VARCHAR"/>
 		<result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
@@ -32,17 +32,19 @@
     </sql>
 
      <!-- 查询Writer详情 -->
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from yryz_writer
-        where del_flag = 0 and id = #{id,jdbcType=BIGINT}
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
     </select>
     
     <!-- 删除Writer-->
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-   	 	delete from yryz_writer
-    	where id = #{id,jdbcType=BIGINT}
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_writer
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
     </delete>
   
   
@@ -77,8 +79,8 @@
     <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.writer.entity.Writer">
 	    insert into yryz_writer 
 	    <trim prefix="(" suffix=")" suffixOverrides=",">
-        <if test="id != null">
-			id,
+        <if test="kid != null">
+			kid,
 	    </if>
         <if test="account != null and account != ''">
 			account,
@@ -139,8 +141,8 @@
 	    </if>
 	    </trim>
 	    <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="id != null">
-			#{id,jdbcType=BIGINT},
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
 	    </if>
         <if test="account != null and account != ''">
 			#{account,jdbcType=VARCHAR},
@@ -204,12 +206,9 @@
 	
 	
 	<!-- 按需修改Writer-->   
-    <update id="updateByPrimaryKeySelective" parameterType="com.yryz.writer.modules.writer.entity.Writer">
+    <update id="update" parameterType="com.yryz.writer.modules.writer.entity.Writer">
         update yryz_writer
         <set>
-             <if test="id != null">
-    			id = #{id,jdbcType=BIGINT},
-    		</if>
             <if test="account != null and account != ''">
     			account = #{account,jdbcType=VARCHAR},
     		</if>
@@ -268,7 +267,7 @@
     			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
     		</if>
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where kid = #{kid,jdbcType=BIGINT}
     </update>
     
     <!-- 查询Writer列表 -->
@@ -276,12 +275,7 @@
         select
         <include refid="Base_Column_List"/>
         from yryz_writer where del_flag = 0
-        <if test="startDate != null and startDate != '' ">
-             <![CDATA[  AND create_date >= #{startDate} ]]>
-		</if>
-		<if test="endDate != null and endDate != ''">
-	            <![CDATA[ AND create_date <= #{endDate}   ]]>
-		</if>
+
     </select>
     
 </mapper>

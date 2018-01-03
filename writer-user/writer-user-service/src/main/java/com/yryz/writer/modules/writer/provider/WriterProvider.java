@@ -1,63 +1,68 @@
 package com.yryz.writer.modules.writer.provider;
-import java.util.List;
+import com.yryz.common.web.ResponseModel;
+import com.yryz.component.rpc.RpcResponse;
+import com.yryz.component.rpc.dto.PageList;
+
+import com.yryz.writer.modules.writer.WriterApi;
+import com.yryz.writer.modules.writer.vo.WriterVo;
+import com.yryz.writer.modules.writer.dto.WriterDto;
+import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.service.WriterService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import com.github.pagehelper.PageHelper;
-import com.yryz.common.web.ResponseModel;
-import com.yryz.component.rpc.RpcResponse;
-import com.yryz.service.api.api.exception.ServiceException;
-import com.yryz.writer.modules.writer.WriterApi;
-import com.yryz.writer.modules.writer.dto.WriterDto;
-import com.yryz.writer.modules.writer.entity.Writer;
-import com.yryz.writer.modules.writer.service.WriterService;
 
-
-/**
- * 
- * @ClassName: WriterProvider
- * @Description: WriterProvider接口提供者
- * @author liuyanjun
- * @date 2018-01-03 10:45:53
- *
- */
 @Service
 public class WriterProvider implements WriterApi {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(WriterProvider.class);
 
 	@Autowired
 	private WriterService writerService;
 
-//	@Override
-//	public PageList<Writer> list(WriterDto writerDto) throws ServiceException {
-//		return writerService.list(writerDto);
-//	}
+	/**
+	*  获取Writer明细
+	*  @param  writerId
+	*  @return
+	* */
+	public RpcResponse<Writer> get(Long writerId) {
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.get(Writer.class, writerId));
+		} catch (Exception e) {
+			logger.error("获取Writer明细失败", e);
+			return ResponseModel.returnException(e);
+		}
+    }
 
-	@Override
-	public Integer delete(Long id) throws ServiceException {
-		return writerService.delete(id);
+	/**
+	*  获取Writer明细
+	*  @param  writerId
+	*  @return
+	* */
+	public RpcResponse<WriterVo> detail(Long writerId) {
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.detail(writerId));
+		} catch (Exception e) {
+			logger.error("获取Writer明细失败", e);
+			return ResponseModel.returnException(e);
+		}
 	}
 
-	@Override
-	public Integer insert(Writer writer) throws ServiceException {
-		return writerService.insert(writer);
-	}
-
-	
-	@Override
-	public RpcResponse<Writer> detail(Long id) throws ServiceException {
-		return ResponseModel.returnObjectSuccess(writerService.detail(id));
-	}
-	
-	@Override
-	public Integer update(Writer record) throws ServiceException {
-		return writerService.update(record);
-	}
-
+    /**
+    * 获取Writer列表
+    * @param writerDto
+    * @return
+    *
+	*/
+    public RpcResponse<PageList<WriterVo>> list(WriterDto writerDto) {
+        try {
+			 return ResponseModel.returnListSuccess(writerService.selectList(writerDto));
+        } catch (Exception e) {
+        	logger.error("获取Writer列表失败", e);
+       		 return ResponseModel.returnException(e);
+        }
+    }
 
 }

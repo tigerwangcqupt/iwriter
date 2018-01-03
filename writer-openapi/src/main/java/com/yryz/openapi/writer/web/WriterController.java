@@ -1,12 +1,9 @@
 package com.yryz.openapi.writer.web;
 
-import com.yryz.common.Annotation.NotLogin;
-import com.yryz.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
-import com.yryz.writer.modules.bank.BankApi;
-import com.yryz.writer.modules.bank.vo.BankVo;
+import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.writer.WriterApi;
-import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +20,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("services/app/v1/writer")
-public class WriterController extends BaseController {
+public class WriterController {
+   @Autowired
+   private WriterApi writerApi;
 
-    @Autowired
-    private WriterApi writerApi;
+   @ResponseBody
+   @RequestMapping(value="/single", method = RequestMethod.GET)
+   public RpcResponse<WriterVo> detail(Long writerId) {
+       return writerApi.detail(writerId);
+   }
 
-    @RequestMapping(value="/single", method = RequestMethod.GET)
-    @ResponseBody
-    @NotLogin
-    public RpcResponse<Writer> queryConfig(Long id){
-        return writerApi.detail(id);
-    }
-
+   @ResponseBody
+   @RequestMapping(value="/list", method = RequestMethod.GET)
+   public RpcResponse<PageList<WriterVo>> list(WriterDto writerDto) {
+        return writerApi.list(writerDto);
+   }
 
 }
