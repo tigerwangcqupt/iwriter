@@ -91,4 +91,16 @@ public class BankProvider implements BankApi {
 		}
 	}
 
+	@Override
+	public RpcResponse<Bank> updateBank(Bank bank) {
+		try {
+			bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
+			bankService.update(bank);
+			return ResponseModel.returnObjectSuccess(null);
+		} catch (Exception e) {
+			logger.error("修改bank失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }

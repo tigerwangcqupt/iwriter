@@ -12,4 +12,5 @@
 
     <dubbo:service interface="com.yryz.writer.modules.articlefavorite.ArticleFavoriteApi" ref="articleFavoriteProvider" />
 
+    <dubbo:service interface="com.yryz.writer.modules.message.MessageApi" ref="messageProvider" />
 </beans>
