@@ -29,7 +29,7 @@ public class IndexColumnController {
    public RpcResponse<List<IndexColumnVo>> list(IndexColumnDto indexColumnDto) {
 //        return indexColumnApi.list(indexColumnDto);
 
-      return indexColumnApi.list();
+      return indexColumnApi.listByWriter(indexColumnDto);
    }
 
 }

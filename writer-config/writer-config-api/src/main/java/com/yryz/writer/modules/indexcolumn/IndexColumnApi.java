@@ -43,6 +43,6 @@ public interface IndexColumnApi {
 	 * 获取IndexColumn列表
 	 * @return
 	 * */
-	RpcResponse<List<IndexColumnVo>> list();
+	RpcResponse<List<IndexColumnVo>> listByWriter(IndexColumnDto indexColumnDto);
 
 }

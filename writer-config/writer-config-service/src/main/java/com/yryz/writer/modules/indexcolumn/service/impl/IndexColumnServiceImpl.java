@@ -59,10 +59,10 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
      *
      * @return
      */
-    public List<IndexColumnVo> selectAll(){
+    public List<IndexColumnVo> selectAll(IndexColumnDto indexColumnDto){
         List<IndexColumnVo> voList = new ArrayList<IndexColumnVo>();
         try {
-            IndexColumnDto indexColumnDto = new IndexColumnDto();
+//            IndexColumnDto indexColumnDto = new IndexColumnDto();
             List<IndexColumn> list = indexColumnDao.selectList(indexColumnDto);
             if(list != null && list.size() > 0) {
                 for(IndexColumn indexColumn : list){
@@ -72,6 +72,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
                     indexColumnVo.setColumnUrl(indexColumn.getUrl());
                     indexColumnVo.setTipsNum("0");
                     //IndexColumn to IndexColumnVo
+                    //需要设置气泡数
                     voList.add(indexColumnVo);
                 }
             }

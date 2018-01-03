@@ -19,7 +19,7 @@
 	<!--Base_Column_List-->
 	<sql id="Base_Column_List">id,kid,user_id,create_user_id,
 create_user_nickname,user_head_img,article_id,article_title,
-create_date,last_update_date
+create_date,last_update_date,writer_id
     </sql>
 
      <!-- 查询ArticleFavorite详情 -->

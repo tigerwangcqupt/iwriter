@@ -24,7 +24,7 @@
 	<!--Base_Column_List-->
 	<sql id="Base_Column_List">id,kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,
 content,shelve_flag,del_flag,recommend,create_date,last_update_date,
-create_user_id,last_update_user_id,comment_user_nickname, article_title
+create_user_id,last_update_user_id,comment_user_nickname, article_title, writer_id
     </sql>
 
      <!-- 查询ArticleComment详情 -->

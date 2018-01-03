@@ -72,9 +72,9 @@ public class IndexColumnProvider implements IndexColumnApi {
     }
 
 	@Override
-	public RpcResponse<List<IndexColumnVo>> list() {
+	public RpcResponse<List<IndexColumnVo>> listByWriter(IndexColumnDto indexColumnDto) {
 		try {
-			return ResponseModel.returnListSuccess(indexColumnService.selectAll());
+			return ResponseModel.returnListSuccess(indexColumnService.selectAll(indexColumnDto));
 		} catch (Exception e) {
 			logger.error("获取IndexColumn列表失败", e);
 			return ResponseModel.returnException(e);

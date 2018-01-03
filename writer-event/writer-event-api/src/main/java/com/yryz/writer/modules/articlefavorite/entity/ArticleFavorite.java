@@ -41,7 +41,11 @@ public class ArticleFavorite extends GenericEntity{
 	 * 文章标题
 	 */	 
     private  String articleTitle;
-    
+
+	/**
+	 * 写手id
+	 */
+	private Long writerId;
 
 	public Long getUserId() {
 		return this.userId;
@@ -82,5 +86,13 @@ public class ArticleFavorite extends GenericEntity{
 	public void setArticleTitle(String articleTitle) {
 		this.articleTitle = articleTitle;
 	}
-		
+
+	public void setWriterId(Long writerId) {
+		this.writerId = writerId;
+	}
+
+	public Long getWriterId() {
+
+		return writerId;
+	}
 }

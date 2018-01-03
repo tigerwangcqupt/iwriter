@@ -24,26 +24,26 @@ public enum ModuleEnum {
     private String id;
 
     //中文名字
-    private String zhName;
+    private String name;
 
     public String getId() {
         return id;
     }
 
-    public String getZhName() {
-        return zhName;
+    public String getName() {
+        return name;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setZhName(String zhName) {
-        this.zhName = zhName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    ModuleEnum(String id, String zhName) {
+    ModuleEnum(String id, String name) {
         this.id = id;
-        this.zhName = zhName;
+        this.name = name;
     }
 }

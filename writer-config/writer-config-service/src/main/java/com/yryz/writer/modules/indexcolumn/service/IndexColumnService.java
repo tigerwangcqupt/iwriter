@@ -28,5 +28,5 @@ public interface IndexColumnService extends BaseService {
     * 查询未删除的全部栏目
     * @return
     */
-   public List<IndexColumnVo> selectAll();
+   public List<IndexColumnVo> selectAll(IndexColumnDto indexColumnDto);
 }

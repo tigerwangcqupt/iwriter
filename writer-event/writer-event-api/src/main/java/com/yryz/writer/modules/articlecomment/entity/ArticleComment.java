@@ -76,6 +76,11 @@ public class ArticleComment extends GenericEntity{
 	 */
 	private String articleTitle;
 
+	/**
+	 * 写手id
+	 */
+	private Long writerId;
+
 	public Long getTargetId() {
 		return this.targetId;
 	}
@@ -163,5 +168,14 @@ public class ArticleComment extends GenericEntity{
 	public String getArticleTitle() {
 
 		return articleTitle;
+	}
+
+	public void setWriterId(Long writerId) {
+		this.writerId = writerId;
+	}
+
+	public Long getWriterId() {
+
+		return writerId;
 	}
 }
