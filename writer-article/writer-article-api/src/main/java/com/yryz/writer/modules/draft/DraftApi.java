@@ -24,17 +24,24 @@ public interface DraftApi {
 	RpcResponse<Draft> get(Long id);
 
     /**
-    *  获取Draft明细
+    *  获取稿件明细
     *  @param  id
     *  @return
     * */
     RpcResponse<DraftVo> detail(Long id);
 
     /**
-    * 获取Draft列表
+    * 获取稿件列表
     * @param draftDto
     * @return
     * */
     RpcResponse<PageList<DraftVo>> list(DraftDto draftDto);
+
+    /**
+    * 发布稿件
+    * @param draft
+    * @return
+    * */
+    RpcResponse<Integer> add(Draft draft);
 
 }

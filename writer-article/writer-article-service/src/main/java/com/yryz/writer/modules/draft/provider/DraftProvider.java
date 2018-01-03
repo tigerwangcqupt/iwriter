@@ -1,4 +1,5 @@
 package com.yryz.writer.modules.draft.provider;
+
 import com.yryz.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
@@ -17,51 +18,68 @@ import org.springframework.stereotype.Service;
 @Service
 public class DraftProvider implements DraftApi {
 
-	private static final Logger logger = LoggerFactory.getLogger(DraftProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(DraftProvider.class);
 
-	@Autowired
-	private DraftService draftService;
-
-	/**
-	*  获取Draft明细
-	*  @param  draftId
-	*  @return
-	* */
-	public RpcResponse<Draft> get(Long draftId) {
-		try {
-			return ResponseModel.returnObjectSuccess(draftService.get(Draft.class, draftId));
-		} catch (Exception e) {
-			logger.error("获取Draft明细失败", e);
-			return ResponseModel.returnException(e);
-		}
-    }
-
-	/**
-	*  获取Draft明细
-	*  @param  draftId
-	*  @return
-	* */
-	public RpcResponse<DraftVo> detail(Long draftId) {
-		try {
-			return ResponseModel.returnObjectSuccess(draftService.detail(draftId));
-		} catch (Exception e) {
-			logger.error("获取Draft明细失败", e);
-			return ResponseModel.returnException(e);
-		}
-	}
+    @Autowired
+    private DraftService draftService;
 
     /**
-    * 获取Draft列表
-    * @param draftDto
-    * @return
-    *
-	*/
+     * 获取Draft明细
+     *
+     * @param draftId
+     * @return
+     */
+    public RpcResponse<Draft> get(Long draftId) {
+        try {
+            return ResponseModel.returnObjectSuccess(draftService.get(Draft.class, draftId));
+        } catch (Exception e) {
+            logger.error("获取Draft明细失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
+
+    /**
+     * 获取Draft明细
+     *
+     * @param draftId
+     * @return
+     */
+    public RpcResponse<DraftVo> detail(Long draftId) {
+        try {
+            return ResponseModel.returnObjectSuccess(draftService.detail(draftId));
+        } catch (Exception e) {
+            logger.error("获取Draft明细失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
+
+    /**
+     * 获取Draft列表
+     *
+     * @param draftDto
+     * @return
+     */
     public RpcResponse<PageList<DraftVo>> list(DraftDto draftDto) {
         try {
-			 return ResponseModel.returnListSuccess(draftService.selectList(draftDto));
+            return ResponseModel.returnListSuccess(draftService.selectList(draftDto));
         } catch (Exception e) {
-        	logger.error("获取Draft列表失败", e);
-       		 return ResponseModel.returnException(e);
+            logger.error("获取Draft列表失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
+
+    /**
+     * 发布稿件
+     *
+     * @param draft
+     * @return
+     */
+    public RpcResponse<Integer> add(Draft draft) {
+        try {
+            return ResponseModel.returnListSuccess(draftService.add(draft));
+        } catch (Exception e) {
+            logger.error("发布稿件失败", e);
+            return ResponseModel.returnException(e);
         }
     }
 

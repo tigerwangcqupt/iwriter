@@ -307,7 +307,19 @@
     <select id="selectList" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yryz_draft where del_flag = 0
+        from yryz_draft where 1=1
+
+		<if test="createUserId != null and createUserId != '' ">
+			AND create_user_id = #{createUserId,jdbcType=VARCHAR}
+		</if>
+
+		<if test="draftStatus != null and draftStatus != 2 ">
+			AND draft_status = #{draftStatus,jdbcType=TINYINT}
+		</if>
+
+		<if test="draftStatus == 2 ">
+			AND draft_status IN (1,2)
+		</if>
 
     </select>
     
