@@ -7,10 +7,8 @@
 	    http://code.alibabatech.com/schema/dubbo
 	    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <dubbo:service interface="com.yryz.writer.modules.bank.BankApi" ref="bankProvider" />
-    <dubbo:service interface="com.yryz.writer.modules.fans.FansApi" ref="fansProvider" />
-   <!-- <dubbo:service interface="com.yryz.writer.modules.writer.WriterApi" ref="writerProvider" />
-    <dubbo:service interface="com.yryz.writer.modules.writer.WriterAuditApi" ref="writerAuditProvider" />-->
+    <!--ID发号服务-->
+    <dubbo:reference id="idAPI" interface="com.yryz.writer.modules.id.api.IdAPI" check="false"/>
 
 
 </beans>

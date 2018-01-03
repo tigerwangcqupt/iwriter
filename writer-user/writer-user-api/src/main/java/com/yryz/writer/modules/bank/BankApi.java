@@ -6,6 +6,8 @@ import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.vo.BankVo;
 
+import java.util.Map;
+
 
 /**
  * 
@@ -37,5 +39,13 @@ public interface BankApi {
     * @return
     * */
     RpcResponse<PageList<BankVo>> list(BankDto bankDto);
+
+	/**
+	 * 添加银行卡
+	 *
+	 * @param bank
+	 * @return
+	 */
+	RpcResponse<Map> insertBank(Bank bank);
 
 }

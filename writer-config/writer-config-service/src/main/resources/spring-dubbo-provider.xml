@@ -14,5 +14,10 @@
 
     <dubbo:service interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" ref="indexColumnProvider" />
 
+    <!--ID发号服务-->
+    <dubbo:service interface="com.yryz.writer.modules.id.api.IdAPI" ref="idAPI"/>
+    <!--发号配置服务，系统配置服务，业务服务不得引用-->
+    <dubbo:service interface="com.yryz.writer.modules.id.api.CodeAPI" ref="codeAPI"/>
+
 
 </beans>

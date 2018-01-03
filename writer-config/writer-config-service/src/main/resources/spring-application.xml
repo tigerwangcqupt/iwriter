@@ -68,6 +68,19 @@
         </property>
     </bean>
 
+    <!-- ID generator -->
+    <!-- 用完即弃的WorkerIdAssigner，依赖DB操作 -->
+    <bean id="disposableWorkerIdAssigner" class="com.yryz.writer.modules.id.service.worker.DisposableWorkerIdAssigner"/>
+    <bean id="defaultUidGenerator" class="com.yryz.writer.modules.id.service.impl.DefaultUidGenerator"
+          lazy-init="false">
+        <property name="workerIdAssigner" ref="disposableWorkerIdAssigner"/>
+
+        <!-- Specified bits & epoch as your demand. No specified the default value will be used -->
+        <property name="timeBits" value="${idGenerator.timeBits}"/>
+        <property name="workerBits" value="${idGenerator.workerBits}"/>
+        <property name="seqBits" value="${idGenerator.seqBits}"/>
+        <property name="epochStr" value="${idGenerator.epochStr}"/>
+    </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.yryz.writer.modules.**.dao.persistence"/>

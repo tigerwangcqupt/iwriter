@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.id.dao.persistence.IdDao">
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.id.entity.CodeModel">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="current" property="current" jdbcType="BIGINT"/>
+        <result column="code_length" property="codeLength" jdbcType="INTEGER"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, `type`, `current`, code_length, create_date, last_update_date
+  </sql>
+
+    <select id="selectByType" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_code
+        where `type` = #{type,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertCodeModel" parameterType="com.yryz.writer.modules.id.entity.CodeModel">
+    insert into yryz_code (
+    `type`,
+    `current`,
+    code_length,
+    create_date,
+    last_update_date)
+    values (
+    #{type,jdbcType=VARCHAR},
+    #{current,jdbcType=BIGINT},
+    #{codeLength,jdbcType=INTEGER},
+    #{createDate,jdbcType=TIMESTAMP},
+    #{lastUpdateDate,jdbcType=TIMESTAMP}
+    )
+  </insert>
+
+    <update id="updateByType" parameterType="java.lang.String">
+        update yryz_code
+        <set>
+            <if test="current != null">
+                `current` = #{current,jdbcType=BIGINT},
+            </if>
+            <!--<if test="lastUpdateDate != null" >
+              last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>-->
+        </set>
+        where `type` = #{type,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertSelective" parameterType="com.yryz.writer.modules.id.entity.CodeModel">
+        insert into yryz_code
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="current != null">
+                current,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="lastUpdateDate != null">
+                last_update_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="current != null">
+                #{current,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateDate != null">
+                #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from yryz_code
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+    <!-- 查询CodeModel列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.id.entity.CodeModelDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_code where 1=1
+        <if test="startDate != null and startDate != '' ">
+            <![CDATA[  AND create_date >= #{startDate} ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[ AND create_date <= #{endDate}   ]]>
+        </if>
+        ORDER BY create_date DESC
+    </select>
+
+</mapper>
