@@ -7,6 +7,7 @@ import com.yryz.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.bank.dao.persistence.BankDao;
 import com.yryz.writer.modules.bank.service.BankService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,7 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         Bank bank = bankDao.selectByKid(Bank.class,bankId);
         BankVo bankVo = new BankVo();
         if (bankVo != null) {
-            //Bank to BankVo
+            BeanUtils.copyProperties(bank,bankVo);
         }
         return bankVo;
     }

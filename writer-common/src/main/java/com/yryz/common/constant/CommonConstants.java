@@ -25,4 +25,7 @@ public class CommonConstants {
     public static final String TENANTID = "zgzyq";
     //版本号
     public static final Integer REVERSION = 0;
+
+    //redis名称
+    public static final String REDISLOCKPREFIX= "YRYZ_NEW_PC_LOCK_";
 }

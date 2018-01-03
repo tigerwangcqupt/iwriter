@@ -24,10 +24,10 @@ public class BankController extends BaseController {
     private BankApi bankApi;
 
 
-    @RequestMapping(value="/single", method = RequestMethod.GET)
+    @RequestMapping(value="/detail", method = RequestMethod.GET)
     @ResponseBody
     @NotLogin
-    public RpcResponse<BankVo> queryConfig(Long id){
+    public RpcResponse<BankVo> detail(Long id){
         return bankApi.detail(id);
     }
 
@@ -38,5 +38,11 @@ public class BankController extends BaseController {
         return bankApi.insertBank(bank);
     }
 
+    @RequestMapping(value="/update", method = RequestMethod.POST)
+    @ResponseBody
+    public RpcResponse<Bank> updateBank(@RequestBody Bank bank, @RequestHeader String userId){
+        bank.setCreateUserId(userId);
+        return bankApi.updateBank(bank);
+    }
 
 }

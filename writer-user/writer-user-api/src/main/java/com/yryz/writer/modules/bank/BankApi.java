@@ -48,4 +48,12 @@ public interface BankApi {
 	 */
 	RpcResponse<Bank> insertBank(Bank bank);
 
+	/**
+	 * 添加银行卡
+	 *
+	 * @param bank
+	 * @return
+	 */
+	RpcResponse<Bank> updateBank(Bank bank);
+
 }
