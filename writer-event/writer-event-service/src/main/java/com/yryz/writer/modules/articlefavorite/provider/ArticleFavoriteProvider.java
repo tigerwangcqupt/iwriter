@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * 文章收藏服务
+ */
 @Service
 public class ArticleFavoriteProvider implements ArticleFavoriteApi {
 
@@ -64,5 +67,15 @@ public class ArticleFavoriteProvider implements ArticleFavoriteApi {
        		 return ResponseModel.returnException(e);
         }
     }
+
+	@Override
+	public RpcResponse<PageList<ArticleFavoriteVo>> listByWriter(ArticleFavoriteDto articleFavoriteDto) {
+		try {
+			return ResponseModel.returnListSuccess(articleFavoriteService.selectListByWriter(articleFavoriteDto));
+		} catch (Exception e) {
+			logger.error("获取ArticleFavorite列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
 
 }

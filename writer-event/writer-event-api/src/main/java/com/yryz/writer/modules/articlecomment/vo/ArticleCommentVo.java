@@ -24,8 +24,44 @@ public class ArticleCommentVo implements Serializable {
     private Date createDate;
 
     /**
-     *评论时间
+     *评论标题
      */
     private String title;
 
+    /**
+     * 评论用户昵称
+     */
+    private String userName;
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
 }

@@ -20,4 +20,10 @@ public interface ArticleFavoriteDao extends BaseDao {
 
     List<ArticleFavorite> selectList(ArticleFavoriteDto articleFavoriteDto);
 
+    /**
+     * 查询写手文章的全部收藏详情
+     * @param articleFavoriteDto
+     * @return
+     */
+    List<ArticleFavorite> selectListByWriter(ArticleFavoriteDto articleFavoriteDto);
 }

@@ -17,7 +17,9 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,user_id,create_user_id,create_user_nickname,user_head_img,article_id,article_title,create_date,last_update_date
+	<sql id="Base_Column_List">id,kid,user_id,create_user_id,
+create_user_nickname,user_head_img,article_id,article_title,
+create_date,last_update_date
     </sql>
 
      <!-- 查询ArticleFavorite详情 -->
@@ -156,5 +158,21 @@
         from yryz_article_favorite where del_flag = 0
 
     </select>
+
+	<!--  查询写手文章的全部收藏详情  -->
+	<select id="selectListByWriter" parameterType="com.yryz.writer.modules.articlefavorite.dto.ArticleFavoriteDto" resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List"/>
+		FROM
+			yryz_article_favorite
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			shelve_flag = 0
+			AND del_flag = 0
+			<if test="custId != null and custId != ''">
+				AND writer_id = #{custId}
+			</if>
+			ORDER BY kid DESC
+		</trim>
+	</select>
     
 </mapper>

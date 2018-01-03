@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
 
+import java.util.List;
+
 /**
  * 
   * @ClassName: ArticleFavoriteService
@@ -23,4 +25,10 @@ public interface ArticleFavoriteService extends BaseService {
 
    ArticleFavoriteVo detail(Long articleFavoriteId);
 
+   /**
+    * 查询写手文章的全部收藏分页
+    * @param articleFavoriteDto
+    * @return
+    */
+   PageList<ArticleFavoriteVo> selectListByWriter(ArticleFavoriteDto articleFavoriteDto);
 }
