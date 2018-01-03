@@ -17,7 +17,13 @@ public enum ModuleEnum {
     SHARE("10003",
             "分享"),
     FAVORITE("10004",
-                   "收藏")
+                   "收藏"),
+    PLATFORM("10005",
+            "平台"),
+    INCOME("10006",
+            "收益"),
+    FANS("10007",
+            "粉丝")
     ;
 
     //编码

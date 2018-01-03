@@ -49,4 +49,9 @@
     <dubbo:reference id="articleFavoriteApi"
                      interface="com.yryz.writer.modules.articlefavorite.ArticleFavoriteApi" registry="yryz-new"
                      check="false" timeout="10000" retries="0"/>
+
+    <dubbo:reference id="messageApi"
+                     interface="com.yryz.writer.modules.message.MessageApi" registry="yryz-new"
+                     check="false" timeout="10000" retries="0"/>
+
 </beans>
