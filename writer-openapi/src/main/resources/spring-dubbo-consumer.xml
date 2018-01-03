@@ -9,23 +9,36 @@
 
     <!-- bank -->
     <dubbo:reference id="bankApi"
-                     interface="com.yryz.writer.modules.bank.BankApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
-                     
+                     interface="com.yryz.writer.modules.bank.BankApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
+
     <!-- province -->
-     <dubbo:reference id="provinceApi"
-                     interface="com.yryz.writer.modules.province.ProvinceApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
-                      
+    <dubbo:reference id="provinceApi"
+                     interface="com.yryz.writer.modules.province.ProvinceApi" registry="yryz-new" check="false"
+                     timeout="10000" retries="0"/>
     <!-- city -->
     <dubbo:reference id="cityApi"
-                     interface="com.yryz.writer.modules.city.CityApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
- 
+                     interface="com.yryz.writer.modules.city.CityApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
     <dubbo:reference id="indexColumnApi"
-                     interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
+                     interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" registry="yryz-new" check="false"
+                     timeout="10000" retries="0"/>
+    <!-- draft -->
     <dubbo:reference id="draftApi"
-                     interface="com.yryz.writer.modules.draft.DraftApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
+                     interface="com.yryz.writer.modules.draft.DraftApi" registry="yryz-new" check="false"
+                     timeout="10000" retries="0"/>
+    <!-- task -->
+    <dubbo:reference id="taskApi"
+                     interface="com.yryz.writer.modules.task.TaskApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
+    <!-- fans -->
+    <dubbo:reference id="fansApi"
+                     interface="com.yryz.writer.modules.fans.FansApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
 
     <dubbo:reference id="articleShareApi"
-                     interface="com.yryz.writer.modules.articleshare.ArticleShareApi" registry="yryz-new" check="false" timeout="10000" retries="0"/>
+                     interface="com.yryz.writer.modules.articleshare.ArticleShareApi" registry="yryz-new" check="false"
+                     timeout="10000" retries="0"/>
 
     <dubbo:reference id="articleFavoriteApi"
                      interface="com.yryz.writer.modules.articlefavorite.ArticleFavoriteApi" registry="yryz-new"
