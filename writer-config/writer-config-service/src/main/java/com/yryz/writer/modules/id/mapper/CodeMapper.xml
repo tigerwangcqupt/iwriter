@@ -7,11 +7,11 @@
         <result column="current" property="current" jdbcType="BIGINT"/>
         <result column="code_length" property="codeLength" jdbcType="INTEGER"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
-        <result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+        <result column="last_update_time" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-    id, `type`, `current`, code_length, create_date, last_update_date
+    id, `type`, `current`, code_length, create_date, last_update_time
   </sql>
 
     <select id="selectByType" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -27,7 +27,7 @@
     `current`,
     code_length,
     create_date,
-    last_update_date)
+    last_update_time)
     values (
     #{type,jdbcType=VARCHAR},
     #{current,jdbcType=BIGINT},
@@ -44,7 +44,7 @@
                 `current` = #{current,jdbcType=BIGINT},
             </if>
             <!--<if test="lastUpdateDate != null" >
-              last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+              last_update_time = #{lastUpdateDate,jdbcType=TIMESTAMP},
             </if>-->
         </set>
         where `type` = #{type,jdbcType=VARCHAR}
@@ -66,7 +66,7 @@
                 create_date,
             </if>
             <if test="lastUpdateDate != null">
-                last_update_date,
+                last_update_time,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">

@@ -46,6 +46,6 @@ public interface BankApi {
 	 * @param bank
 	 * @return
 	 */
-	RpcResponse<Map> insertBank(Bank bank);
+	RpcResponse<Bank> insertBank(Bank bank);
 
 }

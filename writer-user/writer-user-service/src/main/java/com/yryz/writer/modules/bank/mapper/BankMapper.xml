@@ -44,15 +44,13 @@
   
   	<!-- 新增Bank-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.bank.entity.Bank">
-	    insert into yryz_bank (kid,module_enum,create_date,last_update_date,create_user_id,last_update_user_id,del_flag,user_name,user_cart,user_bank_cart,user_trade_bank_cart,provice,city,user_account_open_bank)
+	    insert into yryz_bank (kid,module_enum,create_date,last_update_date,create_user_id,user_name,user_cart,user_bank_cart,user_trade_bank_cart,provice,city,user_account_open_bank)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{moduleEnum,jdbcType=VARCHAR}
 			,NOW()
 			,NOW()
 				,#{createUserId,jdbcType=VARCHAR}
-				,#{lastUpdateUserId,jdbcType=VARCHAR}
-				,#{delFlag,jdbcType=TINYINT}
 				,#{userName,jdbcType=VARCHAR}
 				,#{userCart,jdbcType=VARCHAR}
 				,#{userBankCart,jdbcType=VARCHAR}

@@ -4,12 +4,11 @@ import com.yryz.common.Annotation.NotLogin;
 import com.yryz.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.bank.BankApi;
+import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author:sun
@@ -30,6 +29,13 @@ public class BankController extends BaseController {
     @NotLogin
     public RpcResponse<BankVo> queryConfig(Long id){
         return bankApi.detail(id);
+    }
+
+    @RequestMapping(value="/save", method = RequestMethod.POST)
+    @ResponseBody
+    public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId){
+        bank.setCreateUserId(userId);
+        return bankApi.insertBank(bank);
     }
 
 

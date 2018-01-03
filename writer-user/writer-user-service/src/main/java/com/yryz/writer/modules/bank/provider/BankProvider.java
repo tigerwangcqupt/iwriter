@@ -1,4 +1,5 @@
 package com.yryz.writer.modules.bank.provider;
+import com.yryz.common.constant.YyrzModuleEnumConstants;
 import com.yryz.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
@@ -77,10 +78,11 @@ public class BankProvider implements BankApi {
 	 * @return
 	 */
 	@Override
-	public RpcResponse<Map> insertBank(Bank bank) {
+	public RpcResponse<Bank> insertBank(Bank bank) {
 		try {
 			Long kid  = idAPI.getId("yryz_bank");
 			bank.setKid(kid);
+			bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
 			bankService.insert(bank);
 			return ResponseModel.returnObjectSuccess(null);
 		} catch (Exception e) {
