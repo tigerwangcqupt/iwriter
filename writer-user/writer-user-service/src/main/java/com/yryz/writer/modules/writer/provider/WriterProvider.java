@@ -65,4 +65,16 @@ public class WriterProvider implements WriterApi {
         }
     }
 
+	@Override
+	public RpcResponse<WriterVo> updateWriter(Writer writer) {
+		 try {
+			 writerService.update(writer);
+			 WriterVo writerVo = writerService.detail(writer.getKid());
+			 return ResponseModel.returnObjectSuccess(null);
+        } catch (Exception e) {
+        	 logger.error("更新Writer信息失败", e);
+       		 return ResponseModel.returnException(e);
+        }
+	}
+
 }

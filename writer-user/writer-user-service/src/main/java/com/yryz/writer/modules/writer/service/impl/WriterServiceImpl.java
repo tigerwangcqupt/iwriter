@@ -6,6 +6,8 @@ import com.yryz.common.dao.BaseDao;
 import com.yryz.common.service.BaseServiceImpl;
 import com.yryz.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,7 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         Writer writer = writerDao.selectByKid(Writer.class,writerId);
         WriterVo writerVo = new WriterVo();
         if (writerVo != null) {
-            //Writer to WriterVo
+        	BeanUtils.copyProperties(writer, writerVo);
         }
         return writerVo;
     }

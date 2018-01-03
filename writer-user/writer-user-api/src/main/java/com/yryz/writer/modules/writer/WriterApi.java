@@ -1,8 +1,11 @@
 package com.yryz.writer.modules.writer;
 
+import java.util.Map;
+
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.writer.vo.WriterVo;
+import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 
@@ -36,5 +39,13 @@ public interface WriterApi {
     * @return
     * */
     RpcResponse<PageList<WriterVo>> list(WriterDto writerDto);
+    
+    /**
+	 * 
+	 *
+	 * @param bank
+	 * @return
+	 */
+	RpcResponse<WriterVo> updateWriter(Writer writer);
 
 }
