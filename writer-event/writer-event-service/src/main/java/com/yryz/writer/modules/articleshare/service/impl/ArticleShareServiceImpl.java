@@ -6,6 +6,8 @@ import com.yryz.common.dao.BaseDao;
 import com.yryz.common.service.BaseServiceImpl;
 import com.yryz.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import java.util.List;
 
 @Service
 public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleShareService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ArticleShareServiceImpl.class);
 
     @Autowired
     private ArticleShareDao articleShareDao;

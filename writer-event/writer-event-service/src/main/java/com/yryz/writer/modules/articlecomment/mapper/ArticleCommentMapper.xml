@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.articlecomment.dao.persistence.ArticleCommentDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.articlecomment.entity.ArticleComment">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="target_id" property="targetId" jdbcType="BIGINT"/>
+		<result column="comment_type" property="commentType" jdbcType="TINYINT"/>
+		<result column="comment_writer_id" property="commentWriterId" jdbcType="BIGINT"/>
+		<result column="comment_user_id" property="commentUserId" jdbcType="BIGINT"/>
+		<result column="article_id" property="articleId" jdbcType="BIGINT"/>
+		<result column="content" property="content" jdbcType="VARCHAR"/>
+		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
+		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+		<result column="recommend" property="recommend" jdbcType="TINYINT"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,content,shelve_flag,del_flag,recommend,create_date,last_update_date,create_user_id,last_update_user_id
+    </sql>
+
+     <!-- 查询ArticleComment详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_articlecomment
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除ArticleComment-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_articlecomment
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增ArticleComment-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.articlecomment.entity.ArticleComment">
+	    insert into yryz_articlecomment (kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,content,shelve_flag,del_flag,recommend,create_date,last_update_date,create_user_id,last_update_user_id)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{targetId,jdbcType=BIGINT}
+				,#{commentType,jdbcType=TINYINT}
+				,#{commentWriterId,jdbcType=BIGINT}
+				,#{commentUserId,jdbcType=BIGINT}
+				,#{articleId,jdbcType=BIGINT}
+				,#{content,jdbcType=VARCHAR}
+				,#{shelveFlag,jdbcType=TINYINT}
+				,#{delFlag,jdbcType=TINYINT}
+				,#{recommend,jdbcType=TINYINT}
+			,NOW()
+			,NOW()
+				,#{createUserId,jdbcType=VARCHAR}
+				,#{lastUpdateUserId,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<!--按需新增ArticleComment-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.articlecomment.entity.ArticleComment">
+	    insert into yryz_articlecomment 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="targetId != null">
+			target_id,
+	    </if>
+        <if test="commentType != null">
+			comment_type,
+	    </if>
+        <if test="commentWriterId != null">
+			comment_writer_id,
+	    </if>
+        <if test="commentUserId != null">
+			comment_user_id,
+	    </if>
+        <if test="articleId != null">
+			article_id,
+	    </if>
+        <if test="content != null and content != ''">
+			content,
+	    </if>
+        <if test="shelveFlag != null">
+			shelve_flag,
+	    </if>
+        <if test="delFlag != null">
+			del_flag,
+	    </if>
+        <if test="recommend != null">
+			recommend,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			last_update_user_id,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="targetId != null">
+			#{targetId,jdbcType=BIGINT},
+	    </if>
+        <if test="commentType != null">
+			#{commentType,jdbcType=TINYINT},
+	    </if>
+        <if test="commentWriterId != null">
+			#{commentWriterId,jdbcType=BIGINT},
+	    </if>
+        <if test="commentUserId != null">
+			#{commentUserId,jdbcType=BIGINT},
+	    </if>
+        <if test="articleId != null">
+			#{articleId,jdbcType=BIGINT},
+	    </if>
+        <if test="content != null and content != ''">
+			#{content,jdbcType=VARCHAR},
+	    </if>
+        <if test="shelveFlag != null">
+			#{shelveFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="delFlag != null">
+			#{delFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="recommend != null">
+			#{recommend,jdbcType=TINYINT},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			#{lastUpdateUserId,jdbcType=VARCHAR},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改ArticleComment-->   
+    <update id="update" parameterType="com.yryz.writer.modules.articlecomment.entity.ArticleComment">
+        update yryz_articlecomment
+        <set>
+             <if test="targetId != null">
+    			target_id = #{targetId,jdbcType=BIGINT},
+    		</if>
+             <if test="commentType != null">
+    			comment_type = #{commentType,jdbcType=TINYINT},
+    		</if>
+             <if test="commentWriterId != null">
+    			comment_writer_id = #{commentWriterId,jdbcType=BIGINT},
+    		</if>
+             <if test="commentUserId != null">
+    			comment_user_id = #{commentUserId,jdbcType=BIGINT},
+    		</if>
+             <if test="articleId != null">
+    			article_id = #{articleId,jdbcType=BIGINT},
+    		</if>
+            <if test="content != null and content != ''">
+    			content = #{content,jdbcType=VARCHAR},
+    		</if>
+             <if test="shelveFlag != null">
+    			shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+    		</if>
+             <if test="delFlag != null">
+    			del_flag = #{delFlag,jdbcType=TINYINT},
+    		</if>
+             <if test="recommend != null">
+    			recommend = #{recommend,jdbcType=TINYINT},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询ArticleComment列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_articlecomment
+		where del_flag = 0 and shelve_flag = 0
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="custId !=null and custId !='' ">
+
+			</if>
+		</trim>
+    </select>
+
+	<!--  查询写手的全部文章的用户评论  -->
+	<select id="selectListByWriter" parameterType="com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto" >
+		SELECT
+		<include refid="Base_Column_List"/>
+		<![CDATA[
+		FROM
+			yryz_articlecomment ,
+			(
+				SELECT
+					ya.id AS articleId
+				FROM
+					yryz_writer yw
+				INNER JOIN yryz_article ya ON yw.kid = ya.create_user_id
+				WHERE
+					ya.del_flag=0 and ya.shelve_flag = 0
+					and yw.kid = #{custId}
+			) ar
+		WHERE
+			article_id = ar.articleId
+			AND comment_type = 0
+			AND shelve_flag = 0
+			AND del_flag = 0
+			]]>
+	</select>
+
+</mapper>
