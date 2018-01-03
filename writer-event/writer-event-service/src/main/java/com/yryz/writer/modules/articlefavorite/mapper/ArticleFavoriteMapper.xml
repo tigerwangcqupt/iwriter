@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.articlefavorite.dao.persistence.ArticleFavoriteDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="user_id" property="userId" jdbcType="BIGINT"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="create_user_nickname" property="createUserNickname" jdbcType="VARCHAR"/>
+		<result column="user_head_img" property="userHeadImg" jdbcType="VARCHAR"/>
+		<result column="article_id" property="articleId" jdbcType="BIGINT"/>
+		<result column="article_title" property="articleTitle" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,user_id,create_user_id,create_user_nickname,user_head_img,article_id,article_title,create_date,last_update_date
+    </sql>
+
+     <!-- 查询ArticleFavorite详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_article_favorite
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除ArticleFavorite-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_article_favorite
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增ArticleFavorite-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite">
+	    insert into yryz_article_favorite (kid,user_id,create_user_id,create_user_nickname,user_head_img,article_id,article_title,create_date,last_update_date)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{userId,jdbcType=BIGINT}
+				,#{createUserId,jdbcType=VARCHAR}
+				,#{createUserNickname,jdbcType=VARCHAR}
+				,#{userHeadImg,jdbcType=VARCHAR}
+				,#{articleId,jdbcType=BIGINT}
+				,#{articleTitle,jdbcType=VARCHAR}
+			,NOW()
+			,NOW()
+	    )
+	</insert>
+	
+	<!--按需新增ArticleFavorite-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite">
+	    insert into yryz_article_favorite 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="userId != null">
+			user_id,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="createUserNickname != null and createUserNickname != ''">
+			create_user_nickname,
+	    </if>
+        <if test="userHeadImg != null and userHeadImg != ''">
+			user_head_img,
+	    </if>
+        <if test="articleId != null">
+			article_id,
+	    </if>
+        <if test="articleTitle != null and articleTitle != ''">
+			article_title,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="userId != null">
+			#{userId,jdbcType=BIGINT},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="createUserNickname != null and createUserNickname != ''">
+			#{createUserNickname,jdbcType=VARCHAR},
+	    </if>
+        <if test="userHeadImg != null and userHeadImg != ''">
+			#{userHeadImg,jdbcType=VARCHAR},
+	    </if>
+        <if test="articleId != null">
+			#{articleId,jdbcType=BIGINT},
+	    </if>
+        <if test="articleTitle != null and articleTitle != ''">
+			#{articleTitle,jdbcType=VARCHAR},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改ArticleFavorite-->   
+    <update id="update" parameterType="com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite">
+        update yryz_article_favorite
+        <set>
+             <if test="userId != null">
+    			user_id = #{userId,jdbcType=BIGINT},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+            <if test="createUserNickname != null and createUserNickname != ''">
+    			create_user_nickname = #{createUserNickname,jdbcType=VARCHAR},
+    		</if>
+            <if test="userHeadImg != null and userHeadImg != ''">
+    			user_head_img = #{userHeadImg,jdbcType=VARCHAR},
+    		</if>
+             <if test="articleId != null">
+    			article_id = #{articleId,jdbcType=BIGINT},
+    		</if>
+            <if test="articleTitle != null and articleTitle != ''">
+    			article_title = #{articleTitle,jdbcType=VARCHAR},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询ArticleFavorite列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.articlefavorite.dto.ArticleFavoriteDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_article_favorite where del_flag = 0
+
+    </select>
+    
+</mapper>
