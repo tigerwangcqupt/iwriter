@@ -32,4 +32,10 @@ public class ArticleFavoriteController {
         return articleFavoriteApi.list(articleFavoriteDto);
    }
 
+   @ResponseBody
+   @RequestMapping(value="/save", method = RequestMethod.POST)
+   public RpcResponse<ArticleFavoriteVo> save(ArticleFavorite articleFavorite) {
+      return articleFavoriteApi.saveFavorite(articleFavorite);
+   }
+
 }

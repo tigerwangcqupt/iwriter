@@ -11,5 +11,14 @@ import com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite;
  */
 public class ArticleFavoriteVo implements Serializable {
 
+    private String successNum;
 
+    public void setSuccessNum(String successNum) {
+        this.successNum = successNum;
+    }
+
+    public String getSuccessNum() {
+
+        return successNum;
+    }
 }

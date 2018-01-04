@@ -31,4 +31,11 @@ public interface ArticleFavoriteService extends BaseService {
     * @return
     */
    PageList<ArticleFavoriteVo> selectListByWriter(ArticleFavoriteDto articleFavoriteDto);
+
+   /**
+    * 保存
+    * @param articleFavorite
+    * @return
+    */
+   Long saveFavorite(ArticleFavorite articleFavorite);
 }

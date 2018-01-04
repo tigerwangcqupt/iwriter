@@ -12,12 +12,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.yryz.writer</groupId>
-            <artifactId>writer-event-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -28,6 +22,18 @@
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!--  其他模块依赖 -->
+        <dependency>
+            <groupId>com.yryz.writer</groupId>
+            <artifactId>writer-event-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.yryz.writer</groupId>
+            <artifactId>writer-config-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>

@@ -46,4 +46,14 @@ public class MessageConstant {
         return stringBuffer.toString();
     }
 
+    public static String getHashField(String moduleEnum) {
+//        StringBuffer stringBuffer = new StringBuffer();
+//        stringBuffer.append(DEFAULT_KEY);
+//        stringBuffer.append("_");
+//        stringBuffer.append(StringUtils.isNotBlank(moduleEnum) ? moduleEnum : "");
+
+
+        return StringUtils.isNotBlank(moduleEnum) ? moduleEnum : "";
+    }
+
 }

@@ -32,7 +32,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     public MessageNumVo getMessageNumVo(String writerId) {
         MessageNumVo messageNumVo = null;
         try {
-            //todo
+            //todo设置消息总数
             messageNumVo = new MessageNumVo();
             messageNumVo.setMessageNum("99");
         } catch (Exception e) {

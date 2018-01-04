@@ -43,4 +43,10 @@ public interface ArticleFavoriteApi {
 	 * @return
 	 * */
 	RpcResponse<PageList<ArticleFavoriteVo>> listByWriter(ArticleFavoriteDto articleFavoriteDto);
+
+	/**
+	 * 保存收藏记录
+	 * @return
+	 * */
+	RpcResponse<ArticleFavoriteVo> saveFavorite(ArticleFavorite articleFavorite);
 }

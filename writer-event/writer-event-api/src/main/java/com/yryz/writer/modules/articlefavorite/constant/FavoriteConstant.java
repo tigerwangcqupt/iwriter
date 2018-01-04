@@ -21,4 +21,12 @@ public class FavoriteConstant {
     public static String getHashKey(ArticleFavorite articleFavorite) {
         return MessageConstant.getHashKey(articleFavorite.getWriterId());
     }
+
+    /**
+     * 获取hash中的Field值
+     * @return
+     * */
+    public static String getHashField() {
+        return MessageConstant.getHashField(ModuleEnum.FAVORITE.getName());
+    }
 }
