@@ -11,6 +11,11 @@
     <dubbo:reference id="bankApi"
                      interface="com.yryz.writer.modules.bank.BankApi" registry="yryz-new" check="false" timeout="10000"
                      retries="0"/>
+    <!-- profit -->
+    <dubbo:reference id="profitApi"
+                     interface="com.yryz.writer.modules.profit.ProfitApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
+
     <!-- writer -->
     <dubbo:reference id="writerApi"
                      interface="com.yryz.writer.modules.writer.WriterApi" registry="yryz-new" check="false"

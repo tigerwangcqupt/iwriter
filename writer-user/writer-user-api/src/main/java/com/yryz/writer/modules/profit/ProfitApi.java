@@ -1,0 +1,47 @@
+package com.yryz.writer.modules.profit;
+
+import com.yryz.component.rpc.RpcResponse;
+import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.modules.profit.vo.ProfitVo;
+import com.yryz.writer.modules.profit.dto.ProfitDto;
+import com.yryz.writer.modules.profit.entity.Profit;
+
+/**
+ * 
+ * @ClassName: ProfitApi
+ * @Description: ProfitApi接口
+ * @author zhongying
+ * @date 2017-12-29 15:36:15
+ *
+ */
+public interface ProfitApi {
+
+	/**
+	*  获取Profit明细
+	*  @param  id
+	*  @return
+	* */
+	RpcResponse<Profit> get(Long id);
+
+    /**
+    *  获取Profit明细
+    *  @param  id
+    *  @return
+    * */
+    RpcResponse<ProfitVo> detail(Long id);
+
+	/**
+	 *  根据用户id获取Profit明细
+	 *  @param  userId
+	 *  @return
+	 * */
+	RpcResponse<ProfitVo> detailProfit(Long userId);
+
+    /**
+    * 获取Profit列表
+    * @param profitDto
+    * @return
+    * */
+    RpcResponse<PageList<ProfitVo>> list(ProfitDto profitDto);
+
+}
