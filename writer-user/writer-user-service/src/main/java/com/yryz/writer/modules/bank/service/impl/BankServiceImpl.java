@@ -46,9 +46,10 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
     public BankVo detail(Long bankId) {
         Bank bank = bankDao.selectByKid(Bank.class,bankId);
         BankVo bankVo = new BankVo();
-        if (bankVo != null) {
+        if (bank != null) {
             BeanUtils.copyProperties(bank,bankVo);
+            return bankVo;
         }
-        return bankVo;
+        return null;
     }
  }

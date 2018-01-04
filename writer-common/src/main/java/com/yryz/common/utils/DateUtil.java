@@ -9,6 +9,15 @@ import com.yryz.common.exception.QsourceException;
 
 public class DateUtil {
 
+	public static String getNYRString(Date date) {
+		if (date == null) {
+			return null;
+		}
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String s = simpleDateFormat.format(date);
+		return s;
+	}
+
 	public static String getString(Date date) {
 		if (date == null) {
 			return null;

@@ -7,7 +7,12 @@
 	    http://code.alibabatech.com/schema/dubbo
 	    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
+    <!--银行服务-->
     <dubbo:service interface="com.yryz.writer.modules.bank.BankApi" ref="bankProvider" />
+
+    <!--收益服务-->
+    <dubbo:service interface="com.yryz.writer.modules.profit.ProfitApi" ref="profitProvider" />
+
     <dubbo:service interface="com.yryz.writer.modules.fans.FansApi" ref="fansProvider" />
     <dubbo:service interface="com.yryz.writer.modules.writer.WriterApi" ref="writerProvider" />
     <dubbo:service interface="com.yryz.writer.modules.writer.WriterAuditApi" ref="writerAuditProvider" />

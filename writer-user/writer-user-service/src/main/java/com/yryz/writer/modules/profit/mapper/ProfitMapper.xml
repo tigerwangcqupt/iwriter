@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.profit.dao.persistence.ProfitDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.profit.entity.Profit">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+		<result column="settlement_date" property="settlementDate" jdbcType="TIMESTAMP"/>
+		<result column="settlement_amount" property="settlementAmount" jdbcType="DECIMAL"/>
+		<result column="settlement_type" property="settlementType" jdbcType="TINYINT"/>
+		<result column="surplus_amount" property="surplusAmount" jdbcType="DECIMAL"/>
+		<result column="charge_fee" property="chargeFee" jdbcType="DECIMAL"/>
+		<result column="bank_card" property="bankCard" jdbcType="VARCHAR"/>
+		<result column="bank_cash" property="bankCash" jdbcType="VARCHAR"/>
+		<result column="settlement_msg" property="settlementMsg" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,module_enum,create_date,last_update_date,create_user_id,last_update_user_id,del_flag,settlement_date,settlement_amount,settlement_type,surplus_amount,charge_fee,bank_card,bank_cash,settlement_msg
+    </sql>
+
+     <!-- 查询Profit详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_profit
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除Profit-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_profit
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增Profit-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.profit.entity.Profit">
+	    insert into yryz_profit (kid,module_enum,create_date,last_update_date,create_user_id,last_update_user_id,del_flag,settlement_date,settlement_amount,settlement_type,surplus_amount,charge_fee,bank_card,bank_cash,settlement_msg)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{moduleEnum,jdbcType=VARCHAR}
+			,NOW()
+			,NOW()
+				,#{createUserId,jdbcType=VARCHAR}
+				,#{lastUpdateUserId,jdbcType=VARCHAR}
+				,#{delFlag,jdbcType=TINYINT}
+				,#{settlementDate,jdbcType=TIMESTAMP}
+				,#{settlementAmount,jdbcType=DECIMAL}
+				,#{settlementType,jdbcType=TINYINT}
+				,#{surplusAmount,jdbcType=DECIMAL}
+				,#{chargeFee,jdbcType=DECIMAL}
+				,#{bankCard,jdbcType=VARCHAR}
+				,#{bankCash,jdbcType=VARCHAR}
+				,#{settlementMsg,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<!--按需新增Profit-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.profit.entity.Profit">
+	    insert into yryz_profit 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="moduleEnum != null and moduleEnum != ''">
+			module_enum,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			last_update_user_id,
+	    </if>
+        <if test="delFlag != null">
+			del_flag,
+	    </if>
+        <if test="settlementDate != null">
+			settlement_date,
+	    </if>
+        <if test="settlementAmount != null">
+			settlement_amount,
+	    </if>
+        <if test="settlementType != null">
+			settlement_type,
+	    </if>
+        <if test="surplusAmount != null">
+			surplus_amount,
+	    </if>
+        <if test="chargeFee != null">
+			charge_fee,
+	    </if>
+        <if test="bankCard != null and bankCard != ''">
+			bank_card,
+	    </if>
+        <if test="bankCash != null and bankCash != ''">
+			bank_cash,
+	    </if>
+        <if test="settlementMsg != null and settlementMsg != ''">
+			settlement_msg,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="moduleEnum != null and moduleEnum != ''">
+			#{moduleEnum,jdbcType=VARCHAR},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			#{lastUpdateUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="delFlag != null">
+			#{delFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="settlementDate != null">
+			#{settlementDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="settlementAmount != null">
+			#{settlementAmount,jdbcType=DECIMAL},
+	    </if>
+        <if test="settlementType != null">
+			#{settlementType,jdbcType=TINYINT},
+	    </if>
+        <if test="surplusAmount != null">
+			#{surplusAmount,jdbcType=DECIMAL},
+	    </if>
+        <if test="chargeFee != null">
+			#{chargeFee,jdbcType=DECIMAL},
+	    </if>
+        <if test="bankCard != null and bankCard != ''">
+			#{bankCard,jdbcType=VARCHAR},
+	    </if>
+        <if test="bankCash != null and bankCash != ''">
+			#{bankCash,jdbcType=VARCHAR},
+	    </if>
+        <if test="settlementMsg != null and settlementMsg != ''">
+			#{settlementMsg,jdbcType=VARCHAR},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改Profit-->   
+    <update id="update" parameterType="com.yryz.writer.modules.profit.entity.Profit">
+        update yryz_profit
+        <set>
+            <if test="moduleEnum != null and moduleEnum != ''">
+    			module_enum = #{moduleEnum,jdbcType=VARCHAR},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+    		</if>
+             <if test="delFlag != null">
+    			del_flag = #{delFlag,jdbcType=TINYINT},
+    		</if>
+             <if test="settlementDate != null">
+    			settlement_date = #{settlementDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="settlementAmount != null">
+    			settlement_amount = #{settlementAmount,jdbcType=DECIMAL},
+    		</if>
+             <if test="settlementType != null">
+    			settlement_type = #{settlementType,jdbcType=TINYINT},
+    		</if>
+             <if test="surplusAmount != null">
+    			surplus_amount = #{surplusAmount,jdbcType=DECIMAL},
+    		</if>
+             <if test="chargeFee != null">
+    			charge_fee = #{chargeFee,jdbcType=DECIMAL},
+    		</if>
+            <if test="bankCard != null and bankCard != ''">
+    			bank_card = #{bankCard,jdbcType=VARCHAR},
+    		</if>
+            <if test="bankCash != null and bankCash != ''">
+    			bank_cash = #{bankCash,jdbcType=VARCHAR},
+    		</if>
+            <if test="settlementMsg != null and settlementMsg != ''">
+    			settlement_msg = #{settlementMsg,jdbcType=VARCHAR},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询Profit列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.profit.dto.ProfitDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_profit where del_flag = 0
+		<if test="createUserId != null and createUserId != ''">
+			and create_user_id = #{createUserId,jdbcType=VARCHAR}
+		</if>
+		ORDER  by create_date desc;
+    </select>
+    
+</mapper>
