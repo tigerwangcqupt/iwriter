@@ -16,6 +16,11 @@
             <artifactId>writer-article-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.yryz.writer</groupId>
+            <artifactId>writer-config-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>

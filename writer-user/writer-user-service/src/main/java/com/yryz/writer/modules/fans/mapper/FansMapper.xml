@@ -7,7 +7,7 @@
 		<id column="id" property="id" jdbcType="BIGINT"/>
 		<result column="kid" property="kid" jdbcType="BIGINT"/>
 		<result column="user_id" property="userId" jdbcType="BIGINT"/>
-		<result column="wirter_id" property="wirterId" jdbcType="BIGINT"/>
+		<result column="wirter_id" property="writerId" jdbcType="BIGINT"/>
 		<result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
 		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
 		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
@@ -165,7 +165,16 @@
         select
         <include refid="Base_Column_List"/>
         from yryz_fans where del_flag = 0
-
+		<if test="writerId != null">
+			AND wirter_id = #{writerId,jdbcType=BIGINT}
+		</if>
+		ORDER BY create_date DESC
     </select>
-    
+
+    <select id="selectUserById" parameterType="java.lang.Long" resultType="com.yryz.writer.modules.fans.vo.FansVo">
+        select nick_name,head_img
+        from yryz_user
+        WHERE id = #{id}
+    </select>
+
 </mapper>

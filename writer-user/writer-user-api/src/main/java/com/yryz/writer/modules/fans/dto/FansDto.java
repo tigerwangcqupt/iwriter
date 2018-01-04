@@ -10,6 +10,8 @@ import com.yryz.component.rpc.dto.PageList;
  */
 public class FansDto extends PageList {
     private Long id;
+    private String createUserId;
+    private Long writerId;
 
     public Long getId() {
         return id;
@@ -17,5 +19,21 @@ public class FansDto extends PageList {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public Long getWriterId() {
+        return writerId;
+    }
+
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
     }
 }
