@@ -41,9 +41,9 @@ public class WriterAuditProvider implements WriterAuditApi {
 	*  @param  writerAuditId
 	*  @return
 	* */
-	public RpcResponse<WriterAuditVo> detail(Long writerAuditId) {
+	public RpcResponse<WriterAuditVo> detail(Long kid) {
 		try {
-			return ResponseModel.returnObjectSuccess(writerAuditService.detail(writerAuditId));
+			return ResponseModel.returnObjectSuccess(writerAuditService.detail(kid));
 		} catch (Exception e) {
 			logger.error("获取WriterAudit明细失败", e);
 			return ResponseModel.returnException(e);

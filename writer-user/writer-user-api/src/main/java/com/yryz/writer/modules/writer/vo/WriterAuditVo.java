@@ -12,6 +12,8 @@ import com.yryz.writer.modules.writer.entity.WriterAudit;
  *
  */
 public class WriterAuditVo implements Serializable {
+	
+	private Long kid;
 
 	/**
 	 * 写手表kid
@@ -76,13 +78,27 @@ public class WriterAuditVo implements Serializable {
 	/**
 	 * 申请时间
 	 */	 
-    private String applyDate;
+    private Date applyDate;
+    
+    private String applyDateStr;
     
 
 	/**
 	 * 审核时间
 	 */	 
-    private String auditDate;
+    private Date auditDate;
+    
+    private String auditDateStr;
+    
+
+	public Long getKid() {
+		return kid;
+	}
+
+
+	public void setKid(Long kid) {
+		this.kid = kid;
+	}
 
 
 	public Long getWriterKid() {
@@ -185,24 +201,47 @@ public class WriterAuditVo implements Serializable {
 	}
 
 
-	public String getApplyDate() {
+	public Date getApplyDate() {
 		return applyDate;
 	}
 
 
-	public void setApplyDate(String applyDate) {
+	public void setApplyDate(Date applyDate) {
 		this.applyDate = applyDate;
 	}
 
 
-	public String getAuditDate() {
+	public String getApplyDateStr() {
+		return applyDateStr;
+	}
+
+
+	public void setApplyDateStr(String applyDateStr) {
+		this.applyDateStr = applyDateStr;
+	}
+
+
+	public Date getAuditDate() {
 		return auditDate;
 	}
 
 
-	public void setAuditDate(String auditDate) {
+	public void setAuditDate(Date auditDate) {
 		this.auditDate = auditDate;
 	}
+
+
+	public String getAuditDateStr() {
+		return auditDateStr;
+	}
+
+
+	public void setAuditDateStr(String auditDateStr) {
+		this.auditDateStr = auditDateStr;
+	}
+
+
+	
 
 
 }

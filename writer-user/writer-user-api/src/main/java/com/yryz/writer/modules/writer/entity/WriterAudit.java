@@ -12,7 +12,8 @@ import java.util.Date;
  */
 public class WriterAudit extends GenericEntity{
 	
-
+	private Long kid;
+	
 	/**
 	 * 写手表kid
 	 */	 
@@ -85,6 +86,14 @@ public class WriterAudit extends GenericEntity{
     private  Date auditDate;
     
 
+    public Long getKid() {
+		return kid;
+	}
+
+	public void setKid(Long kid) {
+		this.kid = kid;
+	}
+	
 	public Long getWriterKid() {
 		return this.writerKid;
 	}

@@ -28,7 +28,7 @@ public interface WriterAuditApi {
     *  @param  id
     *  @return
     * */
-    RpcResponse<WriterAuditVo> detail(Long id);
+    RpcResponse<WriterAuditVo> detail(Long kid);
 
     /**
     * 获取WriterAudit列表

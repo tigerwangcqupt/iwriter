@@ -25,7 +25,8 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,writer_kid,user_name,identity_card,identity_card_photo,provice,city,tel,email,audit_status,reamrk,apply_date,audit_date,create_date,create_user_id,last_update_date,last_update_user_id
+	<sql id="Base_Column_List">
+		id,kid,writer_kid,user_name,identity_card,identity_card_photo,provice,city,tel,email,audit_status,reamrk,apply_date,audit_date,create_date,create_user_id,last_update_date,last_update_user_id
     </sql>
 
      <!-- 查询WriterAudit详情 -->
