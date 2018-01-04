@@ -43,6 +43,15 @@ public class WriterController extends BaseController {
 	   }
        return writerApi.updateWriter(writer);
    }
+   
+   @RequestMapping(value="/submitAudit", method = RequestMethod.PUT)
+   public RpcResponse<WriterVo> submitAudit(@RequestBody Writer writer,@RequestHeader String userId) {
+	   if(StringUtils.isNotEmpty(userId)){
+		   writer.setKid(Long.valueOf(userId));
+		   writer.setLastUpdateUserId(userId);
+	   }
+       return writerApi.submitAudit(writer);
+   }
 
    @ResponseBody
    @RequestMapping(value="/list", method = RequestMethod.GET)

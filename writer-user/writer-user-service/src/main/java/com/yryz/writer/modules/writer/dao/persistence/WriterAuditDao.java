@@ -19,5 +19,7 @@ import java.util.List;
 public interface WriterAuditDao extends BaseDao {
 
     List<WriterAudit> selectList(WriterAuditDto writerAuditDto);
+    
+    int insertByPrimaryKeySelective(WriterAudit writerAudit);
 
 }

@@ -43,9 +43,11 @@ public interface WriterApi {
     /**
 	 * 
 	 *
-	 * @param bank
+	 * @param writer
 	 * @return
 	 */
 	RpcResponse<WriterVo> updateWriter(Writer writer);
+	
+	RpcResponse<WriterVo> submitAudit(Writer writer);
 
 }
