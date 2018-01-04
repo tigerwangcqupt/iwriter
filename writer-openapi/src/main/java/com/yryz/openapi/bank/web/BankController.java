@@ -31,7 +31,7 @@ public class BankController extends BaseController {
         return bankApi.detail(id);
     }
 
-    @RequestMapping(value="/save", method = RequestMethod.POST)
+    @RequestMapping(value="/add", method = RequestMethod.POST)
     @ResponseBody
     public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId){
         bank.setCreateUserId(userId);

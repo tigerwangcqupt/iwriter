@@ -17,4 +17,7 @@ public class YyrzModuleEnumConstants {
     //粉丝
     public static final String FANS_INFO = "10013";
 
+    //提现
+    public static final String PROFIT_INFO = "10014";
+
 }
