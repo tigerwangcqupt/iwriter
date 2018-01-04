@@ -11,13 +11,40 @@ import com.yryz.writer.modules.fans.entity.Fans;
  * @date 2018-01-02 20:08:19
  */
 public class FansVo implements Serializable {
-    private Long id;
+    private Long userId;
+    private String nickName;
+    private String headImg;
+    private Integer fansFlag;
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
+    }
+
+    public Integer getFansFlag() {
+        return fansFlag;
+    }
+
+    public void setFansFlag(Integer fansFlag) {
+        this.fansFlag = fansFlag;
     }
 }

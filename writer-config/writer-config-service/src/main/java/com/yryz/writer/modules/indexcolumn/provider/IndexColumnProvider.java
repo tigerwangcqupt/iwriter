@@ -10,6 +10,7 @@ import com.yryz.writer.modules.indexcolumn.service.IndexColumnService;
 
 
 import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
+import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,16 @@ public class IndexColumnProvider implements IndexColumnApi {
 	public RpcResponse<List<IndexColumnVo>> listByWriter(IndexColumnDto indexColumnDto) {
 		try {
 			return ResponseModel.returnListSuccess(indexColumnService.selectAll(indexColumnDto));
+		} catch (Exception e) {
+			logger.error("获取IndexColumn列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<List<IndexTipsVo>> getIndexTips(IndexColumnDto indexColumnDto) {
+		try {
+			return ResponseModel.returnListSuccess(indexColumnService.getIndexTips(indexColumnDto));
 		} catch (Exception e) {
 			logger.error("获取IndexColumn列表失败", e);
 			return ResponseModel.returnException(e);

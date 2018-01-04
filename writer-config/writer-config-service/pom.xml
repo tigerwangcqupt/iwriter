@@ -15,10 +15,17 @@
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
-		
+
+		<!-- 其他模块依赖  -->
 		<dependency>
 			<groupId>com.yryz.writer</groupId>
 			<artifactId>writer-config-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yryz.writer</groupId>
+			<artifactId>writer-event-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

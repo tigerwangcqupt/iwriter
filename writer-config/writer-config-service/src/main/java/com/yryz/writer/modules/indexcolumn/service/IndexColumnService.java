@@ -1,8 +1,10 @@
 package com.yryz.writer.modules.indexcolumn.service;
 
 import com.yryz.common.service.BaseService;
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
+import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
@@ -29,4 +31,11 @@ public interface IndexColumnService extends BaseService {
     * @return
     */
    public List<IndexColumnVo> selectAll(IndexColumnDto indexColumnDto);
+
+   /**
+    * 获得写手的消息栏目（包含每个栏目的消息数）
+    * @param indexColumnDto
+    * @return
+    */
+   public List<IndexTipsVo> getIndexTips(IndexColumnDto indexColumnDto);
 }

@@ -3,13 +3,17 @@ package com.yryz.writer.modules.message.provider;
 import com.yryz.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.message.MessageApi;
+import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.dto.MessageDto;
 import com.yryz.writer.modules.message.service.MessageService;
+import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import com.yryz.writer.modules.message.vo.MessageNumVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * File Name: MessageProvider
@@ -31,7 +35,37 @@ public class MessageProvider implements MessageApi {
         try {
             return ResponseModel.returnObjectSuccess(messageService.getMessageNumVo(messageDto.getCustId()));
         } catch (Exception e) {
-            logger.error("获取ArticleFavorite明细失败", e);
+            logger.error("获取首页消息总数失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
+
+    @Override
+    public RpcResponse<List<IndexTipsVo>> getIndexTips(Long writerId) {
+        try {
+            return ResponseModel.returnObjectSuccess(messageService.getIndexTips(writerId));
+        } catch (Exception e) {
+            logger.error("获得写手的消息栏目失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
+
+    @Override
+    public RpcResponse<Boolean> cleanMessageTips(ModuleEnum moduleEnum, Long writerId) {
+        try {
+            return ResponseModel.returnObjectSuccess(messageService.cleanMessageTips(moduleEnum, writerId));
+        } catch (Exception e) {
+            logger.error("清空某个消息栏目缓存数失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
+
+    @Override
+    public RpcResponse<Boolean> saveMessageTips(ModuleEnum moduleEnum, Long writerId) {
+        try {
+            return ResponseModel.returnObjectSuccess(messageService.saveMessageTips(moduleEnum, writerId));
+        } catch (Exception e) {
+            logger.error("清空某个消息栏目缓存数失败", e);
             return ResponseModel.returnException(e);
         }
     }

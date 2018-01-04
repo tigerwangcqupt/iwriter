@@ -10,6 +10,7 @@ import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.service.DraftService;
 import com.yryz.writer.modules.draft.vo.DraftVo;
+import com.yryz.writer.modules.id.api.IdAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
     @Autowired
     private DraftDao draftDao;
 
+    @Autowired
+    private IdAPI idAPI;
+
     protected BaseDao getDao() {
         return draftDao;
     }
@@ -34,26 +38,26 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         //获取状态,已发表需查询文章表,其余查询稿件表
         //列表参数:0 全部,1 已发表,2 未通过,3 草稿
         Integer status = draftDto.getStatus();
+        List<Draft> list;
         switch (status) {
             case 0:
-                draftDto.setDraftStatus(null);
+                list = draftDao.selectList(draftDto);
                 break;
             case 1:
-                draftDto.setDraftStatus(3);
+                list = draftDao.selectPublish(draftDto);
                 break;
             case 2:
-                draftDto.setDraftStatus(2);
+                list = draftDao.selectNotPass(draftDto);
                 break;
             case 3:
-                draftDto.setDraftStatus(0);
+                list = draftDao.selectDraught(draftDto);
                 break;
             default:
-                draftDto.setDraftStatus(null);
+                list = draftDao.selectList(draftDto);
                 break;
         }
 
         //查询稿件表
-        List<Draft> list = draftDao.selectList(draftDto);
         List<DraftVo> draftVoList = new ArrayList<DraftVo>();
         if (list != null && list.size() > 0) {
             for (Draft draft : list) {
@@ -66,6 +70,8 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 draftVo.setDescription(draft.getDescription());
                 draftVo.setDraftFee(draft.getDraftFee());
                 draftVo.setDraftStatus(draft.getDraftStatus());
+                draftVo.setDraftType(draft.getDraftType());
+                draftVo.setTaskFlag(draft.getTaskFlag());
                 draftVo.setReason(draft.getReason());
                 draftVo.setSuggest(draft.getSuggest());
                 draftVo.setVideoUrl(draft.getVideoUrl());
@@ -87,7 +93,8 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 
     @Override
     public int add(Draft draft) {
-        draft.setKid(1L);
+        Long id = idAPI.getId("yryz_draft");
+        draft.setKid(id);
         Long appId = draft.getAppId();
         return draftDao.insertByPrimaryKeySelective(draft);
     }

@@ -37,4 +37,11 @@ public interface ArticleShareApi {
     * */
     RpcResponse<PageList<ArticleShareVo>> list(ArticleShareDto articleShareDto);
 
+	/**
+	 * 查询写手文章的全部分享列表
+	 * @param articleShareDto
+	 * @return
+	 * */
+	RpcResponse<PageList<ArticleShareVo>> listByWriter(ArticleShareDto articleShareDto);
+
 }

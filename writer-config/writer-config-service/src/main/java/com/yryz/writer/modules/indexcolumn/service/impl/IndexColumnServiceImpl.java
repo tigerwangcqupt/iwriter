@@ -4,7 +4,10 @@ import com.yryz.common.utils.PageUtils;
 import com.yryz.common.dao.BaseDao;
 import com.yryz.common.service.BaseServiceImpl;
 import com.yryz.common.web.PageModel;
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.modules.message.MessageApi;
+import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,8 @@ import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.dao.persistence.IndexColumnDao;
 import com.yryz.writer.modules.indexcolumn.service.IndexColumnService;
+import org.springframework.util.Assert;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +31,9 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
 
     @Autowired
     private IndexColumnDao indexColumnDao;
+
+    @Autowired
+    private MessageApi messageApi;
 
     protected BaseDao getDao() {
         return indexColumnDao;
@@ -86,4 +94,23 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
         return voList;
     }
 
- }
+    @Override
+    public List<IndexTipsVo> getIndexTips(IndexColumnDto indexColumnDto) {
+//        messageApi
+        List<IndexTipsVo> indexTips = null;
+        try {
+            //查询写手的消息栏目
+            RpcResponse<List<IndexTipsVo>> response = messageApi.getIndexTips(Long.valueOf(indexColumnDto.getCustId()));
+            if (response.success()){
+                indexTips = response.getData();
+            }
+        } catch (Exception e) {
+            logger.error("查询操作失败", e);
+//            throw new QsourceException(ExceptionEnum.SysException.getCode(),
+//                    ExceptionEnum.SysException.getMsg(),
+//                    ExceptionEnum.SysException.getErrorMsg());
+        }
+        return indexTips;
+    }
+
+}

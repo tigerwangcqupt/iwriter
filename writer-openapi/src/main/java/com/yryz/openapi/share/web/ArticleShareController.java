@@ -10,6 +10,7 @@ import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,7 +32,8 @@ public class ArticleShareController {
    @ResponseBody
    @RequestMapping(value="/list", method = RequestMethod.GET)
    public RpcResponse<PageList<ArticleShareVo>> list(ArticleShareDto articleShareDto) {
-      return articleShareApi.list(articleShareDto);
+      Assert.notNull(articleShareDto.getCustId(), "写手id不能为空");
+      return articleShareApi.listByWriter(articleShareDto);
    }
 
 

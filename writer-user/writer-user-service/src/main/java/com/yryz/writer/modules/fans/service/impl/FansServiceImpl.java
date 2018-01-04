@@ -14,6 +14,8 @@ import com.yryz.writer.modules.fans.entity.Fans;
 import com.yryz.writer.modules.fans.dto.FansDto;
 import com.yryz.writer.modules.fans.dao.persistence.FansDao;
 import com.yryz.writer.modules.fans.service.FansService;
+import redis.clients.jedis.Jedis;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,8 @@ public class FansServiceImpl extends BaseServiceImpl implements FansService {
     }
 
     public PageList<FansVo> selectList(FansDto fansDto){
+        Jedis jedis=new Jedis();
+
         PageUtils.startPage(fansDto.getCurrentPage(), fansDto.getPageSize());
         List<Fans> list = fansDao.selectList(fansDto);
         List<FansVo> fansVoList = new ArrayList <FansVo>();
@@ -36,6 +40,14 @@ public class FansServiceImpl extends BaseServiceImpl implements FansService {
             for(Fans fans : list){
                 FansVo fansVo = new FansVo();
                 //Fans to FansVo
+                Long userId = fans.getUserId();
+                fansVo.setUserId(userId);
+                //获取用户信息
+                FansVo user = fansDao.selectUserById(userId);
+                fansVo.setNickName(user.getNickName());
+                fansVo.setHeadImg(user.getHeadImg());
+                //判断新老粉丝
+                // TODO: 2018/1/4
                 fansVoList.add(fansVo);
             }
         }
