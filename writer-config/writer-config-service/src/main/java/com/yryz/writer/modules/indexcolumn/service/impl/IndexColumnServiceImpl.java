@@ -12,7 +12,9 @@ import com.yryz.writer.modules.indexcolumn.vo.IndexItemVo;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.constant.ModuleEnumConstants;
+import com.yryz.writer.modules.message.dto.MessageDto;
 import com.yryz.writer.modules.message.vo.IndexTipsVo;
+import com.yryz.writer.modules.message.vo.MessageNumVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +78,11 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
         List<IndexItemVo> items = new ArrayList<IndexItemVo>();
         indexColumnVo.setIndexItems(items);
         try {
+            //查询消息总数
+            MessageDto messageDto = new MessageDto();
+            messageDto.setCustId(indexColumnDto.getCustId());
+            MessageNumVo numVo = messageApi.getIndexMessageNum(messageDto).getData();
+            indexColumnVo.setMessageSum(numVo.getMessageNum());
 //            IndexColumnDto indexColumnDto = new IndexColumnDto();
             List<IndexColumn> list = indexColumnDao.selectList(indexColumnDto);
             if(list != null && list.size() > 0) {
