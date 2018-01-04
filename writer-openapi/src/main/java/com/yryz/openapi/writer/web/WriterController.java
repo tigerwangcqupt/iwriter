@@ -30,7 +30,6 @@ public class WriterController extends BaseController {
    @Autowired
    private WriterApi writerApi;
 
-   @ResponseBody
    @RequestMapping(value="/detail", method = RequestMethod.GET)
    public RpcResponse<WriterVo> detail(@RequestHeader String userId) {
 	   return writerApi.detail(Long.valueOf(userId));
