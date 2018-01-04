@@ -28,6 +28,19 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+
+      <!--  其他业务模块依赖 -->
+      <dependency>
+          <groupId>com.yryz.writer</groupId>
+          <artifactId>writer-common</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>com.yryz.writer</groupId>
+          <artifactId>writer-event-api</artifactId>
+          <version>${project.version}</version>
+      </dependency>
   </dependencies>
   
   <build>

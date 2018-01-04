@@ -5,8 +5,12 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.articlefavorite.dto.ArticleFavoriteDto;
 import com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite;
 import com.yryz.writer.modules.articlefavorite.vo.ArticleFavoriteVo;
+import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.dto.MessageDto;
+import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import com.yryz.writer.modules.message.vo.MessageNumVo;
+
+import java.util.List;
 
 /**
  * 
@@ -25,5 +29,17 @@ public interface MessageApi {
      */
     RpcResponse<MessageNumVo> getIndexMessageNum(MessageDto messageDto);
 
+    /**
+     * 获得写手的消息栏目（包含每个栏目的消息数）
+     * @param writerId
+     * @return
+     */
+    public RpcResponse<List<IndexTipsVo>> getIndexTips(Long writerId);
 
+    /**
+     * 清空某个消息栏目缓存数（通知、评论、分享、收藏）
+     * @param writerId
+     * @return
+     */
+    public RpcResponse<Boolean> cleanMessageTips(ModuleEnum moduleEnum, Long writerId);
 }
