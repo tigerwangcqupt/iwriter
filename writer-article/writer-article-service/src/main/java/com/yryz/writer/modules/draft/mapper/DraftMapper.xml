@@ -303,24 +303,34 @@
         where kid = #{kid,jdbcType=BIGINT}
     </update>
     
-    <!-- 查询Draft列表 -->
-    <select id="selectList" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from yryz_draft where 1=1
-
-		<if test="createUserId != null and createUserId != '' ">
-			AND create_user_id = #{createUserId,jdbcType=VARCHAR}
-		</if>
-
-		<if test="draftStatus != null and draftStatus != 2 ">
-			AND draft_status = #{draftStatus,jdbcType=TINYINT}
-		</if>
-
-		<if test="draftStatus == 2 ">
-			AND draft_status IN (1,2)
-		</if>
-
+    <!-- 查询全部 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
+        select title,cover_img_url,draft_fee,reason,draft_type,suggest
+        from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status != 3
+		UNION ALL
+		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest
+		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0
     </select>
-    
+
+	<!-- 查询已发表 -->
+    <select id="selectPublish" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
+		SELECT title,cover_img_url,draft_fee,content_flag draft_type
+		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0 AND shelve_flag = 0
+    </select>
+
+	<!-- 查询未通过 -->
+    <select id="selectNotPass" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
+		select title,cover_img_url,draft_fee,reason,draft_type,suggest
+        from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status IN (1,2)
+		UNION ALL
+		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest
+		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0 AND shelve_flag = 1
+    </select>
+
+	<!-- 查询草稿 -->
+    <select id="selectDraught" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
+		select title,cover_img_url,draft_fee,reason,draft_type,suggest
+        from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status = 0
+    </select>
+
 </mapper>

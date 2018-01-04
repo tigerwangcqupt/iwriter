@@ -11,6 +11,17 @@ import java.math.BigDecimal;
  */
 public class DraftVo implements Serializable {
     private Long id;
+
+    /**
+     * 稿件类型:0图文,1视频
+     */
+    private Integer draftType;
+
+    /**
+     * 任务标识:0自由投稿,1任务投稿
+     */
+    private Integer taskFlag;
+
     /**
      * 标题
      */
@@ -67,6 +78,22 @@ public class DraftVo implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getDraftType() {
+        return draftType;
+    }
+
+    public void setDraftType(Integer draftType) {
+        this.draftType = draftType;
+    }
+
+    public Integer getTaskFlag() {
+        return taskFlag;
+    }
+
+    public void setTaskFlag(Integer taskFlag) {
+        this.taskFlag = taskFlag;
     }
 
     public String getTitle() {
