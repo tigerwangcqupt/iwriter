@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.profit.provider;
 import com.yryz.common.constant.YyrzModuleEnumConstants;
+import com.yryz.common.distributed.lock.DistributedLockUtils;
 import com.yryz.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
@@ -25,11 +26,11 @@ public class ProfitProvider implements ProfitApi {
 
 	private static final Logger logger = LoggerFactory.getLogger(ProfitProvider.class);
 
+
 	@Autowired
 	private ProfitService profitService;
 
-	@Autowired
-	private IdAPI idAPI;
+
 
 	/**
 	*  获取Profit明细
@@ -77,18 +78,9 @@ public class ProfitProvider implements ProfitApi {
 	@Override
 	public RpcResponse<Profit> insertProfit(Profit profit) {
 		try {
-			Long kid  = idAPI.getId("yryz_bank");
-			profit.setKid(kid);
-			profit.setModuleEnum(YyrzModuleEnumConstants.PROFIT_INFO);
-			profit.setSettlementDate(new Date());
-			profit.setChargeFee(new BigDecimal(2));
-			profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
-			profit.setSurplusAmount(new BigDecimal(500));
-			profit.setSettlementMsg(ProfitEnum.WITHDRAWALS_FEE.getMsg());
-			profitService.insert(profit);
-			return ResponseModel.returnObjectSuccess(null);
+			return ResponseModel.returnObjectSuccess(profitService.insertProfit(profit));
 		} catch (Exception e) {
-			logger.error("保存profit失败", e);
+			logger.error("新增收益失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}
