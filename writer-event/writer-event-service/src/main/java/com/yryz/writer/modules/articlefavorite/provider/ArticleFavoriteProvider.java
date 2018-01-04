@@ -79,15 +79,14 @@ public class ArticleFavoriteProvider implements ArticleFavoriteApi {
 	}
 
 	@Override
-	public RpcResponse<ArticleFavoriteVo> saveFavorite(ArticleFavorite articleFavorite) {
+	public RpcResponse<Boolean> saveFavorite(ArticleFavorite articleFavorite) {
 		try {
 			ArticleFavoriteVo articleFavoriteVo = new ArticleFavoriteVo();
 			if (articleFavoriteService.saveFavorite(articleFavorite) > 0){
-				articleFavoriteVo.setSuccessNum("1");
+				return ResponseModel.returnListSuccess(true);
 			}else{
-				articleFavoriteVo.setSuccessNum("0");
+				return ResponseModel.returnListSuccess(false);
 			}
-			return ResponseModel.returnListSuccess(articleFavoriteVo);
 		} catch (Exception e) {
 			logger.error("获取ArticleFavorite列表失败", e);
 			return ResponseModel.returnException(e);

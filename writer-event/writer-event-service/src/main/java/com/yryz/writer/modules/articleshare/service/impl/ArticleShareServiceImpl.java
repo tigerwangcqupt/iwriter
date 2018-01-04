@@ -82,7 +82,7 @@ public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleS
                     articleShareVoList.add(articleShareVo);
                 }
             }
-            messageApi.cleanMessageTips(ModuleEnum.SHARE, Long.valueOf(articleShareDto.getCustId()));
+            messageApi.cleanMessageTips(ModuleEnum.SHARE, articleShareDto.getCustId());
         }catch (Exception e) {
             logger.error("保存ArticleFavorite明细失败", e);
             e.printStackTrace();
@@ -98,8 +98,8 @@ public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleS
         articleShare.setKid(kid);
         try {
             //保存写手的被收藏数
-            messageApi.saveMessageTips(ModuleEnum.SHARE, articleShare.getWriterId() == null ? 0 : articleShare.getWriterId());
             articleShareDao.insert(articleShare);
+            messageApi.saveMessageTips(ModuleEnum.SHARE, articleShare.getWriterId() == null ? 0 : articleShare.getWriterId());
 
         } catch (Exception e) {
             logger.error("保存ArticleFavorite明细失败", e);

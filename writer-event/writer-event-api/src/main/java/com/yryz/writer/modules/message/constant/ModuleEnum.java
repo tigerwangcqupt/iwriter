@@ -35,7 +35,7 @@ public enum ModuleEnum {
 
     /** 平台 */
     PLATFORM("10005",
-            "平台",
+            "平台任务",
             "platform",
             "/service/noticeList"),
 

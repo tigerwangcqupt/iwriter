@@ -89,7 +89,7 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
                     articleFavoriteVoList.add(articleFavoriteVo);
                 }
             }
-            messageApi.cleanMessageTips(ModuleEnum.FAVORITE, Long.valueOf(articleFavoriteDto.getCustId()));
+            messageApi.cleanMessageTips(ModuleEnum.FAVORITE, articleFavoriteDto.getCustId());
         }catch (Exception e) {
             logger.error("保存ArticleFavorite明细失败", e);
             e.printStackTrace();
@@ -106,8 +106,8 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
         articleFavorite.setKid(kid);
         try {
             //保存写手的被收藏数
-            messageApi.saveMessageTips(ModuleEnum.FAVORITE, articleFavorite.getWriterId() == null ? 0 : articleFavorite.getWriterId());
             articleFavoriteDao.insert(articleFavorite);
+            messageApi.saveMessageTips(ModuleEnum.FAVORITE, articleFavorite.getWriterId() == null ? 0 : articleFavorite.getWriterId());
 
         }catch (Exception e) {
             logger.error("保存ArticleFavorite明细失败", e);

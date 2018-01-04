@@ -4,6 +4,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.articleshare.ArticleShareApi;
 import com.yryz.writer.modules.articleshare.dto.ArticleShareDto;
+import com.yryz.writer.modules.articleshare.entity.ArticleShare;
 import com.yryz.writer.modules.articleshare.vo.ArticleShareVo;
 import com.yryz.writer.modules.indexcolumn.IndexColumnApi;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
@@ -11,6 +12,7 @@ import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,5 +38,11 @@ public class ArticleShareController {
       return articleShareApi.listByWriter(articleShareDto);
    }
 
+   @ResponseBody
+   @RequestMapping(value="/save", method = RequestMethod.POST)
+   public RpcResponse<Boolean> save(@RequestBody ArticleShare articleShare) {
+      Assert.notNull(articleShare.getWriterId(), "写手id不能为空");
+      return articleShareApi.saveArticleShare(articleShare);
+   }
 
 }

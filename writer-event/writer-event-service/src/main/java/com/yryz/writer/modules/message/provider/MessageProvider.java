@@ -69,4 +69,14 @@ public class MessageProvider implements MessageApi {
             return ResponseModel.returnException(e);
         }
     }
+
+    @Override
+    public RpcResponse<Long> getMessageTipsNum(ModuleEnum moduleEnum, Long writerId) {
+        try {
+            return ResponseModel.returnObjectSuccess(messageService.getMessageTipsNum(moduleEnum, writerId));
+        } catch (Exception e) {
+            logger.error("返回某个消息栏目缓存数失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
 }

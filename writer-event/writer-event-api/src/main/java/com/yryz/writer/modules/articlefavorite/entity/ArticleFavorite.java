@@ -11,7 +11,6 @@ import java.util.Date;
   *
  */
 public class ArticleFavorite extends GenericEntity{
-	
 
 	/**
 	 * 创建者id(收藏用户id)
@@ -46,6 +45,8 @@ public class ArticleFavorite extends GenericEntity{
 	 * 写手id
 	 */
 	private Long writerId;
+
+
 
 	public Long getUserId() {
 		return this.userId;
@@ -95,4 +96,5 @@ public class ArticleFavorite extends GenericEntity{
 
 		return writerId;
 	}
+
 }

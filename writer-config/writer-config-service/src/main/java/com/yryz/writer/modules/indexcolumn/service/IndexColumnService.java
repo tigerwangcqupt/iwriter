@@ -30,7 +30,7 @@ public interface IndexColumnService extends BaseService {
     * 查询未删除的全部栏目
     * @return
     */
-   public List<IndexColumnVo> selectAll(IndexColumnDto indexColumnDto);
+   public IndexColumnVo selectAll(IndexColumnDto indexColumnDto);
 
    /**
     * 获得写手的消息栏目（包含每个栏目的消息数）

@@ -12,13 +12,13 @@ import com.yryz.component.rpc.dto.PageList;
 public class ArticleCommentDto extends PageList {
 
     /**  写手id  */
-    public String custId;
+    public Long custId;
 
-    public void setCustId(String custId) {
+    public void setCustId(Long custId) {
         this.custId = custId;
     }
 
-    public String getCustId() {
+    public Long getCustId() {
 
         return custId;
     }

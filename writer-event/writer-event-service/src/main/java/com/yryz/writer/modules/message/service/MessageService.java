@@ -21,7 +21,7 @@ public interface MessageService {
      * @param writerId
      * @return
      */
-    public MessageNumVo getMessageNumVo(String writerId);
+    public MessageNumVo getMessageNumVo(Long writerId);
 
 
     /**
@@ -44,4 +44,12 @@ public interface MessageService {
      * @return
      */
     public Boolean cleanMessageTips(ModuleEnum moduleEnum, Long writerId);
+
+    /**
+     * 获得写手某个栏目的气泡数
+     * @param moduleEnum
+     * @param writerId
+     * @return
+     */
+    public Long getMessageTipsNum(ModuleEnum moduleEnum, Long writerId);
 }
