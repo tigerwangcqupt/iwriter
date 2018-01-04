@@ -103,7 +103,7 @@ create_date,last_update_date,writer_id
 	
 	<!--按需新增ArticleFavorite-->
     <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite">
-	    insert into yryz_article_favorite 
+	    insert into yryz_article_favorite
 	    <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="kid != null">
 			kid,
@@ -163,8 +163,8 @@ create_date,last_update_date,writer_id
 	    </if>
 	    </trim>
 	</insert>
-	
-	
+
+
 	<!-- 按需修改ArticleFavorite-->   
     <update id="update" parameterType="com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite">
         update yryz_article_favorite
@@ -212,7 +212,8 @@ create_date,last_update_date,writer_id
 		FROM
 			yryz_article_favorite
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-
+			shelve_flag = 0
+			AND del_flag = 0
 			<if test="custId != null and custId != ''">
 				AND writer_id = #{custId}
 			</if>

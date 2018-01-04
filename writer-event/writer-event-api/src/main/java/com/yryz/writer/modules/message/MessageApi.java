@@ -42,4 +42,11 @@ public interface MessageApi {
      * @return
      */
     public RpcResponse<Boolean> cleanMessageTips(ModuleEnum moduleEnum, Long writerId);
+
+    /**
+     * 增加写手的消息缓存数，每次访问列表时清空（通知、评论、分享、收藏）
+     * @param writerId
+     * @return
+     */
+    public RpcResponse<Boolean> saveMessageTips(ModuleEnum moduleEnum, Long writerId);
 }

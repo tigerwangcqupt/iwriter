@@ -46,8 +46,6 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
     @Autowired
     private MessageApi messageApi;
 
-    @Autowired
-    private MessageService messageService;
 
     protected BaseDao getDao() {
         return articleFavoriteDao;
@@ -108,12 +106,12 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
         articleFavorite.setKid(kid);
         try {
             //保存写手的被收藏数
-            messageService.saveMessageTips(ModuleEnum.FAVORITE, articleFavorite.getWriterId() == null ? 0 : articleFavorite.getWriterId());
+            messageApi.saveMessageTips(ModuleEnum.FAVORITE, articleFavorite.getWriterId() == null ? 0 : articleFavorite.getWriterId());
             articleFavoriteDao.insert(articleFavorite);
 
         }catch (Exception e) {
             logger.error("保存ArticleFavorite明细失败", e);
-            e.printStackTrace();
+            return 0L;
         }
         return 1L;
     }

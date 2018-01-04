@@ -20,4 +20,10 @@ public interface ArticleShareDao extends BaseDao {
 
     List<ArticleShare> selectList(ArticleShareDto articleShareDto);
 
+    /**
+     * 查询写手文章的全部分享详情
+     * @param articleShareDto
+     * @return
+     */
+    List<ArticleShare> selectListByWriter(ArticleShareDto articleShareDto);
 }

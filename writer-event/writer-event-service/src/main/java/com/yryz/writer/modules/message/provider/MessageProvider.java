@@ -59,4 +59,14 @@ public class MessageProvider implements MessageApi {
             return ResponseModel.returnException(e);
         }
     }
+
+    @Override
+    public RpcResponse<Boolean> saveMessageTips(ModuleEnum moduleEnum, Long writerId) {
+        try {
+            return ResponseModel.returnObjectSuccess(messageService.saveMessageTips(moduleEnum, writerId));
+        } catch (Exception e) {
+            logger.error("清空某个消息栏目缓存数失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
 }

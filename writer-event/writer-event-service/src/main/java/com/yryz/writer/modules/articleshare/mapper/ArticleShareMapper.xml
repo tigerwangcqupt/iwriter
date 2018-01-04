@@ -38,74 +38,118 @@
   
   	<!-- 新增ArticleShare-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.articleshare.entity.ArticleShare">
-	    insert into yryz_article_share (kid,user_id,create_user_id,create_user_nickname,article_id,article_title,create_date,last_update_date)
-	    values (
-	    	#{kid,jdbcType=BIGINT}
-				,#{userId,jdbcType=BIGINT}
-				,#{createUserId,jdbcType=VARCHAR}
-				,#{createUserNickname,jdbcType=VARCHAR}
-				,#{articleId,jdbcType=BIGINT}
-				,#{articleTitle,jdbcType=VARCHAR}
-			,NOW()
-			,NOW()
-	    )
+		insert into yryz_article_share
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="kid != null">
+				kid,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="createUserId != null and createUserId != ''">
+				create_user_id,
+			</if>
+			<if test="userHeadImg != null and userHeadImg != ''">
+				user_head_img,
+			</if>
+			<if test="articleId != null">
+				article_id,
+			</if>
+			<if test="articleTitle != null and articleTitle != ''">
+				article_title,
+			</if>
+			<if test="writerId != null">
+				writer_id,
+			</if>
+			create_date,
+			last_update_date
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="kid != null">
+				#{kid,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="createUserId != null and createUserId != ''">
+				#{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserNickname != null and createUserNickname != ''">
+				#{createUserNickname,jdbcType=VARCHAR},
+			</if>
+			<if test="articleId != null">
+				#{articleId,jdbcType=BIGINT},
+			</if>
+			<if test="articleTitle != null and articleTitle != ''">
+				#{articleTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="writerId != null">
+				#{writerId,jdbcType=BIGINT},
+			</if>
+			NOW(),
+			NOW()
+		</trim>
 	</insert>
 	
 	<!--按需新增ArticleShare-->
     <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.articleshare.entity.ArticleShare">
-	    insert into yryz_article_share 
-	    <trim prefix="(" suffix=")" suffixOverrides=",">
-        <if test="kid != null">
-			kid,
-	    </if>
-        <if test="userId != null">
-			user_id,
-	    </if>
-        <if test="createUserId != null and createUserId != ''">
-			create_user_id,
-	    </if>
-        <if test="createUserNickname != null and createUserNickname != ''">
-			create_user_nickname,
-	    </if>
-        <if test="articleId != null">
-			article_id,
-	    </if>
-        <if test="articleTitle != null and articleTitle != ''">
-			article_title,
-	    </if>
-        <if test="createDate != null">
+	    insert into yryz_article_share
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="kid != null">
+				kid,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="createUserId != null and createUserId != ''">
+				create_user_id,
+			</if>
+			<if test="createUserNickname != null and createUserNickname != ''">
+				create_user_nickname,
+			</if>
+			<if test="userHeadImg != null and userHeadImg != ''">
+				user_head_img,
+			</if>
+			<if test="articleId != null">
+				article_id,
+			</if>
+			<if test="articleTitle != null and articleTitle != ''">
+				article_title,
+			</if>
+			<if test="writerId != null">
+				writer_id,
+			</if>
 			create_date,
-	    </if>
-        <if test="lastUpdateDate != null">
-			last_update_date,
-	    </if>
-	    </trim>
-	    <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="kid != null">
-			#{kid,jdbcType=BIGINT},
-	    </if>
-        <if test="userId != null">
-			#{userId,jdbcType=BIGINT},
-	    </if>
-        <if test="createUserId != null and createUserId != ''">
-			#{createUserId,jdbcType=VARCHAR},
-	    </if>
-        <if test="createUserNickname != null and createUserNickname != ''">
-			#{createUserNickname,jdbcType=VARCHAR},
-	    </if>
-        <if test="articleId != null">
-			#{articleId,jdbcType=BIGINT},
-	    </if>
-        <if test="articleTitle != null and articleTitle != ''">
-			#{articleTitle,jdbcType=VARCHAR},
-	    </if>
-        <if test="createDate != null">
-			#{createDate,jdbcType=TIMESTAMP},
-	    </if>
-        <if test="lastUpdateDate != null">
-			#{lastUpdateDate,jdbcType=TIMESTAMP},
-	    </if>
-	    </trim>
+			last_update_date
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="kid != null">
+				#{kid,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="createUserId != null and createUserId != ''">
+				#{createUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserNickname != null and createUserNickname != ''">
+				#{createUserNickname,jdbcType=VARCHAR},
+			</if>
+			<if test="userHeadImg != null and userHeadImg != ''">
+				#{userHeadImg,jdbcType=VARCHAR},
+			</if>
+			<if test="articleId != null">
+				#{articleId,jdbcType=BIGINT},
+			</if>
+			<if test="articleTitle != null and articleTitle != ''">
+				#{articleTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="writerId != null">
+				#{writerId,jdbcType=BIGINT},
+			</if>
+			NOW(),
+			NOW()
+		</trim>
 	</insert>
 	
 	
@@ -139,10 +183,18 @@
     </update>
     
     <!-- 查询ArticleShare列表 -->
-    <select id="selectList" parameterType="com.yryz.writer.modules.articleshare.dto.ArticleShareDto" resultMap="BaseResultMap">
+    <select id="selectListByWriter" parameterType="com.yryz.writer.modules.articleshare.dto.ArticleShareDto" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yryz_article_share where del_flag = 0
+        from yryz_article_share
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			shelve_flag = 0
+			AND del_flag = 0
+			<if test="custId != null and custId != ''">
+				AND writer_id = #{custId}
+			</if>
+			ORDER BY kid DESC
+		</trim>
 
     </select>
     

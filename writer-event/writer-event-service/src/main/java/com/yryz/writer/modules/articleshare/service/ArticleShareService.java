@@ -23,4 +23,17 @@ public interface ArticleShareService extends BaseService {
 
    ArticleShareVo detail(Long articleShareId);
 
+   /**
+    * 保存
+    * @param articleShare
+    * @return
+    */
+   Long saveArticleShare(ArticleShare articleShare);
+
+   /**
+    * 写手的文章分享列表
+    * @param articleShareDto
+    * @return
+    */
+   public PageList<ArticleShareVo> selectListByWriter(ArticleShareDto articleShareDto);
 }

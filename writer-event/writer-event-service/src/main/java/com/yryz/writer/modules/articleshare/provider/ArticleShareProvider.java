@@ -65,4 +65,14 @@ public class ArticleShareProvider implements ArticleShareApi {
         }
     }
 
+	@Override
+	public RpcResponse<PageList<ArticleShareVo>> listByWriter(ArticleShareDto articleShareDto) {
+		try {
+			return ResponseModel.returnListSuccess(articleShareService.selectListByWriter(articleShareDto));
+		} catch (Exception e) {
+			logger.error("获取ArticleShare列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }
