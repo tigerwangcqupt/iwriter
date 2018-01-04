@@ -6,6 +6,9 @@ import com.yryz.common.dao.BaseDao;
 import com.yryz.common.service.BaseServiceImpl;
 import com.yryz.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +35,16 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
         PageUtils.startPage(writerAuditDto.getCurrentPage(), writerAuditDto.getPageSize());
         List<WriterAudit> list = writerAuditDao.selectList(writerAuditDto);
         List<WriterAuditVo> writerAuditVoList = new ArrayList <WriterAuditVo>();
-        if(list != null && list.size() > 0) {
+        
+        
+        if(CollectionUtils.isNotEmpty(list)){
             for(WriterAudit writerAudit : list){
                 WriterAuditVo writerAuditVo = new WriterAuditVo();
-                //WriterAudit to WriterAuditVo
+                BeanUtils.copyProperties(writerAudit, writerAuditVo);
                 writerAuditVoList.add(writerAuditVo);
             }
         }
+
         return new PageModel<WriterAuditVo>().getPageList(writerAuditVoList);
     }
 

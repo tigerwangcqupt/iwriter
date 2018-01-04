@@ -240,7 +240,7 @@
     <select id="selectList" parameterType="com.yryz.writer.modules.writer.dto.WriterAuditDto" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yryz_writer_audit_history where del_flag = 0
+        from yryz_writer_audit_history
     </select>
     
 </mapper>
