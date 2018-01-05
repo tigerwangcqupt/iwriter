@@ -44,7 +44,7 @@ public interface IndexColumnApi {
 	 * 获取首页栏目列表（未删除）
 	 * @return
 	 * */
-	RpcResponse<List<IndexColumnVo>> listByWriter(IndexColumnDto indexColumnDto);
+	RpcResponse<IndexColumnVo> listByWriter(IndexColumnDto indexColumnDto);
 
 	/**
 	 * 获得写手的消息栏目（包含每个栏目的消息数）

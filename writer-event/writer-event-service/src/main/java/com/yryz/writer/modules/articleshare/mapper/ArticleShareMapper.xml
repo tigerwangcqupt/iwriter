@@ -49,8 +49,8 @@
 			<if test="createUserId != null and createUserId != ''">
 				create_user_id,
 			</if>
-			<if test="userHeadImg != null and userHeadImg != ''">
-				user_head_img,
+			<if test="createUserNickname != null and createUserNickname != ''">
+				create_user_nickname,
 			</if>
 			<if test="articleId != null">
 				article_id,

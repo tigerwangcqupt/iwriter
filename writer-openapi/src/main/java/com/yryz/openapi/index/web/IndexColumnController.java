@@ -27,14 +27,16 @@ public class IndexColumnController {
 
    @ResponseBody
    @RequestMapping(value="/list", method = RequestMethod.GET)
-   public RpcResponse<List<IndexColumnVo>> list(IndexColumnDto indexColumnDto) {
+   public RpcResponse<IndexColumnVo> list(IndexColumnDto indexColumnDto, @RequestHeader Long userId) {
+      Assert.notNull(userId, "写手id不能为空");
+      indexColumnDto.setCustId(userId);
 //        return indexColumnApi.list(indexColumnDto);
       return indexColumnApi.listByWriter(indexColumnDto);
    }
 
    @ResponseBody
    @RequestMapping(value="/getIndexTips", method = RequestMethod.GET)
-   public RpcResponse<List<IndexTipsVo>> getIndexTips(IndexColumnDto indexColumnDto, @RequestHeader String userId) {
+   public RpcResponse<List<IndexTipsVo>> getIndexTips(IndexColumnDto indexColumnDto, @RequestHeader Long userId) {
 //        return indexColumnApi.list(indexColumnDto);
 //      Assert.notNull(indexColumnDto.getCustId(), "写手id不能为空");
       Assert.notNull(userId, "写手id不能为空");

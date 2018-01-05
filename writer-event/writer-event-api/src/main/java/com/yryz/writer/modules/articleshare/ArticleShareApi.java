@@ -44,4 +44,10 @@ public interface ArticleShareApi {
 	 * */
 	RpcResponse<PageList<ArticleShareVo>> listByWriter(ArticleShareDto articleShareDto);
 
+	/**
+	 * 保存写手的文章分享
+	 * @param articleShare
+	 * @return
+	 */
+	RpcResponse<Boolean> saveArticleShare(ArticleShare articleShare);
 }

@@ -75,4 +75,15 @@ public class ArticleShareProvider implements ArticleShareApi {
 		}
 	}
 
+	@Override
+	public RpcResponse<Boolean> saveArticleShare(ArticleShare articleShare) {
+		try {
+			long successNum = articleShareService.saveArticleShare(articleShare);
+			return ResponseModel.returnListSuccess(successNum == 1 ? true : false);
+		} catch (Exception e) {
+			logger.error("获取ArticleShare列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }

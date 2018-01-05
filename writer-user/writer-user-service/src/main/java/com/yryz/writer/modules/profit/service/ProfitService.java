@@ -5,6 +5,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
+import com.yryz.writer.modules.writer.entity.Writer;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
@@ -25,5 +26,9 @@ public interface ProfitService extends BaseService {
    ProfitVo detail(Long profitId);
 
    ProfitVo detailProfit(Long userId);
+
+   Profit insertProfit(Profit profit);
+
+   Integer bindCapital(Writer writer);
 
 }

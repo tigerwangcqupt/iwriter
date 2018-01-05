@@ -43,4 +43,10 @@ public interface ArticleCommentApi {
 	 * @return
 	 * */
 	RpcResponse<PageList<ArticleCommentVo>> listByWriter(ArticleCommentDto articleCommentDto);
+
+	/**
+	 * 保存评论
+	 * @return
+	 * */
+	RpcResponse<Boolean> saveArticleComment(ArticleComment articleComment);
 }

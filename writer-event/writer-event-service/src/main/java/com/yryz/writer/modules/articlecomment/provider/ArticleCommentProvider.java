@@ -83,4 +83,14 @@ public class ArticleCommentProvider implements ArticleCommentApi {
 		}
 	}
 
+	@Override
+	public RpcResponse<Boolean> saveArticleComment(ArticleComment articleComment) {
+		try {
+			return ResponseModel.returnListSuccess(articleCommentService.saveArticleComment(articleComment));
+		} catch (Exception e) {
+			logger.error("保存ArticleComment失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }

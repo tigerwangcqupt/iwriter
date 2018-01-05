@@ -49,4 +49,12 @@ public interface MessageApi {
      * @return
      */
     public RpcResponse<Boolean> saveMessageTips(ModuleEnum moduleEnum, Long writerId);
+
+    /**
+     * 获得写手某个栏目的气泡数
+     * @param moduleEnum
+     * @param writerId
+     * @return
+     */
+    public RpcResponse<Long> getMessageTipsNum(ModuleEnum moduleEnum, Long writerId);
 }

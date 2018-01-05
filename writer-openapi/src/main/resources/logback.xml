@@ -4,7 +4,7 @@
     debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
 <configuration scan="true" scanPeriod="600 seconds" debug="false">
     <!-- 定义日志文件 输入位置 -->
-    <property name="log_dir" value="logs/new-openapi"/>
+    <property name="log_dir" value="logs/new-yryz/new-openapi"/>
     <!-- 日志最大的历史-->
     <property name="maxHistory" value="90"/>
     <property name="normal-pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n"/>

@@ -48,5 +48,5 @@ public interface ArticleFavoriteApi {
 	 * 保存收藏记录
 	 * @return
 	 * */
-	RpcResponse<ArticleFavoriteVo> saveFavorite(ArticleFavorite articleFavorite);
+	RpcResponse<Boolean> saveFavorite(ArticleFavorite articleFavorite);
 }

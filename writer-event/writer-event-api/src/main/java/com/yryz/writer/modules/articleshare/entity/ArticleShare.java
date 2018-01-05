@@ -11,7 +11,6 @@ import java.util.Date;
   *
  */
 public class ArticleShare extends GenericEntity{
-	
 
 	/**
 	 * 创建者id(分享用户id)
@@ -82,4 +81,5 @@ public class ArticleShare extends GenericEntity{
 
 		return writerId;
 	}
+
 }

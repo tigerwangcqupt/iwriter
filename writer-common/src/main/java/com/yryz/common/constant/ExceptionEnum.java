@@ -65,7 +65,10 @@ public enum ExceptionEnum {
     QUESTION_HAS_BEEN_ANSWERED("7001", "You've already answered!", "您已经回答过一次该问题了！"),
     QUESTION_PIC_TOO_MANY("7002", "You have uploaded more than 10 of the pictures!", "您上传的图片超过了10张！"),
 
-    Exception("1000", "Server error; please try again later.", "服务器内部错误，未知异常！");
+    Exception("1000", "Server error; please try again later.", "服务器内部错误，未知异常！"),
+
+    //写手消息的异常码由8000开始
+    MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！");
 
     private String code;
 

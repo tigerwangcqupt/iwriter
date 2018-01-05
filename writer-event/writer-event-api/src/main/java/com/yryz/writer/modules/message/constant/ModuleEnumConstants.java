@@ -54,7 +54,7 @@ public class ModuleEnumConstants {
     static {
         if(ModuleEnum.values() != null && ModuleEnum.values().length > 0){
             for(ModuleEnum e : ModuleEnum.values()){
-                moduleEnumMap.put(e.getId(), e);
+                moduleEnumMap.put(e.getName(), e);
             }
         }
     }

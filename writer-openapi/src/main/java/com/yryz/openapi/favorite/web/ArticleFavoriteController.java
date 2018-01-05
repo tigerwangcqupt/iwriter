@@ -37,7 +37,7 @@ public class ArticleFavoriteController {
 
    @ResponseBody
    @RequestMapping(value="/save", method = RequestMethod.POST)
-   public RpcResponse<ArticleFavoriteVo> save(@RequestBody ArticleFavorite articleFavorite) {
+   public RpcResponse<Boolean> save(@RequestBody ArticleFavorite articleFavorite) {
       Assert.notNull(articleFavorite, "文章收藏参数不能为空");
       Assert.notNull(articleFavorite.getWriterId(), "文章作者不能为空");
       Assert.notNull(articleFavorite.getCreateUserNickname(), "收藏者昵称不为空");
