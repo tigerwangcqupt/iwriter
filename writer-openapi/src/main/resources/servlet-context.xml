@@ -50,18 +50,18 @@
         </property>
     </bean>
      
-    <!--<mvc:interceptors>
-         //跨域拦截 
+    <mvc:interceptors>
+        <!-- 跨域拦截 -->
          <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.yryz.openapi.core.interceptor.CommonInterceptor"/>
          </mvc:interceptor>
-        //token拦截
-         <mvc:interceptor>
+
+<!--         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.yryz.openapi.core.interceptor.SecurityInterceptor"/>
-         </mvc:interceptor>
-     </mvc:interceptors> -->
+         </mvc:interceptor>-->
+     </mvc:interceptors>
 
     <!-- 上下文环境 -->
     <bean class="com.yryz.common.context.SpringContextHelper"></bean>
