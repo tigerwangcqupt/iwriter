@@ -31,21 +31,5 @@
 	</dependencies>
 	<build>
 		<finalName>writer-config-service</finalName>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.xml</include>
-				</includes>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
 	</build>
 </project>
