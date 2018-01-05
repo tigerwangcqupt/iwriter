@@ -36,9 +36,9 @@ public class WriterAuditProvider implements WriterAuditApi {
 	*  @param  writerAuditId
 	*  @return
 	* */
-	public RpcResponse<WriterAudit> get(Long writerAuditId) {
+	public RpcResponse<WriterAudit> get(Long kid) {
 		try {
-			return ResponseModel.returnObjectSuccess(writerAuditService.get(WriterAudit.class, writerAuditId));
+			return ResponseModel.returnObjectSuccess(writerAuditService.get(WriterAudit.class, kid));
 		} catch (Exception e) {
 			logger.error("获取WriterAudit明细失败", e);
 			return ResponseModel.returnException(e);
@@ -84,5 +84,10 @@ public class WriterAuditProvider implements WriterAuditApi {
        		 return ResponseModel.returnException(e);
         }
     }
+
+	@Override
+	public RpcResponse<Integer> audit(Long kid) {
+		return null;
+	}
 
 }

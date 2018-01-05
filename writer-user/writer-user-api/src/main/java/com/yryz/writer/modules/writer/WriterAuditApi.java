@@ -36,5 +36,8 @@ public interface WriterAuditApi {
     * @return
     * */
     RpcResponse<PageList<WriterAuditVo>> list(WriterAuditDto writerAuditDto);
+    
+    RpcResponse<Integer> audit(Long kid);
+    
 
 }

@@ -65,12 +65,13 @@
         order by h.apply_date DESC
     </select>
 
-     <!-- 查询WriterAudit详情 -->
+    <!-- 查询WriterAudit详情 -->
     <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
-        from yryz_writer_audit_history h
-        where h.kid = #{kid,jdbcType=BIGINT}
+        from yryz_writer_audit_history h,yryz_writer w 
+        WHERE h.writer_kid = w.kid
+        and h.kid = #{kid,jdbcType=BIGINT}
     </select>
     
     <!-- 删除WriterAudit-->
