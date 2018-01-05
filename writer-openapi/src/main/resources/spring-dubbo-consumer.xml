@@ -63,4 +63,8 @@
                      interface="com.yryz.writer.modules.message.MessageApi" registry="yryz-new"
                      check="false" timeout="10000" retries="0"/>
 
+    <dubbo:reference id="articleCommentApi"
+                     interface="com.yryz.writer.modules.articlecomment.ArticleCommentApi" registry="yryz-new"
+                     check="false" timeout="10000" retries="0"/>
+
 </beans>

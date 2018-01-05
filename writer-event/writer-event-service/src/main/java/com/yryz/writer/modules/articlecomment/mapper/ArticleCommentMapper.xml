@@ -45,24 +45,96 @@ create_user_id,last_update_user_id,comment_user_nickname, article_title, writer_
   
   
   	<!-- 新增ArticleComment-->
-    <insert id="insert"  parameterType="com.yryz.writer.modules.articlecomment.entity.ArticleComment">
-	    insert into yryz_articlecomment (kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,content,shelve_flag,del_flag,recommend,create_date,last_update_date,create_user_id,last_update_user_id)
-	    values (
-	    	#{kid,jdbcType=BIGINT}
-				,#{targetId,jdbcType=BIGINT}
-				,#{commentType,jdbcType=TINYINT}
-				,#{commentWriterId,jdbcType=BIGINT}
-				,#{commentUserId,jdbcType=BIGINT}
-				,#{articleId,jdbcType=BIGINT}
-				,#{content,jdbcType=VARCHAR}
-				,#{shelveFlag,jdbcType=TINYINT}
-				,#{delFlag,jdbcType=TINYINT}
-				,#{recommend,jdbcType=TINYINT}
-			,NOW()
-			,NOW()
-				,#{createUserId,jdbcType=VARCHAR}
-				,#{lastUpdateUserId,jdbcType=VARCHAR}
-	    )
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.yryz.writer.modules.articlecomment.entity.ArticleComment">
+		insert into yryz_articlecomment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="kid != null">
+				kid,
+			</if>
+			<if test="targetId != null">
+				target_id,
+			</if>
+			<if test="commentType != null">
+				comment_type,
+			</if>
+			<if test="commentWriterId != null">
+				comment_writer_id,
+			</if>
+			<if test="commentUserId != null">
+				comment_user_id,
+			</if>
+			<if test="articleId != null">
+				article_id,
+			</if>
+			<if test="content != null and content != ''">
+				content,
+			</if>
+			<if test="createUserId != null and createUserId != ''">
+				create_user_id,
+			</if>
+				last_update_user_id,
+			<if test="commentUserNickname != null and commentUserNickname != ''">
+				comment_user_nickname,
+			</if>
+			<if test="writerId != null">
+				writer_id,
+			</if>
+			<if test="articleTitle != null and articleTitle != ''">
+				article_title,
+			</if>
+			recommend,
+			create_date,
+			last_update_date
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="kid != null">
+				#{kid,jdbcType=BIGINT},
+			</if>
+			<if test="targetId != null">
+				#{targetId,jdbcType=BIGINT},
+			</if>
+			<if test="commentType != null">
+				#{commentType,jdbcType=BIGINT},
+			</if>
+			<if test="commentWriterId != null">
+				#{commentWriterId,jdbcType=BIGINT},
+			</if>
+			<if test="commentUserId != null">
+				#{commentUserId,jdbcType=BIGINT},
+			</if>
+			<if test="articleId != null">
+				#{articleId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null and content != ''">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="createUserId != null and createUserId != ''">
+				#{createUserId,jdbcType=VARCHAR},
+			</if>
+			<choose>
+				<when test="lastUpdateUserId != null and lastUpdateUserId != ''" >
+					#{lastUpdateUserId,jdbcType=VARCHAR},
+				</when>
+				<when test="createUserId != null and createUserId != ''" >
+					#{createUserId,jdbcType=VARCHAR},
+				</when>
+				<otherwise>
+					0,
+				</otherwise>
+			</choose>
+			<if test="commentUserNickname != null and commentUserNickname != ''">
+				#{commentUserNickname,jdbcType=VARCHAR},
+			</if>
+			<if test="writerId != null">
+				#{writerId,jdbcType=BIGINT},
+			</if>
+			<if test="articleTitle != null and articleTitle != ''">
+				#{articleTitle,jdbcType=VARCHAR},
+			</if>
+			1,
+			NOW(),
+			NOW()
+		</trim>
 	</insert>
 	
 	<!--按需新增ArticleComment-->

@@ -29,4 +29,11 @@ public interface ArticleCommentService extends BaseService {
     * @return
     */
    PageList<ArticleCommentVo> selectListByWriter(ArticleCommentDto articleCommentDto);
+
+   /**
+    * 保存文章评论
+    * @param articleComment
+    * @return
+    */
+   public Boolean saveArticleComment(ArticleComment articleComment);
 }

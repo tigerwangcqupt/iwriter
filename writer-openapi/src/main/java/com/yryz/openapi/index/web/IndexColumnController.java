@@ -27,7 +27,9 @@ public class IndexColumnController {
 
    @ResponseBody
    @RequestMapping(value="/list", method = RequestMethod.GET)
-   public RpcResponse<IndexColumnVo> list(IndexColumnDto indexColumnDto) {
+   public RpcResponse<IndexColumnVo> list(IndexColumnDto indexColumnDto, @RequestHeader Long userId) {
+      Assert.notNull(userId, "写手id不能为空");
+      indexColumnDto.setCustId(userId);
 //        return indexColumnApi.list(indexColumnDto);
       return indexColumnApi.listByWriter(indexColumnDto);
    }

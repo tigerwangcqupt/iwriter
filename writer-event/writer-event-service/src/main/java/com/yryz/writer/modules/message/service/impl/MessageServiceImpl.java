@@ -48,9 +48,17 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     public MessageNumVo getMessageNumVo(Long writerId) {
         MessageNumVo messageNumVo = null;
         try {
-            //todo设置消息总数
+//            //todo设置消息总数
             messageNumVo = new MessageNumVo();
-            messageNumVo.setMessageNum("99");
+//            messageNumVo.setMessageNum("99");
+            long messageNum = 0;
+            for (ModuleEnum moduleEnum : indexModuleEnums) {
+                Long tipsNum = messageService.getMessageTipsNum(moduleEnum, writerId);
+                if (tipsNum != null){
+                    messageNum += tipsNum;
+                }
+            }
+            messageNumVo.setMessageNum(String.valueOf(messageNum));
         } catch (Exception e) {
             logger.error("查询写手首页消息总数失败", e);
         }
