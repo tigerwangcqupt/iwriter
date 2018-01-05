@@ -14,6 +14,7 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.profit.constant.ProfitEnum;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
+import com.yryz.writer.modules.writer.entity.Writer;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,5 +145,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 DistributedLockUtils.unlock(LOCK_PROFIT_ADD, lockKey);
             }
         }
+    }
+
+    @Override
+    public Integer bindCapital(Writer writer) {
+        return null;
     }
 }

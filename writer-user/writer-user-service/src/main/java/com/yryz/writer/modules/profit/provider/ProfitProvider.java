@@ -13,6 +13,7 @@ import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.service.ProfitService;
 
+import com.yryz.writer.modules.writer.entity.Writer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +100,10 @@ public class ProfitProvider implements ProfitApi {
        		 return ResponseModel.returnException(e);
         }
     }
+
+	@Override
+	public RpcResponse<Integer> bindCapital(Writer writer) {
+		return null;
+	}
 
 }
