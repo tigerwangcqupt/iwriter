@@ -24,4 +24,5 @@ public interface CityApi {
 	 */
 	List<CityVo> selectCitysByPid(String provinceCode);
 
+	public CityVo selectCity(String cityCode);
 }

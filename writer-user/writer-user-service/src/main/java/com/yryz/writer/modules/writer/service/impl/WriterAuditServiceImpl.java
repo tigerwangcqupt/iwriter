@@ -26,6 +26,8 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
 
     @Autowired
     private WriterAuditDao writerAuditDao;
+    
+  
 
     protected BaseDao getDao() {
         return writerAuditDao;
@@ -48,6 +50,7 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
 
     public WriterAuditVo detail(Long kid) {
         WriterAudit writerAudit = writerAuditDao.selectByKid(WriterAudit.class,kid);
+        
         WriterAuditVo writerAuditVo = new WriterAuditVo();
         if (writerAudit != null) {
             BeanUtils.copyProperties(writerAudit, writerAuditVo);

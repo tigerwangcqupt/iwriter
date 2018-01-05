@@ -3,6 +3,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.yryz.service.api.api.exception.ServiceException;
 import com.yryz.writer.modules.province.dao.persistence.ProvinceDao;
+import com.yryz.writer.modules.province.entity.Province;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
 
 
@@ -24,6 +26,7 @@ import com.yryz.writer.modules.province.vo.ProvinceVo;
  */
 @Service
 public class ProvinceService  {
+	
 	private static final Logger logger = LoggerFactory.getLogger(ProvinceService.class);
 
 	@Autowired
@@ -33,5 +36,13 @@ public class ProvinceService  {
 		return provinceDao.queryAllProvinces();
 	}
 
+	public ProvinceVo selectProvince(String provinceCode){
+		Province province = provinceDao.selectProvince(provinceCode);
+		ProvinceVo provinceVo = new ProvinceVo();
+		if(province!=null){
+			BeanUtils.copyProperties(province, provinceVo);
+		}
+		return provinceVo;
+	}
 
 }

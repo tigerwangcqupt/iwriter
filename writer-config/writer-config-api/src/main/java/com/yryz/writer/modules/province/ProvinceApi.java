@@ -22,5 +22,7 @@ public interface ProvinceApi {
 	 * @return
 	 */
 	public List<ProvinceVo> queryAllProvinces() throws ServiceException;
+	
+	public ProvinceVo selectProvinces(String provinceCode) throws ServiceException;
 
 }

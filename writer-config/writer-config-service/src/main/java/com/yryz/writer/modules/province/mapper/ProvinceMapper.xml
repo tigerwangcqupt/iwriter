@@ -13,13 +13,19 @@
 	<sql id="Base_Column_List">id,province_code,province_name
     </sql>
 
-    
-    
     <!-- 查询所有省 -->
     <select id="queryAllProvinces" resultType="com.yryz.writer.modules.province.vo.ProvinceVo">
         select
         id,province_code,province_name
         from yryz_province
+    </select>
+    
+    <!-- 查询Province详情 -->
+    <select id="selectProvince" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_province
+        where province_code = #{provinceCode}
     </select>
     
 </mapper>

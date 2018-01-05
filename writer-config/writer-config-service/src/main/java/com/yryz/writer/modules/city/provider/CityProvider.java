@@ -1,10 +1,12 @@
 package com.yryz.writer.modules.city.provider;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yryz.writer.modules.city.CityApi;
+import com.yryz.writer.modules.city.entity.City;
 import com.yryz.writer.modules.city.service.CityService;
 import com.yryz.writer.modules.city.vo.CityVo;
 
@@ -31,5 +33,12 @@ public class CityProvider implements CityApi {
 		return cityService.selectCitysByPid(provinceCode);
 	}
 
+
+	@Override
+	public CityVo selectCity(String cityCode) {
+		return cityService.selectCity(cityCode);
+	}
+
+	
 
 }

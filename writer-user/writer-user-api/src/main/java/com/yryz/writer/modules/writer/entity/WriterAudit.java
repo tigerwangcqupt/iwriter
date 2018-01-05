@@ -85,6 +85,10 @@ public class WriterAudit extends GenericEntity{
 	 */	 
     private  Date auditDate;
     
+    private Date registerDate;
+    
+    private String phone;
+    
 
     public Long getKid() {
 		return kid;
@@ -189,5 +193,23 @@ public class WriterAudit extends GenericEntity{
 	public void setAuditDate(Date auditDate) {
 		this.auditDate = auditDate;
 	}
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	
+	
 		
 }
