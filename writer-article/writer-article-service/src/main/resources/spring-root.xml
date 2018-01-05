@@ -27,4 +27,5 @@
 
     <import resource="classpath:spring-application.xml"/>
     <import resource="classpath:spring-dubbo.xml"/>
+    <import resource="classpath:spring-context-jedis.xml"/>
 </beans>

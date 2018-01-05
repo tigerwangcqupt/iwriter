@@ -253,7 +253,18 @@
         select
         <include refid="Base_Column_List"/>
         from yryz_task where del_flag = 0
-
+		<if test="status == 0">
+			AND start_date &lt;= NOW() AND end_date &gt;= NOW()
+		</if>
+		<if test="status == 1">
+			AND end_date &lt;= NOW()
+		</if>
     </select>
-    
+	<!-- 查询应用 -->
+    <select id="selectAppById" parameterType="java.lang.Long" resultType="com.yryz.writer.modules.task.vo.TaskVo">
+        select id,appli_name,appli_icon icon
+        from yryz_application
+        where id = #{id}
+    </select>
+
 </mapper>

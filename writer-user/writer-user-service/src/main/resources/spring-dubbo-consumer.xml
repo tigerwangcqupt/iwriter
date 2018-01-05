@@ -9,9 +9,10 @@
 
     <!--ID发号服务-->
     <dubbo:reference id="idAPI" interface="com.yryz.writer.modules.id.api.IdAPI" check="false"/>
-    
+    <dubbo:reference id="messageApi" interface="com.yryz.writer.modules.message.MessageApi" check="false"/>
+
     <dubbo:reference id="provinceApi" interface="com.yryz.writer.modules.province.ProvinceApi" check="false"/>
-    
+
     <dubbo:reference id="cityApi" interface="com.yryz.writer.modules.city.CityApi" check="false"/>
 
 

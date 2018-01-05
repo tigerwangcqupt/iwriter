@@ -29,12 +29,40 @@ public class FansController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public RpcResponse<Integer> count(FansDto fansDto) {
+        String userId = request.getHeader("userId");
+        Assert.notNull(userId, "用户id不能为空");
+        return fansApi.selectCount(Long.valueOf(userId));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/newFansCount", method = RequestMethod.GET)
+    public RpcResponse<Integer> newFansCount(FansDto fansDto) {
+        String userId = request.getHeader("userId");
+        Assert.notNull(userId, "用户id不能为空");
+        return fansApi.selectNewFansCount(Long.valueOf(userId));
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public RpcResponse<PageList<FansVo>> list(FansDto fansDto) {
         String userId = request.getHeader("userId");
         Assert.notNull(userId, "用户id不能为空");
         fansDto.setWriterId(Long.valueOf(userId));
         return fansApi.list(fansDto);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/newFansList", method = RequestMethod.GET)
+    public RpcResponse<PageList<FansVo>> newFansList(FansDto fansDto) {
+        String userId = request.getHeader("userId");
+        Assert.notNull(userId, "用户id不能为空");
+        Assert.notNull(fansDto.getCurrentPage(), "页码不能为空");
+        Assert.notNull(fansDto.getPageSize(), "每页条数不能为空");
+
+        fansDto.setWriterId(Long.valueOf(userId));
+        return fansApi.NewFansList(fansDto);
     }
 
 }

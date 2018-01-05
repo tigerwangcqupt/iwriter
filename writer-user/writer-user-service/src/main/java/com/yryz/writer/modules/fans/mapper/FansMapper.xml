@@ -2,49 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yryz.writer.modules.fans.dao.persistence.FansDao">
 
-	<!--BaseResultMap-->
+    <!--BaseResultMap-->
     <resultMap id="BaseResultMap" type="com.yryz.writer.modules.fans.entity.Fans">
-		<id column="id" property="id" jdbcType="BIGINT"/>
-		<result column="kid" property="kid" jdbcType="BIGINT"/>
-		<result column="user_id" property="userId" jdbcType="BIGINT"/>
-		<result column="wirter_id" property="writerId" jdbcType="BIGINT"/>
-		<result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
-		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
-		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
-		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
-		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
-		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
-		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="kid" property="kid" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="writer_id" property="writerId" jdbcType="BIGINT"/>
+        <result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
+        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+        <result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+        <result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
     </resultMap>
-	
-	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,user_id,wirter_id,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
+
+    <!--Base_Column_List-->
+    <sql id="Base_Column_List">id,kid,user_id,writer_id,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
     </sql>
 
-     <!-- 查询Fans详情 -->
+    <!-- 查询Fans详情 -->
     <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from yryz_fans
         where del_flag = 0
-		and kid = #{kid,jdbcType=BIGINT}
+        and kid = #{kid,jdbcType=BIGINT}
     </select>
-    
+
     <!-- 删除Fans-->
     <delete id="delete" parameterType="java.lang.Long">
         update yryz_fans
         set del_flag = 1
         where kid = #{kid,jdbcType=BIGINT}
     </delete>
-  
-  
-  	<!-- 新增Fans-->
-    <insert id="insert"  parameterType="com.yryz.writer.modules.fans.entity.Fans">
-	    insert into yryz_fans (kid,user_id,wirter_id,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
+
+
+    <!-- 新增Fans-->
+    <insert id="insert" parameterType="com.yryz.writer.modules.fans.entity.Fans">
+	    insert into yryz_fans (kid,user_id,writer_id,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{userId,jdbcType=BIGINT}
-				,#{wirterId,jdbcType=BIGINT}
+				,#{writerId,jdbcType=BIGINT}
 				,#{moduleEnum,jdbcType=VARCHAR}
 				,#{createUserId,jdbcType=VARCHAR}
 			,NOW()
@@ -54,127 +54,145 @@
 				,#{shelveFlag,jdbcType=TINYINT}
 	    )
 	</insert>
-	
-	<!--按需新增Fans-->
-    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.fans.entity.Fans">
-	    insert into yryz_fans 
-	    <trim prefix="(" suffix=")" suffixOverrides=",">
-        <if test="kid != null">
-			kid,
-	    </if>
-        <if test="userId != null">
-			user_id,
-	    </if>
-        <if test="wirterId != null">
-			wirter_id,
-	    </if>
-        <if test="moduleEnum != null and moduleEnum != ''">
-			module_enum,
-	    </if>
-        <if test="createUserId != null and createUserId != ''">
-			create_user_id,
-	    </if>
-        <if test="createDate != null">
-			create_date,
-	    </if>
-        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
-			last_update_user_id,
-	    </if>
-        <if test="lastUpdateDate != null">
-			last_update_date,
-	    </if>
-        <if test="delFlag != null">
-			del_flag,
-	    </if>
-        <if test="shelveFlag != null">
-			shelve_flag,
-	    </if>
-	    </trim>
-	    <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="kid != null">
-			#{kid,jdbcType=BIGINT},
-	    </if>
-        <if test="userId != null">
-			#{userId,jdbcType=BIGINT},
-	    </if>
-        <if test="wirterId != null">
-			#{wirterId,jdbcType=BIGINT},
-	    </if>
-        <if test="moduleEnum != null and moduleEnum != ''">
-			#{moduleEnum,jdbcType=VARCHAR},
-	    </if>
-        <if test="createUserId != null and createUserId != ''">
-			#{createUserId,jdbcType=VARCHAR},
-	    </if>
-        <if test="createDate != null">
-			#{createDate,jdbcType=TIMESTAMP},
-	    </if>
-        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
-			#{lastUpdateUserId,jdbcType=VARCHAR},
-	    </if>
-        <if test="lastUpdateDate != null">
-			#{lastUpdateDate,jdbcType=TIMESTAMP},
-	    </if>
-        <if test="delFlag != null">
-			#{delFlag,jdbcType=TINYINT},
-	    </if>
-        <if test="shelveFlag != null">
-			#{shelveFlag,jdbcType=TINYINT},
-	    </if>
-	    </trim>
-	</insert>
-	
-	
-	<!-- 按需修改Fans-->   
+
+    <!--按需新增Fans-->
+    <insert id="insertByPrimaryKeySelective" parameterType="com.yryz.writer.modules.fans.entity.Fans">
+        insert into yryz_fans
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="kid != null">
+                kid,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="writerId != null">
+                writer_id,
+            </if>
+            <if test="moduleEnum != null and moduleEnum != ''">
+                module_enum,
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                create_user_id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+                last_update_user_id,
+            </if>
+            <if test="lastUpdateDate != null">
+                last_update_date,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="shelveFlag != null">
+                shelve_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="kid != null">
+                #{kid,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="writerId != null">
+                #{writerId,jdbcType=BIGINT},
+            </if>
+            <if test="moduleEnum != null and moduleEnum != ''">
+                #{moduleEnum,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+                #{lastUpdateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastUpdateDate != null">
+                #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=TINYINT},
+            </if>
+            <if test="shelveFlag != null">
+                #{shelveFlag,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 按需修改Fans-->
     <update id="update" parameterType="com.yryz.writer.modules.fans.entity.Fans">
         update yryz_fans
         <set>
-             <if test="userId != null">
-    			user_id = #{userId,jdbcType=BIGINT},
-    		</if>
-             <if test="wirterId != null">
-    			wirter_id = #{wirterId,jdbcType=BIGINT},
-    		</if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="writerId != null">
+                writer_id = #{writerId,jdbcType=BIGINT},
+            </if>
             <if test="moduleEnum != null and moduleEnum != ''">
-    			module_enum = #{moduleEnum,jdbcType=VARCHAR},
-    		</if>
+                module_enum = #{moduleEnum,jdbcType=VARCHAR},
+            </if>
             <if test="createUserId != null and createUserId != ''">
-    			create_user_id = #{createUserId,jdbcType=VARCHAR},
-    		</if>
-             <if test="createDate != null">
-    			create_date = #{createDate,jdbcType=TIMESTAMP},
-    		</if>
+                create_user_id = #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
             <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
-    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
-    		</if>
-             <if test="lastUpdateDate != null">
-    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
-    		</if>
-             <if test="delFlag != null">
-    			del_flag = #{delFlag,jdbcType=TINYINT},
-    		</if>
-             <if test="shelveFlag != null">
-    			shelve_flag = #{shelveFlag,jdbcType=TINYINT},
-    		</if>
+                last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastUpdateDate != null">
+                last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=TINYINT},
+            </if>
+            <if test="shelveFlag != null">
+                shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+            </if>
         </set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
-    
+
     <!-- 查询Fans列表 -->
     <select id="selectList" parameterType="com.yryz.writer.modules.fans.dto.FansDto" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from yryz_fans where del_flag = 0
-		<if test="writerId != null">
-			AND wirter_id = #{writerId,jdbcType=BIGINT}
-		</if>
-		ORDER BY create_date DESC
+        <if test="createDate != null">
+            AND create_date &gt;= #{createDate}
+        </if>
+        <if test="writerId != null">
+            AND writer_id = #{writerId,jdbcType=BIGINT}
+        </if>
+        ORDER BY create_date DESC
     </select>
 
     <select id="selectUserById" parameterType="java.lang.Long" resultType="com.yryz.writer.modules.fans.vo.FansVo">
         select nick_name,head_img
         from yryz_user
         WHERE id = #{id}
+    </select>
+
+    <!-- 粉丝数 -->
+    <select id="selectCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM yryz_fans where del_flag = 0
+        AND writer_id = #{writerId}
+    </select>
+
+    <!-- 新增粉丝数 -->
+    <select id="selectNewFansCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM yryz_fans where del_flag = 0
+        <if test="createDate != null">
+            AND create_date &gt;= #{createDate}
+        </if>
+        AND writer_id = #{writerId}
     </select>
 
 </mapper>

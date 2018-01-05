@@ -57,12 +57,18 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
         return new PageModel<ArticleCommentVo>().getPageList(articleCommentVoList);
     }
 
-
     public ArticleCommentVo detail(Long articleCommentId) {
         ArticleComment articleComment = articleCommentDao.selectByKid(ArticleComment.class,articleCommentId);
         ArticleCommentVo articleCommentVo = new ArticleCommentVo();
-        if (articleCommentVo != null) {
-            //ArticleComment to ArticleCommentVo
+        if (articleComment != null) {
+            articleCommentVo.setCommentId(articleComment.getKid());
+            articleCommentVo.setArticleId(articleComment.getArticleId());
+            articleCommentVo.setArticleTitle(articleComment.getArticleTitle() == null ? "": articleComment.getArticleTitle());
+            articleCommentVo.setCommentUserNickname(articleComment.getCommentUserNickname() == null ? "": articleComment.getCommentUserNickname());
+            articleCommentVo.setUserId(articleComment.getCommentUserId());
+            articleCommentVo.setContent(articleComment.getContent() == null ? "": articleComment.getContent());
+            articleCommentVo.setCreateDate(articleComment.getCreateDate());
+            articleCommentVo.setUserHeadImg(articleComment.getUserHeadImg());
         }
         return articleCommentVo;
     }
@@ -76,9 +82,9 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
                 if (articleComment == null) continue;
                 ArticleCommentVo articleCommentVo = new ArticleCommentVo();
                 //ArticleComment to ArticleCommentVo
-                articleCommentVo.setUserName(articleComment.getCommentUserNickname() == null ? "": articleComment.getCommentUserNickname());
+                articleCommentVo.setCommentUserNickname(articleComment.getCommentUserNickname() == null ? "": articleComment.getCommentUserNickname());
                 articleCommentVo.setContent(articleComment.getContent() == null ? "": articleComment.getContent());
-                articleCommentVo.setTitle(articleComment.getArticleTitle() == null ? "": articleComment.getArticleTitle());
+                articleCommentVo.setArticleTitle(articleComment.getArticleTitle() == null ? "": articleComment.getArticleTitle());
                 articleCommentVo.setCreateDate(articleComment.getCreateDate());
                 articleCommentVoList.add(articleCommentVo);
             }

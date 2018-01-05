@@ -19,12 +19,17 @@
 		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
 		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
 		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="user_head_img" property="userHeadImg" jdbcType="VARCHAR"/>
+		<result column="comment_user_nickname" property="commentUserNickname" jdbcType="VARCHAR"/>
+		<result column="article_title" property="articleTitle" jdbcType="VARCHAR"/>
+		<result column="writer_id" property="writerId" jdbcType="BIGINT"/>
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,
-content,shelve_flag,del_flag,recommend,create_date,last_update_date,
-create_user_id,last_update_user_id,comment_user_nickname, article_title, writer_id
+	<sql id="Base_Column_List">
+		id,kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,
+		content,shelve_flag,del_flag,recommend,create_date,last_update_date,
+		create_user_id,last_update_user_id, user_head_img, comment_user_nickname, article_title, writer_id
     </sql>
 
      <!-- 查询ArticleComment详情 -->
@@ -139,7 +144,7 @@ create_user_id,last_update_user_id,comment_user_nickname, article_title, writer_
 	
 	<!--按需新增ArticleComment-->
     <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.articlecomment.entity.ArticleComment">
-	    insert into yryz_articlecomment 
+	    insert into yryz_articlecomment
 	    <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="kid != null">
 			kid,
@@ -229,8 +234,8 @@ create_user_id,last_update_user_id,comment_user_nickname, article_title, writer_
 	    </if>
 	    </trim>
 	</insert>
-	
-	
+
+
 	<!-- 按需修改ArticleComment-->   
     <update id="update" parameterType="com.yryz.writer.modules.articlecomment.entity.ArticleComment">
         update yryz_articlecomment
@@ -292,7 +297,7 @@ create_user_id,last_update_user_id,comment_user_nickname, article_title, writer_
     </select>
 
 	<!--  查询写手的全部文章的用户评论  -->
-	<select id="selectListByWriter" parameterType="com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto" >
+	<select id="selectListByWriter" parameterType="com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto" resultMap="BaseResultMap">
 		SELECT
 		<include refid="Base_Column_List"/>
 		FROM
