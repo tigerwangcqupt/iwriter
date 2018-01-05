@@ -9,18 +9,22 @@ import org.springframework.stereotype.Repository;
 import com.yryz.component.rpc.dto.PageList;
 
 /**
- * 
-  * @ClassName: FansService
-  * @Description: Fans业务访问接口
-  * @author luohao
-  * @date 2018-01-02 20:08:19
-  *
+ * @author luohao
+ * @ClassName: FansService
+ * @Description: Fans业务访问接口
+ * @date 2018-01-02 20:08:19
  */
 @Repository
 public interface FansService extends BaseService {
 
-   PageList<FansVo> selectList(FansDto fansDto);
+    int selectCount(Long userId);
 
-   FansVo detail(Long fansId);
+    int selectNewFansCount(Long userId);
+
+    PageList<FansVo> selectList(FansDto fansDto);
+
+    FansVo detail(Long fansId);
+
+    PageList<FansVo> selectNewFans(FansDto fansDto);
 
 }
