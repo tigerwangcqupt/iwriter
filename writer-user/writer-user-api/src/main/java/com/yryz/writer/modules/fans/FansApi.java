@@ -37,4 +37,16 @@ public interface FansApi {
     * */
     RpcResponse<PageList<FansVo>> list(FansDto fansDto);
 
+    /**
+    * 获取新增Fans列表
+    * @param fansDto
+    * @return
+    * */
+    RpcResponse<PageList<FansVo>> NewFansList(FansDto fansDto);
+
+    //获取粉丝数量
+    RpcResponse<Integer> selectCount(Long userId);
+
+    //获取新增粉丝数量
+    RpcResponse<Integer> selectNewFansCount(Long userId);
 }

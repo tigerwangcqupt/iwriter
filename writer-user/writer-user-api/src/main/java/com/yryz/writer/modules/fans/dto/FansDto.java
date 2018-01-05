@@ -2,6 +2,8 @@ package com.yryz.writer.modules.fans.dto;
 
 import com.yryz.component.rpc.dto.PageList;
 
+import java.util.Date;
+
 /**
  * @author luohao
  * @ClassName: FansDto
@@ -12,6 +14,7 @@ public class FansDto extends PageList {
     private Long id;
     private String createUserId;
     private Long writerId;
+    private String createDate;
 
     public Long getId() {
         return id;
@@ -35,5 +38,13 @@ public class FansDto extends PageList {
 
     public void setWriterId(Long writerId) {
         this.writerId = writerId;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 }

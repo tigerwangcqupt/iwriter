@@ -22,19 +22,55 @@
 		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
 		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
 		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="register_date" property="registerDate" jdbcType="TIMESTAMP"/>
+		<result column="phone" property="phone" jdbcType="VARCHAR"/>
     </resultMap>
 	
 	<!--Base_Column_List-->
 	<sql id="Base_Column_List">
-		id,kid,writer_kid,user_name,identity_card,identity_card_photo,provice,city,tel,email,audit_status,reamrk,apply_date,audit_date,create_date,create_user_id,last_update_date,last_update_user_id
+		h.id,
+		h.kid,
+		h.writer_kid,
+		h.user_name,
+		h.identity_card,
+		h.identity_card_photo,
+		h.provice,
+		h.city,
+		h.tel,
+		h.email,
+		h.audit_status,
+		h.reamrk,
+		h.apply_date,
+		h.audit_date,
+		h.create_date,
+		h.create_user_id,
+		h.last_update_date,
+		h.last_update_user_id,
+		w.create_date as register_date,
+		w.phone
     </sql>
+    
+    <!-- 查询WriterAudit列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.writer.dto.WriterAuditDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_writer_audit_history h,yryz_writer w 
+        WHERE h.writer_kid = w.kid
+        <if test="phone != null and phone != ''">
+    		and w.phone = #{phone,jdbcType=VARCHAR}
+    	</if>
+    	<if test="auditStatus != null">
+    		and h.audit_status = #{auditStatus,jdbcType=TINYINT}
+    	</if>
+        order by h.apply_date DESC
+    </select>
 
      <!-- 查询WriterAudit详情 -->
     <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
-        from yryz_writer_audit_history
-        where kid = #{kid,jdbcType=BIGINT}
+        from yryz_writer_audit_history h
+        where h.kid = #{kid,jdbcType=BIGINT}
     </select>
     
     <!-- 删除WriterAudit-->
@@ -185,7 +221,7 @@
     <update id="update" parameterType="com.yryz.writer.modules.writer.entity.WriterAudit">
         update yryz_writer_audit_history
         <set>
-             <if test="writerKid != null">
+            <if test="writerKid != null">
     			writer_kid = #{writerKid,jdbcType=BIGINT},
     		</if>
             <if test="userName != null and userName != ''">
@@ -237,11 +273,6 @@
         where kid = #{kid,jdbcType=BIGINT}
     </update>
     
-    <!-- 查询WriterAudit列表 -->
-    <select id="selectList" parameterType="com.yryz.writer.modules.writer.dto.WriterAuditDto" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from yryz_writer_audit_history
-    </select>
+    
     
 </mapper>

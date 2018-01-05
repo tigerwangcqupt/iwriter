@@ -14,6 +14,7 @@ import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.dto.TaskDto;
 import com.yryz.writer.modules.task.dao.persistence.TaskDao;
 import com.yryz.writer.modules.task.service.TaskService;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,14 +29,22 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         return taskDao;
     }
 
-    public PageList<TaskVo> selectList(TaskDto taskDto){
+    public PageList<TaskVo> selectList(TaskDto taskDto) {
         PageUtils.startPage(taskDto.getCurrentPage(), taskDto.getPageSize());
         List<Task> list = taskDao.selectList(taskDto);
-        List<TaskVo> taskVoList = new ArrayList <TaskVo>();
-        if(list != null && list.size() > 0) {
-            for(Task task : list){
+        List<TaskVo> taskVoList = new ArrayList<TaskVo>();
+        if (list != null && list.size() > 0) {
+            for (Task task : list) {
                 TaskVo taskVo = new TaskVo();
-                //Task to TaskVo
+                taskVo.setId(task.getId());
+                taskVo.setDraftFee(task.getDraftFee());
+                taskVo.setAcceptTaskNum(task.getAcceptTaskNum());
+                taskVo.setStartDate(task.getStartDate());
+                Long appId = task.getAppId();
+                //聚合应用数据
+                TaskVo app = taskDao.selectAppById(appId);
+                taskVo.setAppliName(app.getAppliName());
+                taskVo.setIcon(app.getIcon());
                 taskVoList.add(taskVo);
             }
         }
@@ -44,11 +53,11 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
 
 
     public TaskVo detail(Long taskId) {
-        Task task = taskDao.selectByKid(Task.class,taskId);
+        Task task = taskDao.selectByKid(Task.class, taskId);
         TaskVo taskVo = new TaskVo();
         if (taskVo != null) {
             //Task to TaskVo
         }
         return taskVo;
     }
- }
+}

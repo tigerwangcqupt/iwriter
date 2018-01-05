@@ -2,7 +2,10 @@ package com.yryz.writer.modules.writer.provider;
 import com.yryz.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
-
+import com.yryz.writer.modules.city.CityApi;
+import com.yryz.writer.modules.city.vo.CityVo;
+import com.yryz.writer.modules.province.ProvinceApi;
+import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.WriterAuditApi;
 import com.yryz.writer.modules.writer.vo.WriterAuditVo;
 import com.yryz.writer.modules.writer.dto.WriterAuditDto;
@@ -21,6 +24,12 @@ public class WriterAuditProvider implements WriterAuditApi {
 
 	@Autowired
 	private WriterAuditService writerAuditService;
+	
+	@Autowired
+	private ProvinceApi provinceApi;
+	
+	@Autowired
+	private CityApi cityApi;
 
 	/**
 	*  获取WriterAudit明细
@@ -43,7 +52,18 @@ public class WriterAuditProvider implements WriterAuditApi {
 	* */
 	public RpcResponse<WriterAuditVo> detail(Long kid) {
 		try {
-			return ResponseModel.returnObjectSuccess(writerAuditService.detail(kid));
+			WriterAuditVo writerAuditVo = writerAuditService.detail(kid);
+			if(writerAuditVo!=null){
+				ProvinceVo provinceVo = provinceApi.selectProvinces(writerAuditVo.getProvice());
+				if(provinceVo!=null){
+					writerAuditVo.setProviceName(provinceVo.getProvinceName());
+				}
+				CityVo cityVo = cityApi.selectCity(writerAuditVo.getCity());
+				if(cityVo!=null){
+					writerAuditVo.setCityName(cityVo.getCityName());
+				}
+			}
+			return ResponseModel.returnObjectSuccess(writerAuditVo);
 		} catch (Exception e) {
 			logger.error("获取WriterAudit明细失败", e);
 			return ResponseModel.returnException(e);

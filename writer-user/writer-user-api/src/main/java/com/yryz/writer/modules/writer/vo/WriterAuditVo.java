@@ -44,11 +44,15 @@ public class WriterAuditVo implements Serializable {
 	 */	 
     private  String provice;
     
+    private  String proviceName;
+    
 
+    private  String cityName;
 	/**
 	 * 市
 	 */	 
     private  String city;
+    
     
 
 	/**
@@ -90,7 +94,12 @@ public class WriterAuditVo implements Serializable {
     
     private String auditDateStr;
     
-
+    private Date registerDate;
+    
+    private String registerDateStr;
+    
+    private String phone;
+    
 	public Long getKid() {
 		return kid;
 	}
@@ -241,7 +250,55 @@ public class WriterAuditVo implements Serializable {
 	}
 
 
-	
+	public String getProviceName() {
+		return proviceName;
+	}
 
+
+	public void setProviceName(String proviceName) {
+		this.proviceName = proviceName;
+	}
+
+
+	public String getCityName() {
+		return cityName;
+	}
+
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
+
+	public String getRegisterDateStr() {
+		return registerDateStr;
+	}
+
+
+	public void setRegisterDateStr(String registerDateStr) {
+		this.registerDateStr = registerDateStr;
+	}
+
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	
 
 }

@@ -14,7 +14,6 @@ public class FansVo implements Serializable {
     private Long userId;
     private String nickName;
     private String headImg;
-    private Integer fansFlag;
 
     public Long getUserId() {
         return userId;
@@ -40,11 +39,4 @@ public class FansVo implements Serializable {
         this.headImg = headImg;
     }
 
-    public Integer getFansFlag() {
-        return fansFlag;
-    }
-
-    public void setFansFlag(Integer fansFlag) {
-        this.fansFlag = fansFlag;
-    }
 }

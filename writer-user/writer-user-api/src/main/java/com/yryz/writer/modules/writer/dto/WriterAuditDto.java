@@ -12,6 +12,8 @@ import com.yryz.component.rpc.dto.PageList;
 public class WriterAuditDto extends PageList {
 	
 	private String phone;
+	
+	private Integer auditStatus;
 
 	public String getPhone() {
 		return phone;
@@ -20,7 +22,15 @@ public class WriterAuditDto extends PageList {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	
 
+	public Integer getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(Integer auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+	
+	
+	
 }

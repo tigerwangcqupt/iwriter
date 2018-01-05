@@ -24,6 +24,7 @@ import com.yryz.writer.modules.province.vo.ProvinceVo;
  */
 @Service
 public class ProvinceProvider implements ProvinceApi {
+	
 	private static final Logger logger = LoggerFactory.getLogger(ProvinceProvider.class);
 
 	@Autowired
@@ -32,6 +33,12 @@ public class ProvinceProvider implements ProvinceApi {
 
 	public List<ProvinceVo> queryAllProvinces() throws ServiceException {
 		return provinceService.queryAllProvinces();
+	}
+
+
+	@Override
+	public ProvinceVo selectProvinces(String provinceCode) throws ServiceException {
+		return provinceService.selectProvince(provinceCode);
 	}
 
 

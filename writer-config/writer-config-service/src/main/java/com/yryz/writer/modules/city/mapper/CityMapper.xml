@@ -24,4 +24,12 @@
     	</if>
     </select>
     
+    <!-- 查询City详情 -->
+    <select id="selectCity" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_city
+        where city_code = #{cityCode}
+    </select>
+    
 </mapper>

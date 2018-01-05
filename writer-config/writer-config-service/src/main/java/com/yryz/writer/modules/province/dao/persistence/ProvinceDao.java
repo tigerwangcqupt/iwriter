@@ -2,6 +2,7 @@ package com.yryz.writer.modules.province.dao.persistence;
 
 
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.writer.modules.province.dto.ProvinceDto;
@@ -22,4 +23,6 @@ import java.util.List;
 public interface ProvinceDao {
 
     public List<ProvinceVo> queryAllProvinces();
+    
+    public Province selectProvince(@Param("provinceCode") String provinceCode);
 }
