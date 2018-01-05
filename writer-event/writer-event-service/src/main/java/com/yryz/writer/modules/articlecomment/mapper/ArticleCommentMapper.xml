@@ -19,12 +19,16 @@
 		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
 		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
 		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="user_head_img" property="userHeadImg" jdbcType="VARCHAR"/>
+		<result column="comment_user_nickname" property="commentUserNickname" jdbcType="VARCHAR"/>
+		<result column="article_title" property="articleTitle" jdbcType="VARCHAR"/>
+		<result column="writer_id" property="writerId" jdbcType="BIGINT"/>
     </resultMap>
 	
 	<!--Base_Column_List-->
 	<sql id="Base_Column_List">id,kid,target_id,comment_type,comment_writer_id,comment_user_id,article_id,
 content,shelve_flag,del_flag,recommend,create_date,last_update_date,
-create_user_id,last_update_user_id,comment_user_nickname, article_title, writer_id
+create_user_id,last_update_user_id,comment_user_nickname, article_title, writer_id, user_head_img
     </sql>
 
      <!-- 查询ArticleComment详情 -->

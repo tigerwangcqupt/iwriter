@@ -22,8 +22,8 @@ public class ArticleCommentController {
 
    @ResponseBody
    @RequestMapping(value="/single", method = RequestMethod.GET)
-   public RpcResponse<ArticleCommentVo> detail(Long articleFavoriteId) {
-       return articleCommentApi.detail(articleFavoriteId);
+   public RpcResponse<ArticleCommentVo> detail(Long articleCommentId) {
+       return articleCommentApi.detail(articleCommentId);
    }
 
    @ResponseBody
@@ -34,12 +34,19 @@ public class ArticleCommentController {
    }
 
    @ResponseBody
-   @RequestMapping(value="/save", method = RequestMethod.POST)
-   public RpcResponse<Boolean> save(@RequestBody ArticleComment articleComment) {
+   @RequestMapping(value="/saveWriterComment", method = RequestMethod.POST)
+   public RpcResponse<Boolean> saveWriterComment(@RequestBody ArticleComment articleComment) {
       Assert.notNull(articleComment, "文章收藏参数不能为空");
-      Assert.notNull(articleComment.getWriterId(), "文章作者不能为空");
+      Assert.notNull(articleComment.getTargetId(), "被回复评论不能为空");
+      Assert.notNull(articleComment.getWriterId(), "写手不能为空");
+      Assert.notNull(articleComment.getCommentUserId(), "评论用户不能为空");
       Assert.notNull(articleComment.getCommentUserNickname(), "收藏者昵称不为空");
+      Assert.notNull(articleComment.getArticleId(), "文章不能为空");
       Assert.notNull(articleComment.getArticleTitle(), "文章标题不能为空");
+      Assert.notNull(articleComment.getContent(), "评论内容不能为空");
+      articleComment.setCommentType(1);
+      articleComment.setCommentWriterId(articleComment.getWriterId());
+      articleComment.setCreateUserId(articleComment.getWriterId().toString());
       return articleCommentApi.saveArticleComment(articleComment);
    }
 

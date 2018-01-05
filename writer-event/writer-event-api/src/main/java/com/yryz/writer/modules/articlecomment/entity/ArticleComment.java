@@ -81,6 +81,9 @@ public class ArticleComment extends GenericEntity{
 	 */
 	private Long writerId;
 
+	/**  评论用户头像  */
+	private String userHeadImg;
+
 	public Long getTargetId() {
 		return this.targetId;
 	}
@@ -177,5 +180,13 @@ public class ArticleComment extends GenericEntity{
 	public Long getWriterId() {
 
 		return writerId;
+	}
+
+	public String getUserHeadImg() {
+		return userHeadImg;
+	}
+
+	public void setUserHeadImg(String userHeadImg) {
+		this.userHeadImg = userHeadImg;
 	}
 }

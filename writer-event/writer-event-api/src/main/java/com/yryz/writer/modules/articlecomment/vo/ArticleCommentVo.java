@@ -13,6 +13,24 @@ import com.yryz.writer.modules.articlecomment.entity.ArticleComment;
  */
 public class ArticleCommentVo implements Serializable {
 
+    /**  评论id  */
+    private Long commentId;
+
+    /**  文章id  */
+    private Long articleId;
+
+    /**  文章标题  */
+    private String articleTitle;
+
+    /**  评论用户昵称  */
+    private String commentUserNickname;
+
+    /**  评论用户id  */
+    private Long userId;
+
+    /**  评论用户头像  */
+    private String userHeadImg;
+
     /**
      * 评论内容
      */
@@ -23,15 +41,6 @@ public class ArticleCommentVo implements Serializable {
      */
     private Date createDate;
 
-    /**
-     *评论标题
-     */
-    private String title;
-
-    /**
-     * 评论用户昵称
-     */
-    private String userName;
 
     public void setContent(String content) {
         this.content = content;
@@ -41,13 +50,6 @@ public class ArticleCommentVo implements Serializable {
         this.createDate = createDate;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public String getContent() {
         return content;
@@ -57,11 +59,51 @@ public class ArticleCommentVo implements Serializable {
         return createDate;
     }
 
-    public String getTitle() {
-        return title;
+    public Long getCommentId() {
+        return commentId;
     }
 
-    public String getUserName() {
-        return userName;
+    public Long getArticleId() {
+        return articleId;
+    }
+
+    public String getArticleTitle() {
+        return articleTitle;
+    }
+
+    public String getCommentUserNickname() {
+        return commentUserNickname;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setCommentId(Long commentId) {
+        this.commentId = commentId;
+    }
+
+    public void setArticleId(Long articleId) {
+        this.articleId = articleId;
+    }
+
+    public void setArticleTitle(String articleTitle) {
+        this.articleTitle = articleTitle;
+    }
+
+    public void setCommentUserNickname(String commentUserNickname) {
+        this.commentUserNickname = commentUserNickname;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserHeadImg() {
+        return userHeadImg;
+    }
+
+    public void setUserHeadImg(String userHeadImg) {
+        this.userHeadImg = userHeadImg;
     }
 }
