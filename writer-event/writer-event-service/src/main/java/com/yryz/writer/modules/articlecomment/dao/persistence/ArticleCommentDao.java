@@ -2,7 +2,7 @@ package com.yryz.writer.modules.articlecomment.dao.persistence;
 
 import com.yryz.writer.modules.articlecomment.entity.ArticleComment;
 import com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto;
-import com.yryz.common.dao.BaseDao;
+import com.yryz.writer.common.dao.BaseDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

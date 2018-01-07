@@ -1,7 +1,7 @@
 package com.yryz.openapi.bank.web;
 
-import com.yryz.common.Annotation.NotLogin;
-import com.yryz.common.web.BaseController;
+import com.yryz.writer.common.Annotation.NotLogin;
+import com.yryz.writer.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.bank.BankApi;
 import com.yryz.writer.modules.bank.entity.Bank;

@@ -1,7 +1,6 @@
 package com.yryz.writer.modules.indexcolumn.service;
 
-import com.yryz.common.service.BaseService;
-import com.yryz.component.rpc.RpcResponse;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 import com.yryz.writer.modules.message.vo.IndexTipsVo;

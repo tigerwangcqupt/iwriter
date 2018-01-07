@@ -1,7 +1,7 @@
 package com.yryz.writer.modules.articlecomment.entity;
 
-import com.yryz.common.entity.GenericEntity;
-import java.util.Date;
+import com.yryz.writer.common.entity.GenericEntity;
+
 /**
  * 
   * @ClassName: ArticleComment

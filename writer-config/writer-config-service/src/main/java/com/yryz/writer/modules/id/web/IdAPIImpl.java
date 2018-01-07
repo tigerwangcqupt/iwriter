@@ -2,8 +2,8 @@ package com.yryz.writer.modules.id.web;
 
 
 import com.google.common.collect.Lists;
-import com.yryz.common.constant.ExceptionEnum;
-import com.yryz.common.exception.QsourceException;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.exception.QsourceException;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.id.service.IdGenerator;
 import com.yryz.writer.modules.id.service.IdService;

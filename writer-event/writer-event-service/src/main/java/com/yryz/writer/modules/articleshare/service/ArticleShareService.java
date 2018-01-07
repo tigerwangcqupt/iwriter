@@ -1,6 +1,6 @@
 package com.yryz.writer.modules.articleshare.service;
 
-import com.yryz.common.service.BaseService;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.articleshare.dto.ArticleShareDto;
 import com.yryz.writer.modules.articleshare.entity.ArticleShare;
 import com.yryz.writer.modules.articleshare.vo.ArticleShareVo;

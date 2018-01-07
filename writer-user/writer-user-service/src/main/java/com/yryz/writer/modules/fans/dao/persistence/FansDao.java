@@ -2,7 +2,7 @@ package com.yryz.writer.modules.fans.dao.persistence;
 
 import com.yryz.writer.modules.fans.entity.Fans;
 import com.yryz.writer.modules.fans.dto.FansDto;
-import com.yryz.common.dao.BaseDao;
+import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.modules.fans.vo.FansVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

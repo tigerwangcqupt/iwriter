@@ -1,6 +1,6 @@
 package com.yryz.writer.modules.draft.entity;
 
-import com.yryz.common.entity.GenericEntity;
+import com.yryz.writer.common.entity.GenericEntity;
 
 import java.math.BigDecimal;
 

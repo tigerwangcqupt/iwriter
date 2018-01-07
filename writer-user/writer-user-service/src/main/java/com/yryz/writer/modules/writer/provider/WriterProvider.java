@@ -1,5 +1,5 @@
 package com.yryz.writer.modules.writer.provider;
-import com.yryz.common.web.ResponseModel;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.id.api.IdAPI;

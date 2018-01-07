@@ -1,13 +1,9 @@
 package com.yryz.writer.modules.profit.provider;
-import com.yryz.common.constant.YyrzModuleEnumConstants;
-import com.yryz.common.distributed.lock.DistributedLockUtils;
-import com.yryz.common.web.ResponseModel;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
-import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.profit.ProfitApi;
-import com.yryz.writer.modules.profit.constant.ProfitEnum;
 import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
@@ -18,9 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 @Service
 public class ProfitProvider implements ProfitApi {

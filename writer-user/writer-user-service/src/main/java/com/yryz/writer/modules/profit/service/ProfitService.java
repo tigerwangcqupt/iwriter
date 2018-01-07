@@ -1,7 +1,6 @@
 package com.yryz.writer.modules.profit.service;
 
-import com.yryz.common.service.BaseService;
-import com.yryz.component.rpc.RpcResponse;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.profit.vo.ProfitVo;

@@ -1,12 +1,11 @@
 package com.yryz.openapi.fans.web;
 
-import com.yryz.common.web.BaseController;
+import com.yryz.writer.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.modules.fans.vo.FansVo;
 import com.yryz.writer.modules.fans.dto.FansDto;
-import com.yryz.writer.modules.fans.entity.Fans;
 import com.yryz.writer.modules.fans.FansApi;
 
 import org.springframework.beans.factory.annotation.Autowired;

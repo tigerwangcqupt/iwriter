@@ -1,8 +1,6 @@
 package com.yryz.writer.modules.fans.entity;
 
-import com.yryz.common.entity.GenericEntity;
-
-import java.util.Date;
+import com.yryz.writer.common.entity.GenericEntity;
 
 /**
  * @author luohao

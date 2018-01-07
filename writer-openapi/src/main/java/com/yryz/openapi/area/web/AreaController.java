@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yryz.common.Annotation.NotLogin;
-import com.yryz.common.web.BaseController;
+import com.yryz.writer.common.Annotation.NotLogin;
+import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.province.ProvinceApi;

@@ -1,8 +1,8 @@
 package com.yryz.writer.modules.id.web;
 
 import com.alibaba.fastjson.JSON;
-import com.yryz.common.constant.ExceptionEnum;
-import com.yryz.common.exception.QsourceException;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.exception.QsourceException;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.id.api.CodeAPI;
 import com.yryz.writer.modules.id.entity.CodeModel;

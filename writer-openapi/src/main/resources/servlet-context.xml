@@ -35,7 +35,7 @@
                         </list>
                     </property>
                 </bean>
-                <bean id="mappingJacksonHttpMessageConverter" class="com.yryz.common.web.wrapper.MappingJackson2HttpMessageConverterWrapper">
+                <bean id="mappingJacksonHttpMessageConverter" class="com.yryz.writer.common.web.wrapper.MappingJackson2HttpMessageConverterWrapper">
                     <property name="objectMapper">                        
                         <bean class="com.fasterxml.jackson.databind.ObjectMapper">
                             <property name="dateFormat">
@@ -64,9 +64,9 @@
      </mvc:interceptors>
 
     <!-- 上下文环境 -->
-    <bean class="com.yryz.common.context.SpringContextHelper"></bean>
+    <bean class="com.yryz.writer.common.context.SpringContextHelper"></bean>
     
     <!-- 统一异常处理 -->
-    <bean id="exceptionHandler" class="com.yryz.common.exception.ExceptionHandler"/>
+    <bean id="exceptionHandler" class="com.yryz.writer.common.exception.ExceptionHandler"/>
 
 </beans>

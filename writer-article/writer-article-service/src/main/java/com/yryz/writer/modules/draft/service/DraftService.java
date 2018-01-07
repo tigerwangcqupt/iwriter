@@ -1,6 +1,6 @@
 package com.yryz.writer.modules.draft.service;
 
-import com.yryz.common.service.BaseService;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.vo.DraftVo;

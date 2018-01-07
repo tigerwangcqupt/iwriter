@@ -1,10 +1,9 @@
 package com.yryz.writer.modules.articlecomment.service.impl;
 
-import com.yryz.common.utils.PageUtils;
-import com.github.pagehelper.PageInfo;
-import com.yryz.common.dao.BaseDao;
-import com.yryz.common.service.BaseServiceImpl;
-import com.yryz.common.web.PageModel;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.message.MessageApi;

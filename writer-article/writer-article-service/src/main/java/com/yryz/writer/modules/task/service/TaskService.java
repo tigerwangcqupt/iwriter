@@ -1,8 +1,7 @@
 package com.yryz.writer.modules.task.service;
 
-import com.yryz.common.service.BaseService;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.task.dto.TaskDto;
-import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.vo.TaskVo;
 import org.springframework.stereotype.Repository;
 

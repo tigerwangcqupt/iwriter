@@ -1,9 +1,9 @@
 package com.yryz.writer.modules.draft.service.impl;
 
-import com.yryz.common.dao.BaseDao;
-import com.yryz.common.service.BaseServiceImpl;
-import com.yryz.common.utils.PageUtils;
-import com.yryz.common.web.PageModel;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.draft.dao.persistence.DraftDao;
 import com.yryz.writer.modules.draft.dto.DraftDto;
@@ -14,7 +14,6 @@ import com.yryz.writer.modules.id.api.IdAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 

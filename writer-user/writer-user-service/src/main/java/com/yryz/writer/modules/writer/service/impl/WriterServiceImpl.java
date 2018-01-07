@@ -1,10 +1,9 @@
 package com.yryz.writer.modules.writer.service.impl;
 
-import com.yryz.common.utils.PageUtils;
-import com.github.pagehelper.PageInfo;
-import com.yryz.common.dao.BaseDao;
-import com.yryz.common.service.BaseServiceImpl;
-import com.yryz.common.web.PageModel;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 
 import org.springframework.beans.BeanUtils;

@@ -1,6 +1,6 @@
 package com.yryz.writer.modules.writer.entity;
 
-import com.yryz.common.entity.GenericEntity;
+import com.yryz.writer.common.entity.GenericEntity;
 import java.util.Date;
 /**
  * 
