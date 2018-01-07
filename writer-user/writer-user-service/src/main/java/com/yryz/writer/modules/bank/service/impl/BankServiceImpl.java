@@ -15,6 +15,7 @@ import com.yryz.writer.modules.bank.dao.persistence.BankDao;
 import com.yryz.writer.modules.bank.service.BankService;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.writer.service.WriterService;
+import com.yryz.writer.modules.writer.vo.WriterVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -42,10 +43,11 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
     @Autowired
     private IdAPI idAPI;
 
+
     @Autowired
     private WriterService writerService;
 
-    @Value("${appId}")
+    @Value("${clientCode}")
     private String clientCode;
 
     protected BaseDao getDao() {
@@ -79,6 +81,8 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Override
     public Bank insertBank(Bank bank) {
+        //根据写手id,查询写手信息
+        WriterVo writerVo = writerService.detail(Long.valueOf(bank.getCreateUserId()));
         Long kid  = idAPI.getId("yryz_bank");
         bank.setKid(kid);
         bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
@@ -87,12 +91,16 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             BankCard bankCard=new BankCard();
             //银行卡号
             bankCard.setBankCardNo(bank.getUserBankCart());
+            //个人银行卡
             bankCard.setBankCardType((byte)10);
-
+            //银行名称
             bankCard.setBankName(bank.getUserAccountOpenBank());
+            //状态生效
             bankCard.setStatus((byte)1);
-            bankCard.setCertNo("身份证");
-            bankCard.setOwnerCode(1l);
+            //身份证
+            bankCard.setCertNo(bank.getUserCart());
+            //资金主体编码
+            bankCard.setOwnerCode(11L);
             RpcContext.getContext().setAttachment("clientCode", clientCode);
             openBankCardApi.add(bankCard);
         }catch(Exception e){
@@ -101,7 +109,6 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
                     ExceptionEnum.BindBankException.getErrorMsg()
             );
         }
-
         return bank;
     }
 

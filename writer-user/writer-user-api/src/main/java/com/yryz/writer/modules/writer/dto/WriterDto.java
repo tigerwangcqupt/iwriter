@@ -11,7 +11,15 @@ import com.yryz.writer.modules.writer.entity.Writer;
  *
  */
 public class WriterDto extends PageList {
-	
 
-	
+    private String keyWord;
+
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
 }

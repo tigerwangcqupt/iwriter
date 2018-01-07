@@ -20,4 +20,6 @@ public interface WriterDao extends BaseDao {
 
     List<Writer> selectList(WriterDto writerDto);
     Writer selectByPhone(String phone);
+
+    List<Writer> selectAdminList(WriterDto writerDto);
 }

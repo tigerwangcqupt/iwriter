@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.profit.service;
 
+import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.entity.Profit;
@@ -8,6 +9,8 @@ import com.yryz.writer.modules.writer.entity.Writer;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
+
+
 
 /**
  * 
@@ -28,6 +31,11 @@ public interface ProfitService extends BaseService {
 
    Profit insertProfit(Profit profit);
 
-   Integer bindCapital(Writer writer);
+   /**
+    * 绑定资金主体
+    * @param writer
+    * @return
+    */
+   Owner bindCapital(Writer writer);
 
 }

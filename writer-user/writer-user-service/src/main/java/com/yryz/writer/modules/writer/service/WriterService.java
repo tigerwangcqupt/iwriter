@@ -3,6 +3,7 @@ package com.yryz.writer.modules.writer.service;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,8 @@ public interface WriterService extends BaseService {
    PageList<WriterVo> selectList(WriterDto writerDto);
 
    WriterVo detail(Long writerId);
+
+   PageList<WriterAdminVo> selectListAdmin(WriterDto writerDto);
 
    Writer selectByPhone(String phone);
 

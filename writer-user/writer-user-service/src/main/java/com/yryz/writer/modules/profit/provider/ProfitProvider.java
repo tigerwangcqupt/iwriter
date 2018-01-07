@@ -1,4 +1,5 @@
 package com.yryz.writer.modules.profit.provider;
+import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
@@ -14,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 
 @Service
 public class ProfitProvider implements ProfitApi {
@@ -95,8 +98,13 @@ public class ProfitProvider implements ProfitApi {
     }
 
 	@Override
-	public RpcResponse<Integer> bindCapital(Writer writer) {
-		return null;
+	public RpcResponse<Owner> bindCapital(Writer writer) {
+		try {
+			return ResponseModel.returnObjectSuccess(profitService.bindCapital(writer));
+		} catch (Exception e) {
+			logger.error("写手绑定资金主体失败", e);
+			return ResponseModel.returnException(e);
+		}
 	}
 
 }

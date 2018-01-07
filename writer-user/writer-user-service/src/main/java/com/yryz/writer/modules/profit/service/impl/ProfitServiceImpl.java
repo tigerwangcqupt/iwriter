@@ -140,6 +140,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public Profit insertProfit(Profit profit) {
         String lockKey = null;
         try {
+            String orderNumber = String.valueOf(idAPI.getSnowflakeId());
+            System.out.println(orderNumber+":orderNumber");
             //分布式锁控制用户频繁操作
             lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getCreateUserId());
             ProfitDto profitDto = new ProfitDto();
@@ -148,7 +150,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             if(CollectionUtils.isEmpty(profitList)){
                 System.out.println("没有余钱了");
             }
-
             Long kid  = idAPI.getId("yryz_bank");
             profit.setKid(kid);
             profit.setModuleEnum(YyrzModuleEnumConstants.PROFIT_INFO);
@@ -170,12 +171,12 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     }
 
     /**
-     * 写手绑定资金主体
+     * 写手绑定资金主体(返回资金主体)
      * @param writer
      * @return
      */
     @Override
-    public Integer bindCapital(Writer writer) {
+    public Owner bindCapital(Writer writer) {
         Owner data=new Owner();
         try{
             Owner owner=new Owner();
@@ -194,7 +195,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                     ExceptionEnum.AddOwnerException.getErrorMsg()
                     );
         }
-
         try{
             Account account=new Account();
             account.setAccountName(writer.getUserName());
@@ -210,6 +210,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                     ExceptionEnum.AddAccountException.getErrorMsg()
             );
         }
-        return null;
+        return data;
     }
 }

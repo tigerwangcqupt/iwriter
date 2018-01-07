@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.writer.dto.WriterDto;
@@ -71,5 +72,13 @@ public interface WriterApi {
 	RpcResponse<WriterVo> updateWriter(Writer writer);
 	
 	RpcResponse<WriterVo> submitAudit(Writer writer);
+
+
+	/**
+	 * 获取Writer列表
+	 * @param writerDto
+	 * @return
+	 * */
+	RpcResponse<PageList<WriterAdminVo>> listAdmin(WriterDto writerDto);
 
 }
