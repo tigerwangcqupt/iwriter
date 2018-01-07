@@ -17,5 +17,7 @@
     <dubbo:service interface="com.yryz.writer.modules.writer.WriterApi" ref="writerProvider" />
     <dubbo:service interface="com.yryz.writer.modules.writer.WriterAuditApi" ref="writerAuditProvider" />
 
+    <!--Sms Service-->
+    <dubbo:service interface="com.yryz.writer.modules.platform.SmsCommonApi" ref="smsCommonProvider"/>
 
 </beans>

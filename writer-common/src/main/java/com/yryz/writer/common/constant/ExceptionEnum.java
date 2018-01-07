@@ -29,8 +29,7 @@ public enum ExceptionEnum {
     GET_APP_VERSION_UNSUCCESSFUL("5014", "获取APP版本信息失败，请稍候再试！", "获取APP版本信息失败，请稍候再试！"),
     PHONE_UNBIND("5015", "该手机号未绑定，无法设置密码！", "该手机号未绑定，无法设置密码！"),
     HAS_SET_PASSWORD("5016", "已设置过密码！", "已设置过密码！"),
-
-
+    PIN_FREQUENTLY("5024", "发送验证码过于频繁，请稍候再试！", "发送验证码过于频繁，请稍候再试！"),
 
 
     AddOwnerException("6001", "增加资金主体异常", "增加资金主体异常"),

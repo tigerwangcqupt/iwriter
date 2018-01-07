@@ -38,12 +38,12 @@
         from yryz_writer
         where kid = #{kid,jdbcType=BIGINT}
     </select>
-    
+
     <!-- 删除Writer-->
     <delete id="delete" parameterType="java.lang.Long">
         update yryz_writer
         set del_flag = 1
-        where kid = #{kid,jdbcType=BIGINT}
+        where kid = #{kid,jdbcType=VARCHAR}
     </delete>
   
   
@@ -275,5 +275,13 @@
         <include refid="Base_Column_List"/>
         from yryz_writer where del_flag = 0
     </select>
-    
+
+	<!-- 查询Writer详情 -->
+	<select id="selectByPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List"/>
+		from yryz_writer
+		where phone = #{phone,jdbcType=VARCHAR}
+	</select>
+
 </mapper>

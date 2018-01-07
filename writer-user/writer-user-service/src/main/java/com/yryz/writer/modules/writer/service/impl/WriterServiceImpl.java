@@ -52,4 +52,9 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         }
         return writerVo;
     }
+
+    public Writer selectByPhone(String phone) {
+        Writer writer = writerDao.selectByPhone(phone);
+        return writer;
+    }
  }

@@ -19,5 +19,5 @@ import java.util.List;
 public interface WriterDao extends BaseDao {
 
     List<Writer> selectList(WriterDto writerDto);
-
+    Writer selectByPhone(String phone);
 }
