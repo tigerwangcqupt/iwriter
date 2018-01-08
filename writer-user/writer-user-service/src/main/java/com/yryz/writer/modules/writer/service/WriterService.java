@@ -41,6 +41,13 @@ public interface WriterService extends BaseService {
     */
    PageList<WriterAdminRefProfit> selectAdminProfitList(WriterDto writerDto);
 
+   /**
+    * 后台查询写手收益列表
+    * @param writerDto
+    * @return
+    */
+   List<WriterAdminRefProfit> selectAllAdminProfitList(WriterDto writerDto);
+
    String getUserToken(String custId);
 
 }

@@ -48,6 +48,7 @@ public class WriterDto extends PageList {
      */
     private String orderValue;
 
+
     public Long getKid() {
         return kid;
     }
@@ -119,4 +120,5 @@ public class WriterDto extends PageList {
     public void setOrderValue(String orderValue) {
         this.orderValue = orderValue;
     }
+
 }
