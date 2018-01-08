@@ -16,6 +16,11 @@ public class ModuleEnumConstants {
     /**
      * 通知
      */
+    public static final String INDEX = ModuleEnum.INDEX.getId();
+
+    /**
+     * 通知
+     */
     public static final String NOTICE = ModuleEnum.NOTICE.getId();
 
     /**
