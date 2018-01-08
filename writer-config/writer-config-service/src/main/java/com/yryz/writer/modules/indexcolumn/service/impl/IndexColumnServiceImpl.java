@@ -74,6 +74,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
      * @return
      */
     public IndexColumnVo selectAll(IndexColumnDto indexColumnDto){
+        logger.info("--------进入查询首页栏目Service--------");
         IndexColumnVo indexColumnVo = new IndexColumnVo();
         List<IndexItemVo> items = new ArrayList<IndexItemVo>();
         indexColumnVo.setIndexItems(items);
@@ -107,12 +108,13 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
                 }
             }
         } catch (Exception e) {
-            logger.error("查询操作失败", e);
+            logger.error("查询首页栏目操作失败", e);
             //抛出异常回滚数据
             throw new QsourceException(ExceptionEnum.SysException.getCode(),
                     ExceptionEnum.SysException.getMsg(),
                     ExceptionEnum.SysException.getErrorMsg());
         }
+        logger.info("--------查询首页栏目Service完成--------");
         return indexColumnVo;
     }
 
@@ -127,7 +129,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
                 indexTips = response.getData();
             }
         } catch (Exception e) {
-            logger.error("查询操作失败", e);
+            logger.error("查询首页消息栏目操作失败", e);
             throw new QsourceException(ExceptionEnum.SysException.getCode(),
                     ExceptionEnum.SysException.getMsg(),
                     ExceptionEnum.SysException.getErrorMsg());

@@ -50,7 +50,19 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
         }
         return new PageModel<WriterAuditVo>().getPageList(writerAuditVoList);
     }
-
+    
+    public List<WriterAuditVo> exportList(WriterAuditDto writerAuditDto){
+        List<WriterAudit> list = writerAuditDao.selectList(writerAuditDto);
+        List<WriterAuditVo> writerAuditVoList = new ArrayList <WriterAuditVo>();
+        if(CollectionUtils.isNotEmpty(list)){
+            for(WriterAudit writerAudit : list){
+                WriterAuditVo writerAuditVo = new WriterAuditVo();
+                BeanUtils.copyProperties(writerAudit, writerAuditVo);
+                writerAuditVoList.add(writerAuditVo);
+            }
+        }
+        return writerAuditVoList;
+    }
 
     public WriterAuditVo detail(Long kid) {
         WriterAudit writerAudit = writerAuditDao.selectByKid(WriterAudit.class,kid);

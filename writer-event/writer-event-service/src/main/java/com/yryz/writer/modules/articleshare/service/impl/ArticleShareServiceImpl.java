@@ -30,6 +30,8 @@ public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleS
 
     private static final Logger logger = LoggerFactory.getLogger(ArticleShareServiceImpl.class);
 
+    private static final String shareTemplate = "分享了您的文章《$content》";
+
     @Autowired
     private ArticleShareDao articleShareDao;
 
@@ -75,9 +77,12 @@ public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleS
         try {
             if(list != null && list.size() > 0) {
                 for(ArticleShare articleShare : list){
+                    StringBuilder content = new StringBuilder();
                     ArticleShareVo articleShareVo = new ArticleShareVo();
                     BeanUtils.copyProperties(articleShare, articleShareVo);
                     //ArticleFavorite to ArticleFavoriteVo
+                    content.append(articleShare.getCreateUserNickname()).append(shareTemplate);
+                    articleShareVo.setContent(content.toString().replace("$content", articleShare.getArticleTitle()));
                     articleShareVoList.add(articleShareVo);
                 }
             }

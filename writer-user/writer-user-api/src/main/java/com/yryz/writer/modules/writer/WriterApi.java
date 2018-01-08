@@ -1,9 +1,11 @@
 package com.yryz.writer.modules.writer;
 
+import java.util.List;
 import java.util.Map;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.bank.entity.Bank;
@@ -87,10 +89,4 @@ public interface WriterApi {
 	 * */
 	RpcResponse<PageList<WriterAdminVo>> listAdmin(WriterDto writerDto);
 
-	/**
-	 * 删除用户token
-	 * @param custId
-	 * @return
-	 */
-	RpcResponse<Integer> deleteUserToken(String custId);
 }

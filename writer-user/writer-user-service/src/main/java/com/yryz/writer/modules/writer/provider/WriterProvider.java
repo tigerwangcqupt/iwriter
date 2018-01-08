@@ -4,6 +4,7 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.writer.WriterApi;
+import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
@@ -13,6 +14,7 @@ import com.yryz.writer.modules.writer.service.WriterAuditService;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.service.redis.TokenRedis;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -130,7 +132,22 @@ public class WriterProvider implements WriterApi {
 			return ResponseModel.returnException(e);
 		}
 	}
-	
+
+	@Override
+	public RpcResponse<PageList<WriterAdminRefProfit>> selectAdminProfitList(WriterDto writerDto) {
+		try {
+			return ResponseModel.returnListSuccess(writerService.selectAdminProfitList(writerDto));
+		} catch (Exception e) {
+			logger.error("获取Writer列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public List<WriterAdminRefProfit> selectAllAdminProfitList(WriterDto writerDto) {
+		return writerService.selectAllAdminProfitList(writerDto);
+	}
+
 	@Override
 	public RpcResponse<Integer> register(Writer user) {
 		try {

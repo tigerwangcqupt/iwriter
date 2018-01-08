@@ -67,6 +67,16 @@ public class Profit extends GenericEntity{
 	 * 提现消息
 	 */	 
     private  String settlementMsg;
+
+	/**
+	 * 流水号
+	 */
+	private  String profitSn;
+
+	/**
+	 * 写手id
+	 */
+	private  Long writerId;
     
 
 	public Integer getDelFlag() {
@@ -140,5 +150,20 @@ public class Profit extends GenericEntity{
 	public void setSettlementMsg(String settlementMsg) {
 		this.settlementMsg = settlementMsg;
 	}
-		
+
+	public String getProfitSn() {
+		return profitSn;
+	}
+
+	public void setProfitSn(String profitSn) {
+		this.profitSn = profitSn;
+	}
+
+	public Long getWriterId() {
+		return writerId;
+	}
+
+	public void setWriterId(Long writerId) {
+		this.writerId = writerId;
+	}
 }

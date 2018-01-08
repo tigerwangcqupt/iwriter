@@ -48,17 +48,6 @@ public class ArticleFavoriteVo implements Serializable {
      */
     private Long writerId;
 
-    private String successNum;
-
-    public void setSuccessNum(String successNum) {
-        this.successNum = successNum;
-    }
-
-    public String getSuccessNum() {
-
-        return successNum;
-    }
-
     public void setArticleTitle(String articleTitle) {
         this.articleTitle = articleTitle;
     }
