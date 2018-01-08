@@ -169,4 +169,9 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         PageUtils.startPage(writerDto.getCurrentPage(), writerDto.getPageSize());
         return new PageModel<WriterAdminRefProfit>().getPageList(writerDao.selectAdminProfitList(writerDto));
     }
+
+    @Override
+    public List<WriterAdminRefProfit> selectAllAdminProfitList(WriterDto writerDto) {
+        return writerDao.selectAdminProfitList(writerDto);
+    }
 }

@@ -14,6 +14,7 @@ import com.yryz.writer.modules.writer.service.WriterAuditService;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.service.redis.TokenRedis;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -140,6 +141,11 @@ public class WriterProvider implements WriterApi {
 			logger.error("获取Writer列表失败", e);
 			return ResponseModel.returnException(e);
 		}
+	}
+
+	@Override
+	public List<WriterAdminRefProfit> selectAllAdminProfitList(WriterDto writerDto) {
+		return writerService.selectAllAdminProfitList(writerDto);
 	}
 
 	@Override

@@ -96,4 +96,10 @@ public interface WriterApi {
 	 */
 	RpcResponse<PageList<WriterAdminRefProfit>> selectAdminProfitList(WriterDto writerDto);
 
+	/**
+	 * 后台查询写手收益列表
+	 * @param writerDto
+	 * @return
+	 */
+	List<WriterAdminRefProfit> selectAllAdminProfitList(WriterDto writerDto);
 }
