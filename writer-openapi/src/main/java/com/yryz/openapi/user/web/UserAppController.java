@@ -178,13 +178,11 @@ public class UserAppController extends BaseController {
      */
     @RequestMapping(value = "judgePwd", method = {RequestMethod.POST})
     @ResponseBody
-    public RpcResponse<Boolean> judgePwd(@RequestBody CustRegisterDto custRegisterDto) {
-        Assert.notNull(custRegisterDto, "缺少参数或参数错误！");
-        Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
-        Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
+    public RpcResponse<Boolean> judgePwd(@RequestHeader("userId") String userId) {
+        Assert.notNull(userId, "userId不能为空！");
+        Assert.hasText(userId, "userId不能为空！");
 
-
-        RpcResponse<Writer> rpcResponseWriter = writerApi.selectByPhone(custRegisterDto.getCustPhone());
+        RpcResponse<Writer> rpcResponseWriter = writerApi.get(Long.valueOf(userId));
         Writer user = isSuccess(rpcResponseWriter);
         if (user != null) {
             if (user.getPwd() != null && user.getPwd() != null) {
@@ -466,7 +464,7 @@ public class UserAppController extends BaseController {
                     ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
         }
 
-        RpcResponse<Boolean> booleanRpcResponse = smsCommonApi.checkVerifyCode(user.getPhone(), SmsTypeEnum.CODE_CHANGE_PHONE, custRegisterDto.getVeriCode());
+        RpcResponse<Boolean> booleanRpcResponse = smsCommonApi.checkVerifyCode(user.getPhone(), SmsTypeEnum.CODE_UNKNOW, custRegisterDto.getVeriCode());
         boolean b = isSuccessNotNull(booleanRpcResponse);
         if (b) {
             Map<String,Object> mapResult = new HashMap <String,Object>();
@@ -509,6 +507,7 @@ public class UserAppController extends BaseController {
                 RpcResponse<Writer> rpcResponseWriterSave = writerApi.get(Long.valueOf(userId));
                 Writer writer = isSuccess(rpcResponseWriterSave);
                 writer.setPhone(custRegisterDto.getCustPhone());
+                writer.setAccount(custRegisterDto.getCustPhone());
                 writerApi.updateByPrimaryKeySelective(writer);
                 Map<String,Object> mapResult = new HashMap <String,Object>();
                 mapResult.put("custPhone",custRegisterDto.getCustPhone());

@@ -57,10 +57,12 @@
             <bean class="com.yryz.openapi.core.interceptor.CommonInterceptor"/>
          </mvc:interceptor>
 
-<!--         <mvc:interceptor>
+        <!-- token拦截 -->
+        <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.yryz.openapi.core.interceptor.SecurityInterceptor"/>
-         </mvc:interceptor>-->
+        </mvc:interceptor>
+
      </mvc:interceptors>
 
     <!-- 上下文环境 -->

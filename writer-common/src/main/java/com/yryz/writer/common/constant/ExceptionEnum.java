@@ -9,6 +9,14 @@ public enum ExceptionEnum {
 
     Exception("1000", "Server error; please try again later.", "服务器内部错误，未知异常！"),
 
+    //用户异常码从5000开始，应原生需求，与平台跳登录页的状态码统一，OTHER_DEVICE_LOGIN = "4"，NO_TOKEN_RE_LOGIN = "6"
+    //用户异常码从5000开始，应原生需求，与平台跳登录页的状态码统一，OTHER_DEVICE_LOGIN = "4"，NO_TOKEN_RE_LOGIN = "6"
+    //跳转登录页
+    NOT_LOGIN("5000",  "用户未登录", "暂未获取到您的信息，请先登录"),
+
+    //跳转登录页
+    OTHER_DEVICE_LOGIN("4",  "您已在其他设备登录，请注意账户安全！", "您的账号已在其他设备登录，请注意账号安全！"),
+
     PHONE_REGISTERED("5001", "该手机号已注册！", "该手机号已注册！"),
     PHONE_UNREGISTERED("5002", "该手机号未注册！", "该手机号未注册！"),
     USER_REGISTERED("5003", "该用户已注册，请检查后再试！", "该用户已注册，请检查后再试！"),
