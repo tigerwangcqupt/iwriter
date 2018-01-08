@@ -8,10 +8,7 @@ import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.dto.MessageDto;
 import com.yryz.writer.modules.message.service.MessageService;
 import com.yryz.writer.modules.message.service.impl.MessageMongo;
-import com.yryz.writer.modules.message.vo.IndexTipsVo;
-import com.yryz.writer.modules.message.vo.MessageNumVo;
-import com.yryz.writer.modules.message.vo.WriterNoticeMessageDto;
-import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
+import com.yryz.writer.modules.message.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +92,7 @@ public class MessageProvider implements MessageApi {
     }
 
     @Override
-    public RpcResponse<PageList<WriterNoticeMessageVo>> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
+    public RpcResponse<PageList<WriterNoticeVo>> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
         try {
             return ResponseModel.returnObjectSuccess(messageService.queryWriterNoticeMessage(writerNoticeMessageDto));
         } catch (Exception e) {

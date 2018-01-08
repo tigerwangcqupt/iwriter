@@ -5,10 +5,7 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.service.api.basic.message.MessageVo;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.dto.MessageDto;
-import com.yryz.writer.modules.message.vo.MessageNumVo;
-import com.yryz.writer.modules.message.vo.NoticeReceiveWriter;
-import com.yryz.writer.modules.message.vo.WriterNoticeMessageDto;
-import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
+import com.yryz.writer.modules.message.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -44,8 +41,8 @@ public class MessageController {
    }
 
    @ResponseBody
-   @RequestMapping(value="/queryMessage", method = RequestMethod.GET)
-   public RpcResponse<PageList<WriterNoticeMessageVo>> queryMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
+   @RequestMapping(value="/list", method = RequestMethod.GET)
+   public RpcResponse<PageList<WriterNoticeVo>> queryMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
       return messageApi.queryWriterNoticeMessage(writerNoticeMessageDto);
    }
 

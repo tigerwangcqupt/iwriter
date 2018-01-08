@@ -175,22 +175,11 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             writerNoticeMessageVo.setMessageId(kid.toString());
             writerNoticeMessageVo.setCreateTime(new Date());
             writerNoticeMessageVo.setSendUserId(writerNoticeMessageVo.getSendUserId() == null ? 0l : writerNoticeMessageVo.getSendUserId());
-
-//            writerNoticeMessageVo.setMessageId("1");
-//            writerNoticeMessageVo.setSendUserId(0l);
-//            writerNoticeMessageVo.setContent("hyy测试消息");
-//            writerNoticeMessageVo.setTitle("hyy测试消息");
-//            List<NoticeReceiveWriter> writers = new ArrayList<NoticeReceiveWriter>();
-//            NoticeReceiveWriter one = new NoticeReceiveWriter();
-//            one.setKid(1l);
-//            one.setUserNickName("接受的写手1");
-//            writers.add(one);
-//            NoticeReceiveWriter second = new NoticeReceiveWriter();
-//            second.setKid(2l);
-//            second.setUserNickName("接受的写手2");
-//            writers.add(second);
-//            writerNoticeMessageVo.setReceiveWriter(writers);
-
+            for (NoticeReceiveWriter writer : writerNoticeMessageVo.getReceiveWriter()){
+                if (writer == null) continue;
+                //保存写手的消息缓存数
+                saveMessageTips(ModuleEnum.NOTICE, writer.getKid());
+            }
             messageMongo.saveWriterNotice(writerNoticeMessageVo);
         } catch (Exception e) {
             logger.error("发送写手通知消息失败", e);
@@ -200,13 +189,20 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     }
 
     @Override
-    public PageList<WriterNoticeMessageVo> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
+    public PageList<WriterNoticeVo> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
         Long result = null;
         try {
             PageUtils.startPage(writerNoticeMessageDto.getCurrentPage(), writerNoticeMessageDto.getPageSize());
 //            return messageMongo.queryWriterNoticePage(writerNoticeMessageDto);
             List<WriterNoticeMessageVo> writerNoticeMessageVoList = messageMongo.queryWriterNoticePage(writerNoticeMessageDto);
-            return new PageModel<WriterNoticeMessageVo>().getPageList(writerNoticeMessageVoList);
+            List<WriterNoticeVo> noticeVos = new ArrayList<>(writerNoticeMessageVoList.size());
+            for (WriterNoticeMessageVo writerNoticeMessageVo : writerNoticeMessageVoList){
+                WriterNoticeVo writerNoticeVo = new WriterNoticeVo();
+                writerNoticeVo.setContent(writerNoticeMessageVo.getContent());
+                writerNoticeVo.setCreateDate(writerNoticeMessageVo.getCreateTime());
+                noticeVos.add(writerNoticeVo);
+            }
+            return new PageModel<WriterNoticeVo>().getPageList(noticeVos);
         } catch (Exception e) {
             logger.error("获取通知消息失败", e);
         }

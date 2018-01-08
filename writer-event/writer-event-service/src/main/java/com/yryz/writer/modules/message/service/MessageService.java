@@ -2,10 +2,7 @@ package com.yryz.writer.modules.message.service;
 
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
-import com.yryz.writer.modules.message.vo.IndexTipsVo;
-import com.yryz.writer.modules.message.vo.MessageNumVo;
-import com.yryz.writer.modules.message.vo.WriterNoticeMessageDto;
-import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
+import com.yryz.writer.modules.message.vo.*;
 
 import java.util.List;
 
@@ -68,5 +65,5 @@ public interface MessageService {
      * @param writerNoticeMessageDto
      * @return
      */
-    public PageList<WriterNoticeMessageVo> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto);
+    public PageList<WriterNoticeVo> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto);
 }

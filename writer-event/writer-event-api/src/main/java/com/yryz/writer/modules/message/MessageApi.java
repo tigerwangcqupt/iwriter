@@ -7,10 +7,7 @@ import com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite;
 import com.yryz.writer.modules.articlefavorite.vo.ArticleFavoriteVo;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.dto.MessageDto;
-import com.yryz.writer.modules.message.vo.IndexTipsVo;
-import com.yryz.writer.modules.message.vo.MessageNumVo;
-import com.yryz.writer.modules.message.vo.WriterNoticeMessageDto;
-import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
+import com.yryz.writer.modules.message.vo.*;
 
 import java.util.List;
 
@@ -72,5 +69,5 @@ public interface MessageApi {
      * @param writerNoticeMessageDto
      * @return
      */
-    public RpcResponse<PageList<WriterNoticeMessageVo>> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto);
+    public RpcResponse<PageList<WriterNoticeVo>> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto);
 }
