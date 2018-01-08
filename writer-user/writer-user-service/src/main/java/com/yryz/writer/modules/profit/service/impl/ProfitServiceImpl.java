@@ -140,8 +140,9 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public Profit insertProfit(Profit profit) {
         String lockKey = null;
         try {
-            String orderNumber = String.valueOf(idAPI.getSnowflakeId());
-            System.out.println(orderNumber+":orderNumber");
+            String profitSn = String.valueOf(idAPI.getSnowflakeId());
+            profit.setWriterId(1l);
+            profit.setProfitSn(profitSn);
             //分布式锁控制用户频繁操作
             lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getCreateUserId());
             ProfitDto profitDto = new ProfitDto();

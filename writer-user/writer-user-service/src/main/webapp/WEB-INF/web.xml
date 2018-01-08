@@ -20,7 +20,7 @@
     </listener-class>
   </listener>
 
-	<servlet>
+<!--	<servlet>
 		<servlet-name>springMVC</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
@@ -32,7 +32,7 @@
 	<servlet-mapping>
 		<servlet-name>springMVC</servlet-name>
 		<url-pattern>/</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
   	<!-- 字符编码集为UTF-8 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
