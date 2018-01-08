@@ -101,13 +101,17 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
     @Override
     public String getUserToken(String custId){
         String token = this.getToken(custId);
-        if(token==null){
-            String tokenValue = UUID.randomUUID().toString().replaceAll("-", "");
-            if(this.addToken(custId,tokenValue)){
-                token = this.getToken(custId);
-            }
-        }
         return token;
+    }
+
+    @Override
+    public String addUserToken(String custId){
+        String token="";
+        String tokenValue = UUID.randomUUID().toString().replaceAll("-", "");
+        if(this.addToken(custId,tokenValue)){
+            return tokenValue;
+        }
+        return null;
     }
 
     @Override

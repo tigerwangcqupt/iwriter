@@ -12,7 +12,6 @@ import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
 import com.yryz.writer.modules.writer.service.WriterAuditService;
 import com.yryz.writer.modules.writer.service.WriterService;
-import com.yryz.writer.modules.writer.service.redis.TokenRedis;
 
 import java.util.List;
 import java.util.UUID;
@@ -202,7 +201,7 @@ public class WriterProvider implements WriterApi {
 		}
 	}
 
-
+	@Override
 	public RpcResponse<Integer> deleteUserToken(String custId){
 		try {
 			return ResponseModel.returnObjectSuccess(writerService.deleteUserToken(custId));
@@ -212,6 +211,14 @@ public class WriterProvider implements WriterApi {
 		}
 	}
 
-
+	@Override
+	public RpcResponse<String> addUserToken(String custId){
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.addUserToken(custId));
+		} catch (Exception e) {
+			logger.error("添加用户token失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
 
 }

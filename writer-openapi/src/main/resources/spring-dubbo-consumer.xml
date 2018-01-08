@@ -19,7 +19,7 @@
     <!-- writer -->
     <dubbo:reference id="writerApi"
                      interface="com.yryz.writer.modules.writer.WriterApi" registry="yryz-new" check="false"
-                     timeout="10000" retries="0"/>
+                     timeout="30000" retries="0"/>
     <!-- writer -->
     <dubbo:reference id="writerAuditApi"
                      interface="com.yryz.writer.modules.writer.WriterAuditApi" registry="yryz-new" check="false"

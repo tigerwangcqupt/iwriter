@@ -52,4 +52,6 @@ public interface WriterService extends BaseService {
 
    Integer deleteUserToken(String custId);
 
+    String addUserToken(String custId);
+
 }

@@ -105,4 +105,6 @@ public interface WriterApi {
 
 
 	 RpcResponse<Integer> deleteUserToken(String custId);
+
+	RpcResponse<String> addUserToken(String custId);
 }

@@ -326,7 +326,7 @@ public class UserAppController extends BaseController {
                     ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
         } else {
             if (password.equals(user.getPwd())) {
-                RpcResponse<String> tokenRpcResponse = writerApi.getUserToken(String.valueOf(user.getKid()));
+                RpcResponse<String> tokenRpcResponse = writerApi.addUserToken(String.valueOf(user.getKid()));
                 String token = isSuccess(tokenRpcResponse);
                 authInfoVo.setToken(token);
             } else {
