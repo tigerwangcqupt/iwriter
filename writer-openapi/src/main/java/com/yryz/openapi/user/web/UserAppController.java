@@ -53,7 +53,7 @@ public class UserAppController extends BaseController {
 
     //TODO
     //要修改称新悠然一指的短信模板
-    private static final String ZGZYQ_CHANNEL = "ZGZYQ";
+    private static final String YRYZ_CHANNEL = "YRYZ";
 
 
 
@@ -93,7 +93,7 @@ public class UserAppController extends BaseController {
         //选取短信模板
         smsReq.setTemplateType(Integer.valueOf(SmsContants.CODE_REGISTER));
         smsReq.setAppId(appId);
-        smsReq.setChannel(ZGZYQ_CHANNEL);
+        smsReq.setChannel(YRYZ_CHANNEL);
         return smsCommonApi.sendVerifyCode(smsReq);
     }
 
