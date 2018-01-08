@@ -73,7 +73,7 @@ public class ArticleFavoriteProvider implements ArticleFavoriteApi {
 		try {
 			return ResponseModel.returnListSuccess(articleFavoriteService.selectListByWriter(articleFavoriteDto));
 		} catch (Exception e) {
-			logger.error("获取ArticleFavorite列表失败", e);
+			logger.error("获取ArticleFavorite--listByWriter列表失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}
@@ -88,7 +88,7 @@ public class ArticleFavoriteProvider implements ArticleFavoriteApi {
 				return ResponseModel.returnListSuccess(false);
 			}
 		} catch (Exception e) {
-			logger.error("获取ArticleFavorite列表失败", e);
+			logger.error("保存ArticleFavorite明细失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}

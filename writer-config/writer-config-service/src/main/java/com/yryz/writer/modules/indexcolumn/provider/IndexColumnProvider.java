@@ -75,6 +75,7 @@ public class IndexColumnProvider implements IndexColumnApi {
 	@Override
 	public RpcResponse<IndexColumnVo> listByWriter(IndexColumnDto indexColumnDto) {
 		try {
+			logger.info("--------进入查询首页栏目Provider--------");
 			return ResponseModel.returnListSuccess(indexColumnService.selectAll(indexColumnDto));
 		} catch (Exception e) {
 			logger.error("获取IndexColumn列表失败", e);
