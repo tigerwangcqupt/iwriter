@@ -13,7 +13,7 @@ import com.yryz.writer.modules.task.entity.Task;
  * @date 2018-01-02 20:07:17
  */
 public class TaskVo implements Serializable {
-    private Long id;
+    private Long kid;
     /**
      * 任务标题
      */
@@ -34,6 +34,11 @@ public class TaskVo implements Serializable {
      * 应用图标
      */
     private String icon;
+
+    /**
+     * 开发商名
+     */
+    private String companyName;
 
 
     /**
@@ -61,13 +66,13 @@ public class TaskVo implements Serializable {
     /**
      * 任务截至人数
      */
-    private Integer taskJoinNum;
+    private Integer taskCloseNum;
 
 
     /**
      * 投稿写手数
      */
-    private Integer joinNum;
+    private Integer submitNum;
 
 
     /**
@@ -81,12 +86,12 @@ public class TaskVo implements Serializable {
      */
     private String contentHtml;
 
-    public Long getId() {
-        return id;
+    public Long getKid() {
+        return kid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKid(Long kid) {
+        this.kid = kid;
     }
 
     public String getTitle() {
@@ -137,20 +142,28 @@ public class TaskVo implements Serializable {
         this.acceptTaskNum = acceptTaskNum;
     }
 
-    public Integer getTaskJoinNum() {
-        return taskJoinNum;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setTaskJoinNum(Integer taskJoinNum) {
-        this.taskJoinNum = taskJoinNum;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public Integer getJoinNum() {
-        return joinNum;
+    public Integer getTaskCloseNum() {
+        return taskCloseNum;
     }
 
-    public void setJoinNum(Integer joinNum) {
-        this.joinNum = joinNum;
+    public void setTaskCloseNum(Integer taskCloseNum) {
+        this.taskCloseNum = taskCloseNum;
+    }
+
+    public Integer getSubmitNum() {
+        return submitNum;
+    }
+
+    public void setSubmitNum(Integer submitNum) {
+        this.submitNum = submitNum;
     }
 
     public Integer getDraftType() {

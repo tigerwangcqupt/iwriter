@@ -11,5 +11,9 @@
     <dubbo:reference id="idAPI"
                      interface="com.yryz.writer.modules.id.api.IdAPI" registry="yryz-new" check="false" timeout="10000"
                      retries="0"/>
+    <!--ID发号服务-->
+    <dubbo:reference id="messageApi"
+                     interface="com.yryz.writer.modules.message.MessageApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
 
 </beans>

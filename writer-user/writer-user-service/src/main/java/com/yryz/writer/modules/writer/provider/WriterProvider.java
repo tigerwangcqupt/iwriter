@@ -35,9 +35,6 @@ public class WriterProvider implements WriterApi {
 	@Autowired
 	private WriterAuditService writerAuditService;
 	
-	@Autowired
-	private TokenRedis tokenRedis;
-
 	/**
 	*  获取Writer明细
 	*  @param  writerId
@@ -148,6 +145,17 @@ public class WriterProvider implements WriterApi {
 			return ResponseModel.returnException(e);
 		}
 	}
+
+	@Override
+	public RpcResponse<Integer> updateByPrimaryKeySelective(Writer user) {
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.update(user));
+		} catch (Exception e) {
+			logger.error("修改用户失败！" + e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 	
 	/**
 	 *  获取Writer明细
@@ -170,14 +178,7 @@ public class WriterProvider implements WriterApi {
 	 */
 	public RpcResponse<String> getUserToken(String custId) {
 		try {
-			String token = tokenRedis.getToken(custId);
-			if(token==null){
-				String tokenValue = UUID.randomUUID().toString().replaceAll("-", "");
-				if(tokenRedis.addToken(custId,tokenValue)){
-					token = tokenRedis.getToken(custId);
-				}
-			}
-			return ResponseModel.returnObjectSuccess(token);
+			return ResponseModel.returnObjectSuccess(writerService.getUserToken(custId));
 		} catch (Exception e) {
 			logger.error("获取用户token失败", e);
 			return ResponseModel.returnException(e);

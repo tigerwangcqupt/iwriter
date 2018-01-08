@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.task.dao.persistence;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.dto.TaskDto;
 import com.yryz.writer.common.dao.BaseDao;
@@ -23,4 +24,7 @@ public interface TaskDao extends BaseDao {
     //根据id查询应用id,应用名,应用icon
     TaskVo selectAppById(@Param("id") Long id);
 
+    int acceptTask(@Param("kid") Long kid);
+
+    Integer selectSubmitNum(@Param("kid") Long kid);
 }

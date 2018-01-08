@@ -23,8 +23,8 @@ public class DraftController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/single", method = RequestMethod.GET)
-    public RpcResponse<DraftVo> detail(Long draftId) {
-        return draftApi.detail(draftId);
+    public RpcResponse<DraftVo> detail(Long kid) {
+        return draftApi.detail(kid);
     }
 
     @ResponseBody

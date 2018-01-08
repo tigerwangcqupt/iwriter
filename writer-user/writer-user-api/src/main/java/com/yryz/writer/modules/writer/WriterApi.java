@@ -21,10 +21,16 @@ import com.yryz.writer.modules.writer.entity.Writer;
 public interface WriterApi {
 
 	/**
-	 * 新增User(选择)
+	 * 用户注册
 	 */
 	RpcResponse<Integer> register(Writer user);
 
+	/**
+	 * 用户修改
+	 * @param user
+	 * @return
+	 */
+	RpcResponse<Integer> updateByPrimaryKeySelective(Writer user);
 
 	/**
 	*  获取Writer明细

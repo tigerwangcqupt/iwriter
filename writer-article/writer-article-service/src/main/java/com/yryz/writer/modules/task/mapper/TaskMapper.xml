@@ -2,53 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yryz.writer.modules.task.dao.persistence.TaskDao">
 
-	<!--BaseResultMap-->
+    <!--BaseResultMap-->
     <resultMap id="BaseResultMap" type="com.yryz.writer.modules.task.entity.Task">
-		<id column="id" property="id" jdbcType="BIGINT"/>
-		<result column="kid" property="kid" jdbcType="BIGINT"/>
-		<result column="title" property="title" jdbcType="VARCHAR"/>
-		<result column="app_id" property="appId" jdbcType="BIGINT"/>
-		<result column="draft_fee" property="draftFee" jdbcType="DECIMAL"/>
-		<result column="start_date" property="startDate" jdbcType="TIMESTAMP"/>
-		<result column="end_date" property="endDate" jdbcType="TIMESTAMP"/>
-		<result column="accept_task_num" property="acceptTaskNum" jdbcType="INTEGER"/>
-		<result column="task_join_num" property="taskJoinNum" jdbcType="INTEGER"/>
-		<result column="join_num" property="joinNum" jdbcType="INTEGER"/>
-		<result column="draft_type" property="draftType" jdbcType="TINYINT"/>
-		<result column="content_html" property="contentHtml" jdbcType="VARCHAR"/>
-		<result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
-		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
-		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
-		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
-		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
-		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
-		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="kid" property="kid" jdbcType="BIGINT"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="app_id" property="appId" jdbcType="BIGINT"/>
+        <result column="draft_fee" property="draftFee" jdbcType="DECIMAL"/>
+        <result column="start_date" property="startDate" jdbcType="TIMESTAMP"/>
+        <result column="end_date" property="endDate" jdbcType="TIMESTAMP"/>
+        <result column="accept_task_num" property="acceptTaskNum" jdbcType="INTEGER"/>
+        <result column="task_close_num" property="taskCloseNum" jdbcType="INTEGER"/>
+        <result column="draft_type" property="draftType" jdbcType="TINYINT"/>
+        <result column="content_html" property="contentHtml" jdbcType="VARCHAR"/>
+        <result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
+        <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+        <result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+        <result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+        <result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
     </resultMap>
-	
-	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_join_num,join_num,draft_type,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
+
+    <!--Base_Column_List-->
+    <sql id="Base_Column_List">id,kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_close_num,draft_type,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
     </sql>
 
-     <!-- 查询Task详情 -->
+    <!-- 查询Task详情 -->
     <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from yryz_task
         where del_flag = 0
-		and kid = #{kid,jdbcType=BIGINT}
+        and kid = #{kid,jdbcType=BIGINT}
     </select>
-    
+
     <!-- 删除Task-->
     <delete id="delete" parameterType="java.lang.Long">
         update yryz_task
         set del_flag = 1
         where kid = #{kid,jdbcType=BIGINT}
     </delete>
-  
-  
-  	<!-- 新增Task-->
-    <insert id="insert"  parameterType="com.yryz.writer.modules.task.entity.Task">
-	    insert into yryz_task (kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_join_num,join_num,draft_type,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
+
+
+    <!-- 新增Task-->
+    <insert id="insert" parameterType="com.yryz.writer.modules.task.entity.Task">
+	    insert into yryz_task (kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_close_num,draft_type,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{title,jdbcType=VARCHAR}
@@ -57,8 +56,7 @@
 				,#{startDate,jdbcType=TIMESTAMP}
 				,#{endDate,jdbcType=TIMESTAMP}
 				,#{acceptTaskNum,jdbcType=INTEGER}
-				,#{taskJoinNum,jdbcType=INTEGER}
-				,#{joinNum,jdbcType=INTEGER}
+				,#{taskCloseNum,jdbcType=INTEGER}
 				,#{draftType,jdbcType=TINYINT}
 				,#{contentHtml,jdbcType=VARCHAR}
 				,#{moduleEnum,jdbcType=VARCHAR}
@@ -70,201 +68,249 @@
 				,#{shelveFlag,jdbcType=TINYINT}
 	    )
 	</insert>
-	
-	<!--按需新增Task-->
-    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.task.entity.Task">
-	    insert into yryz_task 
-	    <trim prefix="(" suffix=")" suffixOverrides=",">
-        <if test="kid != null">
-			kid,
-	    </if>
-        <if test="title != null and title != ''">
-			title,
-	    </if>
-        <if test="appId != null">
-			app_id,
-	    </if>
-        <if test="draftFee != null">
-			draft_fee,
-	    </if>
-        <if test="startDate != null">
-			start_date,
-	    </if>
-        <if test="endDate != null">
-			end_date,
-	    </if>
-        <if test="acceptTaskNum != null">
-			accept_task_num,
-	    </if>
-        <if test="taskJoinNum != null">
-			task_join_num,
-	    </if>
-        <if test="joinNum != null">
-			join_num,
-	    </if>
-        <if test="draftType != null">
-			draft_type,
-	    </if>
-        <if test="contentHtml != null and contentHtml != ''">
-			content_html,
-	    </if>
-        <if test="moduleEnum != null and moduleEnum != ''">
-			module_enum,
-	    </if>
-        <if test="createUserId != null and createUserId != ''">
-			create_user_id,
-	    </if>
-        <if test="createDate != null">
-			create_date,
-	    </if>
-        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
-			last_update_user_id,
-	    </if>
-        <if test="lastUpdateDate != null">
-			last_update_date,
-	    </if>
-        <if test="delFlag != null">
-			del_flag,
-	    </if>
-        <if test="shelveFlag != null">
-			shelve_flag,
-	    </if>
-	    </trim>
-	    <trim prefix="values (" suffix=")" suffixOverrides=",">
-        <if test="kid != null">
-			#{kid,jdbcType=BIGINT},
-	    </if>
-        <if test="title != null and title != ''">
-			#{title,jdbcType=VARCHAR},
-	    </if>
-        <if test="appId != null">
-			#{appId,jdbcType=BIGINT},
-	    </if>
-        <if test="draftFee != null">
-			#{draftFee,jdbcType=DECIMAL},
-	    </if>
-        <if test="startDate != null">
-			#{startDate,jdbcType=TIMESTAMP},
-	    </if>
-        <if test="endDate != null">
-			#{endDate,jdbcType=TIMESTAMP},
-	    </if>
-        <if test="acceptTaskNum != null">
-			#{acceptTaskNum,jdbcType=INTEGER},
-	    </if>
-        <if test="taskJoinNum != null">
-			#{taskJoinNum,jdbcType=INTEGER},
-	    </if>
-        <if test="joinNum != null">
-			#{joinNum,jdbcType=INTEGER},
-	    </if>
-        <if test="draftType != null">
-			#{draftType,jdbcType=TINYINT},
-	    </if>
-        <if test="contentHtml != null and contentHtml != ''">
-			#{contentHtml,jdbcType=VARCHAR},
-	    </if>
-        <if test="moduleEnum != null and moduleEnum != ''">
-			#{moduleEnum,jdbcType=VARCHAR},
-	    </if>
-        <if test="createUserId != null and createUserId != ''">
-			#{createUserId,jdbcType=VARCHAR},
-	    </if>
-        <if test="createDate != null">
-			#{createDate,jdbcType=TIMESTAMP},
-	    </if>
-        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
-			#{lastUpdateUserId,jdbcType=VARCHAR},
-	    </if>
-        <if test="lastUpdateDate != null">
-			#{lastUpdateDate,jdbcType=TIMESTAMP},
-	    </if>
-        <if test="delFlag != null">
-			#{delFlag,jdbcType=TINYINT},
-	    </if>
-        <if test="shelveFlag != null">
-			#{shelveFlag,jdbcType=TINYINT},
-	    </if>
-	    </trim>
-	</insert>
-	
-	
-	<!-- 按需修改Task-->   
+
+    <!--按需新增Task-->
+    <insert id="insertByPrimaryKeySelective" parameterType="com.yryz.writer.modules.task.entity.Task">
+        insert into yryz_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="kid != null">
+                kid,
+            </if>
+            <if test="title != null and title != ''">
+                title,
+            </if>
+            <if test="appId != null">
+                app_id,
+            </if>
+            <if test="draftFee != null">
+                draft_fee,
+            </if>
+            <if test="startDate != null">
+                start_date,
+            </if>
+            <if test="endDate != null">
+                end_date,
+            </if>
+            <if test="acceptTaskNum != null">
+                accept_task_num,
+            </if>
+            <if test="taskCloseNum != null">
+                task_close_num,
+            </if>
+            <if test="draftType != null">
+                draft_type,
+            </if>
+            <if test="contentHtml != null and contentHtml != ''">
+                content_html,
+            </if>
+            <if test="moduleEnum != null and moduleEnum != ''">
+                module_enum,
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                create_user_id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+                last_update_user_id,
+            </if>
+            <if test="lastUpdateDate != null">
+                last_update_date,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="shelveFlag != null">
+                shelve_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="kid != null">
+                #{kid,jdbcType=BIGINT},
+            </if>
+            <if test="title != null and title != ''">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="appId != null">
+                #{appId,jdbcType=BIGINT},
+            </if>
+            <if test="draftFee != null">
+                #{draftFee,jdbcType=DECIMAL},
+            </if>
+            <if test="startDate != null">
+                #{startDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endDate != null">
+                #{endDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="acceptTaskNum != null">
+                #{acceptTaskNum,jdbcType=INTEGER},
+            </if>
+            <if test="taskCloseNum != null">
+                #{taskCloseNum,jdbcType=INTEGER},
+            </if>
+            <if test="draftType != null">
+                #{draftType,jdbcType=TINYINT},
+            </if>
+            <if test="contentHtml != null and contentHtml != ''">
+                #{contentHtml,jdbcType=VARCHAR},
+            </if>
+            <if test="moduleEnum != null and moduleEnum != ''">
+                #{moduleEnum,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserId != null and createUserId != ''">
+                #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+                #{lastUpdateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastUpdateDate != null">
+                #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=TINYINT},
+            </if>
+            <if test="shelveFlag != null">
+                #{shelveFlag,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 按需修改Task-->
     <update id="update" parameterType="com.yryz.writer.modules.task.entity.Task">
         update yryz_task
         <set>
             <if test="title != null and title != ''">
-    			title = #{title,jdbcType=VARCHAR},
-    		</if>
-             <if test="appId != null">
-    			app_id = #{appId,jdbcType=BIGINT},
-    		</if>
-             <if test="draftFee != null">
-    			draft_fee = #{draftFee,jdbcType=DECIMAL},
-    		</if>
-             <if test="startDate != null">
-    			start_date = #{startDate,jdbcType=TIMESTAMP},
-    		</if>
-             <if test="endDate != null">
-    			end_date = #{endDate,jdbcType=TIMESTAMP},
-    		</if>
-             <if test="acceptTaskNum != null">
-    			accept_task_num = #{acceptTaskNum,jdbcType=INTEGER},
-    		</if>
-             <if test="taskJoinNum != null">
-    			task_join_num = #{taskJoinNum,jdbcType=INTEGER},
-    		</if>
-             <if test="joinNum != null">
-    			join_num = #{joinNum,jdbcType=INTEGER},
-    		</if>
-             <if test="draftType != null">
-    			draft_type = #{draftType,jdbcType=TINYINT},
-    		</if>
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="appId != null">
+                app_id = #{appId,jdbcType=BIGINT},
+            </if>
+            <if test="draftFee != null">
+                draft_fee = #{draftFee,jdbcType=DECIMAL},
+            </if>
+            <if test="startDate != null">
+                start_date = #{startDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endDate != null">
+                end_date = #{endDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="acceptTaskNum != null">
+                accept_task_num = #{acceptTaskNum,jdbcType=INTEGER},
+            </if>
+            <if test="taskCloseNum != null">
+                task_close_num = #{taskCloseNum,jdbcType=INTEGER},
+            </if>
+            <if test="draftType != null">
+                draft_type = #{draftType,jdbcType=TINYINT},
+            </if>
             <if test="contentHtml != null and contentHtml != ''">
-    			content_html = #{contentHtml,jdbcType=VARCHAR},
-    		</if>
+                content_html = #{contentHtml,jdbcType=VARCHAR},
+            </if>
             <if test="moduleEnum != null and moduleEnum != ''">
-    			module_enum = #{moduleEnum,jdbcType=VARCHAR},
-    		</if>
+                module_enum = #{moduleEnum,jdbcType=VARCHAR},
+            </if>
             <if test="createUserId != null and createUserId != ''">
-    			create_user_id = #{createUserId,jdbcType=VARCHAR},
-    		</if>
-             <if test="createDate != null">
-    			create_date = #{createDate,jdbcType=TIMESTAMP},
-    		</if>
+                create_user_id = #{createUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
             <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
-    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
-    		</if>
-             <if test="lastUpdateDate != null">
-    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
-    		</if>
-             <if test="delFlag != null">
-    			del_flag = #{delFlag,jdbcType=TINYINT},
-    		</if>
-             <if test="shelveFlag != null">
-    			shelve_flag = #{shelveFlag,jdbcType=TINYINT},
-    		</if>
+                last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastUpdateDate != null">
+                last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=TINYINT},
+            </if>
+            <if test="shelveFlag != null">
+                shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+            </if>
         </set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
-    
+
     <!-- 查询Task列表 -->
     <select id="selectList" parameterType="com.yryz.writer.modules.task.dto.TaskDto" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from yryz_task where del_flag = 0
-		<if test="status == 0">
-			AND start_date &lt;= NOW() AND end_date &gt;= NOW()
-		</if>
-		<if test="status == 1">
-			AND end_date &lt;= NOW()
-		</if>
+        <if test="status == 0">
+            AND start_date &lt;= NOW() AND end_date &gt;= NOW()
+            AND accept_task_num &lt; task_close_num
+            AND task_close_flag = 0
+        </if>
+        <if test="status == 1">
+            AND end_date &lt;= NOW()
+            OR accept_task_num &gt;= task_close_num
+            OR task_close_flag = 1
+        </if>
+        <if test="order == 1">
+            ORDER BY create_date ASC
+        </if>
+        <if test="order == 2">
+            ORDER BY create_date DESC
+        </if>
+        <if test="order == 3">
+            ORDER BY end_date ASC
+        </if>
+        <if test="order == 4">
+            ORDER BY end_date DESC
+        </if>
+        <if test="order == 5">
+            ORDER BY draft_fee ASC
+        </if>
+        <if test="order == 6">
+            ORDER BY draft_fee DESC
+        </if>
+        <if test="order == 7">
+            ORDER BY accept_task_num ASC
+        </if>
+        <if test="order == 8">
+            ORDER BY accept_task_num DESC
+        </if>
+        <if test="order == 9">
+
+        </if>
+        <if test="order == 10">
+
+        </if>
+        <if test="order == 11">
+
+        </if>
+        <if test="order == 12">
+
+        </if>
     </select>
-	<!-- 查询应用 -->
+
+    <!-- 查询应用 -->
     <select id="selectAppById" parameterType="java.lang.Long" resultType="com.yryz.writer.modules.task.vo.TaskVo">
-        select id,appli_name,appli_icon icon
-        from yryz_application
-        where id = #{id}
+        SELECT
+	      a.id,a.appli_name,a.appli_icon icon,
+	      b.company_name
+        FROM
+	      yryz_application a,
+	      yryz_company b
+        WHERE
+	      a.id = #{id}
+        AND a.owner_id = b.id
     </select>
+
+    <!-- 接受任务 -->
+    <update id="acceptTask" parameterType="java.lang.Long">
+		UPDATE yryz_task SET accept_task_num=accept_task_num+1 WHERE kid = #{kid}
+	</update>
+
+    <!-- 查询投稿人数 -->
+    <select id="selectSubmitNum" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		SELECT COUNT(DISTINCT create_user_id) FROM yryz_draft WHERE task_kid = #{kid} AND draft_status != 0
+	</select>
 
 </mapper>

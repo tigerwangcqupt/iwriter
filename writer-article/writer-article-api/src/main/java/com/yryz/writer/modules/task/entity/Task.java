@@ -53,13 +53,13 @@ public class Task extends GenericEntity {
     /**
      * 任务截至人数
      */
-    private Integer taskJoinNum;
+    private Integer taskCloseNum;
 
 
     /**
      * 投稿写手数
      */
-    private Integer joinNum;
+    private Integer submitNum;
 
 
     /**
@@ -134,20 +134,20 @@ public class Task extends GenericEntity {
         this.acceptTaskNum = acceptTaskNum;
     }
 
-    public Integer getTaskJoinNum() {
-        return this.taskJoinNum;
+    public Integer getTaskCloseNum() {
+        return taskCloseNum;
     }
 
-    public void setTaskJoinNum(Integer taskJoinNum) {
-        this.taskJoinNum = taskJoinNum;
+    public void setTaskCloseNum(Integer taskCloseNum) {
+        this.taskCloseNum = taskCloseNum;
     }
 
-    public Integer getJoinNum() {
-        return this.joinNum;
+    public Integer getSubmitNum() {
+        return submitNum;
     }
 
-    public void setJoinNum(Integer joinNum) {
-        this.joinNum = joinNum;
+    public void setSubmitNum(Integer submitNum) {
+        this.submitNum = submitNum;
     }
 
     public Integer getDraftType() {
