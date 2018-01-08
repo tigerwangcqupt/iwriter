@@ -24,7 +24,7 @@
     <dubbo:reference id="writerApi" interface="com.yryz.writer.modules.writer.WriterApi" check="false"/>
 
     <!--平台的SMS服务-->
-    <dubbo:reference id="smsAPI"
+   <dubbo:reference id="smsAPI"
                      interface="com.yryz.service.api.basic.api.SmsAPI" check="false"
                      version="1.0" registry="platform" timeout="30000"/>
 

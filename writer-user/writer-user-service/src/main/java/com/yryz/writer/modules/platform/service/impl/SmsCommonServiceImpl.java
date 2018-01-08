@@ -38,7 +38,8 @@ public class SmsCommonServiceImpl implements SmsCommonService {
             SmsReqVo smsReqVo = new SmsReqVo();
             smsReqVo.setPhone(phone);
             smsReqVo.setCode(code);
-            return smsAPI.sendVerifyCode(smsReqVo);
+            //return smsAPI.sendVerifyCode(smsReqVo);
+            return null;
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
             throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
@@ -80,7 +81,8 @@ public class SmsCommonServiceImpl implements SmsCommonService {
     public Boolean checkVerifyCode(String phone, String code, String verifyCode) {
         try {
             RpcContext.getContext().setAttachment("appId", appId);
-            return smsAPI.checkVerifyCode(phone, code, verifyCode);
+            //return smsAPI.checkVerifyCode(phone, code, verifyCode);
+            return null;
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
             throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
@@ -101,7 +103,8 @@ public class SmsCommonServiceImpl implements SmsCommonService {
     public Boolean sendMessage(SmsReqVo smsReq) {
         try {
             RpcContext.getContext().setAttachment("appId", appId);
-            return smsAPI.sendMessage(smsReq);
+            //return smsAPI.sendMessage(smsReq);
+            return null;
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
             throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
