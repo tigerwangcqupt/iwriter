@@ -88,7 +88,28 @@ public class WriterAdminVo implements Serializable {
      * 极光唯一注册ID
      */
     private  String jpushRegistrationId;
-
+    
+    private String auditDate;
+    
+    private String remark;
+    
+    private String bindBankCard;
+    
+    private Integer articleQty;
+    
+    private Integer videoQty;
+    
+    private Integer fansQty; 
+    
+    private Integer visitQty;
+    
+    private Integer commentQty;
+    
+    private Integer collectQty;
+    
+    private Integer shareQty;
+    
+    private Integer praiseQty;
 
     public String getAccount() {
         return this.account;
@@ -225,4 +246,96 @@ public class WriterAdminVo implements Serializable {
     public void setKid(Long kid) {
         this.kid = kid;
     }
+
+	public String getAuditDate() {
+		return auditDate;
+	}
+
+	public void setAuditDate(String auditDate) {
+		this.auditDate = auditDate;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getBindBankCard() {
+		return bindBankCard;
+	}
+
+	public void setBindBankCard(String bindBankCard) {
+		this.bindBankCard = bindBankCard;
+	}
+
+	public Integer getArticleQty() {
+		return articleQty;
+	}
+
+	public void setArticleQty(Integer articleQty) {
+		this.articleQty = articleQty;
+	}
+
+	public Integer getVideoQty() {
+		return videoQty;
+	}
+
+	public void setVideoQty(Integer videoQty) {
+		this.videoQty = videoQty;
+	}
+
+	public Integer getFansQty() {
+		return fansQty;
+	}
+
+	public void setFansQty(Integer fansQty) {
+		this.fansQty = fansQty;
+	}
+
+	public Integer getVisitQty() {
+		return visitQty;
+	}
+
+	public void setVisitQty(Integer visitQty) {
+		this.visitQty = visitQty;
+	}
+
+	public Integer getCommentQty() {
+		return commentQty;
+	}
+
+	public void setCommentQty(Integer commentQty) {
+		this.commentQty = commentQty;
+	}
+
+	public Integer getCollectQty() {
+		return collectQty;
+	}
+
+	public void setCollectQty(Integer collectQty) {
+		this.collectQty = collectQty;
+	}
+
+	public Integer getShareQty() {
+		return shareQty;
+	}
+
+	public void setShareQty(Integer shareQty) {
+		this.shareQty = shareQty;
+	}
+
+	public Integer getPraiseQty() {
+		return praiseQty;
+	}
+
+	public void setPraiseQty(Integer praiseQty) {
+		this.praiseQty = praiseQty;
+	}
+    
+    
+    
+    
 }

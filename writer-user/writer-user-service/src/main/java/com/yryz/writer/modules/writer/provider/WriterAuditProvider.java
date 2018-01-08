@@ -12,6 +12,8 @@ import com.yryz.writer.modules.writer.dto.WriterAuditDto;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
 import com.yryz.writer.modules.writer.service.WriterAuditService;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +83,15 @@ public class WriterAuditProvider implements WriterAuditApi {
 			 return ResponseModel.returnListSuccess(writerAuditService.selectList(writerAuditDto));
         } catch (Exception e) {
         	logger.error("获取WriterAudit列表失败", e);
+       		 return ResponseModel.returnException(e);
+        }
+    }
+    
+    public RpcResponse<List<WriterAuditVo>> exportList(WriterAuditDto writerAuditDto) {
+        try {
+			 return ResponseModel.returnListSuccess(writerAuditService.exportList(writerAuditDto));
+        } catch (Exception e) {
+        	 logger.error("获取WriterAudit列表失败", e);
        		 return ResponseModel.returnException(e);
         }
     }

@@ -21,8 +21,8 @@ public class WriterAuditController {
    private WriterAuditApi writerAuditApi;
 
    @RequestMapping(value="/single", method = RequestMethod.GET)
-   public RpcResponse<WriterAuditVo> detail(Long writerAuditId) {
-       return writerAuditApi.detail(writerAuditId);
+   public RpcResponse<WriterAuditVo> detail(Long kid) {
+       return writerAuditApi.detail(kid);
    }
 
    @ResponseBody
