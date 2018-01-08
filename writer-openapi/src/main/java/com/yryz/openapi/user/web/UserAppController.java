@@ -16,6 +16,7 @@ import com.yryz.writer.modules.platform.dto.CustRegisterDto;
 import com.yryz.writer.modules.platform.vo.AuthInfoVo;
 import com.yryz.writer.modules.writer.WriterApi;
 import com.yryz.writer.modules.writer.entity.Writer;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,11 +114,11 @@ public class UserAppController extends BaseController {
 
         Assert.notNull(custRegister.getCustPhone(), "手机号不能为空!");
         Assert.notNull(custRegister.getVeriCode(), "验证码不能为空!");
-        Assert.notNull(custRegister.getCustPwd(), "密码不能为空!");
+        Assert.notNull(custRegister.getCode(), "功能码不能为空!");
 
         Assert.hasText(custRegister.getCustPhone(), "手机号不能为空!");
         Assert.hasText(custRegister.getVeriCode(), "验证码不能为空!");
-        Assert.hasText(custRegister.getCustPwd(), "密码不能为空!");
+        Assert.hasText(custRegister.getCode(), "功能码不能为空!");
 
         //校验验证码
         RpcResponse<Boolean> rpcResponse = smsCommonApi.checkVerifyCode(custRegister.getCustPhone(), custRegister.getCode(), custRegister.getVeriCode());
@@ -139,8 +140,8 @@ public class UserAppController extends BaseController {
             //用户注册
             Writer user = new Writer();
             user.setAccount(custRegister.getCustPhone());
-            user.setPwd(custRegister.getCustPwd());
             user.setPhone(custRegister.getCustPhone());
+            user.setAccount(custRegister.getCustPhone());
 
             writerApi.register(user);
 
@@ -163,6 +164,79 @@ public class UserAppController extends BaseController {
                 ExceptionEnum.PIN_ERROR.getCode(),
                 ExceptionEnum.PIN_ERROR.getMsg(),
                 ExceptionEnum.PIN_ERROR.getErrorMsg());
+    }
+
+    /**
+     * 判断是否设置过密码
+     *
+     * @param custRegisterDto
+     * @return true 没有设置 false 已设置
+     */
+    @RequestMapping(value = "judgePwd", method = {RequestMethod.POST})
+    @ResponseBody
+    public RpcResponse<Boolean> judgePwd(@RequestBody CustRegisterDto custRegisterDto) {
+        Assert.notNull(custRegisterDto, "缺少参数或参数错误！");
+        Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
+        Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
+
+
+        RpcResponse<Writer> rpcResponseWriter = writerApi.selectByPhone(custRegisterDto.getCustPhone());
+        Writer user = isSuccess(rpcResponseWriter);
+        if (user != null) {
+            if (user.getPwd() != null && user.getPwd() != null) {
+                return new DubboResponse<Boolean>(true, "200", "success", "", false);
+            } else {
+                return new DubboResponse<Boolean>(true, "200", "success", "", true);
+            }
+        }
+        throw new QsourceException(
+                ExceptionEnum.USER_UNREGISTERED.getCode(),
+                ExceptionEnum.USER_UNREGISTERED.getMsg(),
+                ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
+    }
+
+
+    /**
+     * 设置密码
+     *
+     * @param custRegisterDto
+     * @return
+     */
+    @RequestMapping(value = "setPwd", method = {RequestMethod.POST})
+    @ResponseBody
+    public RpcResponse<AuthInfoVo> setPwd(@RequestBody CustRegisterDto custRegisterDto) {
+        Assert.notNull(custRegisterDto, "缺少参数或参数错误！");
+        Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
+        Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
+
+        Assert.notNull(custRegisterDto.getCustPwd(), "密码不能为空！");
+        Assert.hasText(custRegisterDto.getCustPwd(), "密码不能为空！");
+
+
+        RpcResponse<Writer> rpcResponseWriter = writerApi.selectByPhone(custRegisterDto.getCustPhone());
+        Writer user = isSuccess(rpcResponseWriter);
+        if (user == null) {
+            throw new QsourceException(
+                    ExceptionEnum.PHONE_UNBIND.getCode(),
+                    ExceptionEnum.PHONE_UNBIND.getMsg(),
+                    ExceptionEnum.PHONE_UNBIND.getErrorMsg());
+        }
+        if (StringUtils.isNotBlank(user.getPwd())) {
+            throw new QsourceException(
+                    ExceptionEnum.HAS_SET_PASSWORD.getCode(),
+                    ExceptionEnum.HAS_SET_PASSWORD.getMsg(),
+                    ExceptionEnum.HAS_SET_PASSWORD.getErrorMsg());
+        }
+
+
+        //修改用户信息
+        Writer writer = new Writer();
+        writer.setKid(user.getKid());
+        writer.setPwd(custRegisterDto.getCustPwd());
+        writerApi.updateByPrimaryKeySelective(writer);
+
+
+        return new DubboResponse<AuthInfoVo>(true, "200", "success", "", new AuthInfoVo());
     }
 
     /**
