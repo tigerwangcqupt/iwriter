@@ -1,6 +1,8 @@
 package com.yryz.writer.modules.bank.service.impl;
 
 import com.alibaba.dubbo.rpc.RpcContext;
+import com.yryz.qstone.entity.base.model.Owner;
+import com.yryz.qstone.modules.base.api.OpenOwnerApi;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.exception.YyrzPcException;
@@ -14,7 +16,9 @@ import com.yryz.qstone.modules.base.api.OpenBankCardApi;
 import com.yryz.writer.modules.bank.dao.persistence.BankDao;
 import com.yryz.writer.modules.bank.service.BankService;
 import com.yryz.writer.modules.id.api.IdAPI;
+import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.service.WriterService;
+import com.yryz.writer.modules.writer.vo.WriterModelVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +43,9 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Autowired
     private OpenBankCardApi openBankCardApi;
+
+    @Autowired
+    private OpenOwnerApi openOwnerApi;
 
     @Autowired
     private IdAPI idAPI;
@@ -81,8 +88,18 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Override
     public Bank insertBank(Bank bank) {
+
+
         //根据写手id,查询写手信息
-        WriterVo writerVo = writerService.detail(Long.valueOf(bank.getCreateUserId()));
+        WriterDto writerDto = new WriterDto();
+        //写手id
+        writerDto.setKid(Long.valueOf(bank.getCreateUserId()));
+        WriterModelVo writerModelVo = writerService.selectWriterByParameters(writerDto);
+
+        Owner owner = new Owner();
+        owner.setOwnerFcode(Long.valueOf(writerModelVo.getOwnerFcode()));
+        owner = openOwnerApi.detail(owner);
+
         Long kid  = idAPI.getId("yryz_bank");
         bank.setKid(kid);
         bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
@@ -100,7 +117,7 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             //身份证
             bankCard.setCertNo(bank.getUserCart());
             //资金主体编码
-            bankCard.setOwnerCode(11L);
+            bankCard.setOwnerCode(owner.getOwnerCode());
             RpcContext.getContext().setAttachment("clientCode", clientCode);
             openBankCardApi.add(bankCard);
         }catch(Exception e){

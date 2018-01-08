@@ -297,5 +297,40 @@
     <update id="updateStatus">
       update yryz_writer set user_status= #{auditStatus},last_update_date = now() where kid = #{kid}
     </update>
+
+	<!-- 查询Writer关联资金 -->
+	<select id="selectWriterByParameters" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterModelVo">
+		select kid,owner_code,owner_fcode,lately_withdraw_amount,
+		withdraw_amount,sum_withdraw_amount,withdraw_date
+		from yryz_writer where 1=1
+		<if test="keyWord != null and keyWord != '' ">
+			AND nick_name like CONCAT('%',trim(#{keyWord}),'%')
+		</if>
+		<if test="kid != null and kid != ''">
+			AND kid = #{kid}
+		</if>
+	</select>
+
+	<!-- 查询管理后台写手收益列表 -->
+	<select id="selectAdminProfitList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminRefProfit">
+		select kid,nick_name,user_name,phone,
+		withdraw_amount,sum_withdraw_amount,user_bank_cart
+		from yryz_writer where 1=1
+		<if test="nickName != null and nickName != '' ">
+			AND nick_name like CONCAT('%',trim(#{nickName}),'%')
+		</if>
+		<if test="phone != null and phone != '' ">
+			AND phone like CONCAT('%',trim(#{phone}),'%')
+		</if>
+		<if test="userName != null and userName != '' ">
+			AND user_name like CONCAT('%',trim(#{userName}),'%')
+		</if>
+		<if test="kid != null and kid != ''">
+			AND kid = #{kid}
+		</if>
+		<if test="orderStr != null and orderStr != ''">
+			${orderStr}
+		</if>
+	</select>
     
 </mapper>

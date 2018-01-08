@@ -20,10 +20,13 @@
 		<result column="bank_card" property="bankCard" jdbcType="VARCHAR"/>
 		<result column="bank_cash" property="bankCash" jdbcType="VARCHAR"/>
 		<result column="settlement_msg" property="settlementMsg" jdbcType="VARCHAR"/>
+		<result column="profit_sn" property="profitSn" jdbcType="VARCHAR"/>
+		<result column="writer_id" property="writerId" jdbcType="BIGINT"/>
     </resultMap>
 	
 	<!--Base_Column_List-->
 	<sql id="Base_Column_List">id,kid,module_enum,create_date,last_update_date,create_user_id,last_update_user_id,del_flag,settlement_date,settlement_amount,settlement_type,surplus_amount,charge_fee,bank_card,bank_cash,settlement_msg
+    ,profit_sn,writer_id
     </sql>
 
      <!-- 查询Profit详情 -->
@@ -45,7 +48,7 @@
   
   	<!-- 新增Profit-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.profit.entity.Profit">
-	    insert into yryz_profit (kid,module_enum,create_date,last_update_date,create_user_id,settlement_date,settlement_amount,settlement_type,surplus_amount,charge_fee,bank_card,bank_cash,settlement_msg)
+	    insert into yryz_profit (kid,module_enum,create_date,last_update_date,create_user_id,settlement_date,settlement_amount,settlement_type,surplus_amount,charge_fee,bank_card,bank_cash,settlement_msg,profit_sn,writer_id)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{moduleEnum,jdbcType=VARCHAR}
@@ -60,6 +63,8 @@
 				,#{bankCard,jdbcType=VARCHAR}
 				,#{bankCash,jdbcType=VARCHAR}
 				,#{settlementMsg,jdbcType=VARCHAR}
+				,#{profitSn,jdbcType=VARCHAR}
+				,#{writerId,jdbcType=BIGINT}
 	    )
 	</insert>
 	

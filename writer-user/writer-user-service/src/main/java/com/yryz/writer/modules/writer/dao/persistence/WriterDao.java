@@ -4,6 +4,8 @@ import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 
+import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
+import com.yryz.writer.modules.writer.vo.WriterModelVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +29,14 @@ public interface WriterDao extends BaseDao {
     Writer selectByPhone(String phone);
 
     List<Writer> selectAdminList(WriterDto writerDto);
+
+    WriterModelVo selectWriterByParameters(WriterDto writerDto);
+
+    /**
+     * 后台查询写手收益列表
+     * @param writerDto
+     * @return
+     */
+    List<WriterAdminRefProfit> selectAdminProfitList(WriterDto writerDto);
 
 }
