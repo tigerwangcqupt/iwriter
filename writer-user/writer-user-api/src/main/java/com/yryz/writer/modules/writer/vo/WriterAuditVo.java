@@ -100,6 +100,8 @@ public class WriterAuditVo implements Serializable {
     
     private String phone;
     
+    private String lastUpdateUserId;
+    
 	public Long getKid() {
 		return kid;
 	}
@@ -297,6 +299,16 @@ public class WriterAuditVo implements Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+
+	public String getLastUpdateUserId() {
+		return lastUpdateUserId;
+	}
+
+
+	public void setLastUpdateUserId(String lastUpdateUserId) {
+		this.lastUpdateUserId = lastUpdateUserId;
 	}
 
 	

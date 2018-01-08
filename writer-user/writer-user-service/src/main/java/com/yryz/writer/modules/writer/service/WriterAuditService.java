@@ -21,6 +21,8 @@ public interface WriterAuditService extends BaseService {
 
    PageList<WriterAuditVo> selectList(WriterAuditDto writerAuditDto);
 
-   WriterAuditVo detail(Long writerAuditId);
+   WriterAuditVo detail(Long kid);
+   
+   int audit(WriterAuditVo writerAuditVo);
 
 }

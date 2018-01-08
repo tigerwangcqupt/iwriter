@@ -37,7 +37,7 @@ public interface WriterAuditApi {
     * */
     RpcResponse<PageList<WriterAuditVo>> list(WriterAuditDto writerAuditDto);
     
-    RpcResponse<Integer> audit(Long kid);
+    RpcResponse<Integer> audit(WriterAuditVo WriterAuditVo);
     
 
 }

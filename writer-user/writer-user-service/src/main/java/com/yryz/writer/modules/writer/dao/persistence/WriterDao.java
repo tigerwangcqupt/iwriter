@@ -3,6 +3,8 @@ package com.yryz.writer.modules.writer.dao.persistence;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.common.dao.BaseDao;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,5 +21,7 @@ import java.util.List;
 public interface WriterDao extends BaseDao {
 
     List<Writer> selectList(WriterDto writerDto);
+    
+    int updateStatus(@Param("kid")Long kid,@Param("auditStatus")Integer auditStatus);
 
 }

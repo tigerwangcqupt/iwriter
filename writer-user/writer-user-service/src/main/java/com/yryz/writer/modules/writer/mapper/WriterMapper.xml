@@ -276,4 +276,8 @@
         from yryz_writer where del_flag = 0
     </select>
     
+    <update id="updateStatus">
+      update yryz_writer set user_status= #{auditStatus},last_update_date = now() where kid = #{kid}
+    </update>
+    
 </mapper>

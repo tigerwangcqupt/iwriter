@@ -11,13 +11,17 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yryz.writer.modules.writer.vo.WriterAuditVo;
+import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
 import com.yryz.writer.modules.writer.dto.WriterAuditDto;
 import com.yryz.writer.modules.writer.dao.persistence.WriterAuditDao;
+import com.yryz.writer.modules.writer.dao.persistence.WriterDao;
 import com.yryz.writer.modules.writer.service.WriterAuditService;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -27,7 +31,8 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
     @Autowired
     private WriterAuditDao writerAuditDao;
     
-  
+    @Autowired
+    private WriterDao writerDao;
 
     protected BaseDao getDao() {
         return writerAuditDao;
@@ -57,6 +62,29 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
         }
         return writerAuditVo;
     }
+
+	@Override
+	@Transactional
+	public int audit(WriterAuditVo writerAuditVo) {
+		WriterAudit writerAudit = new WriterAudit();
+		BeanUtils.copyProperties(writerAuditVo, writerAudit);
+		if(writerAudit!=null){
+			//更新写手审核表
+			writerAudit.setAuditDate(new Date());
+			writerAudit.setLastUpdateDate(new Date());
+			writerAuditDao.update(writerAudit);
+			//更新写手表状态
+			Writer writer = new Writer();
+			writer.setKid(writerAudit.getWriterKid());
+			writer.setUserStatus(writerAudit.getAuditStatus());
+			writer.setLastUpdateDate(new Date());
+			writer.setLastUpdateUserId(writerAuditVo.getLastUpdateUserId());
+			return writerDao.update(writer);
+		}
+		return 0;
+	}
+    
+    
     
     
  }

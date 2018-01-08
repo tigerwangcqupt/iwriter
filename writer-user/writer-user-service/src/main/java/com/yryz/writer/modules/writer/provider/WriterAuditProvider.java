@@ -86,8 +86,13 @@ public class WriterAuditProvider implements WriterAuditApi {
     }
 
 	@Override
-	public RpcResponse<Integer> audit(Long kid) {
-		return null;
+	public RpcResponse<Integer> audit(WriterAuditVo writerAuditVo) {
+		 try {
+			 return ResponseModel.returnObjectSuccess(writerAuditService.audit(writerAuditVo));
+        } catch (Exception e) {
+        	 logger.error("更新WriterAudit状态失败", e);
+       		 return ResponseModel.returnException(e);
+        }
 	}
 
 }

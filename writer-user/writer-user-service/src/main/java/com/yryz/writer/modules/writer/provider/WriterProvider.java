@@ -91,6 +91,7 @@ public class WriterProvider implements WriterApi {
 	public RpcResponse<WriterVo> submitAudit(Writer writer) {
 		 try {
 			 //更新写手信息
+			 writer.setUserStatus(1);
 			 writerService.update(writer);
 			 //新增审核信息
 			 WriterAudit writerAudit = new WriterAudit();
