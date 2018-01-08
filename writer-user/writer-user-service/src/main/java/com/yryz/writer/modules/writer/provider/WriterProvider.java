@@ -1,15 +1,19 @@
 package com.yryz.writer.modules.writer.provider;
-import com.yryz.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.writer.WriterApi;
+import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
 import com.yryz.writer.modules.writer.service.WriterAuditService;
 import com.yryz.writer.modules.writer.service.WriterService;
+import com.yryz.writer.modules.writer.service.redis.TokenRedis;
+
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,9 @@ public class WriterProvider implements WriterApi {
 	
 	@Autowired
 	private WriterAuditService writerAuditService;
+	
+	@Autowired
+	private TokenRedis tokenRedis;
 
 	/**
 	*  获取Writer明细
@@ -115,6 +122,66 @@ public class WriterProvider implements WriterApi {
         	 logger.error("更新Writer信息失败", e);
        		 return ResponseModel.returnException(e);
         }
+	}
+	
+	@Override
+	public RpcResponse<PageList<WriterAdminVo>> listAdmin(WriterDto writerDto) {
+		try {
+			return ResponseModel.returnListSuccess(writerService.selectListAdmin(writerDto));
+		} catch (Exception e) {
+			logger.error("获取Writer列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+	
+	@Override
+	public RpcResponse<Integer> register(Writer user) {
+		try {
+			/*//idCard：CR+9位 需在数据库给出9位初始值
+			Long suffix_id = idAPI.getId(CR);
+			user.setIdCard(CR + suffix_id);*/
+			Long kid = idAPI.getId("yryz_writer");
+			user.setKid(kid);
+			return ResponseModel.returnObjectSuccess(writerService.insertByPrimaryKeySelective(user));
+		} catch (Exception e) {
+			logger.error("新增用户失败！" + e);
+			return ResponseModel.returnException(e);
+		}
+	}
+	
+	/**
+	 *  获取Writer明细
+	 *  @param  phone
+	 *  @return
+	 * */
+	public RpcResponse<Writer> selectByPhone(String phone) {
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.selectByPhone(phone));
+		} catch (Exception e) {
+			logger.error("获取Writer明细失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+	
+	/**
+	 * 获取用户token
+	 * @param  custId
+	 * @return
+	 */
+	public RpcResponse<String> getUserToken(String custId) {
+		try {
+			String token = tokenRedis.getToken(custId);
+			if(token==null){
+				String tokenValue = UUID.randomUUID().toString().replaceAll("-", "");
+				if(tokenRedis.addToken(custId,tokenValue)){
+					token = tokenRedis.getToken(custId);
+				}
+			}
+			return ResponseModel.returnObjectSuccess(token);
+		} catch (Exception e) {
+			logger.error("获取用户token失败", e);
+			return ResponseModel.returnException(e);
+		}
 	}
 
 }
