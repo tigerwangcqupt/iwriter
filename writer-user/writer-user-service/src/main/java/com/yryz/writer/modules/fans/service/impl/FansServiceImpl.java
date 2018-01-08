@@ -1,13 +1,12 @@
 package com.yryz.writer.modules.fans.service.impl;
 
-import com.yryz.common.redis.utils.JedisUtils;
-import com.yryz.common.redis.utils.StringUtils;
-import com.yryz.common.utils.DateUtil;
-import com.yryz.common.utils.PageUtils;
-import com.github.pagehelper.PageInfo;
-import com.yryz.common.dao.BaseDao;
-import com.yryz.common.service.BaseServiceImpl;
-import com.yryz.common.web.PageModel;
+import com.yryz.writer.common.redis.utils.JedisUtils;
+import com.yryz.writer.common.redis.utils.StringUtils;
+import com.yryz.writer.common.utils.DateUtil;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
@@ -19,7 +18,6 @@ import com.yryz.writer.modules.fans.entity.Fans;
 import com.yryz.writer.modules.fans.dto.FansDto;
 import com.yryz.writer.modules.fans.dao.persistence.FansDao;
 import com.yryz.writer.modules.fans.service.FansService;
-import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,9 +1,6 @@
 package com.yryz.writer.modules.city.entity;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import com.yryz.common.entity.GenericEntity;
+import com.yryz.writer.common.entity.GenericEntity;
 /**
  * 
   * @ClassName: City

@@ -1,6 +1,6 @@
 package com.yryz.writer.modules.profit.constant;
 
-import com.yryz.common.constant.ExceptionEnum;
+import com.yryz.writer.common.constant.ExceptionEnum;
 
 import java.util.HashMap;
 import java.util.Map;

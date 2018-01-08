@@ -1,17 +1,22 @@
 package com.yryz.writer.modules.profit.service.impl;
 
-import com.yryz.common.constant.YyrzModuleEnumConstants;
-import com.yryz.common.distributed.lock.DistributedLockUtils;
-import com.yryz.common.utils.DateUtil;
-import com.yryz.common.utils.PageUtils;
-import com.github.pagehelper.PageInfo;
-import com.yryz.common.dao.BaseDao;
-import com.yryz.common.service.BaseServiceImpl;
-import com.yryz.common.web.PageModel;
-import com.yryz.common.web.ResponseModel;
-import com.yryz.component.rpc.RpcResponse;
+import com.alibaba.dubbo.rpc.RpcContext;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
+import com.yryz.writer.common.distributed.lock.DistributedLockUtils;
+import com.yryz.writer.common.exception.YyrzPcException;
+import com.yryz.writer.common.utils.DateUtil;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.qstone.entity.base.model.Account;
+import com.yryz.qstone.entity.base.model.Owner;
+import com.yryz.qstone.modules.base.api.OpenAccountApi;
+import com.yryz.qstone.modules.base.api.OpenOwnerApi;
 import com.yryz.writer.modules.id.api.IdAPI;
+import com.yryz.writer.modules.profit.constant.ProfitConstants;
 import com.yryz.writer.modules.profit.constant.ProfitEnum;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
 import com.yryz.writer.modules.writer.entity.Writer;
@@ -20,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.yryz.writer.modules.profit.vo.ProfitVo;
@@ -44,6 +50,18 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 
     @Autowired
     private IdAPI idAPI;
+
+    @Autowired
+    private OpenOwnerApi openOwnerApi;
+
+    @Autowired
+    private OpenAccountApi openAccountApi;
+
+    @Value("${clientCode}")
+    private String clientCode;
+
+    @Value("${currencyCode}")
+    private Long  currencyCode;
 
     protected BaseDao getDao() {
         return profitDao;
@@ -112,9 +130,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             profitVo.setAccumulativeAmount(accumulativeAmount);
             //最近提现金额
             profitVo.setCurrentAmount(currentAmount);
-
-
-
             //detailList
             profitVo.setList(detailList);
         }
@@ -125,8 +140,16 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public Profit insertProfit(Profit profit) {
         String lockKey = null;
         try {
+            String orderNumber = String.valueOf(idAPI.getSnowflakeId());
+            System.out.println(orderNumber+":orderNumber");
             //分布式锁控制用户频繁操作
             lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getCreateUserId());
+            ProfitDto profitDto = new ProfitDto();
+            profitDto.setCreateUserId(Long.valueOf(profit.getCreateUserId()));
+            List<Profit> profitList = profitDao.selectList(profitDto);
+            if(CollectionUtils.isEmpty(profitList)){
+                System.out.println("没有余钱了");
+            }
             Long kid  = idAPI.getId("yryz_bank");
             profit.setKid(kid);
             profit.setModuleEnum(YyrzModuleEnumConstants.PROFIT_INFO);
@@ -147,8 +170,46 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         }
     }
 
+    /**
+     * 写手绑定资金主体(返回资金主体)
+     * @param writer
+     * @return
+     */
     @Override
-    public Integer bindCapital(Writer writer) {
-        return null;
+    public Owner bindCapital(Writer writer) {
+        Owner data=new Owner();
+        try{
+            Owner owner=new Owner();
+            RpcContext.getContext().setAttachment("clientCode", clientCode);
+            //资金主体名称
+            owner.setOwnerName(writer.getUserName());
+            //个人
+            owner.setOwnerType(ProfitConstants.OWNERTYPE);
+            openOwnerApi.add(owner);
+            data.setOwnerName(writer.getUserName());
+            RpcContext.getContext().setAttachment("clientCode", clientCode);
+            data = openOwnerApi.detail(data);
+        }catch(Exception e){
+            logger.error("调用资金系统插入资金主体表出现异常:", e);
+            throw new YyrzPcException(ExceptionEnum.AddOwnerException.getCode(),ExceptionEnum.AddOwnerException.getMsg(),
+                    ExceptionEnum.AddOwnerException.getErrorMsg()
+                    );
+        }
+        try{
+            Account account=new Account();
+            account.setAccountName(writer.getUserName());
+            account.setAccountTypeCode(ProfitConstants.ACCOUNTTYPECODE);
+            account.setCurrencyCode(currencyCode);
+            account.setStatus(ProfitConstants.ACCOUNTSTATUS);
+            account.setOwnerCode(data.getOwnerCode());
+            RpcContext.getContext().setAttachment("clientCode", clientCode);
+            openAccountApi.add(account);
+        }catch(Exception e){
+            logger.error("调用资金系统插入账户出现异常:" , e);
+            throw new YyrzPcException(ExceptionEnum.AddAccountException.getCode(),ExceptionEnum.AddAccountException.getMsg(),
+                    ExceptionEnum.AddAccountException.getErrorMsg()
+            );
+        }
+        return data;
     }
 }

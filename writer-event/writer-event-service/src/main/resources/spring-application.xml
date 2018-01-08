@@ -79,7 +79,7 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-    <bean class="com.yryz.common.context.SpringContextHolder"/>
+    <bean class="com.yryz.writer.common.context.SpringContextHolder"/>
     <!-- 配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 

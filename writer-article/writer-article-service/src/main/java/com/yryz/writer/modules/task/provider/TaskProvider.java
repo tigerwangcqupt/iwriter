@@ -1,5 +1,5 @@
 package com.yryz.writer.modules.task.provider;
-import com.yryz.common.web.ResponseModel;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 

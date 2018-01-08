@@ -1,6 +1,6 @@
 package com.yryz.writer.modules.message.provider;
 
-import com.yryz.common.web.ResponseModel;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.constant.ModuleEnum;

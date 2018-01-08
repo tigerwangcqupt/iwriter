@@ -2,10 +2,10 @@ package com.yryz.writer.modules.id.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
-import com.yryz.common.constant.ExceptionEnum;
-import com.yryz.common.distributed.lock.DistributedLockUtils;
-import com.yryz.common.exception.QsourceException;
-import com.yryz.common.web.PageModel;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.distributed.lock.DistributedLockUtils;
+import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.id.dao.persistence.IdDao;
 import com.yryz.writer.modules.id.entity.CodeModel;

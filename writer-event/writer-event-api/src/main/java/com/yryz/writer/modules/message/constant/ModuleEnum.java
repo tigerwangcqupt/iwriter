@@ -10,6 +10,11 @@ package com.yryz.writer.modules.message.constant;
  **/
 public enum ModuleEnum {
     /** 通知 */
+    INDEX("10000",
+            "首页",
+            "index",
+            "/index"),
+    /** 通知 */
     NOTICE("10001",
             "通知",
             "notice",
@@ -37,19 +42,19 @@ public enum ModuleEnum {
     PLATFORM("10005",
             "平台任务",
             "platform",
-            "/service/noticeList"),
+            "/task"),
 
     /** 收益 */
     INCOME("10006",
             "收益",
             "income",
-            "/service/noticeList"),
+            "/income"),
 
     /** 粉丝 */
     FANS("10007",
             "粉丝",
             "fans",
-            "/service/noticeList")
+            "/fans")
     ;
 
     //编码

@@ -275,6 +275,24 @@
         <include refid="Base_Column_List"/>
         from yryz_writer where del_flag = 0
     </select>
+
+	<!-- 查询管理后台Writer列表 -->
+	<select id="selectAdminList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from yryz_writer where 1=1
+		<if test="keyWord != null and keyWord != '' ">
+			AND nick_name like CONCAT('%',trim(#{keyWord}),'%')
+		</if>
+	</select>
+
+	<!-- 查询Writer详情 -->
+	<select id="selectByPhone" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List"/>
+		from yryz_writer
+		where phone = #{phone,jdbcType=VARCHAR}
+	</select>
     
     <update id="updateStatus">
       update yryz_writer set user_status= #{auditStatus},last_update_date = now() where kid = #{kid}

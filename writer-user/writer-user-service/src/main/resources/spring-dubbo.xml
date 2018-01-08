@@ -23,6 +23,9 @@
     <!-- 定义yryz注册中心 -->
     <dubbo:registry id="yryz-new" address="${dubbo.registry.address}" file="${dubbo.registry.file}"/>
 
+    <!--定义平台注册中心-->
+    <dubbo:registry id="platform" address="${dubbo.platform.address}" file="${dubbo.platform.file}" default="false"/>
+
     <import resource="spring-dubbo-provider.xml"/>
     <import resource="spring-dubbo-consumer.xml"/>
 </beans>

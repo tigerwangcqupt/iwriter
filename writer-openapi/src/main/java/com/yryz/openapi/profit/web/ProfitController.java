@@ -38,7 +38,6 @@ public class ProfitController {
    @ResponseBody
    public RpcResponse<Profit> saveBank(@RequestBody Profit profit, @RequestHeader String userId){
       profit.setCreateUserId(userId);
-
       return profitApi.insertProfit(profit);
    }
 }

@@ -1,12 +1,12 @@
 package com.yryz.writer.modules.writer.service.impl;
 
-import com.yryz.common.utils.PageUtils;
-import com.github.pagehelper.PageInfo;
-import com.yryz.common.dao.BaseDao;
-import com.yryz.common.service.BaseServiceImpl;
-import com.yryz.common.web.PageModel;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 
+import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,4 +53,25 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         }
         return writerVo;
     }
- }
+
+    @Override
+    public PageList<WriterAdminVo> selectListAdmin(WriterDto writerDto) {
+        PageUtils.startPage(writerDto.getCurrentPage(), writerDto.getPageSize());
+        List<Writer> list = writerDao.selectAdminList(writerDto);
+        List<WriterAdminVo> writerVoList = new ArrayList <WriterAdminVo>();
+        if(list != null && list.size() > 0) {
+            for(Writer writer : list){
+                WriterAdminVo writerVo = new WriterAdminVo();
+                //Writer to WriterVo
+                BeanUtils.copyProperties(writer,writerVo);
+                writerVoList.add(writerVo);
+            }
+        }
+        return new PageModel<WriterAdminVo>().getPageList(writerVoList);
+    }
+
+    public Writer selectByPhone(String phone) {
+        Writer writer = writerDao.selectByPhone(phone);
+        return writer;
+    }
+}

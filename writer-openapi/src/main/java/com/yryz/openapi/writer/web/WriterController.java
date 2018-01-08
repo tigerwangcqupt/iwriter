@@ -1,6 +1,6 @@
 package com.yryz.openapi.writer.web;
 
-import com.yryz.common.web.BaseController;
+import com.yryz.writer.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.writer.WriterApi;

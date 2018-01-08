@@ -1,8 +1,7 @@
 package com.yryz.writer.modules.writer.service;
 
-import com.yryz.common.service.BaseService;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.writer.dto.WriterAuditDto;
-import com.yryz.writer.modules.writer.entity.WriterAudit;
 import com.yryz.writer.modules.writer.vo.WriterAuditVo;
 import org.springframework.stereotype.Repository;
 

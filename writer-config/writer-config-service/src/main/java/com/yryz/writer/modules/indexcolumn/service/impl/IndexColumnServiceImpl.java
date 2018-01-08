@@ -1,11 +1,11 @@
 package com.yryz.writer.modules.indexcolumn.service.impl;
 
-import com.yryz.common.constant.ExceptionEnum;
-import com.yryz.common.exception.QsourceException;
-import com.yryz.common.utils.PageUtils;
-import com.yryz.common.dao.BaseDao;
-import com.yryz.common.service.BaseServiceImpl;
-import com.yryz.common.web.PageModel;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.indexcolumn.vo.IndexItemVo;

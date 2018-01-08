@@ -1,7 +1,7 @@
 package com.yryz.writer.modules.bank.dao.persistence;
 
 
-import com.yryz.common.dao.BaseDao;
+import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import org.springframework.stereotype.Repository;

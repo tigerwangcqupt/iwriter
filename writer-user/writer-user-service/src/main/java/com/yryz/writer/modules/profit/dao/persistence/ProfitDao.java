@@ -1,10 +1,8 @@
 package com.yryz.writer.modules.profit.dao.persistence;
 
-import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
-import com.yryz.common.dao.BaseDao;
-import com.yryz.writer.modules.profit.vo.ProfitVo;
+import com.yryz.writer.common.dao.BaseDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

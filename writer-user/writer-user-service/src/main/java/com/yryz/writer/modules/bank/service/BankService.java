@@ -1,8 +1,9 @@
 package com.yryz.writer.modules.bank.service;
 
 
-import com.yryz.common.service.BaseService;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.bank.dto.BankDto;
+import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.component.rpc.dto.PageList;
 
@@ -19,5 +20,9 @@ public interface BankService extends BaseService {
    PageList<BankVo> selectList(BankDto bankDto);
 
    BankVo detail(Long bankId);
+
+   Bank insertBank(Bank bank);
+
+   Bank updateBank(Bank bank);
 
 }

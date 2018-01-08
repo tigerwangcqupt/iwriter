@@ -1,14 +1,12 @@
 package com.yryz.writer.modules.articlefavorite.service;
 
-import com.yryz.common.service.BaseService;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.articlefavorite.dto.ArticleFavoriteDto;
 import com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite;
 import com.yryz.writer.modules.articlefavorite.vo.ArticleFavoriteVo;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
-
-import java.util.List;
 
 /**
  * 

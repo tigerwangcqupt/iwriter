@@ -1,6 +1,6 @@
 package com.yryz.writer.modules.articlecomment.service;
 
-import com.yryz.common.service.BaseService;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto;
 import com.yryz.writer.modules.articlecomment.entity.ArticleComment;
 import com.yryz.writer.modules.articlecomment.vo.ArticleCommentVo;

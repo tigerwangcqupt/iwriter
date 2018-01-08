@@ -299,7 +299,7 @@
 
         <!--平台jar包-->
         <dependency>
-            <groupId>com.ichinaresource</groupId>
+            <groupId>com.quanhu</groupId>
             <artifactId>service-api</artifactId>
             <version>${service-api3.version}</version>
             <exclusions>

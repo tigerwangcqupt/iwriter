@@ -2,7 +2,7 @@ package com.yryz.writer.modules.draft.dao.persistence;
 
 import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.dto.DraftDto;
-import com.yryz.common.dao.BaseDao;
+import com.yryz.writer.common.dao.BaseDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

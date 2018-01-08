@@ -1,7 +1,7 @@
 package com.yryz.writer.modules.id.api;
 
 
-import com.yryz.common.exception.QsourceException;
+import com.yryz.writer.common.exception.QsourceException;
 
 import java.util.List;
 

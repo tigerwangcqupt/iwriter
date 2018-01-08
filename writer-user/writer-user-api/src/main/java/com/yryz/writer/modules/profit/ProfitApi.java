@@ -2,6 +2,7 @@ package com.yryz.writer.modules.profit;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
@@ -59,6 +60,6 @@ public interface ProfitApi {
 	 * @param writer
 	 * @return
 	 */
-	RpcResponse<Integer> bindCapital(Writer writer);
+	RpcResponse<Owner> bindCapital(Writer writer);
 
 }

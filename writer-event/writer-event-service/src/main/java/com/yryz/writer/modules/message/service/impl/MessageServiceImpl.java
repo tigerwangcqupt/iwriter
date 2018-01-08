@@ -1,12 +1,11 @@
 package com.yryz.writer.modules.message.service.impl;
 
-import com.yryz.common.dao.BaseDao;
-import com.yryz.common.distributed.lock.DistributedLockUtils;
-import com.yryz.common.redis.utils.JedisUtils;
-import com.yryz.common.service.BaseServiceImpl;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.distributed.lock.DistributedLockUtils;
+import com.yryz.writer.common.redis.utils.JedisUtils;
+import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.modules.message.constant.MessageConstant;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
-import com.yryz.writer.modules.message.dto.MessageDto;
 import com.yryz.writer.modules.message.service.MessageService;
 import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import com.yryz.writer.modules.message.vo.MessageNumVo;

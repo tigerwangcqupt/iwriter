@@ -1,6 +1,5 @@
 package com.yryz.writer.modules.bank.provider;
-import com.yryz.common.constant.YyrzModuleEnumConstants;
-import com.yryz.common.web.ResponseModel;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
@@ -15,9 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
 public class BankProvider implements BankApi {
 
@@ -26,8 +22,6 @@ public class BankProvider implements BankApi {
 	@Autowired
 	private BankService bankService;
 
-    @Autowired
-	private IdAPI idAPI;
 
 	/**
 	*  获取Bank明细
@@ -80,10 +74,7 @@ public class BankProvider implements BankApi {
 	@Override
 	public RpcResponse<Bank> insertBank(Bank bank) {
 		try {
-			Long kid  = idAPI.getId("yryz_bank");
-			bank.setKid(kid);
-			bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
-			bankService.insert(bank);
+			bankService.insertBank(bank);
 			return ResponseModel.returnObjectSuccess(null);
 		} catch (Exception e) {
 			logger.error("保存bank失败", e);
@@ -94,8 +85,7 @@ public class BankProvider implements BankApi {
 	@Override
 	public RpcResponse<Bank> updateBank(Bank bank) {
 		try {
-			bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
-			bankService.update(bank);
+			bankService.updateBank(bank);
 			return ResponseModel.returnObjectSuccess(null);
 		} catch (Exception e) {
 			logger.error("修改bank失败", e);

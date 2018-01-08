@@ -1,8 +1,7 @@
 package com.yryz.writer.modules.fans.service;
 
-import com.yryz.common.service.BaseService;
+import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.fans.dto.FansDto;
-import com.yryz.writer.modules.fans.entity.Fans;
 import com.yryz.writer.modules.fans.vo.FansVo;
 import org.springframework.stereotype.Repository;
 

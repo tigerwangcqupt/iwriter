@@ -15,5 +15,17 @@
 
     <dubbo:reference id="cityApi" interface="com.yryz.writer.modules.city.CityApi" check="false"/>
 
+    <dubbo:reference id="openBankCardApi" interface="com.yryz.qstone.modules.base.api.OpenBankCardApi" check="false"/>
+    <dubbo:reference id="openAccountApi" interface="com.yryz.qstone.modules.base.api.OpenAccountApi" check="false"/>
+    <dubbo:reference id="openOwnerApi" interface="com.yryz.qstone.modules.base.api.OpenOwnerApi" check="false"/>
+
+
+    <!--writer服务-->
+    <dubbo:reference id="writerApi" interface="com.yryz.writer.modules.writer.WriterApi" check="false"/>
+
+    <!--平台的SMS服务-->
+   <dubbo:reference id="smsAPI"
+                     interface="com.yryz.service.api.basic.api.SmsAPI" check="false"
+                     version="1.0" registry="platform" timeout="30000"/>
 
 </beans>
