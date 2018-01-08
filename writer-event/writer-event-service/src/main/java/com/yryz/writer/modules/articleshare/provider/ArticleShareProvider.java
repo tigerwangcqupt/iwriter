@@ -81,7 +81,7 @@ public class ArticleShareProvider implements ArticleShareApi {
 			long successNum = articleShareService.saveArticleShare(articleShare);
 			return ResponseModel.returnListSuccess(successNum == 1 ? true : false);
 		} catch (Exception e) {
-			logger.error("获取ArticleShare列表失败", e);
+			logger.error("保存ArticleShare明细失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}

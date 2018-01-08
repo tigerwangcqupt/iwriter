@@ -34,7 +34,7 @@ public class TokenRedis {
 	
 	
     /**
-     * 查询消息已读状态
+     * 查询用户的token
      */
     public String getToken(String custId){
 		String key = getMessagekey(custId);

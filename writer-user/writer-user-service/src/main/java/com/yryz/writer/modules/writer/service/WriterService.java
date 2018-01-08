@@ -28,4 +28,6 @@ public interface WriterService extends BaseService {
 
    Writer selectByPhone(String phone);
 
+   String getUserToken(String custId);
+
 }
