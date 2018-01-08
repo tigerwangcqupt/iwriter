@@ -25,4 +25,6 @@ public interface BankService extends BaseService {
 
    Bank updateBank(Bank bank);
 
+   Bank selectByParameters(BankDto bankDto);
+
 }

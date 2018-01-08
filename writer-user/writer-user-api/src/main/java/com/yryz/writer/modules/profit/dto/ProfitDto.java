@@ -28,6 +28,9 @@ public class ProfitDto extends PageList {
     //排序方式 desc倒序,asc升序
     private String orderValue;
 
+    //写手id
+    private Long writerId;
+
     public Long getCreateUserId() {
         return createUserId;
     }
@@ -73,5 +76,13 @@ public class ProfitDto extends PageList {
 
     public void setOrderValue(String orderValue) {
         this.orderValue = orderValue;
+    }
+
+    public Long getWriterId() {
+        return writerId;
+    }
+
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
     }
 }

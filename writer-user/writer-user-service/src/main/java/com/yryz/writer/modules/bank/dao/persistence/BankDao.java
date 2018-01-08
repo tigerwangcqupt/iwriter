@@ -21,4 +21,6 @@ public interface BankDao extends BaseDao {
 
     List<Bank> selectList(BankDto bankDto);
 
+    Bank selectByParameters(BankDto bankDto);
+
 }

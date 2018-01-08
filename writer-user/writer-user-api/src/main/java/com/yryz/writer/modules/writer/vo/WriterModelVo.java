@@ -1,9 +1,10 @@
 package com.yryz.writer.modules.writer.vo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class WriterModelVo {
+public class WriterModelVo implements Serializable{
     //主键
     private Long kid;
     //主体编码

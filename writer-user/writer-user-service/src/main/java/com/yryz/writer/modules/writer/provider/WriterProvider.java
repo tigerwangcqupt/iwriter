@@ -6,6 +6,7 @@ import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.writer.WriterApi;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
+import com.yryz.writer.modules.writer.vo.WriterModelVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
@@ -145,6 +146,16 @@ public class WriterProvider implements WriterApi {
 	@Override
 	public List<WriterAdminRefProfit> selectAllAdminProfitList(WriterDto writerDto) {
 		return writerService.selectAllAdminProfitList(writerDto);
+	}
+
+	@Override
+	public RpcResponse<WriterModelVo> selectWriterByParameters(WriterDto writerDto) {
+		try {
+			return ResponseModel.returnListSuccess(writerService.selectWriterByParameters(writerDto));
+		} catch (Exception e) {
+			logger.error("获取Writer收益失败", e);
+			return ResponseModel.returnException(e);
+		}
 	}
 
 	@Override

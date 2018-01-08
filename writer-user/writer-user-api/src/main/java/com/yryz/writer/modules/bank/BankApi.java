@@ -56,4 +56,6 @@ public interface BankApi {
 	 */
 	RpcResponse<Bank> updateBank(Bank bank);
 
+	RpcResponse<Bank> selectByParameters(BankDto bankDto);
+
 }

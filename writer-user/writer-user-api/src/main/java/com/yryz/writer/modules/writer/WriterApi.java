@@ -7,6 +7,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
+import com.yryz.writer.modules.writer.vo.WriterModelVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.writer.dto.WriterDto;
@@ -102,6 +103,13 @@ public interface WriterApi {
 	 * @return
 	 */
 	List<WriterAdminRefProfit> selectAllAdminProfitList(WriterDto writerDto);
+
+	/**
+	 * 查询收益统计信息
+	 * @param writerDto
+	 * @return
+	 */
+	RpcResponse<WriterModelVo> selectWriterByParameters(WriterDto writerDto);
 
 
 	 RpcResponse<Integer> deleteUserToken(String custId);

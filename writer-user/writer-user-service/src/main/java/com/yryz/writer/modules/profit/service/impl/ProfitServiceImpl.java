@@ -213,4 +213,11 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         }
         return data;
     }
+
+    @Override
+    public PageList<ProfitDetailVo> selectFlowList(ProfitDto profitDto) {
+        PageUtils.startPage(profitDto.getCurrentPage(), profitDto.getPageSize());
+        List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
+        return new PageModel<ProfitDetailVo>().getPageList(list);
+    }
 }

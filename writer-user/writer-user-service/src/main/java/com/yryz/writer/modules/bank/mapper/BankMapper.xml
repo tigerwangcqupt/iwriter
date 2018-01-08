@@ -207,7 +207,17 @@
         select
         <include refid="Base_Column_List"/>
         from yryz_bank where del_flag = 0
-
     </select>
+
+	<!-- 查询Bank详情 -->
+	<select id="selectByParameters" resultMap="BaseResultMap" parameterType="com.yryz.writer.modules.bank.dto.BankDto">
+		select
+		<include refid="Base_Column_List"/>
+		from yryz_bank
+		where del_flag = 0
+		<if test="createUserId != null and createUserId != ''">
+			create_user_id = #{createUserId,jdbcType=VARCHAR}
+		</if>
+	</select>
     
 </mapper>

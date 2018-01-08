@@ -11,4 +11,14 @@ import com.yryz.component.rpc.dto.PageList;
  */
 public class BankDto extends PageList {
 
+    //创建者id
+    private String creatUserId;
+
+    public String getCreatUserId() {
+        return creatUserId;
+    }
+
+    public void setCreatUserId(String creatUserId) {
+        this.creatUserId = creatUserId;
+    }
 }

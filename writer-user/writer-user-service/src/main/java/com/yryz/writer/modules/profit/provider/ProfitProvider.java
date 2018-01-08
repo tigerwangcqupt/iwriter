@@ -6,6 +6,7 @@ import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.profit.entity.Profit;
+import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.service.ProfitService;
@@ -103,6 +104,16 @@ public class ProfitProvider implements ProfitApi {
 			return ResponseModel.returnObjectSuccess(profitService.bindCapital(writer));
 		} catch (Exception e) {
 			logger.error("写手绑定资金主体失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<PageList<ProfitDetailVo>> selectFlowList(ProfitDto profitDto) {
+		try {
+			return ResponseModel.returnListSuccess(profitService.selectFlowList(profitDto));
+		} catch (Exception e) {
+			logger.error("获取Profit流水列表失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}

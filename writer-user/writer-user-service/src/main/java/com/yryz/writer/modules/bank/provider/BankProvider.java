@@ -93,4 +93,14 @@ public class BankProvider implements BankApi {
 		}
 	}
 
+	@Override
+	public RpcResponse<Bank> selectByParameters(BankDto bankDto) {
+		try {
+			return ResponseModel.returnObjectSuccess(bankService.selectByParameters(bankDto));
+		} catch (Exception e) {
+			logger.error("获取Bank明细失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }
