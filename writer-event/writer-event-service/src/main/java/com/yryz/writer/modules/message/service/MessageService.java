@@ -1,8 +1,11 @@
 package com.yryz.writer.modules.message.service;
 
+import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import com.yryz.writer.modules.message.vo.MessageNumVo;
+import com.yryz.writer.modules.message.vo.WriterNoticeMessageDto;
+import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
 
 import java.util.List;
 
@@ -52,4 +55,18 @@ public interface MessageService {
      * @return
      */
     public Long getMessageTipsNum(ModuleEnum moduleEnum, Long writerId);
+
+    /**
+     * 保存发送给写手的消息
+     * @param writerNoticeMessageVo
+     * @return
+     */
+    public Boolean saveWriterNoticeMessage(WriterNoticeMessageVo writerNoticeMessageVo);
+
+    /**
+     * 查询发送给写手的消息
+     * @param writerNoticeMessageDto
+     * @return
+     */
+    public PageList<WriterNoticeMessageVo> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto);
 }

@@ -1,14 +1,17 @@
 package com.yryz.writer.modules.message.service.impl;
 
+import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.distributed.lock.DistributedLockUtils;
 import com.yryz.writer.common.redis.utils.JedisUtils;
 import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.web.PageModel;
+import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.message.constant.MessageConstant;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.service.MessageService;
-import com.yryz.writer.modules.message.vo.IndexTipsVo;
-import com.yryz.writer.modules.message.vo.MessageNumVo;
+import com.yryz.writer.modules.message.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,7 +45,10 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     }
 
     @Autowired
-    private MessageService messageService;
+    private MessageMongo messageMongo;
+
+    @Autowired
+    private IdAPI idApi;
 
     @Override
     public MessageNumVo getMessageNumVo(Long writerId) {
@@ -52,7 +59,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
 //            messageNumVo.setMessageNum("99");
             long messageNum = 0;
             for (ModuleEnum moduleEnum : indexModuleEnums) {
-                Long tipsNum = messageService.getMessageTipsNum(moduleEnum, writerId);
+                Long tipsNum = this.getMessageTipsNum(moduleEnum, writerId);
                 if (tipsNum != null){
                     messageNum += tipsNum;
                 }
@@ -72,7 +79,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
                 IndexTipsVo indexTipsVo = new IndexTipsVo();
                 indexTipsVo.setColumnName(moduleEnum.getName());
                 indexTipsVo.setColumnUrl(moduleEnum.getUrl());
-                Long tipsNum = messageService.getMessageTipsNum(moduleEnum, writerId);
+                Long tipsNum = this.getMessageTipsNum(moduleEnum, writerId);
                 indexTipsVo.setTipsNum(tipsNum != null ? tipsNum.toString() : "0");
 
                 indexTips.add(indexTipsVo);
@@ -158,6 +165,52 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             return 0L;
         }
         return result;
+    }
+
+    @Override
+    public Boolean saveWriterNoticeMessage(WriterNoticeMessageVo writerNoticeMessageVo) {
+        Long result = null;
+        try {
+            Long kid = idApi.getId("yryz_notice_writer");
+            writerNoticeMessageVo.setMessageId(kid.toString());
+            writerNoticeMessageVo.setCreateTime(new Date());
+            writerNoticeMessageVo.setSendUserId(writerNoticeMessageVo.getSendUserId() == null ? 0l : writerNoticeMessageVo.getSendUserId());
+
+//            writerNoticeMessageVo.setMessageId("1");
+//            writerNoticeMessageVo.setSendUserId(0l);
+//            writerNoticeMessageVo.setContent("hyy测试消息");
+//            writerNoticeMessageVo.setTitle("hyy测试消息");
+//            List<NoticeReceiveWriter> writers = new ArrayList<NoticeReceiveWriter>();
+//            NoticeReceiveWriter one = new NoticeReceiveWriter();
+//            one.setKid(1l);
+//            one.setUserNickName("接受的写手1");
+//            writers.add(one);
+//            NoticeReceiveWriter second = new NoticeReceiveWriter();
+//            second.setKid(2l);
+//            second.setUserNickName("接受的写手2");
+//            writers.add(second);
+//            writerNoticeMessageVo.setReceiveWriter(writers);
+
+            messageMongo.saveWriterNotice(writerNoticeMessageVo);
+        } catch (Exception e) {
+            logger.error("发送写手通知消息失败", e);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public PageList<WriterNoticeMessageVo> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
+        Long result = null;
+        try {
+            PageUtils.startPage(writerNoticeMessageDto.getCurrentPage(), writerNoticeMessageDto.getPageSize());
+//            return messageMongo.queryWriterNoticePage(writerNoticeMessageDto);
+            List<WriterNoticeMessageVo> writerNoticeMessageVoList = messageMongo.queryWriterNoticePage(writerNoticeMessageDto);
+            return new PageModel<WriterNoticeMessageVo>().getPageList(writerNoticeMessageVoList);
+        } catch (Exception e) {
+            logger.error("获取通知消息失败", e);
+        }
+        return null;
     }
 
 }
