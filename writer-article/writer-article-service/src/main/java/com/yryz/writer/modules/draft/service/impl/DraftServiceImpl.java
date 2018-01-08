@@ -62,7 +62,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             for (Draft draft : list) {
                 DraftVo draftVo = new DraftVo();
                 //Draft to DraftVo
-                draftVo.setId(draft.getId());
+                draftVo.setKid(draft.getKid());
                 draftVo.setTitle(draft.getTitle());
                 draftVo.setContentHtml(draft.getContentHtml());
                 draftVo.setCoverImgUrl(draft.getCoverImgUrl());

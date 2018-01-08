@@ -37,4 +37,5 @@ public interface TaskApi {
     * */
     RpcResponse<PageList<TaskVo>> list(TaskDto taskDto);
 
+	RpcResponse<Boolean> acceptTask(Long kid);
 }

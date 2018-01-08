@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * @date 2017-12-29 14:40:13
  */
 public class DraftVo implements Serializable {
-    private Long id;
+    private Long kid;
 
     /**
      * 稿件类型:0图文,1视频
@@ -72,12 +72,12 @@ public class DraftVo implements Serializable {
     private BigDecimal draftFee;
 
 
-    public Long getId() {
-        return id;
+    public Long getKid() {
+        return kid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setKid(Long kid) {
+        this.kid = kid;
     }
 
     public Integer getDraftType() {

@@ -65,4 +65,9 @@ public class TaskProvider implements TaskApi {
         }
     }
 
+	@Override
+	public RpcResponse<Boolean> acceptTask(Long kid) {
+		return taskService.acceptTask(kid);
+	}
+
 }
