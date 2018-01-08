@@ -3,6 +3,9 @@ package com.yryz.writer.modules.writer.service;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.writer.dto.WriterAuditDto;
 import com.yryz.writer.modules.writer.vo.WriterAuditVo;
+
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
@@ -19,6 +22,8 @@ import com.yryz.component.rpc.dto.PageList;
 public interface WriterAuditService extends BaseService {
 
    PageList<WriterAuditVo> selectList(WriterAuditDto writerAuditDto);
+   
+   List<WriterAuditVo> exportList(WriterAuditDto writerAuditDto);
 
    WriterAuditVo detail(Long kid);
    

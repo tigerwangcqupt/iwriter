@@ -121,7 +121,6 @@ public class WriterAuditVo implements Serializable {
 		this.writerKid = writerKid;
 	}
 
-
 	public String getUserName() {
 		return userName;
 	}
