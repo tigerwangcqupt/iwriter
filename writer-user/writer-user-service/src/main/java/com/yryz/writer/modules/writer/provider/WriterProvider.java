@@ -185,4 +185,14 @@ public class WriterProvider implements WriterApi {
 		}
 	}
 
+
+	public RpcResponse<Integer> deleteUserToken(String custId){
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.deleteUserToken(custId));
+		} catch (Exception e) {
+			logger.error("删除用户token失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }

@@ -6,9 +6,12 @@ import com.yryz.component.rpc.internal.DubboResponse;
 import com.yryz.service.api.basic.constants.SmsContants;
 import com.yryz.service.api.basic.entity.SmsReqVo;
 import com.yryz.service.api.basic.entity.SmsVerifyCode;
+import com.yryz.service.api.user.entity.AuthInfo;
+import com.yryz.service.api.user.entity.CustInfo;
+import com.yryz.service.api.user.entity.UserAuth;
 import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.constant.ExceptionEnum;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.platform.SmsCommonApi;
 import com.yryz.writer.modules.platform.constants.SmsTypeEnum;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -160,7 +164,7 @@ public class UserAppController extends BaseController {
         }
 
         //您输入的验证码不正确
-        throw new QsourceException(
+        throw new YyrzPcException(
                 ExceptionEnum.PIN_ERROR.getCode(),
                 ExceptionEnum.PIN_ERROR.getMsg(),
                 ExceptionEnum.PIN_ERROR.getErrorMsg());
@@ -189,7 +193,7 @@ public class UserAppController extends BaseController {
                 return new DubboResponse<Boolean>(true, "200", "success", "", true);
             }
         }
-        throw new QsourceException(
+        throw new YyrzPcException(
                 ExceptionEnum.USER_UNREGISTERED.getCode(),
                 ExceptionEnum.USER_UNREGISTERED.getMsg(),
                 ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
@@ -216,13 +220,13 @@ public class UserAppController extends BaseController {
         RpcResponse<Writer> rpcResponseWriter = writerApi.selectByPhone(custRegisterDto.getCustPhone());
         Writer user = isSuccess(rpcResponseWriter);
         if (user == null) {
-            throw new QsourceException(
+            throw new YyrzPcException(
                     ExceptionEnum.PHONE_UNBIND.getCode(),
                     ExceptionEnum.PHONE_UNBIND.getMsg(),
                     ExceptionEnum.PHONE_UNBIND.getErrorMsg());
         }
         if (StringUtils.isNotBlank(user.getPwd())) {
-            throw new QsourceException(
+            throw new YyrzPcException(
                     ExceptionEnum.HAS_SET_PASSWORD.getCode(),
                     ExceptionEnum.HAS_SET_PASSWORD.getMsg(),
                     ExceptionEnum.HAS_SET_PASSWORD.getErrorMsg());
@@ -237,6 +241,57 @@ public class UserAppController extends BaseController {
 
 
         return new DubboResponse<AuthInfoVo>(true, "200", "success", "", new AuthInfoVo());
+    }
+
+    /**
+     * 验证码登录
+     *
+     * @param custRegisterDto
+     * @param devId
+     * @return
+     */
+    @RequestMapping(value = "login/verifyCode", method = {RequestMethod.POST})
+    @ResponseBody
+    @NotLogin
+    public RpcResponse<AuthInfoVo> loginVerifyCode(@RequestBody CustRegisterDto custRegisterDto) {
+        AuthInfoVo authInfoVo = new AuthInfoVo();
+        Assert.notNull(custRegisterDto, "缺少参数或参数错误！");
+
+        Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
+        Assert.notNull(custRegisterDto.getCode(), "功能码不能为空！");
+        Assert.notNull(custRegisterDto.getVeriCode(), "验证码不能为空！");
+
+        Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
+        Assert.hasText(custRegisterDto.getCode(), "功能码不能为空！");
+        Assert.hasText(custRegisterDto.getVeriCode(), "验证码不能为空！");
+
+        //校验验证码
+        RpcResponse<Boolean> rpcResponse = smsCommonApi.checkVerifyCode(custRegisterDto.getCustPhone(), custRegisterDto.getCode(), custRegisterDto.getVeriCode());
+        Boolean aBoolean = isSuccessNotNull(rpcResponse);
+
+        if (aBoolean) {
+
+            //查询用户
+            RpcResponse<Writer> userRpcResponse = writerApi.selectByPhone(custRegisterDto.getCustPhone());
+            Writer user = isSuccess(userRpcResponse);
+            if (user == null) {
+                throw new YyrzPcException(
+                        ExceptionEnum.USER_UNREGISTERED.getCode(),
+                        ExceptionEnum.USER_UNREGISTERED.getMsg(),
+                        ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
+            }
+
+            RpcResponse<String> tokenRpcResponse = writerApi.getUserToken(String.valueOf(user.getKid()));
+            String token = isSuccess(tokenRpcResponse);
+            authInfoVo.setCustPhone(custRegisterDto.getCustPhone());
+            authInfoVo.setToken(token);
+
+            return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
+        }
+        throw new YyrzPcException(
+                ExceptionEnum.PIN_ERROR.getCode(),
+                ExceptionEnum.PIN_ERROR.getMsg(),
+                ExceptionEnum.PIN_ERROR.getErrorMsg());
     }
 
     /**
@@ -265,7 +320,7 @@ public class UserAppController extends BaseController {
         RpcResponse<Writer> userRpcResponse = writerApi.selectByPhone(phone);
         Writer user = isSuccess(userRpcResponse);
         if (user == null) {
-            throw new QsourceException(
+            throw new YyrzPcException(
                     ExceptionEnum.USER_UNREGISTERED.getCode(),
                     ExceptionEnum.USER_UNREGISTERED.getMsg(),
                     ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
@@ -275,7 +330,7 @@ public class UserAppController extends BaseController {
                 String token = isSuccess(tokenRpcResponse);
                 authInfoVo.setToken(token);
             } else {
-                throw new QsourceException(
+                throw new YyrzPcException(
                         ExceptionEnum.PASSWORD_ERROR.getCode(),
                         ExceptionEnum.PASSWORD_ERROR.getMsg(),
                         ExceptionEnum.PASSWORD_ERROR.getErrorMsg());
@@ -288,12 +343,214 @@ public class UserAppController extends BaseController {
 
 
     /**
+     * 修改密码
+     *
+     * @return
+     */
+    @RequestMapping(value = "pwd", method = {RequestMethod.POST})
+    @ResponseBody
+    public RpcResponse<AuthInfoVo> updatePwd(@RequestBody Map<String, Object> map,@RequestHeader("userId") String userId) {
+        Assert.notNull(map, "缺少参数或参数错误");
+
+        Assert.notNull(map.get("password"), "旧密码不能为空！");
+        Assert.notNull(map.get("newPassword"), "新密码不能为空！");
+
+        String  password = (String) map.get("password");
+        String  newPassword = (String) map.get("newPassword");
+        Assert.hasText(password, "旧密码不能为空！");
+        Assert.hasText(newPassword, "新密码不能为空！");
+
+        Assert.notNull(userId, "userId不能为空！");
+        Assert.hasText(userId, "userId不能为空！");
+
+
+
+        RpcResponse<Writer> rpcResponseWriter = writerApi.get(Long.valueOf(userId));
+        Writer user = isSuccess(rpcResponseWriter);
+
+        if (user != null) {
+            if (password.equals(user.getPwd())) {
+                //修改用户信息
+                Writer writer = new Writer();
+                writer.setKid(user.getKid());
+                writer.setPwd(newPassword);
+                writerApi.updateByPrimaryKeySelective(writer);
+                return new DubboResponse<AuthInfoVo>(true, "200", "success", "", new AuthInfoVo());
+            } else {
+                throw new YyrzPcException(
+                        ExceptionEnum.OLD_PASSWORD_ERROR.getCode(),
+                        ExceptionEnum.OLD_PASSWORD_ERROR.getMsg(),
+                        ExceptionEnum.OLD_PASSWORD_ERROR.getErrorMsg());
+            }
+        }
+        throw new YyrzPcException(
+                ExceptionEnum.CAN_NOT_ALERT_PASSWORD.getCode(),
+                ExceptionEnum.CAN_NOT_ALERT_PASSWORD.getMsg(),
+                ExceptionEnum.CAN_NOT_ALERT_PASSWORD.getErrorMsg());
+    }
+
+    /**
+     * 重置密码
+     *
+     * @param custRegisterDto
+     * @return
+     */
+    @RequestMapping(value = "resetPwd", method = {RequestMethod.POST})
+    @ResponseBody
+    @NotLogin
+    public RpcResponse<AuthInfoVo> resetPwd(@RequestBody CustRegisterDto custRegisterDto) {
+        AuthInfoVo authInfoVo = new AuthInfoVo();
+        Assert.notNull(custRegisterDto, "缺少参数或参数错误！");
+        Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
+        Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
+
+        Assert.notNull(custRegisterDto.getCustPwd(), "密码不能为空！");
+        Assert.hasText(custRegisterDto.getCustPwd(), "密码不能为空！");
+
+
+        Assert.notNull(custRegisterDto.getVeriCode(), "验证码不能为空！");
+        Assert.hasText(custRegisterDto.getVeriCode(), "验证码不能为空！");
+
+
+        RpcResponse<Boolean> rpcResponse = smsCommonApi.checkVerifyCode(custRegisterDto.getCustPhone(), SmsTypeEnum.CODE_FIND_PWD, custRegisterDto.getVeriCode());
+        boolean b = isSuccessNotNull(rpcResponse);
+        if (b) {
+            RpcResponse<Writer> userRpcResponse = writerApi.selectByPhone(custRegisterDto.getCustPhone());
+            Writer user = isSuccess(userRpcResponse);
+            if (user != null) {
+                //修改用户信息
+                Writer writer = new Writer();
+                writer.setKid(user.getKid());
+                writer.setPwd(custRegisterDto.getCustPwd());
+                writerApi.updateByPrimaryKeySelective(writer);
+
+                //自动登录，获取token
+                RpcResponse<String> tokenRpcResponse = writerApi.getUserToken(String.valueOf(user.getKid()));
+                String token = isSuccess(tokenRpcResponse);
+                authInfoVo.setToken(token);
+                return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
+            } else {
+                throw new YyrzPcException(
+                        ExceptionEnum.USER_UNREGISTERED.getCode(),
+                        ExceptionEnum.USER_UNREGISTERED.getMsg(),
+                        ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
+            }
+        }
+        throw new YyrzPcException(
+                ExceptionEnum.PIN_ERROR.getCode(),
+                ExceptionEnum.PIN_ERROR.getMsg(),
+                ExceptionEnum.PIN_ERROR.getErrorMsg());
+    }
+
+
+
+    /**
+     * 解绑旧手机号验证
+     *
+     * @param custRegisterDto
+     * @return
+     */
+    @RequestMapping(value = "unbindPhoneAccount", method = {RequestMethod.POST})
+    @ResponseBody
+    public RpcResponse<Map<String,Object>> unbindPhoneAccount(@RequestBody CustRegisterDto custRegisterDto,@RequestHeader("userId") String userId) {
+        Assert.notNull(custRegisterDto, "参数错误！");
+        Assert.notNull(custRegisterDto.getVeriCode(), "验证码不能为空！");
+        Assert.hasText(custRegisterDto.getVeriCode(), "验证码不能为空！");
+
+        RpcResponse<Writer> rpcResponseWriter = writerApi.get(Long.valueOf(userId));
+        Writer user = isSuccess(rpcResponseWriter);
+        if (user == null) {
+            throw new YyrzPcException(
+                    ExceptionEnum.USER_UNREGISTERED.getCode(),
+                    ExceptionEnum.USER_UNREGISTERED.getMsg(),
+                    ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
+        }
+
+        RpcResponse<Boolean> booleanRpcResponse = smsCommonApi.checkVerifyCode(user.getPhone(), SmsTypeEnum.CODE_CHANGE_PHONE, custRegisterDto.getVeriCode());
+        boolean b = isSuccessNotNull(booleanRpcResponse);
+        if (b) {
+            Map<String,Object> mapResult = new HashMap <String,Object>();
+            mapResult.put("custPhone",user.getPhone());
+            return new DubboResponse<Map<String,Object>>(true, "200", "success", "", mapResult);
+        } else {
+            throw new YyrzPcException(
+                    ExceptionEnum.PIN_ERROR.getCode(),
+                    ExceptionEnum.PIN_ERROR.getMsg(),
+                    ExceptionEnum.PIN_ERROR.getErrorMsg());
+        }
+    }
+
+
+    /**
+     * 绑定手机号
+     *
+     * @param custRegisterDto
+     * @return
+     */
+    @RequestMapping(value = "bindPhoneAccount", method = {RequestMethod.POST})
+    @ResponseBody
+    public RpcResponse<AuthInfoVo> bindPhoneAccount(@RequestBody CustRegisterDto custRegisterDto,@RequestHeader("userId") String userId) {
+        Assert.notNull(custRegisterDto, "参数错误！");
+
+        Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
+        Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
+
+        Assert.notNull(custRegisterDto.getVeriCode(), "验证码不能为空！");
+        Assert.hasText(custRegisterDto.getVeriCode(), "验证码不能为空！");
+
+
+        RpcResponse<Boolean> booleanRpcResponse = smsCommonApi.checkVerifyCode(custRegisterDto.getCustPhone(), SmsTypeEnum.CODE_CHANGE_PHONE, custRegisterDto.getVeriCode());
+        boolean b = isSuccessNotNull(booleanRpcResponse);
+        if (b) {
+            RpcResponse<Writer> rpcResponseWriter = writerApi.selectByPhone(custRegisterDto.getCustPhone());
+            Writer user = isSuccess(rpcResponseWriter);
+            if (user == null) {
+                //可以绑定
+                RpcResponse<Writer> rpcResponseWriterSave = writerApi.get(Long.valueOf(userId));
+                Writer writer = isSuccess(rpcResponseWriterSave);
+                writer.setPhone(custRegisterDto.getCustPhone());
+                writerApi.updateByPrimaryKeySelective(writer);
+                Map<String,Object> mapResult = new HashMap <String,Object>();
+                mapResult.put("custPhone",custRegisterDto.getCustPhone());
+                return new DubboResponse<Map<String,Object>>(true, "200", "success", "", mapResult);
+            }else{
+                throw new YyrzPcException(
+                        ExceptionEnum.BIND_UNSUCCESSFUL.getCode(),
+                        ExceptionEnum.BIND_UNSUCCESSFUL.getMsg(),
+                        ExceptionEnum.BIND_UNSUCCESSFUL.getErrorMsg());
+            }
+        } else {
+            throw new YyrzPcException(
+                    ExceptionEnum.PIN_ERROR.getCode(),
+                    ExceptionEnum.PIN_ERROR.getMsg(),
+                    ExceptionEnum.PIN_ERROR.getErrorMsg());
+        }
+    }
+
+
+    /**
+     * 登出
+     *
+     * @return
+     */
+    @RequestMapping(value = "logOut", method = {RequestMethod.POST})
+    @ResponseBody
+    public RpcResponse<AuthInfoVo> logOut(@RequestHeader String userId) {
+        Assert.notNull(userId, "userId不能为空！");
+        Assert.hasText(userId, "userId不能为空！");
+        RpcResponse<Integer> rpcResponse = writerApi.deleteUserToken(userId);
+        return new DubboResponse<AuthInfoVo>(true, "200", "success", "", new AuthInfoVo());
+    }
+
+
+
+    /**
      * 该手机号未注册
      * @param user
      */
     private void phoneUnregistered(Writer user) {
         if (user == null) {
-            throw new QsourceException(
+            throw new YyrzPcException(
                     ExceptionEnum.PHONE_UNREGISTERED.getCode(),
                     ExceptionEnum.PHONE_UNREGISTERED.getMsg(),
                     ExceptionEnum.PHONE_UNREGISTERED.getErrorMsg());
@@ -306,7 +563,7 @@ public class UserAppController extends BaseController {
      */
     private void phoneRegistered(Writer user) {
         if (user != null) {
-            throw new QsourceException(
+            throw new YyrzPcException(
                     ExceptionEnum.PHONE_REGISTERED.getCode(),
                     ExceptionEnum.PHONE_REGISTERED.getMsg(),
                     ExceptionEnum.PHONE_REGISTERED.getErrorMsg());

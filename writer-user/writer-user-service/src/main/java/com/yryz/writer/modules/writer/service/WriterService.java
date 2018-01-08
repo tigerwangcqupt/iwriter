@@ -30,4 +30,6 @@ public interface WriterService extends BaseService {
 
    String getUserToken(String custId);
 
+   Integer deleteUserToken(String custId);
+
 }

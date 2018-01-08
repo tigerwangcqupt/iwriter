@@ -87,4 +87,10 @@ public interface WriterApi {
 	 * */
 	RpcResponse<PageList<WriterAdminVo>> listAdmin(WriterDto writerDto);
 
+	/**
+	 * 删除用户token
+	 * @param custId
+	 * @return
+	 */
+	RpcResponse<Integer> deleteUserToken(String custId);
 }

@@ -108,6 +108,21 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         return token;
     }
 
+    @Override
+    public Integer deleteUserToken(String custId){
+        Long count = 0l;
+        String key = getMessagekey(custId);
+        try {
+             count = JedisUtils.del(key);
+        } catch (Exception e) {
+            logger.error("[deleteUserToken] error", e);
+            throw new RedisOptException(e);
+        }
+
+        return  count.intValue();
+    }
+
+
     /**
      * 查询用户的token
      */
