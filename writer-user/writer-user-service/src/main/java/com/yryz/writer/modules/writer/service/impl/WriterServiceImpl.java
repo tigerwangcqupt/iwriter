@@ -8,7 +8,9 @@ import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 
+import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
+import com.yryz.writer.modules.writer.vo.WriterModelVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -156,4 +158,15 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         }
     }
 
+
+    @Override
+    public WriterModelVo selectWriterByParameters(WriterDto writerDto) {
+        return writerDao.selectWriterByParameters(writerDto);
+    }
+
+    @Override
+    public PageList<WriterAdminRefProfit> selectAdminProfitList(WriterDto writerDto) {
+        PageUtils.startPage(writerDto.getCurrentPage(), writerDto.getPageSize());
+        return new PageModel<WriterAdminRefProfit>().getPageList(writerDao.selectAdminProfitList(writerDto));
+    }
 }
