@@ -96,7 +96,6 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         if(list != null && list.size() > 0) {
             for(Writer writer : list){
                 WriterAdminVo writerVo = new WriterAdminVo();
-                //Writer to WriterVo
                 BeanUtils.copyProperties(writer,writerVo);
                 writerVoList.add(writerVo);
             }
