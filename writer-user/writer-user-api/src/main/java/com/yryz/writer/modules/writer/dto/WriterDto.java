@@ -48,8 +48,19 @@ public class WriterDto extends PageList {
      */
     private String orderValue;
 
+    private String remark;
+    
+    
 
-    public Long getKid() {
+    public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Long getKid() {
         return kid;
     }
 

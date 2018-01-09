@@ -5,6 +5,7 @@ import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
+import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterModelVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,8 @@ import java.util.List;
 public interface WriterDao extends BaseDao {
 
     List<Writer> selectList(WriterDto writerDto);
+    
+    List<WriterAdminVo> selectWriterList(WriterDto writerDto);
     
     int updateStatus(@Param("kid")Long kid,@Param("auditStatus")Integer auditStatus);
     

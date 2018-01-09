@@ -15,7 +15,7 @@
 		<result column="tel" property="tel" jdbcType="VARCHAR"/>
 		<result column="email" property="email" jdbcType="VARCHAR"/>
 		<result column="audit_status" property="auditStatus" jdbcType="TINYINT"/>
-		<result column="reamrk" property="reamrk" jdbcType="VARCHAR"/>
+		<result column="remark" property="remark" jdbcType="VARCHAR"/>
 		<result column="apply_date" property="applyDate" jdbcType="TIMESTAMP"/>
 		<result column="audit_date" property="auditDate" jdbcType="TIMESTAMP"/>
 		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
@@ -39,7 +39,7 @@
 		h.tel,
 		h.email,
 		h.audit_status,
-		h.reamrk,
+		h.remark,
 		h.apply_date,
 		h.audit_date,
 		h.create_date,
@@ -84,7 +84,7 @@
   
   	<!-- 新增WriterAudit-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.writer.entity.WriterAudit">
-	    insert into yryz_writer_audit_history (kid,writer_kid,user_name,identity_card,identity_card_photo,provice,city,tel,email,audit_status,reamrk,apply_date,audit_date,create_date,create_user_id,last_update_date,last_update_user_id)
+	    insert into yryz_writer_audit_history (kid,writer_kid,user_name,identity_card,identity_card_photo,provice,city,tel,email,audit_status,remark,apply_date,audit_date,create_date,create_user_id,last_update_date,last_update_user_id)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{writerKid,jdbcType=BIGINT}
@@ -96,7 +96,7 @@
 				,#{tel,jdbcType=VARCHAR}
 				,#{email,jdbcType=VARCHAR}
 				,#{auditStatus,jdbcType=TINYINT}
-				,#{reamrk,jdbcType=VARCHAR}
+				,#{remark,jdbcType=VARCHAR}
 				,#{applyDate,jdbcType=TIMESTAMP}
 				,#{auditDate,jdbcType=TIMESTAMP}
 			,NOW()
@@ -140,8 +140,8 @@
         <if test="auditStatus != null">
 			audit_status,
 	    </if>
-        <if test="reamrk != null and reamrk != ''">
-			reamrk,
+        <if test="remark != null and remark != ''">
+			remark,
 	    </if>
         <if test="applyDate != null">
 			apply_date,
@@ -193,8 +193,8 @@
         <if test="auditStatus != null">
 			#{auditStatus,jdbcType=TINYINT},
 	    </if>
-        <if test="reamrk != null and reamrk != ''">
-			#{reamrk,jdbcType=VARCHAR},
+        <if test="remark != null and remark != ''">
+			#{remark,jdbcType=VARCHAR},
 	    </if>
         <if test="applyDate != null">
 			#{applyDate,jdbcType=TIMESTAMP},
@@ -249,8 +249,8 @@
              <if test="auditStatus != null">
     			audit_status = #{auditStatus,jdbcType=TINYINT},
     		</if>
-            <if test="reamrk != null and reamrk != ''">
-    			reamrk = #{reamrk,jdbcType=VARCHAR},
+            <if test="remark != null and remark != ''">
+    			remark = #{remark,jdbcType=VARCHAR},
     		</if>
              <if test="applyDate != null">
     			apply_date = #{applyDate,jdbcType=TIMESTAMP},

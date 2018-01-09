@@ -1,6 +1,7 @@
 package com.yryz.writer.modules.writer.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class WriterAdminVo implements Serializable {
 
@@ -93,7 +94,7 @@ public class WriterAdminVo implements Serializable {
     
     private String remark;
     
-    private String bindBankCard;
+    private String userBankCart;
     
     private Integer articleQty;
     
@@ -110,6 +111,27 @@ public class WriterAdminVo implements Serializable {
     private Integer shareQty;
     
     private Integer praiseQty;
+    
+    private String proviceName;
+    
+    private String cityName;
+    
+    /**
+	 * 审核状态(1：待审核，2：审核通过，3：审核不通过)
+	 */	 
+    private  Integer auditStatus;
+        
+	/**
+	 * 申请时间
+	 */	 
+    private Date applyDate;
+    
+    private String applyDateStr;
+    
+    private Date registerDate;
+    
+    private String registerDateStr;
+    
 
     public String getAccount() {
         return this.account;
@@ -263,14 +285,6 @@ public class WriterAdminVo implements Serializable {
 		this.remark = remark;
 	}
 
-	public String getBindBankCard() {
-		return bindBankCard;
-	}
-
-	public void setBindBankCard(String bindBankCard) {
-		this.bindBankCard = bindBankCard;
-	}
-
 	public Integer getArticleQty() {
 		return articleQty;
 	}
@@ -334,7 +348,73 @@ public class WriterAdminVo implements Serializable {
 	public void setPraiseQty(Integer praiseQty) {
 		this.praiseQty = praiseQty;
 	}
+
+	public String getProviceName() {
+		return proviceName;
+	}
+
+	public void setProviceName(String proviceName) {
+		this.proviceName = proviceName;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	public Integer getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(Integer auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+
+
+	public Date getApplyDate() {
+		return applyDate;
+	}
+
+	public void setApplyDate(Date applyDate) {
+		this.applyDate = applyDate;
+	}
+
+	public String getApplyDateStr() {
+		return applyDateStr;
+	}
+
+	public void setApplyDateStr(String applyDateStr) {
+		this.applyDateStr = applyDateStr;
+	}
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
+	public String getRegisterDateStr() {
+		return registerDateStr;
+	}
+
+	public void setRegisterDateStr(String registerDateStr) {
+		this.registerDateStr = registerDateStr;
+	}
+
+	public String getUserBankCart() {
+		return userBankCart;
+	}
+
+	public void setUserBankCart(String userBankCart) {
+		this.userBankCart = userBankCart;
+	}
     
+	
     
     
     

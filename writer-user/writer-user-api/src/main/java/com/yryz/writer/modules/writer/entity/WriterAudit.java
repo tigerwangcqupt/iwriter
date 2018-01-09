@@ -71,7 +71,7 @@ public class WriterAudit extends GenericEntity{
 	/**
 	 * 备注
 	 */	 
-    private  String reamrk;
+    private  String remark;
     
 
 	/**
@@ -170,14 +170,15 @@ public class WriterAudit extends GenericEntity{
 		this.auditStatus = auditStatus;
 	}
 		
-	public String getReamrk() {
-		return this.reamrk;
-	}
-	
-	public void setReamrk(String reamrk) {
-		this.reamrk = reamrk;
-	}
 		
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	public Date getApplyDate() {
 		return this.applyDate;
 	}

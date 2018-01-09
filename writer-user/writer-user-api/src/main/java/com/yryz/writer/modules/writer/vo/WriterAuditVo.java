@@ -76,7 +76,7 @@ public class WriterAuditVo implements Serializable {
 	/**
 	 * 备注
 	 */	 
-    private  String reamrk;
+    private  String remark;
     
 
 	/**
@@ -201,13 +201,14 @@ public class WriterAuditVo implements Serializable {
 	}
 
 
-	public String getReamrk() {
-		return reamrk;
+
+	public String getRemark() {
+		return remark;
 	}
 
 
-	public void setReamrk(String reamrk) {
-		this.reamrk = reamrk;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 

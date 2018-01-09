@@ -33,3 +33,5 @@
 *.log.*
 /writer-config/writer-config-service/target/
 /writer-event/writer-event-api/target/
+/writer-config/writer-config-service/target/maven-archiver/pom.properties
+.gitignore
