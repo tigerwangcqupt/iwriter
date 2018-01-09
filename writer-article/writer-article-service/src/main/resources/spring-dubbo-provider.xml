@@ -9,6 +9,8 @@
 
     <dubbo:service interface="com.yryz.writer.modules.draft.DraftApi" ref="draftProvider" />
     <dubbo:service interface="com.yryz.writer.modules.task.TaskApi" ref="taskProvider" />
+    <!--  文章分类服务 -->
+    <dubbo:service interface="com.yryz.writer.modules.articleClassify.ArticleClassifyApi" ref="articleClassifyApi" />
 
 
 </beans>
