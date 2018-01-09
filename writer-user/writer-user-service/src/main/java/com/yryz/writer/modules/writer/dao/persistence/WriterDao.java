@@ -27,6 +27,8 @@ public interface WriterDao extends BaseDao {
     
     List<WriterAdminVo> selectWriterList(WriterDto writerDto);
     
+    WriterAdminVo selectWriterDetail(@Param("kid")Long kid);
+    
     int updateStatus(@Param("kid")Long kid,@Param("auditStatus")Integer auditStatus);
     
     Writer selectByPhone(String phone);

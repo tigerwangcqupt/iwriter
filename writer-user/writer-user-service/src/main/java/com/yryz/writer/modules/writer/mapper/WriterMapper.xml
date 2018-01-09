@@ -330,6 +330,15 @@
 		</if>
     </select>
     
+    <!-- 查询后台写手详情 -->
+    <select id="selectWriterDetail" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
+        select
+        <include refid="writer_common_column"/>
+        FROM yryz_writer w
+		INNER JOIN yryz_writer_audit_history h ON w.kid = h.writer_kid
+		LEFT JOIN yryz_writer_statistics s ON w.kid = s.writer_kid
+		WHERE w.user_status = 2 AND h.audit_status=2 and w.kid = #{kid}
+    </select>
 
 	<!-- 查询管理后台Writer列表 -->
 	<select id="selectAdminList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultMap="BaseResultMap">
