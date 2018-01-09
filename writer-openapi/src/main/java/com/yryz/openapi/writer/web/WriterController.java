@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -30,12 +29,14 @@ public class WriterController extends BaseController {
    @Autowired
    private WriterApi writerApi;
 
-   @RequestMapping(value="/detail", method = RequestMethod.GET)
+   @ResponseBody
+   @RequestMapping(value="/detail")
    public RpcResponse<WriterVo> detail(@RequestHeader String userId) {
 	   return writerApi.detail(Long.valueOf(userId));
    }
    
-   @RequestMapping(value="/updateWriter", method = RequestMethod.PUT)
+   @ResponseBody
+   @RequestMapping(value="/updateWriter")
    public RpcResponse<WriterVo> updateWriter(@RequestBody Writer writer,@RequestHeader String userId) {
 	   if(StringUtils.isNotEmpty(userId)){
 		   writer.setKid(Long.valueOf(userId));
@@ -44,7 +45,8 @@ public class WriterController extends BaseController {
        return writerApi.updateWriter(writer);
    }
    
-   @RequestMapping(value="/submitAudit", method = RequestMethod.PUT)
+   @ResponseBody
+   @RequestMapping(value="/submitAudit")
    public RpcResponse<WriterVo> submitAudit(@RequestBody Writer writer,@RequestHeader String userId) {
 	   if(StringUtils.isNotEmpty(userId)){
 		   writer.setKid(Long.valueOf(userId));
@@ -54,7 +56,7 @@ public class WriterController extends BaseController {
    }
 
    @ResponseBody
-   @RequestMapping(value="/list", method = RequestMethod.GET)
+   @RequestMapping(value="/list")
    public RpcResponse<PageList<WriterVo>> list(WriterDto writerDto) {
         return writerApi.list(writerDto);
    }

@@ -58,11 +58,21 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         if(list != null && list.size() > 0) {
             for(Writer writer : list){
                 WriterVo writerVo = new WriterVo();
-                //Writer to WriterVo
+                BeanUtils.copyProperties(writer, writerVo);
                 writerVoList.add(writerVo);
             }
         }
         return new PageModel<WriterVo>().getPageList(writerVoList);
+    }
+    
+    public PageList<WriterAdminVo> selectWriterList(WriterDto writerDto){
+        PageUtils.startPage(writerDto.getCurrentPage(), writerDto.getPageSize());
+        List<WriterAdminVo> list = writerDao.selectWriterList(writerDto);
+        return new PageModel<WriterAdminVo>().getPageList(list);
+    }
+    
+    public List<WriterAdminVo> selectWriterExportList(WriterDto writerDto){
+        return writerDao.selectWriterList(writerDto);
     }
 
 

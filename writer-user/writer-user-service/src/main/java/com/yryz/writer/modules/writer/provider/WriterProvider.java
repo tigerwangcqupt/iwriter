@@ -79,6 +79,24 @@ public class WriterProvider implements WriterApi {
        		 return ResponseModel.returnException(e);
         }
     }
+    
+    public RpcResponse<PageList<WriterAdminVo>> writerList(WriterDto writerDto) {
+        try {
+			 return ResponseModel.returnListSuccess(writerService.selectWriterList(writerDto));
+        } catch (Exception e) {
+        	logger.error("获取Writer列表失败", e);
+       		return ResponseModel.returnException(e);
+        }
+    }
+    
+    public RpcResponse<List<WriterAdminVo>> writerExportList(WriterDto writerDto) {
+        try {
+			 return ResponseModel.returnListSuccess(writerService.selectWriterExportList(writerDto));
+        } catch (Exception e) {
+        	logger.error("获取Writer列表失败", e);
+       		return ResponseModel.returnException(e);
+        }
+    }
 
 	@Override
 	public RpcResponse<WriterVo> updateWriter(Writer writer) {

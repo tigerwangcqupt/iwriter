@@ -25,6 +25,10 @@ import java.util.List;
 public interface WriterService extends BaseService {
 
    PageList<WriterVo> selectList(WriterDto writerDto);
+   
+   PageList<WriterAdminVo> selectWriterList(WriterDto writerDto);
+   
+   List<WriterAdminVo> selectWriterExportList(WriterDto writerDto);
 
    WriterVo detail(Long writerId);
 

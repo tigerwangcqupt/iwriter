@@ -31,7 +31,7 @@
 	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
     </sql>
 
-     <!-- 查询Writer详情 -->
+    <!-- 查询Writer详情 -->
     <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
@@ -273,8 +273,58 @@
     <select id="selectList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yryz_writer where del_flag = 0
+        from yryz_writer 
     </select>
+    
+    <sql id="writer_common_column">
+	    w.kid,
+		w.nick_name,
+		w.user_name,
+		w.phone,
+		h.audit_date,
+		h.remark,
+		h.apply_date,
+		w.create_date AS register_date,
+		w.head_img,
+		w.user_bank_cart,
+		w.identity_card,
+		w.identity_card_photo,
+		w.provice,
+		w.city,
+		w.email,
+		w.tel,
+		s.article_qty,
+		s.video_qty,
+		s.fans_qty,
+		s.visit_qty,
+		s.comment_qty,
+		s.collect_qty,
+		s.share_qty,
+		s.praise_qty
+    </sql>
+    
+    <!-- 查询后台写手列表 -->
+    <select id="selectWriterList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
+        select
+        <include refid="writer_common_column"/>
+        FROM yryz_writer w
+		INNER JOIN yryz_writer_audit_history h ON w.kid = h.writer_kid
+		LEFT JOIN yryz_writer_statistics s ON w.kid = s.writer_kid
+		WHERE w.user_status = 2 AND h.audit_status=2
+		<if test="nickName != null and nickName != '' ">
+			AND w.nick_name like CONCAT('%',trim(#{nickName}),'%')
+		</if>
+		<if test="phone != null and phone != '' ">
+			AND w.phone like CONCAT('%',trim(#{phone}),'%')
+		</if>
+		<if test="userName != null and userName != '' ">
+			AND w.user_name like CONCAT('%',trim(#{userName}),'%')
+		</if>
+		<if test="remark != null and remark != '' ">
+			AND h.remark like CONCAT('%',trim(#{remark}),'%')
+		</if>
+    </select>
+    
 
 	<!-- 查询管理后台Writer列表 -->
 	<select id="selectAdminList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultMap="BaseResultMap">

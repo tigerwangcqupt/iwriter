@@ -73,6 +73,20 @@ public interface WriterApi {
     RpcResponse<PageList<WriterVo>> list(WriterDto writerDto);
     
     /**
+     * 后台查询写手信息
+     * @param writerDto
+     * @return
+     * */
+     RpcResponse<PageList<WriterAdminVo>> writerList(WriterDto writerDto);
+     
+     /**
+      * 后台查询写手信息(导出)
+      * @param writerDto
+      * @return
+      * */
+     RpcResponse<List<WriterAdminVo>> writerExportList(WriterDto writerDto);
+    
+    /**
 	 * 
 	 *
 	 * @param writer
@@ -112,7 +126,7 @@ public interface WriterApi {
 	RpcResponse<WriterModelVo> selectWriterByParameters(WriterDto writerDto);
 
 
-	 RpcResponse<Integer> deleteUserToken(String custId);
+	RpcResponse<Integer> deleteUserToken(String custId);
 
 	RpcResponse<String> addUserToken(String custId);
 }
