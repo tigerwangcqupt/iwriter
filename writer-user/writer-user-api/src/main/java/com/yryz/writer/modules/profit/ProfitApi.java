@@ -4,6 +4,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.writer.modules.bank.entity.Bank;
+import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
@@ -69,5 +70,13 @@ public interface ProfitApi {
 	 * @return
 	 * */
 	RpcResponse<PageList<ProfitDetailVo>> selectFlowList(ProfitDto profitDto);
+
+	/**
+	 * 管理后台提现管理
+	 * @param profitDto
+	 * @return
+	 */
+	RpcResponse<PageList<ProfitAdminVo>> selectProfitAdminVoList(ProfitDto profitDto);
+
 
 }

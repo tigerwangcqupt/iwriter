@@ -14,6 +14,9 @@ public class ProfitDto extends PageList {
     //写手id
     private Long createUserId;
 
+    //流水type
+    private Integer settlementType;
+
     //手机号
     private  String phone;
     //写手姓名
@@ -30,6 +33,11 @@ public class ProfitDto extends PageList {
 
     //写手id
     private Long writerId;
+
+    /**
+     * 生成排序字符串
+     */
+    private String orderStr;
 
     public Long getCreateUserId() {
         return createUserId;
@@ -84,5 +92,21 @@ public class ProfitDto extends PageList {
 
     public void setWriterId(Long writerId) {
         this.writerId = writerId;
+    }
+
+    public String getOrderStr() {
+        return orderStr;
+    }
+
+    public void setOrderStr(String orderStr) {
+        this.orderStr = orderStr;
+    }
+
+    public Integer getSettlementType() {
+        return settlementType;
+    }
+
+    public void setSettlementType(Integer settlementType) {
+        this.settlementType = settlementType;
     }
 }

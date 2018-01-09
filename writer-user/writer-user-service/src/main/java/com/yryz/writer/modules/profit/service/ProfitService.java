@@ -4,6 +4,7 @@ import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.entity.Profit;
+import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.writer.entity.Writer;
@@ -46,5 +47,12 @@ public interface ProfitService extends BaseService {
     * @return
     */
    PageList<ProfitDetailVo> selectFlowList(ProfitDto profitDto);
+
+   /**
+    * 管理后台提现管理列表
+    * @param profitDto
+    * @return
+    */
+   PageList<ProfitAdminVo> selectProfitAdminVoList(ProfitDto profitDto);
 
 }

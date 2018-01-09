@@ -40,6 +40,21 @@ public class WriterAdminRefProfit implements Serializable {
      */
     private  String userBankCart;
 
+    /**
+     * 流水号
+     */
+    private String profitSn;
+
+    /**
+     * 省
+     */
+    private  String provice;
+
+    /**
+     * 市
+     */
+    private  String city;
+
     public Long getKid() {
         return kid;
     }
@@ -94,5 +109,29 @@ public class WriterAdminRefProfit implements Serializable {
 
     public void setUserBankCart(String userBankCart) {
         this.userBankCart = userBankCart;
+    }
+
+    public String getProfitSn() {
+        return profitSn;
+    }
+
+    public void setProfitSn(String profitSn) {
+        this.profitSn = profitSn;
+    }
+
+    public String getProvice() {
+        return provice;
+    }
+
+    public void setProvice(String provice) {
+        this.provice = provice;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

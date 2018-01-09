@@ -3,6 +3,8 @@ package com.yryz.writer.modules.writer.dto;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.writer.entity.Writer;
 
+import java.util.List;
+
 /**
  * @ClassName: WriterDto
  * @Description: WriterDto
@@ -48,9 +50,14 @@ public class WriterDto extends PageList {
      */
     private String orderValue;
 
+    /**
+     * 流水号集合
+     */
+    private List<String> profitSnList;
+
     private String remark;
-    
-    
+
+
 
     public String getRemark() {
 		return remark;
@@ -132,4 +139,11 @@ public class WriterDto extends PageList {
         this.orderValue = orderValue;
     }
 
+    public List<String> getProfitSnList() {
+        return profitSnList;
+    }
+
+    public void setProfitSnList(List<String> profitSnList) {
+        this.profitSnList = profitSnList;
+    }
 }

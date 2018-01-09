@@ -156,4 +156,9 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
     public Bank selectByParameters(BankDto bankDto) {
         return bankDao.selectByParameters(bankDto);
     }
+
+    @Override
+    public List<Bank> selectListByWriterIds(BankDto bankDto) {
+        return bankDao.selectList(bankDto);
+    }
 }

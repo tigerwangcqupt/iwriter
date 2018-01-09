@@ -23,7 +23,8 @@ public class ArticleCommentController {
    @ResponseBody
    @RequestMapping(value="/single", method = RequestMethod.GET)
    public RpcResponse<ArticleCommentVo> detail(Long articleCommentId) {
-       return articleCommentApi.detail(articleCommentId);
+      Assert.notNull(articleCommentId, "评论id不能为空");
+      return articleCommentApi.detail(articleCommentId);
    }
 
    @ResponseBody
