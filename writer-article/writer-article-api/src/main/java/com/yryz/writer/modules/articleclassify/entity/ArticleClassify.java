@@ -1,8 +1,7 @@
-package com.yryz.writer.modules.articleClassify.entity;
+package com.yryz.writer.modules.articleclassify.entity;
 
 import com.yryz.writer.common.entity.GenericEntity;
 
-import java.util.Date;
 /**
  * 
   * @ClassName: ArticleClassify

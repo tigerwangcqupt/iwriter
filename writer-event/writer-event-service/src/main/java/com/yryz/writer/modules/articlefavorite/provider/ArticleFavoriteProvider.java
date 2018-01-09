@@ -83,9 +83,9 @@ public class ArticleFavoriteProvider implements ArticleFavoriteApi {
 		try {
 			ArticleFavoriteVo articleFavoriteVo = new ArticleFavoriteVo();
 			if (articleFavoriteService.saveFavorite(articleFavorite) > 0){
-				return ResponseModel.returnListSuccess(true);
+				return ResponseModel.returnObjectSuccess(true);
 			}else{
-				return ResponseModel.returnListSuccess(false);
+				return ResponseModel.returnObjectSuccess(false);
 			}
 		} catch (Exception e) {
 			logger.error("保存ArticleFavorite明细失败", e);

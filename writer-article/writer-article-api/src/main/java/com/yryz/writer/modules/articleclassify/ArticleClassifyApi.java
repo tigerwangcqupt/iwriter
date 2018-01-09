@@ -1,10 +1,10 @@
-package com.yryz.writer.modules.articleClassify;
+package com.yryz.writer.modules.articleclassify;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
-import com.yryz.writer.modules.articleClassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleClassify.entity.ArticleClassify;
-import com.yryz.writer.modules.articleClassify.vo.ArticleClassifyVo;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 
 /**
  * 
@@ -37,4 +37,17 @@ public interface ArticleClassifyApi {
     * */
     RpcResponse<PageList<ArticleClassifyVo>> list(ArticleClassifyDto articleClassifyDto);
 
+	/**
+	 *  保存ArticleClassify明细
+	 *  @param  articleClassify
+	 *  @return
+	 * */
+	RpcResponse<Boolean> insert(ArticleClassify articleClassify);
+
+	/**
+	 *  更新ArticleClassify明细
+	 *  @param  articleClassify
+	 *  @return
+	 * */
+	RpcResponse<Boolean> update(ArticleClassify articleClassify);
 }

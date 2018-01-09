@@ -42,29 +42,10 @@
     </delete>
   
   
-  	<!-- 新增ArticleClassify-->
-    <insert id="insert"  parameterType="com.yryz.writer.modules.articleclassify.entity.ArticleClassify">
-	    insert into yryz_articleclassify (kid,parent_id,icon,classify_name,classify_desc,recommend_flag,sort,last_stage_flag,shelve_flag,del_flag,create_date,last_update_date,create_user_id,last_update_user_id)
-	    values (
-	    	#{kid,jdbcType=BIGINT}
-				,#{parentId,jdbcType=BIGINT}
-				,#{icon,jdbcType=VARCHAR}
-				,#{classifyName,jdbcType=VARCHAR}
-				,#{classifyDesc,jdbcType=VARCHAR}
-				,#{recommendFlag,jdbcType=TINYINT}
-				,#{sort,jdbcType=INTEGER}
-				,#{lastStageFlag,jdbcType=TINYINT}
-				,#{shelveFlag,jdbcType=TINYINT}
-				,#{delFlag,jdbcType=TINYINT}
-			,NOW()
-			,NOW()
-				,#{createUserId,jdbcType=VARCHAR}
-				,#{lastUpdateUserId,jdbcType=VARCHAR}
-	    )
-	</insert>
+
 	
 	<!--按需新增ArticleClassify-->
-    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.articleclassify.entity.ArticleClassify">
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.yryz.writer.modules.articleclassify.entity.ArticleClassify">
 	    insert into yryz_articleclassify 
 	    <trim prefix="(" suffix=")" suffixOverrides=",">
         <if test="kid != null">

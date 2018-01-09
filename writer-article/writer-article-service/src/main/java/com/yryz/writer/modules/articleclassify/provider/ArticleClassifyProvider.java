@@ -1,14 +1,14 @@
-package com.yryz.writer.modules.articleClassify.provider;
+package com.yryz.writer.modules.articleclassify.provider;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.common.web.ResponseModel;
-import com.yryz.writer.modules.articleClassify.ArticleClassifyApi;
-import com.yryz.writer.modules.articleClassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleClassify.entity.ArticleClassify;
+import com.yryz.writer.modules.articleclassify.ArticleClassifyApi;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
 
-import com.yryz.writer.modules.articleClassify.service.ArticleClassifyService;
-import com.yryz.writer.modules.articleClassify.vo.ArticleClassifyVo;
+import com.yryz.writer.modules.articleclassify.service.ArticleClassifyService;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +64,25 @@ public class ArticleClassifyProvider implements ArticleClassifyApi {
        		 return ResponseModel.returnException(e);
         }
     }
+
+	@Override
+	public RpcResponse<Boolean> insert(ArticleClassify articleClassify) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleClassifyService.insert(articleClassify));
+		} catch (Exception e) {
+			logger.error("保存ArticleClassify失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+
+	public RpcResponse<Boolean> update(ArticleClassify articleClassify) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleClassifyService.update(articleClassify));
+		} catch (Exception e) {
+			logger.error("保存ArticleClassify失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
 
 }

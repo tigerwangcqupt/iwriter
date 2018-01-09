@@ -1,4 +1,4 @@
-package com.yryz.writer.modules.articleClassify.dto;
+package com.yryz.writer.modules.articleclassify.dto;
 
 import com.yryz.component.rpc.dto.PageList;
 
