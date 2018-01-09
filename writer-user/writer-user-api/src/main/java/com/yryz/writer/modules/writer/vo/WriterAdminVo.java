@@ -90,8 +90,6 @@ public class WriterAdminVo implements Serializable {
      */
     private  String jpushRegistrationId;
     
-    private String auditDate;
-    
     private String remark;
     
     private String userBankCart;
@@ -132,6 +130,9 @@ public class WriterAdminVo implements Serializable {
     
     private String registerDateStr;
     
+    private Date auditDate;
+    
+    private String auditDateStr;
 
     public String getAccount() {
         return this.account;
@@ -269,12 +270,20 @@ public class WriterAdminVo implements Serializable {
         this.kid = kid;
     }
 
-	public String getAuditDate() {
+	public Date getAuditDate() {
 		return auditDate;
 	}
 
-	public void setAuditDate(String auditDate) {
+	public void setAuditDate(Date auditDate) {
 		this.auditDate = auditDate;
+	}
+
+	public String getAuditDateStr() {
+		return auditDateStr;
+	}
+
+	public void setAuditDateStr(String auditDateStr) {
+		this.auditDateStr = auditDateStr;
 	}
 
 	public String getRemark() {
@@ -413,9 +422,6 @@ public class WriterAdminVo implements Serializable {
 	public void setUserBankCart(String userBankCart) {
 		this.userBankCart = userBankCart;
 	}
-    
-	
-    
     
     
 }
