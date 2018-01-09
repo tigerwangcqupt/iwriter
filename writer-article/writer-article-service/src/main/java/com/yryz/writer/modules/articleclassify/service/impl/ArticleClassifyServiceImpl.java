@@ -1,16 +1,15 @@
-package com.yryz.writer.modules.articleClassify.service.impl;
+package com.yryz.writer.modules.articleclassify.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
-import com.yryz.writer.modules.articleClassify.dao.persistence.ArticleClassifyDao;
-import com.yryz.writer.modules.articleClassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleClassify.entity.ArticleClassify;
-import com.yryz.writer.modules.articleClassify.service.ArticleClassifyService;
-import com.yryz.writer.modules.articleClassify.vo.ArticleClassifyVo;
+import com.yryz.writer.modules.articleclassify.dao.persistence.ArticleClassifyDao;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
+import com.yryz.writer.modules.articleclassify.service.ArticleClassifyService;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,21 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 return false;
             }
         }catch (Exception e){
-            logger.error("查询首页栏目操作失败", e);
+            logger.error("新增文章分类操作失败", e);
+            throw e;
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean update(ArticleClassify articleClassify) {
+        try {
+            int successNum = articleClassifyDao.update(articleClassify);
+            if (successNum < 1){
+                return false;
+            }
+        }catch (Exception e){
+            logger.error("更新文章分类操作失败", e);
             throw e;
         }
         return true;

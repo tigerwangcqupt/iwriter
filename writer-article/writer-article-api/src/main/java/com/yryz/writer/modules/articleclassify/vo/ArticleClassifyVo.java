@@ -1,4 +1,4 @@
-package com.yryz.writer.modules.articleClassify.vo;
+package com.yryz.writer.modules.articleclassify.vo;
 import java.io.Serializable;
 
 /**

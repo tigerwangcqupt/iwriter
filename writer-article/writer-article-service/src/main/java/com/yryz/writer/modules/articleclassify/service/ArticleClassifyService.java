@@ -1,9 +1,9 @@
-package com.yryz.writer.modules.articleClassify.service;
+package com.yryz.writer.modules.articleclassify.service;
 
 import com.yryz.writer.common.service.BaseService;
-import com.yryz.writer.modules.articleClassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleClassify.entity.ArticleClassify;
-import com.yryz.writer.modules.articleClassify.vo.ArticleClassifyVo;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
@@ -28,4 +28,10 @@ public interface ArticleClassifyService extends BaseService {
     * @param articleClassify     文章分类
     * */
    Boolean insert(ArticleClassify articleClassify);
+
+   /**
+    * 更新
+    * @param articleClassify     文章分类
+    * */
+   Boolean update(ArticleClassify articleClassify);
 }

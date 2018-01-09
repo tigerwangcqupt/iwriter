@@ -1,8 +1,8 @@
-package com.yryz.writer.modules.articleClassify.dao.persistence;
+package com.yryz.writer.modules.articleclassify.dao.persistence;
 
 import com.yryz.writer.common.dao.BaseDao;
-import com.yryz.writer.modules.articleClassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleClassify.entity.ArticleClassify;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,6 +23,12 @@ public interface ArticleClassifyDao extends BaseDao {
      * @param articleClassify     文章分类
      * */
     int insert(ArticleClassify articleClassify);
+
+    /**
+     * 更新
+     * @param articleClassify     文章分类
+     * */
+    int update(ArticleClassify articleClassify);
 
     /**
      * 文章分类分页
