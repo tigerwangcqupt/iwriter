@@ -37,4 +37,10 @@ public interface ArticleClassifyApi {
     * */
     RpcResponse<PageList<ArticleClassifyVo>> list(ArticleClassifyDto articleClassifyDto);
 
+	/**
+	 *  获取ArticleClassify明细
+	 *  @param  articleClassify
+	 *  @return
+	 * */
+	RpcResponse<Boolean> insert(ArticleClassify articleClassify);
 }

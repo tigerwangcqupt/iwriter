@@ -11,6 +11,8 @@ import com.yryz.writer.modules.articleClassify.dto.ArticleClassifyDto;
 import com.yryz.writer.modules.articleClassify.entity.ArticleClassify;
 import com.yryz.writer.modules.articleClassify.service.ArticleClassifyService;
 import com.yryz.writer.modules.articleClassify.vo.ArticleClassifyVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
 
     /** 日期格式时分秒 */
     private final static SimpleDateFormat DATETIME_PATTERN = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    private static final Logger logger = LoggerFactory.getLogger(ArticleClassifyServiceImpl.class);
 
     @Autowired
     private ArticleClassifyDao articleClassifyDao;
@@ -62,4 +66,18 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         }
         return articleClassifyVo;
     }
- }
+
+    @Override
+    public Boolean insert(ArticleClassify articleClassify) {
+        try {
+            int successNum = articleClassifyDao.insert(articleClassify);
+            if (successNum < 1){
+                return false;
+            }
+        }catch (Exception e){
+            logger.error("查询首页栏目操作失败", e);
+            throw e;
+        }
+        return true;
+    }
+}

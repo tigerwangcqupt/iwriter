@@ -18,6 +18,17 @@ import java.util.List;
 @Repository
 public interface ArticleClassifyDao extends BaseDao {
 
+    /**
+     * 新增
+     * @param articleClassify     文章分类
+     * */
+    int insert(ArticleClassify articleClassify);
+
+    /**
+     * 文章分类分页
+     * @param articleClassifyDto
+     * @return
+     */
     List<ArticleClassify> selectList(ArticleClassifyDto articleClassifyDto);
 
 }

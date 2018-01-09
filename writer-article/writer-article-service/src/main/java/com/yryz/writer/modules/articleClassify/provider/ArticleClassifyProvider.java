@@ -65,4 +65,14 @@ public class ArticleClassifyProvider implements ArticleClassifyApi {
         }
     }
 
+	@Override
+	public RpcResponse<Boolean> insert(ArticleClassify articleClassify) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleClassifyService.insert(articleClassify));
+		} catch (Exception e) {
+			logger.error("保存ArticleClassify失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }
