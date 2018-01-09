@@ -305,6 +305,7 @@
     
     <!-- 查询后台写手列表 -->
     <select id="selectWriterList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
+        select * from (
         select
         <include refid="writer_common_column"/>
         FROM yryz_writer w
@@ -322,6 +323,10 @@
 		</if>
 		<if test="remark != null and remark != '' ">
 			AND h.remark like CONCAT('%',trim(#{remark}),'%')
+		</if>
+		) t
+		<if test="orderStr != null and orderStr != ''">
+			${orderStr}
 		</if>
     </select>
     
