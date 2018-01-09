@@ -207,6 +207,12 @@
         select
         <include refid="Base_Column_List"/>
         from yryz_bank where del_flag = 0
+		<if test="writerIdList != null and writerIdList.size()>0 ">
+			AND create_user_id in
+			<foreach collection="writerIdList" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
     </select>
 
 	<!-- 查询Bank详情 -->
@@ -216,7 +222,7 @@
 		from yryz_bank
 		where del_flag = 0
 		<if test="createUserId != null and createUserId != ''">
-			create_user_id = #{createUserId,jdbcType=VARCHAR}
+			and create_user_id = #{createUserId,jdbcType=VARCHAR}
 		</if>
 	</select>
     

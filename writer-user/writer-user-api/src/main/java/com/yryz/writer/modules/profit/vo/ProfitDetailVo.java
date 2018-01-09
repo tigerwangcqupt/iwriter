@@ -7,11 +7,15 @@ package com.yryz.writer.modules.profit.vo;
  * @date 2017-12-29 15:36:15
  *
  */
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class ProfitDetailVo implements Serializable {
 
+    //流水id
+    private Long flowId;
     /**
      * 结算金额
      */
@@ -20,12 +24,18 @@ public class ProfitDetailVo implements Serializable {
     /**
      * 结算日期
      */
+    @JsonFormat(pattern="yyyy-MM-dd")
     private String settlementDate;
 
     /**
      * 结算来源
      */
     private String settlementType;
+
+    /**
+     * 流水号
+     */
+    private String profitSn;
 
     /**
      * 剩余可提现金额
@@ -40,6 +50,7 @@ public class ProfitDetailVo implements Serializable {
         this.settlementAmount = settlementAmount;
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd")
     public String getSettlementDate() {
         return settlementDate;
     }
@@ -62,5 +73,21 @@ public class ProfitDetailVo implements Serializable {
 
     public void setSurplusAmount(BigDecimal surplusAmount) {
         this.surplusAmount = surplusAmount;
+    }
+
+    public String getProfitSn() {
+        return profitSn;
+    }
+
+    public void setProfitSn(String profitSn) {
+        this.profitSn = profitSn;
+    }
+
+    public Long getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(Long flowId) {
+        this.flowId = flowId;
     }
 }

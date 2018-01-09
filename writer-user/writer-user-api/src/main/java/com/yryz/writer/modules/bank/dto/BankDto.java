@@ -2,6 +2,8 @@ package com.yryz.writer.modules.bank.dto;
 
 import com.yryz.component.rpc.dto.PageList;
 
+import java.util.List;
+
 /**
  * @ClassName: BankDto
  * @Description: BankDto
@@ -12,13 +14,24 @@ import com.yryz.component.rpc.dto.PageList;
 public class BankDto extends PageList {
 
     //创建者id
-    private String creatUserId;
+    private String createUserId;
 
-    public String getCreatUserId() {
-        return creatUserId;
+    //创建者id集合
+    private List<String> writerIdList;
+
+    public List<String> getWriterIdList() {
+        return writerIdList;
     }
 
-    public void setCreatUserId(String creatUserId) {
-        this.creatUserId = creatUserId;
+    public void setWriterIdList(List<String> writerIdList) {
+        this.writerIdList = writerIdList;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
     }
 }

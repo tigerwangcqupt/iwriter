@@ -5,6 +5,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class WriterModelVo implements Serializable{
+
+    //写手姓名
+    private  String userName;
+    //手机号
+    private  String phone;
     //主键
     private Long kid;
     //主体编码
@@ -18,7 +23,7 @@ public class WriterModelVo implements Serializable{
     //累计提现金额
     private BigDecimal sumWithdrawAmount;
     //放款日期(最近提现金额日期)
-    private Date withdraw_date;
+    private Date withdrawDate;
 
 
     public Long getKid() {
@@ -69,11 +74,27 @@ public class WriterModelVo implements Serializable{
         this.sumWithdrawAmount = sumWithdrawAmount;
     }
 
-    public Date getWithdraw_date() {
-        return withdraw_date;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setWithdraw_date(Date withdraw_date) {
-        this.withdraw_date = withdraw_date;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getWithdrawDate() {
+        return withdrawDate;
+    }
+
+    public void setWithdrawDate(Date withdrawDate) {
+        this.withdrawDate = withdrawDate;
     }
 }

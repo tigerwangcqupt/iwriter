@@ -6,6 +6,7 @@ import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.profit.entity.Profit;
+import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
@@ -114,6 +115,16 @@ public class ProfitProvider implements ProfitApi {
 			return ResponseModel.returnListSuccess(profitService.selectFlowList(profitDto));
 		} catch (Exception e) {
 			logger.error("获取Profit流水列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<PageList<ProfitAdminVo>> selectProfitAdminVoList(ProfitDto profitDto) {
+		try {
+			return ResponseModel.returnListSuccess(profitService.selectProfitAdminVoList(profitDto));
+		} catch (Exception e) {
+			logger.error("获取提现管理列表失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}
