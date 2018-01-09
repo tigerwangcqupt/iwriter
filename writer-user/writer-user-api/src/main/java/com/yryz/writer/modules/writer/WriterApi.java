@@ -40,7 +40,15 @@ public interface WriterApi {
 	*  @param  id
 	*  @return
 	* */
-	RpcResponse<Writer> get(Long id);
+	RpcResponse<Writer> get(Long kid);
+	
+	/**
+	 * 
+	 * 后台获取写手详情
+	 * @param kid
+	 * @return
+	 */
+	RpcResponse<WriterAdminVo> getWriterDetail(Long kid);
 
 
 	/**
@@ -63,7 +71,7 @@ public interface WriterApi {
     *  @param  id
     *  @return
     * */
-    RpcResponse<WriterVo> detail(Long id);
+    RpcResponse<WriterVo> detail(Long kid);
 
     /**
     * 获取Writer列表

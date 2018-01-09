@@ -305,6 +305,7 @@
     
     <!-- 查询后台写手列表 -->
     <select id="selectWriterList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
+        select * from (
         select
         <include refid="writer_common_column"/>
         FROM yryz_writer w
@@ -323,8 +324,21 @@
 		<if test="remark != null and remark != '' ">
 			AND h.remark like CONCAT('%',trim(#{remark}),'%')
 		</if>
+		) t
+		<if test="orderStr != null and orderStr != ''">
+			${orderStr}
+		</if>
     </select>
     
+    <!-- 查询后台写手详情 -->
+    <select id="selectWriterDetail" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
+        select
+        <include refid="writer_common_column"/>
+        FROM yryz_writer w
+		INNER JOIN yryz_writer_audit_history h ON w.kid = h.writer_kid
+		LEFT JOIN yryz_writer_statistics s ON w.kid = s.writer_kid
+		WHERE w.user_status = 2 AND h.audit_status=2 and w.kid = #{kid}
+    </select>
 
 	<!-- 查询管理后台Writer列表 -->
 	<select id="selectAdminList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultMap="BaseResultMap">
@@ -332,7 +346,10 @@
 		<include refid="Base_Column_List"/>
 		from yryz_writer where 1=1
 		<if test="keyWord != null and keyWord != '' ">
-			AND nick_name like CONCAT('%',trim(#{keyWord}),'%')
+			AND ( nick_name like CONCAT('%',trim(#{keyWord}),'%')
+			or phone like CONCAT('%',trim(#{keyWord}),'%')
+			or user_name like CONCAT('%',trim(#{keyWord}),'%')
+			)
 		</if>
 	</select>
 
@@ -350,12 +367,13 @@
 
 	<!-- 查询Writer关联资金 -->
 	<select id="selectWriterByParameters" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterModelVo">
-		select kid,owner_code,owner_fcode,lately_withdraw_amount,
+		select user_name,phone,kid,owner_code,owner_fcode,lately_withdraw_amount,
 		withdraw_amount,sum_withdraw_amount,withdraw_date
 		from yryz_writer where 1=1
 		<if test="keyWord != null and keyWord != '' ">
-			AND nick_name like CONCAT('%',trim(#{keyWord}),'%')
+			AND  nick_name like CONCAT('%',trim(#{keyWord}),'%')
 		</if>
+
 		<if test="kid != null and kid != ''">
 			AND kid = #{kid}
 		</if>
@@ -363,7 +381,7 @@
 
 	<!-- 查询管理后台写手收益列表 -->
 	<select id="selectAdminProfitList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminRefProfit">
-		select kid,nick_name,user_name,phone,
+		select kid,nick_name,user_name,phone,provice,city,profit_sn,
 		withdraw_amount,sum_withdraw_amount,user_bank_cart
 		from yryz_writer where 1=1
 		<if test="nickName != null and nickName != '' ">
@@ -377,6 +395,12 @@
 		</if>
 		<if test="kid != null and kid != ''">
 			AND kid = #{kid}
+		</if>
+		<if test="profitSnList != null and profitSnList.size()>0 ">
+			AND profit_sn  in
+			<foreach collection="profitSnList" item="profitSn" open="(" separator="," close=")">
+				#{profitSn}
+			</foreach>
 		</if>
 		<if test="orderStr != null and orderStr != ''">
 			${orderStr}

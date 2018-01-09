@@ -75,11 +75,14 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         return writerDao.selectWriterList(writerDto);
     }
 
+    public WriterAdminVo selectWriterDetail(Long kid){
+    	 return writerDao.selectWriterDetail(kid);
+    }
 
     public WriterVo detail(Long writerId) {
         Writer writer = writerDao.selectByKid(Writer.class,writerId);
         WriterVo writerVo = new WriterVo();
-        if (writerVo != null) {
+        if (writer != null) {
         	BeanUtils.copyProperties(writer, writerVo);
         }
         return writerVo;

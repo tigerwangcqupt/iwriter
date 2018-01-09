@@ -64,6 +64,20 @@ public class WriterProvider implements WriterApi {
 			return ResponseModel.returnException(e);
 		}
 	}
+	
+	/**
+	*  获取Writer明细
+	*  @param  writerId
+	*  @return
+	* */
+	public RpcResponse<WriterAdminVo> getWriterDetail(Long kid) {
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.selectWriterDetail(kid));
+		} catch (Exception e) {
+			logger.error("获取Writer明细失败", e);
+			return ResponseModel.returnException(e);
+		}
+    }
 
     /**
     * 获取Writer列表

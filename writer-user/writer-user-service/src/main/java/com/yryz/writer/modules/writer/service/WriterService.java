@@ -29,6 +29,8 @@ public interface WriterService extends BaseService {
    PageList<WriterAdminVo> selectWriterList(WriterDto writerDto);
    
    List<WriterAdminVo> selectWriterExportList(WriterDto writerDto);
+   
+   WriterAdminVo selectWriterDetail(Long kid);
 
    WriterVo detail(Long writerId);
 
@@ -56,6 +58,6 @@ public interface WriterService extends BaseService {
 
    Integer deleteUserToken(String custId);
 
-    String addUserToken(String custId);
+   String addUserToken(String custId);
 
 }

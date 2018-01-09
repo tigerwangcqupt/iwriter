@@ -7,6 +7,8 @@ import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.component.rpc.dto.PageList;
 
+import java.util.List;
+
 /**
  * 
   * @ClassName: BankService
@@ -26,5 +28,7 @@ public interface BankService extends BaseService {
    Bank updateBank(Bank bank);
 
    Bank selectByParameters(BankDto bankDto);
+
+   List<Bank> selectListByWriterIds(BankDto bankDto);
 
 }

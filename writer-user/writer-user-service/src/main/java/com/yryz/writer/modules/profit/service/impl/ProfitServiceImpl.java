@@ -15,11 +15,18 @@ import com.yryz.qstone.entity.base.model.Account;
 import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.qstone.modules.base.api.OpenAccountApi;
 import com.yryz.qstone.modules.base.api.OpenOwnerApi;
+import com.yryz.writer.modules.bank.dto.BankDto;
+import com.yryz.writer.modules.bank.entity.Bank;
+import com.yryz.writer.modules.bank.service.BankService;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.profit.constant.ProfitConstants;
 import com.yryz.writer.modules.profit.constant.ProfitEnum;
+import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
+import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.service.WriterService;
+import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +54,12 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     private static final String LOCK_PROFIT_ADD = "PROFIT_ADD";
     @Autowired
     private ProfitDao profitDao;
+
+    @Autowired
+    private WriterService writerService;
+
+    @Autowired
+    private BankService bankService;
 
     @Autowired
     private IdAPI idAPI;
@@ -219,5 +232,55 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         PageUtils.startPage(profitDto.getCurrentPage(), profitDto.getPageSize());
         List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
         return new PageModel<ProfitDetailVo>().getPageList(list);
+    }
+
+    @Override
+    public PageList<ProfitAdminVo> selectProfitAdminVoList(ProfitDto profitDto) {
+        List<ProfitAdminVo> profitAdminVoList = new ArrayList<>();
+        //按照排序规则找出所有的
+        PageUtils.startPage(profitDto.getCurrentPage(), profitDto.getPageSize());
+        List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
+        if(CollectionUtils.isNotEmpty(list)){
+            List<String> profitSnList = new ArrayList<>();
+            //把流水号拿到反差用户表的数据
+            for(ProfitDetailVo profitDetailVo : list){
+                ProfitAdminVo profitAdminVo = new ProfitAdminVo();
+                BeanUtils.copyProperties(profitDetailVo,profitAdminVo);
+                profitSnList.add(profitDetailVo.getProfitSn());
+                profitAdminVoList.add(profitAdminVo);
+            }
+            List<String> writerIdList = new ArrayList<>();
+            WriterDto writerDto = new WriterDto();
+            writerDto.setProfitSnList(profitSnList);
+            List<WriterAdminRefProfit> writerRefProfitList = writerService.selectAllAdminProfitList(writerDto);
+            if(CollectionUtils.isNotEmpty(writerRefProfitList)){
+                for(WriterAdminRefProfit writerAdminRefProfit : writerRefProfitList){
+                   for(ProfitAdminVo profitAdminVo : profitAdminVoList){
+                       if(writerAdminRefProfit.getProfitSn().equals(profitAdminVo.getProfitSn())){
+                             //把用户相关数据拷贝到返回实体
+                             BeanUtils.copyProperties(writerAdminRefProfit,profitAdminVo);
+                             profitAdminVo.setWriterId(writerAdminRefProfit.getKid().toString());
+                             writerIdList.add(writerAdminRefProfit.getKid()+"");
+                       }
+                   }
+                }
+            }
+            BankDto bankDto = new BankDto();
+            bankDto.setWriterIdList(writerIdList);
+            List<Bank> bankList = bankService.selectListByWriterIds(bankDto);
+            if(CollectionUtils.isNotEmpty(bankList)){
+                 for(Bank bank : bankList){
+                     for(ProfitAdminVo profitAdminVo : profitAdminVoList){
+                         if(bank.getCreateUserId().equals(profitAdminVo.getWriterId())){
+                             String userName = profitAdminVo.getUserName();
+                             BeanUtils.copyProperties(bank,profitAdminVo);
+                             profitAdminVo.setUserRefBankName(bank.getUserName());
+                             profitAdminVo.setUserName(userName);
+                         }
+                     }
+                 }
+            }
+        }
+        return new PageModel<ProfitAdminVo>().getPageList(profitAdminVoList);
     }
 }
