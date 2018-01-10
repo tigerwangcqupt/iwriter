@@ -193,24 +193,17 @@
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			shelve_flag = 0
 			AND del_flag = 0
-			<if test="lassifyName != null and lassifyName != " >
-				AND classify_name like CONCAT('%',trim(#{lassifyName}),'%')
+			<if test="classifyName != null and classifyName != '' " >
+				AND classify_name like CONCAT('%',trim(#{classifyName}),'%')
 			</if>
 
-			<if test="parentId != null " >
-				AND parent_id = parentId
+			<if test="orderStr != null and orderStr != '' " >
+				${orderStr}
 			</if>
-			<choose>
-				<when test="orderFiled != null and orderValue != null" >
-					ORDER BY #{orderFiled} #{orderValue}
-				</when>
-				<otherwise>
-					ORDER BY last_update_date desc
-				</otherwise>
-			</choose>
 
 		</trim>
 
     </select>
+
     
 </mapper>

@@ -53,7 +53,7 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
                 articleCommentVoList.add(articleCommentVo);
             }
         }
-        return new PageModel<ArticleCommentVo>().getPageList(articleCommentVoList);
+        return new PageModel<ArticleCommentVo>().getPageList(list, articleCommentVoList);
     }
 
     public ArticleCommentVo detail(Long articleCommentId) {
@@ -88,7 +88,7 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
                 articleCommentVoList.add(articleCommentVo);
             }
         }
-        return new PageModel<ArticleCommentVo>().getPageList(articleCommentVoList);
+        return new PageModel<ArticleCommentVo>().getPageList(list, articleCommentVoList);
     }
 
     @Override

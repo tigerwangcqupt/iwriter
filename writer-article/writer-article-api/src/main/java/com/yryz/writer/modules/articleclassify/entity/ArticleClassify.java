@@ -17,7 +17,6 @@ public class ArticleClassify extends GenericEntity {
 	 * 父级id
 	 */	 
     private  Long parentId;
-    
 
 	/**
 	 * 图标
@@ -150,4 +149,6 @@ public class ArticleClassify extends GenericEntity {
 	public void setCreateUserNickName(String createUserNickName) {
 		this.createUserNickName = createUserNickName;
 	}
+
+
 }

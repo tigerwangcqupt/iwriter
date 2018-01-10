@@ -10,6 +10,11 @@ import java.io.Serializable;
  */
 public class ArticleClassifyVo implements Serializable {
 
+    /**
+     * 父级id
+     */
+    private  Long parentId;
+
     /**  分类名称  */
     private String classifyName;
 
@@ -45,6 +50,26 @@ public class ArticleClassifyVo implements Serializable {
      * 图标
      */
     private  String icon;
+
+    /**
+     * 父级名称
+     */
+    private String parentClassifyName;
+
+    /**
+     * 分类描述
+     */
+    private  String classifyDesc;
+
+    /**
+     * 创建者id
+     */
+    private String createUserId;
+
+    /**
+     * 创建者姓名
+     */
+    private String createUserName;
 
     public String getClassifyName() {
         return classifyName;
@@ -116,5 +141,47 @@ public class ArticleClassifyVo implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+    public String getParentClassifyName() {
+        return parentClassifyName;
+    }
+
+    public void setParentClassifyName(String parentClassifyName) {
+        this.parentClassifyName = parentClassifyName;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public void setClassifyDesc(String classifyDesc) {
+        this.classifyDesc = classifyDesc;
+    }
+
+    public Long getParentId() {
+
+        return parentId;
+    }
+
+    public String getClassifyDesc() {
+        return classifyDesc;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getCreateUserId() {
+
+        return createUserId;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public String getCreateUserName() {
+
+        return createUserName;
     }
 }

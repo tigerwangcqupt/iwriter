@@ -34,4 +34,19 @@ public interface ArticleClassifyService extends BaseService {
     * @param articleClassify     文章分类
     * */
    Boolean update(ArticleClassify articleClassify);
+
+   /**
+    * 上架分类
+    * @param articleClassifyId
+    * @return
+    */
+   Boolean shelveOn(Long articleClassifyId);
+
+   /**
+    * 下架分类
+    * @param articleClassifyId
+    * @return
+    */
+   Boolean shelveOff(Long articleClassifyId);
+
 }
