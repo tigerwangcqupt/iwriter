@@ -26,7 +26,7 @@ public interface WriterApi {
 	/**
 	 * 用户注册
 	 */
-	RpcResponse<Integer> register(Writer user);
+	RpcResponse<Long> register(Writer user);
 
 	/**
 	 * 用户修改

@@ -222,14 +222,15 @@ public class WriterProvider implements WriterApi {
 	}
 
 	@Override
-	public RpcResponse<Integer> register(Writer user) {
+	public RpcResponse<Long> register(Writer user) {
 		try {
 			/*//idCard：CR+9位 需在数据库给出9位初始值
 			Long suffix_id = idAPI.getId(CR);
 			user.setIdCard(CR + suffix_id);*/
 			Long kid = idAPI.getId("yryz_writer");
 			user.setKid(kid);
-			return ResponseModel.returnObjectSuccess(writerService.insertByPrimaryKeySelective(user));
+			writerService.insertByPrimaryKeySelective(user);
+			return ResponseModel.returnObjectSuccess(kid);
 		} catch (Exception e) {
 			logger.error("新增用户失败！" + e);
 			return ResponseModel.returnException(e);
