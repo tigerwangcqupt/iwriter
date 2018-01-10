@@ -294,9 +294,6 @@
 			<if test="sumWithdrawAmount != null">
 				sum_withdraw_amount = #{sumWithdrawAmount},
 			</if>
-			<if test="withdrawAmount != null">
-				withdraw_amount = #{withdrawAmount},
-			</if>
 			<if test="latelyWithdrawAmount != null">
 				lately_withdraw_amount = #{latelyWithdrawAmount},
 			</if>
@@ -306,6 +303,32 @@
         </set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
+
+	<!-- 按需修改Writer-->
+	<update id="updateWriterProfit" parameterType="com.yryz.writer.modules.writer.entity.Writer">
+		update yryz_writer
+		<set>
+			last_update_date = now(),
+			withdraw_amount = withdraw_amount - #{latelyWithdrawAmount},
+			<if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+				last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="profitSn != null and profitSn != ''">
+				profit_sn = #{profitSn},
+			</if>
+			<if test="sumWithdrawAmount != null">
+				sum_withdraw_amount = #{sumWithdrawAmount},
+			</if>
+			<if test="latelyWithdrawAmount != null">
+				lately_withdraw_amount = #{latelyWithdrawAmount},
+			</if>
+			<if test="withdrawDate != null">
+				withdraw_date = #{withdrawDate},
+			</if>
+		</set>
+		where kid = #{kid,jdbcType=BIGINT}
+        and withdraw_amount - lately_withdraw_amount >0
+	</update>
     
     <!-- 查询Writer列表 -->
     <select id="selectList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultMap="BaseResultMap">

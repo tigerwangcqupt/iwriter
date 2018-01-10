@@ -45,6 +45,9 @@ public class ProfitDetailVo implements Serializable {
     //流水消息
     private  String settlementMsg;
 
+    //写手id
+    private Long writerId;
+
     public String getSettlementMsg() {
         return settlementMsg;
     }
@@ -100,5 +103,13 @@ public class ProfitDetailVo implements Serializable {
 
     public void setFlowId(Long flowId) {
         this.flowId = flowId;
+    }
+
+    public Long getWriterId() {
+        return writerId;
+    }
+
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
     }
 }

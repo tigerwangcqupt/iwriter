@@ -64,4 +64,6 @@ public interface WriterService extends BaseService {
 
    String addUserToken(String custId);
 
+   Integer updateWriterProfit(Writer writer);
+
 }

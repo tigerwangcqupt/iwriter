@@ -15,7 +15,31 @@ public class ProfitConstants {
     public static final Byte OWNERTYPE = 2;
 
     //用户收益类型
-    public static final Byte ACCOUNTTYPECODE = 4;
+    public static final Integer USERACCOUNTTYPECODE = 4;
+
+    //平台收益类型
+    public static final Integer PLATACCOUNTTYPECODE = 3;
+
+    //平台现金类型
+    public static final Integer PLATCASHTYPECODE = 1;
+
+    //入账
+    public static final Integer ACCOUNTINGFLAG = 10;
+
+    //出账
+    public static final Integer ACCOUNTINGSUBFLAG = 20;
+
+    //现金
+    public static final Integer CASHFLAG = 10;
+
+    //非现金
+    public static final Integer NOTCASHFLAG = 20;
+
+    //核算
+    public static final Integer CHECKFLAG = 10;
+
+    //不核算
+    public static final Integer NOTCHECKFLAG = 20;
 
     //账户状态,生效
     public static final Byte ACCOUNTSTATUS = 1;

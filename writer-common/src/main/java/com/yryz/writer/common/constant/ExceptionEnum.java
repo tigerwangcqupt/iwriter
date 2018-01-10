@@ -51,6 +51,10 @@ public enum ExceptionEnum {
     TxNotIntException("6005", "当前提现金额不是整数", "当前提现金额不是整数"),
 
     FindModelFailException("6006", "查不到资金主体", "查不到资金主体"),
+
+    addRoyalFlowFailException("6007", "稿费流水插入资金系统失败", "稿费流水插入资金系统失败"),
+
+    addTxFlowFailException("6008", "提现流水插入资金系统失败", "提现流水插入资金系统失败"),
     //写手消息的异常码由8000开始
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),
 	
