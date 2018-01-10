@@ -56,7 +56,7 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
                 taskVoList.add(taskVo);
             }
         }
-        return new PageModel<TaskVo>().getPageList(taskVoList);
+        return new PageModel<TaskVo>().getPageList(list,taskVoList);
     }
 
 

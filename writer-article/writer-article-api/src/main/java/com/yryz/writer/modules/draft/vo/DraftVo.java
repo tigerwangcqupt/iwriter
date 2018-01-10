@@ -78,6 +78,11 @@ public class DraftVo implements Serializable {
     private String appliName;
 
     /**
+     * 应用图标
+     */
+    private String icon;
+
+    /**
      * 写手姓名
      */
     private String writerName;
@@ -294,5 +299,13 @@ public class DraftVo implements Serializable {
 
     public void setTaskAcceptTaskNum(Integer taskAcceptTaskNum) {
         this.taskAcceptTaskNum = taskAcceptTaskNum;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

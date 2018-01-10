@@ -80,7 +80,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 draftVoList.add(draftVo);
             }
         }
-        return new PageModel<DraftVo>().getPageList(draftVoList);
+        return new PageModel<DraftVo>().getPageList(list,draftVoList);
     }
 
 
@@ -105,10 +105,15 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 
     @Override
     public int add(Draft draft) {
-        Long id = idAPI.getId("yryz_draft");
-        draft.setKid(id);
-        Long appId = draft.getAppId();
-        return draftDao.insertByPrimaryKeySelective(draft);
+        Long kid = draft.getKid();
+        if (kid == null) {
+            Long id = idAPI.getId("yryz_draft");
+            draft.setKid(id);
+            Long appId = draft.getAppId();
+            return draftDao.insertByPrimaryKeySelective(draft);
+        } else {
+            return draftDao.update(draft);
+        }
     }
 
     private DraftVo toDraftVo(Draft draft) {
@@ -134,6 +139,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             TaskVo app = taskDao.selectAppById(appId);
             if (app != null) {
                 draftVo.setAppliName(app.getAppliName());
+                draftVo.setIcon(app.getIcon());
             }
         }
         String createUserId = draft.getCreateUserId();

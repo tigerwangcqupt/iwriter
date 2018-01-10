@@ -32,7 +32,7 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,draft_type,task_flag,title,content_html,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
+	<sql id="Base_Column_List">id,kid,draft_type,task_flag,task_kid,title,content_html,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
     </sql>
 
      <!-- 查询Draft详情 -->
