@@ -2,6 +2,7 @@ package com.yryz.writer.modules.draft.vo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author luohao
@@ -71,6 +72,45 @@ public class DraftVo implements Serializable {
      */
     private BigDecimal draftFee;
 
+    /**
+     * 应用名
+     */
+    private String appliName;
+
+    /**
+     * 写手姓名
+     */
+    private String writerName;
+    /**
+     * 写手昵称
+     */
+    private String writerNickName;
+    /**
+     * 写手电话
+     */
+    private String writerPhone;
+    /**
+     * 写手备注
+     */
+    private String writerRemark;
+
+    private String createDate;
+    /**
+     * 非必填,写手填写,供运营参考
+     */
+    private String classifyName;
+
+
+    /**
+     * 非必填,写手填写,空格分割,供运营参考
+     */
+    private String labelName;
+
+    private String taskTitle;
+
+    private Date taskCreateDate;
+
+    private Integer taskAcceptTaskNum;
 
     public Long getKid() {
         return kid;
@@ -166,5 +206,93 @@ public class DraftVo implements Serializable {
 
     public void setDraftFee(BigDecimal draftFee) {
         this.draftFee = draftFee;
+    }
+
+    public String getAppliName() {
+        return appliName;
+    }
+
+    public void setAppliName(String appliName) {
+        this.appliName = appliName;
+    }
+
+    public String getWriterName() {
+        return writerName;
+    }
+
+    public void setWriterName(String writerName) {
+        this.writerName = writerName;
+    }
+
+    public String getWriterNickName() {
+        return writerNickName;
+    }
+
+    public void setWriterNickName(String writerNickName) {
+        this.writerNickName = writerNickName;
+    }
+
+    public String getWriterPhone() {
+        return writerPhone;
+    }
+
+    public void setWriterPhone(String writerPhone) {
+        this.writerPhone = writerPhone;
+    }
+
+    public String getWriterRemark() {
+        return writerRemark;
+    }
+
+    public void setWriterRemark(String writerRemark) {
+        this.writerRemark = writerRemark;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getClassifyName() {
+        return classifyName;
+    }
+
+    public void setClassifyName(String classifyName) {
+        this.classifyName = classifyName;
+    }
+
+    public String getLabelName() {
+        return labelName;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
+    public String getTaskTitle() {
+        return taskTitle;
+    }
+
+    public void setTaskTitle(String taskTitle) {
+        this.taskTitle = taskTitle;
+    }
+
+    public Date getTaskCreateDate() {
+        return taskCreateDate;
+    }
+
+    public void setTaskCreateDate(Date taskCreateDate) {
+        this.taskCreateDate = taskCreateDate;
+    }
+
+    public Integer getTaskAcceptTaskNum() {
+        return taskAcceptTaskNum;
+    }
+
+    public void setTaskAcceptTaskNum(Integer taskAcceptTaskNum) {
+        this.taskAcceptTaskNum = taskAcceptTaskNum;
     }
 }

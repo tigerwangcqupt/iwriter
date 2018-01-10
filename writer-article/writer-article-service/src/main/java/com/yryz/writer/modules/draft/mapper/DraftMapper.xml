@@ -8,6 +8,7 @@
 		<result column="kid" property="kid" jdbcType="BIGINT"/>
 		<result column="draft_type" property="draftType" jdbcType="TINYINT"/>
 		<result column="task_flag" property="taskFlag" jdbcType="TINYINT"/>
+		<result column="task_kid" property="taskKid" jdbcType="BIGINT"/>
 		<result column="title" property="title" jdbcType="VARCHAR"/>
 		<result column="content_html" property="contentHtml" jdbcType="VARCHAR"/>
 		<result column="video_url" property="videoUrl" jdbcType="VARCHAR"/>
@@ -318,7 +319,7 @@
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0 AND shelve_flag = 0
     </select>
 
-	<!-- 查询未通过 -->
+	<!-- 查询未通过,文章和稿件 -->
     <select id="selectNotPass" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
 		select title,cover_img_url,draft_fee,reason,draft_type,suggest
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status IN (1,2)
@@ -331,6 +332,49 @@
     <select id="selectDraught" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
 		select title,cover_img_url,draft_fee,reason,draft_type,suggest
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status = 0
+    </select>
+
+	<!-- 管理后台查询待审核 -->
+    <select id="selectPendingForAdmin" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
+		select
+		<include refid="Base_Column_List"/>
+        from yryz_draft WHERE draft_status = 1
+		<if test="createUserId != null">
+			AND create_user_id = #{createUserId,jdbcType=VARCHAR}
+		</if>
+		<if test="appId != null">
+			AND app_id = #{appId,jdbcType=BIGINT},
+		</if>
+		<if test="orderStr != null and orderStr != ''">
+			${orderStr}
+		</if>
+    </select>
+
+	<!-- 管理后台查询未通过 -->
+    <select id="selectNotPassForAdmin" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
+		select
+		<include refid="Base_Column_List"/>
+		from yryz_draft WHERE draft_status = 2
+		<if test="createUserId != null">
+			AND create_user_id = #{createUserId,jdbcType=VARCHAR}
+		</if>
+		<if test="appId != null">
+			AND app_id = #{appId,jdbcType=BIGINT},
+		</if>
+		<if test="orderStr != null and orderStr != ''">
+			${orderStr}
+		</if>
+    </select>
+
+    <select id="selectWriterByKid" parameterType="java.lang.String" resultType="com.yryz.writer.modules.draft.vo.DraftVo">
+		SELECT
+			a.nick_name writer_nick_name,a.phone writer_phone,a.user_name writer_name,b.remark writer_remark
+		FROM
+			yryz_writer a,
+			yryz_writer_audit_history b
+		WHERE
+			a.kid = #{kid}
+		AND a.kid = b.writer_kid
     </select>
 
 </mapper>

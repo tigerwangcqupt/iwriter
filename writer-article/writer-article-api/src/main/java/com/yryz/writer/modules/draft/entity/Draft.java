@@ -27,7 +27,7 @@ public class Draft extends GenericEntity {
     /**
      * 任务标识:0自由投稿,1任务投稿
      */
-    private Integer taskKid;
+    private Long taskKid;
 
 
     /**
@@ -136,11 +136,11 @@ public class Draft extends GenericEntity {
         this.taskFlag = taskFlag;
     }
 
-    public Integer getTaskKid() {
+    public Long getTaskKid() {
         return taskKid;
     }
 
-    public void setTaskKid(Integer taskKid) {
+    public void setTaskKid(Long taskKid) {
         this.taskKid = taskKid;
     }
 
