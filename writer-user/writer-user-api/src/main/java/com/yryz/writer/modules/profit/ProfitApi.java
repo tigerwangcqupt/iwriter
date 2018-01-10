@@ -11,6 +11,8 @@ import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.writer.entity.Writer;
 
+import java.util.List;
+
 /**
  * 
  * @ClassName: ProfitApi
@@ -50,6 +52,14 @@ public interface ProfitApi {
 	 */
 	RpcResponse<Profit> insertProfit(Profit profit);
 
+	/**
+	 * 修改提现流水
+	 *
+	 * @param profit
+	 * @return
+	 */
+	RpcResponse<Profit> updateProfit(Profit profit);
+
     /**
     * 获取Profit列表
     * @param profitDto
@@ -58,11 +68,11 @@ public interface ProfitApi {
     RpcResponse<PageList<ProfitVo>> list(ProfitDto profitDto);
 
 	/**
-	 * 审核通过时，绑定银行信息
+	 * 审核通过时，绑定资金信息
 	 * @param writer
 	 * @return
 	 */
-	RpcResponse<Owner> bindCapital(Writer writer);
+	RpcResponse<Writer> bindCapital(Writer writer);
 
 	/**
 	 * 获取Profit流水列表
@@ -78,5 +88,10 @@ public interface ProfitApi {
 	 */
 	RpcResponse<PageList<ProfitAdminVo>> selectProfitAdminVoList(ProfitDto profitDto);
 
-
+	/**
+	 * 管理后台提现管理(查询所有)
+	 * @param profitDto
+	 * @return
+	 */
+	RpcResponse<List<ProfitAdminVo>> selectAllProfitAdminVoList(ProfitDto profitDto);
 }

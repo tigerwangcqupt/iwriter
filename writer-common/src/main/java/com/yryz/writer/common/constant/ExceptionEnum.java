@@ -46,7 +46,9 @@ public enum ExceptionEnum {
 
     BindBankException("6003", "绑定银行卡异常", "绑定银行卡异常"),
 
+    TxMoreThanSurplusException("6004", "当前提现金额大于剩余可提现金额", "当前提现金额大于剩余可提现金额"),
 
+    TxNotIntException("6005", "当前提现金额不是整数", "当前提现金额不是整数"),
     //写手消息的异常码由8000开始
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！");
 

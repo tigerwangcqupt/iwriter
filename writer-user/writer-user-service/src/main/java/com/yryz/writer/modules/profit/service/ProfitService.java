@@ -34,12 +34,14 @@ public interface ProfitService extends BaseService {
 
    Profit insertProfit(Profit profit);
 
+   Profit updateProfit(Profit profit);
+
    /**
     * 绑定资金主体
     * @param writer
     * @return
     */
-   Owner bindCapital(Writer writer);
+   Writer bindCapital(Writer writer);
 
    /**
     * 查询流水列表
@@ -54,5 +56,12 @@ public interface ProfitService extends BaseService {
     * @return
     */
    PageList<ProfitAdminVo> selectProfitAdminVoList(ProfitDto profitDto);
+
+   /**
+    * 管理后台提现管理(查询所有)
+    * @param profitDto
+    * @return
+    */
+   List<ProfitAdminVo> selectAllProfitAdminVoList(ProfitDto profitDto);
 
 }

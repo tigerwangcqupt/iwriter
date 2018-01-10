@@ -2,6 +2,9 @@ package com.yryz.writer.modules.profit.constant;
 
 public class ProfitConstants {
 
+    //手续费固定成2元
+    public static  final  Integer chargeFee=2;
+
     //资金主体个人
     public static final Byte OWNERTYPE = 2;
 
