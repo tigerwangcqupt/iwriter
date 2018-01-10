@@ -42,6 +42,17 @@ public class ProfitDetailVo implements Serializable {
      */
     private BigDecimal surplusAmount;
 
+    //流水消息
+    private  String settlementMsg;
+
+    public String getSettlementMsg() {
+        return settlementMsg;
+    }
+
+    public void setSettlementMsg(String settlementMsg) {
+        this.settlementMsg = settlementMsg;
+    }
+
     public BigDecimal getSettlementAmount() {
         return settlementAmount;
     }

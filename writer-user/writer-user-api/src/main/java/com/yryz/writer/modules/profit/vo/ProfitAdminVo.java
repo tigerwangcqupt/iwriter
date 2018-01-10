@@ -45,6 +45,9 @@ public class ProfitAdminVo implements Serializable {
     //银行卡卡主姓名
     private  String userRefBankName;
 
+    //流水消息
+    private  String settlementMsg;
+
     public String getSettlementDate() {
         return settlementDate;
     }
@@ -147,5 +150,13 @@ public class ProfitAdminVo implements Serializable {
 
     public void setFlowId(Long flowId) {
         this.flowId = flowId;
+    }
+
+    public String getSettlementMsg() {
+        return settlementMsg;
+    }
+
+    public void setSettlementMsg(String settlementMsg) {
+        this.settlementMsg = settlementMsg;
     }
 }

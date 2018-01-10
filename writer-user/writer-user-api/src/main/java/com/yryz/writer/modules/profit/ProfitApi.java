@@ -68,7 +68,7 @@ public interface ProfitApi {
     RpcResponse<PageList<ProfitVo>> list(ProfitDto profitDto);
 
 	/**
-	 * 审核通过时，绑定资金信息
+	 * 审核通过时，绑定资金主体信息
 	 * @param writer
 	 * @return
 	 */

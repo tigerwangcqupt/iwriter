@@ -115,6 +115,11 @@ public class Writer extends GenericEntity{
 	private Date withdrawDate;
 
 	/**
+	 * 流水类型
+	 * 1:申请提现 2:提现成功  3:提现失败 4:稿费
+	 */
+	private Integer settlementType;
+	/**
 	 *资金主体外码
 	 */
      private String ownerFcode;
@@ -288,5 +293,11 @@ public class Writer extends GenericEntity{
 		this.jpushRegistrationId = jpushRegistrationId;
 	}
 
+	public Integer getSettlementType() {
+		return settlementType;
+	}
 
+	public void setSettlementType(Integer settlementType) {
+		this.settlementType = settlementType;
+	}
 }

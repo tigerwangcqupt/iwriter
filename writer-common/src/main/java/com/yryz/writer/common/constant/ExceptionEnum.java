@@ -49,6 +49,8 @@ public enum ExceptionEnum {
     TxMoreThanSurplusException("6004", "当前提现金额大于剩余可提现金额", "当前提现金额大于剩余可提现金额"),
 
     TxNotIntException("6005", "当前提现金额不是整数", "当前提现金额不是整数"),
+
+    FindModelFailException("6006", "查不到资金主体", "查不到资金主体"),
     //写手消息的异常码由8000开始
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),
 	

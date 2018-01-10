@@ -236,7 +236,7 @@
 
 	<!-- 查询Profit列表 -->
 	<select id="selectFlowList" parameterType="com.yryz.writer.modules.profit.dto.ProfitDto" resultType="com.yryz.writer.modules.profit.vo.ProfitDetailVo">
-		select kid as flowId,profit_sn,date_format(settlement_date,'%Y-%m-%d') as settlement_date,settlement_amount,settlement_type,surplus_amount
+		select kid as flowId,profit_sn,date_format(settlement_date,'%Y-%m-%d') as settlement_date,settlement_amount,settlement_type,surplus_amount,settlement_msg
 		from yryz_profit where del_flag = 0
 		<if test="createUserId != null and createUserId != ''">
 			and create_user_id = #{createUserId,jdbcType=VARCHAR}

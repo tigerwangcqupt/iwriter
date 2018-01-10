@@ -5,6 +5,7 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.vo.BankVo;
+import com.yryz.writer.modules.writer.entity.Writer;
 
 import java.util.Map;
 
@@ -55,6 +56,9 @@ public interface BankApi {
 	 * @return
 	 */
 	RpcResponse<Bank> updateBank(Bank bank);
+
+
+
 
 	RpcResponse<Bank> selectByParameters(BankDto bankDto);
 
