@@ -19,14 +19,23 @@
 
 <dubbo:application name="qstone-check-test" />
 
+<!--
 	<dubbo:registry address="zookeeper://192.168.30.36:2181?client=zkclient"
 		file="/app/yryz/service-user/test/dubbo-registry.properties" />
+-->
+
+	<dubbo:registry  id="new-yryz" address="zookeeper://127.0.0.1:2181?client=zkclient"
+					default="false" file="/app/yryz/service-user/test/dubbo-registry.properties" />
 
 
 	<!-- 引用dubbo服务 -->
+<!--
 	<dubbo:reference id="openTransactionApi"
 					 interface="com.yryz.qstone.modules.transaction.api.OpenTransactionApi" check="false" timeout="5000" />
+-->
 
-
+	<!-- 引用dubbo服务 -->
+	<dubbo:reference id="profitApi" registry="new-yryz"
+					 interface="com.yryz.writer.modules.profit.ProfitApi" check="false" timeout="5000" />
 
 </beans>

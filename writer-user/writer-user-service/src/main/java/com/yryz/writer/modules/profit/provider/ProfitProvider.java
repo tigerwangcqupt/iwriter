@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service
@@ -84,6 +85,16 @@ public class ProfitProvider implements ProfitApi {
 		}
 	}
 
+	@Override
+	public RpcResponse<Profit> updateProfit(Profit profit) {
+		try {
+			return ResponseModel.returnObjectSuccess(profitService.updateProfit(profit));
+		} catch (Exception e) {
+			logger.error("新增收益失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 	/**
     * 获取Profit列表
     * @param profitDto
@@ -100,7 +111,7 @@ public class ProfitProvider implements ProfitApi {
     }
 
 	@Override
-	public RpcResponse<Owner> bindCapital(Writer writer) {
+	public RpcResponse<Writer> bindCapital(Writer writer) {
 		try {
 			return ResponseModel.returnObjectSuccess(profitService.bindCapital(writer));
 		} catch (Exception e) {
@@ -123,6 +134,16 @@ public class ProfitProvider implements ProfitApi {
 	public RpcResponse<PageList<ProfitAdminVo>> selectProfitAdminVoList(ProfitDto profitDto) {
 		try {
 			return ResponseModel.returnListSuccess(profitService.selectProfitAdminVoList(profitDto));
+		} catch (Exception e) {
+			logger.error("获取提现管理列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<List<ProfitAdminVo>> selectAllProfitAdminVoList(ProfitDto profitDto) {
+		try {
+			return ResponseModel.returnListSuccess(profitService.selectAllProfitAdminVoList(profitDto));
 		} catch (Exception e) {
 			logger.error("获取提现管理列表失败", e);
 			return ResponseModel.returnException(e);

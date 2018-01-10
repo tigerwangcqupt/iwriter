@@ -11,6 +11,8 @@ import com.yryz.component.rpc.dto.PageList;
  */
 public class ProfitDto extends PageList {
 
+    //流水id
+    private Long flowId;
     //写手id
     private Long createUserId;
 
@@ -108,5 +110,13 @@ public class ProfitDto extends PageList {
 
     public void setSettlementType(Integer settlementType) {
         this.settlementType = settlementType;
+    }
+
+    public Long getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(Long flowId) {
+        this.flowId = flowId;
     }
 }

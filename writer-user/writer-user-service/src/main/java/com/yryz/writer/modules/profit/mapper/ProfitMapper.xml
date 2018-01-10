@@ -217,6 +217,8 @@
         </set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
+
+
     
     <!-- 查询Profit列表 -->
     <select id="selectList" parameterType="com.yryz.writer.modules.profit.dto.ProfitDto" resultMap="BaseResultMap">

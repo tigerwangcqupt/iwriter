@@ -9,11 +9,11 @@ public enum ProfitEnum {
 
     WITHDRAWALS_FEE(1, "提现"),
 
-    ROYALTIES_FEE(2, "稿费"),
+    WITHDRAWALS_SUCCESS(2, "提现成功"),
 
-    WITHDRAWALS_SUCCESS(3, "提现成功"),
+    WITHDRAWALS_FAIL(3, "提现失败"),
 
-    WITHDRAWALS_FAIL(4, "提现失败");
+    ROYALTIES_FEE(4, "稿费");
 
 
     private Integer code;

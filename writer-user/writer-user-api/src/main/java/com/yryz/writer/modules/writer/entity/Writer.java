@@ -1,6 +1,10 @@
 package com.yryz.writer.modules.writer.entity;
 
 import com.yryz.writer.common.entity.GenericEntity;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * 
   * @ClassName: Writer
@@ -85,7 +89,84 @@ public class Writer extends GenericEntity{
 	 * 极光唯一注册ID
 	 */	 
     private  String jpushRegistrationId;
-    
+
+	/**
+	 * profit流水号
+	 */
+	private String profitSn;
+	/**
+	 *  可提现金额
+	 */
+	private BigDecimal withdrawAmount;
+
+	/**
+	 * 累计提现金额
+	 */
+	private BigDecimal sumWithdrawAmount;
+
+	/**
+	 *最近提现金额
+	 */
+	private BigDecimal latelyWithdrawAmount;
+
+	/**
+	 *最近提现日期
+	 */
+	private Date withdrawDate;
+
+	/**
+	 *资金主体外码
+	 */
+     private String ownerFcode;
+
+
+	public String getProfitSn() {
+		return profitSn;
+	}
+
+	public void setProfitSn(String profitSn) {
+		this.profitSn = profitSn;
+	}
+
+	public BigDecimal getWithdrawAmount() {
+		return withdrawAmount;
+	}
+
+	public void setWithdrawAmount(BigDecimal withdrawAmount) {
+		this.withdrawAmount = withdrawAmount;
+	}
+
+	public BigDecimal getSumWithdrawAmount() {
+		return sumWithdrawAmount;
+	}
+
+	public void setSumWithdrawAmount(BigDecimal sumWithdrawAmount) {
+		this.sumWithdrawAmount = sumWithdrawAmount;
+	}
+
+	public BigDecimal getLatelyWithdrawAmount() {
+		return latelyWithdrawAmount;
+	}
+
+	public void setLatelyWithdrawAmount(BigDecimal latelyWithdrawAmount) {
+		this.latelyWithdrawAmount = latelyWithdrawAmount;
+	}
+
+	public Date getWithdrawDate() {
+		return withdrawDate;
+	}
+
+	public void setWithdrawDate(Date withdrawDate) {
+		this.withdrawDate = withdrawDate;
+	}
+
+	public String getOwnerFcode() {
+		return ownerFcode;
+	}
+
+	public void setOwnerFcode(String ownerFcode) {
+		this.ownerFcode = ownerFcode;
+	}
 
 	public String getAccount() {
 		return this.account;
@@ -206,5 +287,6 @@ public class Writer extends GenericEntity{
 	public void setJpushRegistrationId(String jpushRegistrationId) {
 		this.jpushRegistrationId = jpushRegistrationId;
 	}
-		
+
+
 }
