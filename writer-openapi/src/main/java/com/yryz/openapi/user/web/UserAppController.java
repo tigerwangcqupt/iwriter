@@ -127,6 +127,7 @@ public class UserAppController extends BaseController {
         //校验验证码
         RpcResponse<Boolean> rpcResponse = smsCommonApi.checkVerifyCode(custRegister.getCustPhone(), custRegister.getCode(), custRegister.getVeriCode());
         Boolean b = isSuccessNotNull(rpcResponse);
+        //Boolean b = true;
         if (b) {
             //判断安装渠道
            /* if (devType == AppConstants.DEVTYPE_IOS) {
@@ -146,8 +147,10 @@ public class UserAppController extends BaseController {
             user.setAccount(custRegister.getCustPhone());
             user.setPhone(custRegister.getCustPhone());
             user.setAccount(custRegister.getCustPhone());
+            user.setNickName(custRegister.getCustPhone());
 
-            writerApi.register(user);
+            RpcResponse<Long> rpcResponseRegister = writerApi.register(user);
+            Long kid = isSuccess(rpcResponseRegister);
 
             //注册成功，消息推送
             /*executorService.schedule(new Runnable() {
@@ -160,6 +163,11 @@ public class UserAppController extends BaseController {
             //输出参数
             AuthInfoVo authInfoVo = new AuthInfoVo();
             authInfoVo.setCustPhone(custRegister.getCustPhone());
+            authInfoVo.setUserId(kid);
+
+            RpcResponse<String> tokenRpcResponse = writerApi.addUserToken(String.valueOf(kid));
+            String token = isSuccess(tokenRpcResponse);
+            authInfoVo.setToken(token);
             return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
         }
 
@@ -206,17 +214,18 @@ public class UserAppController extends BaseController {
      */
     @RequestMapping(value = "setPwd", method = {RequestMethod.POST})
     @ResponseBody
-    public RpcResponse<AuthInfoVo> setPwd(@RequestBody CustRegisterDto custRegisterDto) {
+    public RpcResponse<AuthInfoVo> setPwd(@RequestBody CustRegisterDto custRegisterDto,@RequestHeader("userId") String userId) {
         Assert.notNull(custRegisterDto, "缺少参数或参数错误！");
-        Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
-        Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
 
         Assert.notNull(custRegisterDto.getCustPwd(), "密码不能为空！");
         Assert.hasText(custRegisterDto.getCustPwd(), "密码不能为空！");
 
+        Assert.notNull(userId, "userId不能为空！");
+        Assert.hasText(userId, "userId不能为空！");
 
-        RpcResponse<Writer> rpcResponseWriter = writerApi.selectByPhone(custRegisterDto.getCustPhone());
+        RpcResponse<Writer> rpcResponseWriter = writerApi.get(Long.valueOf(userId));
         Writer user = isSuccess(rpcResponseWriter);
+
         if (user == null) {
             throw new YyrzPcException(
                     ExceptionEnum.PHONE_UNBIND.getCode(),
@@ -279,7 +288,7 @@ public class UserAppController extends BaseController {
                         ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
             }
 
-            RpcResponse<String> tokenRpcResponse = writerApi.getUserToken(String.valueOf(user.getKid()));
+            RpcResponse<String> tokenRpcResponse = writerApi.addUserToken(String.valueOf(user.getKid()));
             String token = isSuccess(tokenRpcResponse);
             authInfoVo.setCustPhone(custRegisterDto.getCustPhone());
             authInfoVo.setToken(token);
