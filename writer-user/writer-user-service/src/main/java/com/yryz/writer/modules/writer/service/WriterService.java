@@ -33,6 +33,8 @@ public interface WriterService extends BaseService {
    WriterAdminVo selectWriterDetail(Long kid);
 
    WriterVo detail(Long writerId);
+   
+   Integer updateWriter(WriterAdminVo writerAdminVo);
 
    PageList<WriterAdminVo> selectListAdmin(WriterDto writerDto);
 

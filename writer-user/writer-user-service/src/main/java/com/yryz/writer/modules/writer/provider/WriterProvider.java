@@ -144,6 +144,16 @@ public class WriterProvider implements WriterApi {
        		 return ResponseModel.returnException(e);
         }
 	}
+	
+	@Override
+	public RpcResponse<Integer> updateWriterRemark(WriterAdminVo writerAdminVo) {
+		 try {
+			 return ResponseModel.returnObjectSuccess(writerService.updateWriter(writerAdminVo));
+        } catch (Exception e) {
+        	 logger.error("更新Writer信息失败", e);
+       		 return ResponseModel.returnException(e);
+        }
+	}
 
 	@Override
 	@Transactional

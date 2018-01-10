@@ -29,7 +29,7 @@ public interface WriterDao extends BaseDao {
     
     WriterAdminVo selectWriterDetail(@Param("kid")Long kid);
     
-    int updateStatus(@Param("kid")Long kid,@Param("auditStatus")Integer auditStatus);
+    Integer updateWriter(WriterAdminVo writerAdminVo);
     
     Writer selectByPhone(String phone);
 

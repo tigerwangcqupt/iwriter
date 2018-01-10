@@ -361,8 +361,10 @@
 		where phone = #{phone,jdbcType=VARCHAR}
 	</select>
     
-    <update id="updateStatus">
-      update yryz_writer set user_status= #{auditStatus},last_update_date = now() where kid = #{kid}
+    <update id="updateWriter" parameterType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
+		update yryz_writer set remark= #{remark},
+		last_update_date = now(),last_update_user_id=#{lastUpdateUserId} 
+		where kid = #{kid}
     </update>
 
 	<!-- 查询Writer关联资金 -->

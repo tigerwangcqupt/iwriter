@@ -9,7 +9,9 @@ public class WriterAdminVo implements Serializable {
      *创建id
      */
     private  String createUserId;
-
+    
+    private  String lastUpdateUserId;
+    
     /**
      * kid
      */
@@ -422,6 +424,15 @@ public class WriterAdminVo implements Serializable {
 	public void setUserBankCart(String userBankCart) {
 		this.userBankCart = userBankCart;
 	}
+
+	public String getLastUpdateUserId() {
+		return lastUpdateUserId;
+	}
+
+	public void setLastUpdateUserId(String lastUpdateUserId) {
+		this.lastUpdateUserId = lastUpdateUserId;
+	}
     
+	
     
 }

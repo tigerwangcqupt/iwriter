@@ -87,6 +87,11 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         }
         return writerVo;
     }
+    
+    @Override
+    public Integer updateWriter(WriterAdminVo writerAdminVo) {
+    	return writerDao.updateWriter(writerAdminVo);
+    }
 
     @Override
     public PageList<WriterAdminVo> selectListAdmin(WriterDto writerDto) {
