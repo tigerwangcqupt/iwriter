@@ -311,7 +311,26 @@
     <select id="selectList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from yryz_writer 
+        from yryz_writer where 1=1
+        <if test="nickName != null and nickName != '' ">
+			AND nick_name = trim(#{nickName})
+		</if>
+		<if test="kid != null and kid != '' ">
+			AND kid != #{kid}
+		</if>
+    </select>
+    
+    <!-- 查询Writer列表 -->
+    <select id="checkNickName" parameterType="com.yryz.writer.modules.writer.entity.Writer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_writer where 1=1
+        <if test="nickName != null and nickName != '' ">
+			AND nick_name = trim(#{nickName})
+		</if>
+		<if test="kid != null and kid != '' ">
+			AND kid != #{kid}
+		</if>
     </select>
     
     <sql id="writer_common_column">

@@ -50,7 +50,9 @@ public enum ExceptionEnum {
 
     TxNotIntException("6005", "当前提现金额不是整数", "当前提现金额不是整数"),
     //写手消息的异常码由8000开始
-    MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！");
+    MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),
+	
+	NICKNAME_REPEAT_EXCEPTION("8001", "昵称重复", "昵称重复");
 
     private String code;
 

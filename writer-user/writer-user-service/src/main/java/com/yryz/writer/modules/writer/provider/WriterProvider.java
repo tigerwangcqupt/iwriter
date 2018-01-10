@@ -21,6 +21,8 @@ import com.yryz.writer.modules.writer.service.WriterService;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -291,6 +293,16 @@ public class WriterProvider implements WriterApi {
 			return ResponseModel.returnObjectSuccess(writerService.addUserToken(custId));
 		} catch (Exception e) {
 			logger.error("添加用户token失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<List<Writer>> checkNickName(Writer writer) {
+		try {
+			return ResponseModel.returnListSuccess(writerService.checkNickName(writer));
+		} catch (Exception e) {
+			logger.error("昵称重复，校验失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}

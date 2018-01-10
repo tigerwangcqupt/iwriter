@@ -71,6 +71,10 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         return new PageModel<WriterAdminVo>().getPageList(list);
     }
     
+    public List<Writer> checkNickName(Writer writer){
+    	return writerDao.checkNickName(writer);
+    }
+    
     public List<WriterAdminVo> selectWriterExportList(WriterDto writerDto){
         return writerDao.selectWriterList(writerDto);
     }

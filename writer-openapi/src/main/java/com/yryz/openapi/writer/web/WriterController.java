@@ -1,5 +1,7 @@
 package com.yryz.openapi.writer.web;
 
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
@@ -8,6 +10,9 @@ import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,15 +40,27 @@ public class WriterController extends BaseController {
 	   return writerApi.detail(Long.valueOf(userId));
    }
    
-   @ResponseBody
-   @RequestMapping(value="/updateWriter")
-   public RpcResponse<WriterVo> updateWriter(@RequestBody Writer writer,@RequestHeader String userId) {
-	   if(StringUtils.isNotEmpty(userId)){
-		   writer.setKid(Long.valueOf(userId));
-		   writer.setLastUpdateUserId(userId);
-	   }
-       return writerApi.updateWriter(writer);
-   }
+    @ResponseBody
+    @RequestMapping(value="/updateWriter")
+	public RpcResponse<WriterVo> updateWriter(@RequestBody Writer writer, @RequestHeader String userId) {
+		if (StringUtils.isNotEmpty(userId)) {
+			writer.setKid(Long.valueOf(userId));
+			writer.setLastUpdateUserId(userId);
+			if (StringUtils.isNotEmpty(writer.getNickName())) {
+				RpcResponse<List<Writer>> result = writerApi.checkNickName(writer);
+				if (result.success()) {
+					if (CollectionUtils.isNotEmpty(result.getData())) {
+						 throw new YyrzPcException(
+				                    ExceptionEnum.NICKNAME_REPEAT_EXCEPTION.getCode(),
+				                    ExceptionEnum.NICKNAME_REPEAT_EXCEPTION.getMsg(),
+				                    ExceptionEnum.NICKNAME_REPEAT_EXCEPTION.getErrorMsg());
+					}
+				}
+			}
+		}
+		return writerApi.updateWriter(writer);
+	}
+
    
    @ResponseBody
    @RequestMapping(value="/submitAudit")

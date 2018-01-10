@@ -25,6 +25,8 @@ public interface WriterDao extends BaseDao {
 
     List<Writer> selectList(WriterDto writerDto);
     
+    List<Writer> checkNickName(Writer writer);
+
     List<WriterAdminVo> selectWriterList(WriterDto writerDto);
     
     WriterAdminVo selectWriterDetail(@Param("kid")Long kid);

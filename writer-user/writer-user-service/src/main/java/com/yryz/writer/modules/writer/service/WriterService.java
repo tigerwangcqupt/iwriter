@@ -26,6 +26,8 @@ public interface WriterService extends BaseService {
 
    PageList<WriterVo> selectList(WriterDto writerDto);
    
+   List<Writer> checkNickName(Writer writer);
+   
    PageList<WriterAdminVo> selectWriterList(WriterDto writerDto);
    
    List<WriterAdminVo> selectWriterExportList(WriterDto writerDto);

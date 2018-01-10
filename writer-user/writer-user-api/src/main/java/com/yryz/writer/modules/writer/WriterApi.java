@@ -102,6 +102,8 @@ public interface WriterApi {
 	 */
 	RpcResponse<WriterVo> updateWriter(Writer writer);
 	
+	RpcResponse<List<Writer>> checkNickName(Writer writer);
+	
 	RpcResponse<Integer> updateWriterRemark(WriterAdminVo writerAdminVo);
 	
 	RpcResponse<WriterVo> submitAudit(Writer writer);
