@@ -146,6 +146,11 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
     }
 
     @Override
+    public Integer updateWriterProfit(Writer writer) {
+        return writerDao.updateWriterProfit(writer);
+    }
+
+    @Override
     public Integer deleteUserToken(String custId){
         Long count = 0l;
         String key = getMessagekey(custId);

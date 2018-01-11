@@ -75,7 +75,7 @@ public class BankProvider implements BankApi {
 	public RpcResponse<Bank> insertBank(Bank bank) {
 		try {
 			bankService.insertBank(bank);
-			return ResponseModel.returnObjectSuccess(null);
+			return ResponseModel.returnObjectSuccess(bankService.insertBank(bank));
 		} catch (Exception e) {
 			logger.error("保存bank失败", e);
 			return ResponseModel.returnException(e);
@@ -85,8 +85,7 @@ public class BankProvider implements BankApi {
 	@Override
 	public RpcResponse<Bank> updateBank(Bank bank) {
 		try {
-			bankService.updateBank(bank);
-			return ResponseModel.returnObjectSuccess(null);
+			return ResponseModel.returnObjectSuccess(bankService.updateBank(bank));
 		} catch (Exception e) {
 			logger.error("修改bank失败", e);
 			return ResponseModel.returnException(e);

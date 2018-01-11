@@ -37,4 +37,11 @@ public interface ArticleClassifyDao extends BaseDao {
      */
     List<ArticleClassify> selectList(ArticleClassifyDto articleClassifyDto);
 
+    /**
+     *查询已上架的子分类个数
+     * @param id
+     * @return
+     */
+    int selectShelveOnChildCount(Long id);
+
 }

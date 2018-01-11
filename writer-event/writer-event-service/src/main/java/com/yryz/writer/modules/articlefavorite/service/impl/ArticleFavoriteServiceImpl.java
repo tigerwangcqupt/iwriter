@@ -55,7 +55,7 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
                 articleFavoriteVoList.add(articleFavoriteVo);
             }
         }
-        return new PageModel<ArticleFavoriteVo>().getPageList(articleFavoriteVoList);
+        return new PageModel<ArticleFavoriteVo>().getPageList(list, articleFavoriteVoList);
     }
 
 
@@ -88,7 +88,7 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
             e.printStackTrace();
         }
 
-        return new PageModel<ArticleFavoriteVo>().getPageList(articleFavoriteVoList);
+        return new PageModel<ArticleFavoriteVo>().getPageList(list, articleFavoriteVoList);
     }
 
     @Override

@@ -86,24 +86,30 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         return null;
     }
 
-    @Override
-    public Bank insertBank(Bank bank) {
-
-
+    /**
+     * 根据写手信息查询资金主体
+     * @param bank
+     * @return
+     */
+    public Long findOwnerByWriter(Bank bank){
         //根据写手id,查询写手信息
         WriterDto writerDto = new WriterDto();
         //写手id
         writerDto.setKid(Long.valueOf(bank.getCreateUserId()));
         WriterModelVo writerModelVo = writerService.selectWriterByParameters(writerDto);
-
         Owner owner = new Owner();
         owner.setOwnerFcode(Long.valueOf(writerModelVo.getOwnerFcode()));
         owner = openOwnerApi.detail(owner);
+        if(null == owner){
+            logger.error("根据银行卡拥有者查不到资金主体账号");
+            throw new YyrzPcException(ExceptionEnum.FindModelFailException.getCode(),ExceptionEnum.FindModelFailException.getMsg(),
+                    ExceptionEnum.FindModelFailException.getErrorMsg());
+        }
+        return owner.getOwnerCode();
+    }
 
-        Long kid  = idAPI.getId("yryz_bank");
-        bank.setKid(kid);
-        bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
-        bankDao.insert(bank);
+    @Override
+    public Bank insertBank(Bank bank) {
         try{
             BankCard bankCard=new BankCard();
             //银行卡号
@@ -117,9 +123,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             //身份证
             bankCard.setCertNo(bank.getUserCart());
             //资金主体编码
-            bankCard.setOwnerCode(owner.getOwnerCode());
+            bankCard.setOwnerCode(findOwnerByWriter(bank));
             RpcContext.getContext().setAttachment("clientCode", clientCode);
             openBankCardApi.add(bankCard);
+            Long kid  = idAPI.getId("yryz_bank");
+            bank.setKid(kid);
+            bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
+            bankDao.insert(bank);
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.BindBankException.getCode(),ExceptionEnum.BindBankException.getMsg(),
@@ -131,7 +141,6 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Override
     public Bank updateBank(Bank bank) {
-        bankDao.update(bank);
         try{
             BankCard bankCard=new BankCard();
             //银行卡号
@@ -140,9 +149,11 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             bankCard.setBankName(bank.getUserAccountOpenBank());
             bankCard.setStatus((byte)1);
             bankCard.setCertNo("身份证");
-            bankCard.setOwnerCode(1l);
+            bankCard.setOwnerCode(findOwnerByWriter(bank));
             RpcContext.getContext().setAttachment("clientCode", clientCode);
             openBankCardApi.add(bankCard);
+
+            bankDao.update(bank);
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.BindBankException.getCode(),ExceptionEnum.BindBankException.getMsg(),

@@ -83,4 +83,9 @@ public class DraftProvider implements DraftApi {
         }
     }
 
+    @Override
+    public RpcResponse<Integer> check(Draft draft) {
+        return ResponseModel.returnObjectSuccess(draftService.update(draft));
+    }
+
 }

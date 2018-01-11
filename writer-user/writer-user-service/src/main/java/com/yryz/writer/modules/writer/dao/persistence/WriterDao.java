@@ -46,4 +46,6 @@ public interface WriterDao extends BaseDao {
      */
     List<WriterAdminRefProfit> selectAdminProfitList(WriterDto writerDto);
 
+    Integer updateWriterProfit(Writer writer);
+
 }

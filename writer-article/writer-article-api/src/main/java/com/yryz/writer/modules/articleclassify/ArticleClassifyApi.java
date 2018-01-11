@@ -50,4 +50,18 @@ public interface ArticleClassifyApi {
 	 *  @return
 	 * */
 	RpcResponse<Boolean> update(ArticleClassify articleClassify);
+
+	/**
+	 * 上架分类
+	 * @param articleClassifyId
+	 * @return
+	 */
+	RpcResponse<Boolean> shelveOn(Long articleClassifyId);
+
+	/**
+	 * 下架分类
+	 * @param articleClassifyId
+	 * @return
+	 */
+	RpcResponse<Boolean> shelveOff(Long articleClassifyId);
 }

@@ -19,7 +19,7 @@
     <dubbo:reference id="openBankCardApi" registry="qstone" interface="com.yryz.qstone.modules.base.api.OpenBankCardApi" check="false"/>
     <dubbo:reference id="openAccountApi" registry="qstone" interface="com.yryz.qstone.modules.base.api.OpenAccountApi" check="false"/>
     <dubbo:reference id="openOwnerApi" registry="qstone" interface="com.yryz.qstone.modules.base.api.OpenOwnerApi" check="false"/>
-
+    <dubbo:reference id="openTransactionApi" registry="qstone" interface="com.yryz.qstone.modules.transaction.api.OpenTransactionApi" check="false" timeout="5000" />
 
     <!--writer服务-->
     <dubbo:reference id="writerApi" interface="com.yryz.writer.modules.writer.WriterApi" check="false"/>

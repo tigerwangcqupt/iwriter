@@ -9,9 +9,33 @@ import com.yryz.component.rpc.dto.PageList;
  * @date 2017-12-29 14:40:13
  */
 public class DraftDto extends PageList {
+    private String title;
     private String createUserId;
     private Integer draftStatus;
     private Integer status;
+    private Long appId;
+    /**
+     * 生成排序字符串
+     */
+    private String orderStr;
+
+    /**
+     * orderFiled
+     */
+    private String orderFiled;
+
+    /**
+     * orderValue
+     */
+    private String orderValue;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getCreateUserId() {
         return createUserId;
@@ -35,5 +59,37 @@ public class DraftDto extends PageList {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Long getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Long appId) {
+        this.appId = appId;
+    }
+
+    public String getOrderStr() {
+        return orderStr;
+    }
+
+    public void setOrderStr(String orderStr) {
+        this.orderStr = orderStr;
+    }
+
+    public String getOrderFiled() {
+        return orderFiled;
+    }
+
+    public void setOrderFiled(String orderFiled) {
+        this.orderFiled = orderFiled;
+    }
+
+    public String getOrderValue() {
+        return orderValue;
+    }
+
+    public void setOrderValue(String orderValue) {
+        this.orderValue = orderValue;
     }
 }

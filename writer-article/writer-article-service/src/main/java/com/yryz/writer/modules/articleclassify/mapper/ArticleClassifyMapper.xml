@@ -78,18 +78,18 @@
         <if test="delFlag != null">
 			del_flag,
 	    </if>
-        <if test="createDate != null">
-			create_date,
-	    </if>
-        <if test="lastUpdateDate != null">
-			last_update_date,
-	    </if>
         <if test="createUserId != null and createUserId != ''">
 			create_user_id,
 	    </if>
         <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
 			last_update_user_id,
 	    </if>
+		<if test="createDate != null">
+			create_date,
+		</if>
+		<if test="lastUpdateDate != null">
+			last_update_date,
+		</if>
 	    </trim>
 	    <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="kid != null">
@@ -122,18 +122,14 @@
         <if test="delFlag != null">
 			#{delFlag,jdbcType=TINYINT},
 	    </if>
-        <if test="createDate != null">
-			#{createDate,jdbcType=TIMESTAMP},
-	    </if>
-        <if test="lastUpdateDate != null">
-			#{lastUpdateDate,jdbcType=TIMESTAMP},
-	    </if>
         <if test="createUserId != null and createUserId != ''">
 			#{createUserId,jdbcType=VARCHAR},
 	    </if>
         <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
 			#{lastUpdateUserId,jdbcType=VARCHAR},
 	    </if>
+			NOW(),
+			NOW()
 	    </trim>
 	</insert>
 	
@@ -169,18 +165,13 @@
              <if test="delFlag != null">
     			del_flag = #{delFlag,jdbcType=TINYINT},
     		</if>
-             <if test="createDate != null">
-    			create_date = #{createDate,jdbcType=TIMESTAMP},
-    		</if>
-             <if test="lastUpdateDate != null">
-    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
-    		</if>
             <if test="createUserId != null and createUserId != ''">
     			create_user_id = #{createUserId,jdbcType=VARCHAR},
     		</if>
             <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
     			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
     		</if>
+			last_update_date = NOW()
         </set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
@@ -193,24 +184,21 @@
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			shelve_flag = 0
 			AND del_flag = 0
-			<if test="lassifyName != null and lassifyName != " >
-				AND classify_name like CONCAT('%',trim(#{lassifyName}),'%')
+			<if test="classifyName != null and classifyName != '' " >
+				AND classify_name like CONCAT('%',trim(#{classifyName}),'%')
 			</if>
 
-			<if test="parentId != null " >
-				AND parent_id = parentId
+			<if test="orderStr != null and orderStr != '' " >
+				${orderStr}
 			</if>
-			<choose>
-				<when test="orderFiled != null and orderValue != null" >
-					ORDER BY #{orderFiled} #{orderValue}
-				</when>
-				<otherwise>
-					ORDER BY last_update_date desc
-				</otherwise>
-			</choose>
 
 		</trim>
 
     </select>
+
+	<!--  查询子分类是上架状态的个数 -->
+	<select id="selectShelveOnChildCount" resultType="int">
+		select count(1) from yryz_classify t where t.parent_id=#{id} and t.del_flag=0 and t.shelve_flag=0
+	</select>
     
 </mapper>

@@ -70,7 +70,7 @@ public class FansServiceImpl extends BaseServiceImpl implements FansService {
         PageUtils.startPage(fansDto.getCurrentPage(), fansDto.getPageSize());
         List<Fans> list = fansDao.selectList(fansDto);
         List<FansVo> fansVoList = getUserInfo(list);
-        return new PageModel<FansVo>().getPageList(fansVoList);
+        return new PageModel<FansVo>().getPageList(list,fansVoList);
     }
 
     //获取新粉丝列表
@@ -83,7 +83,7 @@ public class FansServiceImpl extends BaseServiceImpl implements FansService {
         PageUtils.startPage(fansDto.getCurrentPage(), fansDto.getPageSize());
         List<Fans> list = fansDao.selectList(fansDto);
         List<FansVo> fansVoList = getUserInfo(list);
-        return new PageModel<FansVo>().getPageList(fansVoList);
+        return new PageModel<FansVo>().getPageList(list,fansVoList);
     }
 
 

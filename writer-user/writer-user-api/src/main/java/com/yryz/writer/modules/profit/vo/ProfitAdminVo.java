@@ -40,10 +40,13 @@ public class ProfitAdminVo implements Serializable {
     private String profitSn;
 
     //写手id
-    private String writerId;
+    private Long writerId;
 
     //银行卡卡主姓名
     private  String userRefBankName;
+
+    //流水消息
+    private  String settlementMsg;
 
     public String getSettlementDate() {
         return settlementDate;
@@ -125,11 +128,11 @@ public class ProfitAdminVo implements Serializable {
         this.profitSn = profitSn;
     }
 
-    public String getWriterId() {
+    public Long getWriterId() {
         return writerId;
     }
 
-    public void setWriterId(String writerId) {
+    public void setWriterId(Long writerId) {
         this.writerId = writerId;
     }
 
@@ -147,5 +150,13 @@ public class ProfitAdminVo implements Serializable {
 
     public void setFlowId(Long flowId) {
         this.flowId = flowId;
+    }
+
+    public String getSettlementMsg() {
+        return settlementMsg;
+    }
+
+    public void setSettlementMsg(String settlementMsg) {
+        this.settlementMsg = settlementMsg;
     }
 }

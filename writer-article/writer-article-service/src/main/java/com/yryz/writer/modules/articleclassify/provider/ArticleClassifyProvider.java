@@ -85,4 +85,24 @@ public class ArticleClassifyProvider implements ArticleClassifyApi {
 		}
 	}
 
+	@Override
+	public RpcResponse<Boolean> shelveOn(Long articleClassifyId) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleClassifyService.shelveOn(articleClassifyId));
+		} catch (Exception e) {
+			logger.error("上架ArticleClassify失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Boolean> shelveOff(Long articleClassifyId) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleClassifyService.shelveOn(articleClassifyId));
+		} catch (Exception e) {
+			logger.error("下架ArticleClassify失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }

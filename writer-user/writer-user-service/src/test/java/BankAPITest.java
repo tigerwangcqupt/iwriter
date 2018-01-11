@@ -1,4 +1,3 @@
-package test.java;
 
 
 import com.alibaba.dubbo.rpc.RpcContext;
@@ -31,8 +30,8 @@ public class BankAPITest {
    /* @Autowired
     IdAPI idAPI;*/
 
-/*    @Autowired
-    OpenTransactionApi openTransactionApi;*/
+   @Autowired
+    OpenTransactionApi openTransactionApi;
 
     @Autowired
     ProfitApi profitApi;
@@ -45,14 +44,14 @@ public class BankAPITest {
     public void after() throws Exception {
     }
 
-    //绑定资金主体
+/*    //绑定资金主体
     @Test
     public void bindCapital(){
         Writer writer = new Writer();
-        writer.setUserName("tiger_test002");
+        writer.setUserName("tiger_test003");
         RpcResponse<Writer> rpcResponse =  profitApi.bindCapital(writer);
         System.out.println(rpcResponse);
-    }
+    }*/
 
 /*    //绑定流水
     public void bindFlow(Draft draft){
@@ -65,7 +64,7 @@ public class BankAPITest {
         System.out.println(rpcResponse);
     }*/
 
-/*    @Test
+   @Test
     public void getIdTest() {
         RpcContext.getContext().setAttachment("clientCode", "yryzpc");
         TransactionFlowRecord record = new TransactionFlowRecord();
@@ -120,7 +119,7 @@ public class BankAPITest {
         flowList.add(flow2);
         record.setFlowList(flowList);
         openTransactionApi.add(record);
-    }*/
+    }
 
 
 

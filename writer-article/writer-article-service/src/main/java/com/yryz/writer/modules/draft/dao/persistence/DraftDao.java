@@ -3,6 +3,8 @@ package com.yryz.writer.modules.draft.dao.persistence;
 import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.modules.draft.vo.DraftVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,5 +29,13 @@ public interface DraftDao extends BaseDao {
 
     //草稿
     List<Draft> selectDraught(DraftDto draftDto);
+
+    //管理后台查询待审核
+    List<Draft> selectPendingForAdmin(DraftDto draftDto);
+
+    //管理后台查询未通过
+    List<Draft> selectNotPassForAdmin(DraftDto draftDto);
+
+    DraftVo selectWriterByKid(@Param("kid") String kid);
 
 }

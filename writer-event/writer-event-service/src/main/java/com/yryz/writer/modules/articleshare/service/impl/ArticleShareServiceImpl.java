@@ -92,7 +92,7 @@ public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleS
             e.printStackTrace();
         }
 
-        return new PageModel<ArticleShareVo>().getPageList(articleShareVoList);
+        return new PageModel<ArticleShareVo>().getPageList(list, articleShareVoList);
     }
 
     @Override

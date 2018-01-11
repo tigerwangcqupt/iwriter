@@ -30,6 +30,9 @@ public class ArticleClassifyDto extends PageList {
      */
     private String orderValue;
 
+    /** 排序 */
+    private String orderStr;
+
     public void setClassifyName(String classifyName) {
         this.classifyName = classifyName;
     }
@@ -63,6 +66,15 @@ public class ArticleClassifyDto extends PageList {
 
     public String getOrderValue() {
         return orderValue;
+    }
+
+    public void setOrderStr(String orderStr) {
+        this.orderStr = orderStr;
+    }
+
+    public String getOrderStr() {
+
+        return orderStr;
     }
 
     public String getParentClassifyName() {

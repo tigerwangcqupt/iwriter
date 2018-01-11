@@ -1,11 +1,14 @@
 package com.yryz.writer.modules.profit.service.impl;
 
 import com.alibaba.dubbo.rpc.RpcContext;
+import com.yryz.qstone.entity.transaction.dto.TransactionFlowRecord;
+import com.yryz.qstone.modules.transaction.api.OpenTransactionApi;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.distributed.lock.DistributedLockUtils;
 import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.utils.DateUtil;
+import com.yryz.writer.common.utils.MoneyUtils;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.service.BaseServiceImpl;
@@ -71,8 +74,23 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     @Autowired
     private OpenAccountApi openAccountApi;
 
+    @Autowired
+    private OpenTransactionApi openTransactionApi;
+
     @Value("${clientCode}")
     private String clientCode;
+
+    //平台资金主体外码
+    @Value("${ownerFCode}")
+    private Long ownerFCode;
+
+    //业务外码提现
+    @Value("${busiFCode}")
+    private Long busiFCode;
+
+    //业务外码稿费
+    @Value("${busiRoyalFCode}")
+    private Long busiRoyalFCode;
 
     @Value("${currencyCode}")
     private Long  currencyCode;
@@ -151,48 +169,83 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     }
 
 
-
-
+    /**
+     * 提现|审核文章
+     * @param profit
+     * @return
+     */
     @Override
     public Profit insertProfit(Profit profit) {
         String lockKey = null;
         try {
+            //提现日期
+            Date settlementDate = new Date();
             String profitSn = String.valueOf(idAPI.getSnowflakeId());
             profit.setProfitSn(profitSn);
             //分布式锁控制用户频繁操作
             lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getCreateUserId());
-            ProfitDto profitDto = new ProfitDto();
-            profitDto.setCreateUserId(Long.valueOf(profit.getCreateUserId()));
-
             WriterDto writerDto = new WriterDto();
             writerDto.setKid(profit.getWriterId());
             WriterModelVo writerModelVo =writerService.selectWriterByParameters(writerDto);
-
             //剩余可提现金额
             BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
-            //当剩余金额小于当前提现金额时
-            if(null != withdrawAmount && withdrawAmount.compareTo(settlementAmount)==-1){
-                logger.error("当前提现金额大于剩余可提现金额");
+            //稿费的时候不去判断
+            if(profit.getSettlementType() != ProfitEnum.ROYALTIES_FEE.getCode()){
+                //当剩余金额小于当前提现金额时
+                if(null != withdrawAmount && withdrawAmount.compareTo(settlementAmount)==-1){
+                    logger.error("当前提现金额大于剩余可提现金额");
+                    throw new YyrzPcException(ExceptionEnum.TxMoreThanSurplusException.getCode(),ExceptionEnum.TxMoreThanSurplusException.getMsg(),
+                            ExceptionEnum.TxMoreThanSurplusException.getErrorMsg());
+                }
             }
-
             //更新写手信息
             Writer writer = new Writer();
+            writer.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
             writer.setKid(profit.getWriterId());
-            writer.setLatelyWithdrawAmount(profit.getSettlementAmount());
-            writer.setWithdrawDate(profit.getSettlementDate());
-            writer.setWithdrawAmount(withdrawAmount.subtract(settlementAmount));
-            writerService.update(writer);
+            writer.setWithdrawDate(settlementDate);
+
+            //如果是提现
+            if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FEE.getCode()){
+                writer.setLatelyWithdrawAmount(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
+                //writer.setWithdrawAmount(MoneyUtils.setBigDecimal(withdrawAmount.subtract(settlementAmount)));
+            }
+            //如果是稿费
+            else if(profit.getSettlementType() == ProfitEnum.ROYALTIES_FEE.getCode()){
+                writer.setWithdrawAmount(MoneyUtils.setBigDecimal(withdrawAmount.add(settlementAmount)));
+            }
             //同步插入到profit流水表
-            Long kid  = idAPI.getId("yryz_profit");
+            Long kid  = idAPI.getId(ProfitConstants.PROFITTABLE);
             profit.setKid(kid);
             profit.setModuleEnum(YyrzModuleEnumConstants.PROFIT_INFO);
-            profit.setSettlementDate(new Date());
-            profit.setChargeFee(new BigDecimal(ProfitConstants.chargeFee));
-            profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
-            profit.setSurplusAmount(withdrawAmount.subtract(settlementAmount));
-            profit.setSettlementMsg(ProfitEnum.WITHDRAWALS_FEE.getMsg());
+            profit.setSettlementDate(settlementDate);
+            //当前提现金额扩大一万倍
+            profit.setSettlementAmount(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
+            //如果是提现
+            if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FEE.getCode()){
+                //手续费扩大一万倍
+                profit.setChargeFee(MoneyUtils.setBigDecimal(new BigDecimal(ProfitConstants.CHARGEFEE)));
+                //剩余提现金额扩大一万倍
+                profit.setSurplusAmount(MoneyUtils.setBigDecimal(withdrawAmount.subtract(settlementAmount)));
+                //提现消息
+                profit.setSettlementMsg(ProfitEnum.WITHDRAWALS_FEE.getMsg());
+                //最后修改信息
+                writerService.updateWriterProfit(writer);
+            }
+            //如果是稿费
+            else if(profit.getSettlementType() == ProfitEnum.ROYALTIES_FEE.getCode()){
+                //增加流水到资金主体
+                addRoyalFlow(profit);
+                //手续费扩大一万倍
+                profit.setChargeFee(new BigDecimal(0));
+                //剩余提现金额扩大一万倍
+                profit.setSurplusAmount(MoneyUtils.setBigDecimal(withdrawAmount.add(settlementAmount)));
+                //提现消息
+                profit.setSettlementMsg(ProfitEnum.ROYALTIES_FEE.getMsg());
+                //最后修改信息
+                writerService.update(writer);
+            }
             insert(profit);
             return profit;
         }catch (Exception e) {
@@ -206,14 +259,21 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     }
 
 
-
-
+    /**
+     * 提现成功|提现失败
+     * 提现成功:调用资金平账,插入流水
+     * 提现失败:插入流水
+     * @param profit
+     * @return
+     */
     @Override
     public Profit updateProfit(Profit profit) {
+        //提现日期
+        Date settlementDate = new Date();
         Profit profitData = profitDao.selectByKid(Profit.class,profit.getKid());
-        Long kid  = idAPI.getId("yryz_profit");
+        Long kid  = idAPI.getId(ProfitConstants.PROFITTABLE);
         profit.setKid(kid);
-        profitData.setSettlementDate(new Date());
+        profitData.setSettlementDate(settlementDate);
 
         WriterDto writerDto = new WriterDto();
         writerDto.setKid(profit.getWriterId());
@@ -222,34 +282,42 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
         //当前提现金额
         BigDecimal settlementAmount = profit.getSettlementAmount();
-        //当剩余金额小于当前提现金额时
-        if(null != withdrawAmount && withdrawAmount.compareTo(settlementAmount)==-1){
-            logger.error("当前提现金额大于剩余可提现金额");
-        }
-        //提现成功
+        //提现成功,只更新写手表的累计提现金额
          if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_SUCCESS.getCode()){
-             //copy之前的记录，插入一条
+             //当剩余金额小于当前提现金额时
+             if(null != withdrawAmount && withdrawAmount.compareTo(settlementAmount)==-1){
+                 logger.error("当前提现金额大于剩余可提现金额");
+                 throw new YyrzPcException(ExceptionEnum.TxMoreThanSurplusException.getCode(),ExceptionEnum.TxMoreThanSurplusException.getMsg(),
+                         ExceptionEnum.TxMoreThanSurplusException.getErrorMsg());
+             }
+             //提现流水
+             addTxFlow(profitData);
+             //更新流水,只改变状态
              profitData.setSettlementType(profit.getSettlementType());
-             //更新写手信息
+             profitData.setSettlementMsg(ProfitEnum.WITHDRAWALS_SUCCESS.getMsg());
+             insert(profitData);
+             //更新写手信息,只改累计提现金额
              Writer writer = new Writer();
+             writer.setSettlementType(ProfitEnum.WITHDRAWALS_SUCCESS.getCode());
              writer.setKid(profit.getWriterId());
-             writer.setWithdrawDate(profit.getSettlementDate());
-             writer.setSumWithdrawAmount(writerModelVo.getSumWithdrawAmount().add(profit.getSettlementAmount()));
+             writer.setWithdrawDate(settlementDate);
+             writer.setSumWithdrawAmount(MoneyUtils.setBigDecimal(writerModelVo.getSumWithdrawAmount().add(profit.getSettlementAmount())));
              writerService.update(writer);
          }
          //提现失败
          else if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FAIL.getCode()){
+             //更新流水,把钱加回去,加入剩余可提现金额
              profitData.setSettlementType(profit.getSettlementType());
              BigDecimal surplusAmount = profitData.getSurplusAmount().add(profit.getSettlementAmount());
-             profitData.setSurplusAmount(surplusAmount);
-             //更新写手信息
-             Writer writer = new Writer();
-             writer.setKid(profit.getWriterId());
-             writer.setWithdrawDate(profit.getSettlementDate());
-             writer.setWithdrawAmount(writerModelVo.getWithdrawAmount().add(profit.getSettlementAmount()));
-             writerService.update(writer);
-
+             profitData.setSurplusAmount(MoneyUtils.setBigDecimal(surplusAmount));
              insert(profitData);
+             //更新写手信息,把钱加回去,加入剩余可提现金额
+             Writer writer = new Writer();
+             writer.setSettlementType(ProfitEnum.WITHDRAWALS_FAIL.getCode());
+             writer.setKid(profit.getWriterId());
+             writer.setWithdrawDate(settlementDate);
+             writer.setWithdrawAmount(MoneyUtils.setBigDecimal(writerModelVo.getWithdrawAmount().add(profit.getSettlementAmount())));
+             writerService.update(writer);
          }
          return profit;
     }
@@ -279,11 +347,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                     ExceptionEnum.AddOwnerException.getErrorMsg()
                     );
         }
-
         try{
             Account account=new Account();
             account.setAccountName(writer.getUserName());
-            account.setAccountTypeCode(ProfitConstants.ACCOUNTTYPECODE);
+            account.setAccountTypeCode(ProfitConstants.USERACCOUNTTYPECODE.byteValue());
             account.setCurrencyCode(currencyCode);
             account.setStatus(ProfitConstants.ACCOUNTSTATUS);
             account.setOwnerCode(data.getOwnerCode());
@@ -295,10 +362,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                     ExceptionEnum.AddAccountException.getErrorMsg()
             );
         }
-/*        Writer writer1 = new Writer();
+        Writer writer1 = new Writer();
         writer1.setKid(writer.getKid());
-        writer1.setO
-        writerService.update()*/
+        writer1.setOwnerFcode(data.getOwnerFcode()+"");
+        writerService.update(writer1);
         return writer;
     }
 
@@ -309,61 +376,14 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         return new PageModel<ProfitDetailVo>().getPageList(list);
     }
 
-    @Override
-    public PageList<ProfitAdminVo> selectProfitAdminVoList(ProfitDto profitDto) {
-        List<ProfitAdminVo> profitAdminVoList = new ArrayList<>();
-        //按照排序规则找出所有的
-        PageUtils.startPage(profitDto.getCurrentPage(), profitDto.getPageSize());
-        List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
-        if(CollectionUtils.isNotEmpty(list)){
-            List<String> profitSnList = new ArrayList<>();
-            //把流水号拿到反差用户表的数据
-            for(ProfitDetailVo profitDetailVo : list){
-                ProfitAdminVo profitAdminVo = new ProfitAdminVo();
-                BeanUtils.copyProperties(profitDetailVo,profitAdminVo);
-                profitSnList.add(profitDetailVo.getProfitSn());
-                profitAdminVoList.add(profitAdminVo);
-            }
-            List<String> writerIdList = new ArrayList<>();
-            WriterDto writerDto = new WriterDto();
-            writerDto.setProfitSnList(profitSnList);
-            List<WriterAdminRefProfit> writerRefProfitList = writerService.selectAllAdminProfitList(writerDto);
-            if(CollectionUtils.isNotEmpty(writerRefProfitList)){
-                for(WriterAdminRefProfit writerAdminRefProfit : writerRefProfitList){
-                   for(ProfitAdminVo profitAdminVo : profitAdminVoList){
-                       if(writerAdminRefProfit.getProfitSn().equals(profitAdminVo.getProfitSn())){
-                             //把用户相关数据拷贝到返回实体
-                             BeanUtils.copyProperties(writerAdminRefProfit,profitAdminVo);
-                             profitAdminVo.setWriterId(writerAdminRefProfit.getKid().toString());
-                             writerIdList.add(writerAdminRefProfit.getKid()+"");
-                       }
-                   }
-                }
-            }
-            BankDto bankDto = new BankDto();
-            bankDto.setWriterIdList(writerIdList);
-            List<Bank> bankList = bankService.selectListByWriterIds(bankDto);
-            if(CollectionUtils.isNotEmpty(bankList)){
-                 for(Bank bank : bankList){
-                     for(ProfitAdminVo profitAdminVo : profitAdminVoList){
-                         if(bank.getCreateUserId().equals(profitAdminVo.getWriterId())){
-                             String userName = profitAdminVo.getUserName();
-                             BeanUtils.copyProperties(bank,profitAdminVo);
-                             profitAdminVo.setUserRefBankName(bank.getUserName());
-                             profitAdminVo.setUserName(userName);
-                         }
-                     }
-                 }
-            }
-        }
-        return new PageModel<ProfitAdminVo>().getPageList(profitAdminVoList);
-    }
 
-    @Override
-    public List<ProfitAdminVo> selectAllProfitAdminVoList(ProfitDto profitDto) {
+    /**
+     * 填充数据
+     * @param list
+     * @return
+     */
+    public List<ProfitAdminVo> fillProfitData(List<ProfitDetailVo> list){
         List<ProfitAdminVo> profitAdminVoList = new ArrayList<>();
-        //按照排序规则找出所有的
-        List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
         if(CollectionUtils.isNotEmpty(list)){
             List<String> profitSnList = new ArrayList<>();
             //把流水号拿到反差用户表的数据
@@ -383,7 +403,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                         if(writerAdminRefProfit.getProfitSn().equals(profitAdminVo.getProfitSn())){
                             //把用户相关数据拷贝到返回实体
                             BeanUtils.copyProperties(writerAdminRefProfit,profitAdminVo);
-                            profitAdminVo.setWriterId(writerAdminRefProfit.getKid().toString());
+                            profitAdminVo.setWriterId(writerAdminRefProfit.getKid());
                             writerIdList.add(writerAdminRefProfit.getKid()+"");
                         }
                     }
@@ -406,5 +426,181 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             }
         }
         return profitAdminVoList;
+    }
+
+    @Override
+    public PageList<ProfitAdminVo> selectProfitAdminVoList(ProfitDto profitDto) {
+        //按照排序规则找出所有的
+        PageUtils.startPage(profitDto.getCurrentPage(), profitDto.getPageSize());
+        List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
+        List<ProfitAdminVo> profitAdminVoList = fillProfitData(list);
+        return new PageModel<ProfitAdminVo>().getPageList(profitAdminVoList);
+    }
+
+    @Override
+    public List<ProfitAdminVo> selectAllProfitAdminVoList(ProfitDto profitDto) {
+        List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
+        List<ProfitAdminVo> profitAdminVoList = fillProfitData(list);
+        return profitAdminVoList;
+    }
+
+    /**
+     * 稿费流水
+     * @param profit
+     */
+    public void addRoyalFlow(Profit profit){
+        try{
+            //得到写手的个人基本信息
+            WriterDto writerDto = new WriterDto();
+            writerDto.setKid(profit.getWriterId());
+            WriterModelVo writerModelVo =writerService.selectWriterByParameters(writerDto);
+            Long userFcode = Long.valueOf(writerModelVo.getOwnerFcode());
+
+            BigDecimal amount = profit.getSettlementAmount();
+            TransactionFlowRecord record = new TransactionFlowRecord();
+            //订单号
+            String orderId = String.valueOf(idAPI.getSnowflakeId());
+            record.setOrderId(ProfitConstants.OREDERPREFIX+orderId);
+            //支付单号
+            String paySn = String.valueOf(idAPI.getSnowflakeId());
+            record.setPaySn(ProfitConstants.OREDERPREFIX+paySn);
+            ////业务编码（外码）稿费
+            record.setBusiFCode(busiRoyalFCode);
+            //总金额扩大10000倍
+            record.setTotalAmount(amount);
+            //总条数
+            record.setTotalCount(2);
+            //流水记录集合
+            List<TransactionFlowRecord.Flow> flowList = new ArrayList<TransactionFlowRecord.Flow>();
+            //平台收益
+            TransactionFlowRecord.Flow flow = new TransactionFlowRecord.Flow();
+            flow.setOwnerFCode(ownerFCode);
+            //账户类型编码(1 平台现金 2 平台暂存 3 平台收益 4 用户收益)
+            flow.setAccountTypeCode(ProfitConstants.PLATACCOUNTTYPECODE);
+            //发生额(元*10000)
+            flow.setAmount(amount);
+            //币种编码
+            flow.setCurrencyCode(currencyCode);
+            //记账标识(10入账，20出帐)
+            flow.setAccountingFlag(ProfitConstants.ACCOUNTINGSUBFLAG);
+            //现金标识(10现金，20非现金)
+            flow.setCashFlag(ProfitConstants.NOTCASHFLAG);
+            //核算标识(10核算，20不核算)
+            flow.setCheckFlag(ProfitConstants.CHECKFLAG);
+            flowList.add(flow);
+
+            //用户收益
+            TransactionFlowRecord.Flow flow2 = new TransactionFlowRecord.Flow();
+            flow2.setOwnerFCode(userFcode);
+            //账户类型编码(1 平台现金 2 平台暂存 3 平台收益 4 用户收益)
+            flow2.setAccountTypeCode(ProfitConstants.USERACCOUNTTYPECODE);
+            //发生额(元*10000)
+            flow2.setAmount(amount);
+            //币种编码
+            flow.setCurrencyCode(currencyCode);
+            //记账标识(10入账)
+            flow2.setAccountingFlag(ProfitConstants.ACCOUNTINGFLAG);
+            //现金标识(10现金，20非现金)
+            flow2.setCashFlag(ProfitConstants.NOTCASHFLAG);
+            //核算标识(10核算，20不核算)
+            flow.setCheckFlag(ProfitConstants.CHECKFLAG);
+            flowList.add(flow2);
+            record.setFlowList(flowList);
+            openTransactionApi.add(record);
+        }catch (Exception e){
+            logger.error("稿费流水插入资金系统失败",e);
+            throw new YyrzPcException(ExceptionEnum.addRoyalFlowFailException.getCode(),ExceptionEnum.addRoyalFlowFailException.getMsg(),
+                    ExceptionEnum.addRoyalFlowFailException.getErrorMsg()
+            );
+        }
+    }
+
+    /**
+     * 提现流水
+     * @param profit
+     */
+    public void addTxFlow(Profit profit){
+        try{
+            //得到写手的个人基本信息
+            WriterDto writerDto = new WriterDto();
+            writerDto.setKid(profit.getWriterId());
+            WriterModelVo writerModelVo =writerService.selectWriterByParameters(writerDto);
+            Long userFcode = Long.valueOf(writerModelVo.getOwnerFcode());
+
+            BigDecimal amount = profit.getSettlementAmount();
+            TransactionFlowRecord record = new TransactionFlowRecord();
+            //订单号
+            String orderId = String.valueOf(idAPI.getSnowflakeId());
+            record.setOrderId(ProfitConstants.OREDERPREFIX+orderId);
+            //支付单号
+            String paySn = String.valueOf(idAPI.getSnowflakeId());
+            record.setPaySn(ProfitConstants.OREDERPREFIX+paySn);
+            ////业务编码（外码）稿费
+            record.setBusiFCode(busiRoyalFCode);
+            //总金额扩大10000倍
+            record.setTotalAmount(amount);
+            //总条数
+            record.setTotalCount(3);
+            //流水记录集合
+            List<TransactionFlowRecord.Flow> flowList = new ArrayList<TransactionFlowRecord.Flow>();
+
+            //平台收益减去提现金额
+            TransactionFlowRecord.Flow flow0 = new TransactionFlowRecord.Flow();
+            flow0.setOwnerFCode(ownerFCode);
+            //账户类型编码(平台现金)
+            flow0.setAccountTypeCode(ProfitConstants.PLATCASHTYPECODE);
+            //发生额(元*10000)
+            flow0.setAmount(amount);
+            //币种编码
+            flow0.setCurrencyCode(currencyCode);
+            //记账标识(10入账，20出帐)
+            flow0.setAccountingFlag(ProfitConstants.ACCOUNTINGSUBFLAG);
+            //现金标识(10现金，20非现金)
+            flow0.setCashFlag(ProfitConstants.CASHFLAG);
+            //核算标识(10核算，20不核算)
+            flow0.setCheckFlag(ProfitConstants.CHECKFLAG);
+            flowList.add(flow0);
+
+            //平台收益:手续费
+            TransactionFlowRecord.Flow flow = new TransactionFlowRecord.Flow();
+            flow.setOwnerFCode(ownerFCode);
+            //账户类型编码(1 平台现金 2 平台暂存 3 平台收益 4 用户收益)
+            flow.setAccountTypeCode(ProfitConstants.PLATACCOUNTTYPECODE);
+            //发生额(元*10000),手续费
+            flow.setAmount(profit.getChargeFee());
+            //币种编码
+            flow.setCurrencyCode(currencyCode);
+            //记账标识(10入账，20出帐)
+            flow.setAccountingFlag(ProfitConstants.ACCOUNTINGFLAG);
+            //现金标识(10现金，20非现金)
+            flow.setCashFlag(ProfitConstants.NOTCASHFLAG);
+            //核算标识(10核算，20不核算)
+            flow.setCheckFlag(ProfitConstants.CHECKFLAG);
+            flowList.add(flow);
+
+            //用户收益
+            TransactionFlowRecord.Flow flow2 = new TransactionFlowRecord.Flow();
+            flow2.setOwnerFCode(userFcode);
+            //账户类型编码(1 平台现金 2 平台暂存 3 平台收益 4 用户收益)
+            flow2.setAccountTypeCode(ProfitConstants.USERACCOUNTTYPECODE);
+            //发生额(元*10000),实际得款
+            flow2.setAmount(amount.subtract(profit.getChargeFee()));
+            //币种编码
+            flow.setCurrencyCode(currencyCode);
+            //记账标识(10入账，20出帐)
+            flow2.setAccountingFlag(ProfitConstants.ACCOUNTINGFLAG);
+            //现金标识(10现金，20非现金)
+            flow2.setCashFlag(ProfitConstants.CASHFLAG);
+            //核算标识(10核算，20不核算)
+            flow.setCheckFlag(ProfitConstants.CHECKFLAG);
+            flowList.add(flow2);
+            record.setFlowList(flowList);
+            openTransactionApi.add(record);
+        }catch (Exception e){
+            logger.error("提现流水插入资金系统失败",e);
+            throw new YyrzPcException(ExceptionEnum.addTxFlowFailException.getCode(),ExceptionEnum.addTxFlowFailException.getMsg(),
+                    ExceptionEnum.addTxFlowFailException.getErrorMsg()
+            );
+        }
     }
 }
