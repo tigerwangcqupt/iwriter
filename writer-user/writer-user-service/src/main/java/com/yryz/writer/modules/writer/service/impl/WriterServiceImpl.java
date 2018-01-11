@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.entity.WriterAudit;
+import com.yryz.writer.modules.writer.dao.persistence.WriterAuditDao;
 import com.yryz.writer.modules.writer.dao.persistence.WriterDao;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.service.WriterService;
@@ -35,6 +37,9 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
 
     @Autowired
     private WriterDao writerDao;
+    
+    @Autowired
+    private WriterAuditDao writerAuditDao;
 
     public final static int LOCK_EXPIRE_DEFAULT = 60;
 
@@ -83,11 +88,16 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
     	 return writerDao.selectWriterDetail(kid);
     }
 
-    public WriterVo detail(Long writerId) {
-        Writer writer = writerDao.selectByKid(Writer.class,writerId);
+    public WriterVo detail(Long kid) {
+        Writer writer = writerDao.selectByKid(Writer.class,kid);
+        //查询最新一条审核信息
+        WriterAudit writerAudit = writerAuditDao.selectAuditDetail(kid);
         WriterVo writerVo = new WriterVo();
         if (writer != null) {
         	BeanUtils.copyProperties(writer, writerVo);
+        	if(writerAudit !=null){
+        		writerVo.setRemark(writerAudit.getRemark());        		
+        	}
         }
         return writerVo;
     }

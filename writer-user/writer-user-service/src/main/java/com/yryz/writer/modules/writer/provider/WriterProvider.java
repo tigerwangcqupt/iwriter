@@ -68,9 +68,20 @@ public class WriterProvider implements WriterApi {
 	*  @param  writerId
 	*  @return
 	* */
-	public RpcResponse<WriterVo> detail(Long writerId) {
+	public RpcResponse<WriterVo> detail(Long kid) {
 		try {
-			return ResponseModel.returnObjectSuccess(writerService.detail(writerId));
+			WriterVo writerVo = writerService.detail(kid);
+			if(writerVo!=null){
+				ProvinceVo provinceVo = provinceApi.selectProvinces(writerVo.getProvice());
+				if(provinceVo!=null){
+					writerVo.setProviceName(provinceVo.getProvinceName());
+				}
+				CityVo cityVo = cityApi.selectCity(writerVo.getCity());
+				if(cityVo!=null){
+					writerVo.setCityName(cityVo.getCityName());
+				}
+			}
+			return ResponseModel.returnObjectSuccess(writerVo);
 		} catch (Exception e) {
 			logger.error("获取Writer明细失败", e);
 			return ResponseModel.returnException(e);

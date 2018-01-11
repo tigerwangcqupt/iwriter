@@ -118,7 +118,9 @@ public class Writer extends GenericEntity{
 	 *资金主体外码
 	 */
      private String ownerFcode;
-
+     
+     private String remark;
+     
 
 	public String getProfitSn() {
 		return profitSn;
@@ -287,6 +289,16 @@ public class Writer extends GenericEntity{
 	public void setJpushRegistrationId(String jpushRegistrationId) {
 		this.jpushRegistrationId = jpushRegistrationId;
 	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
+	
 
 
 }

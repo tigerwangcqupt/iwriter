@@ -7,7 +7,6 @@
 		<id column="id" property="id" jdbcType="BIGINT"/>
 		<result column="kid" property="kid" jdbcType="BIGINT"/>
 		<result column="account" property="account" jdbcType="VARCHAR"/>
-		<result column="pwd" property="pwd" jdbcType="VARCHAR"/>
 		<result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
 		<result column="head_img" property="headImg" jdbcType="VARCHAR"/>
 		<result column="phone" property="phone" jdbcType="VARCHAR"/>
@@ -28,22 +27,19 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
+	<sql id="Base_Column_List">id,kid,account,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
     </sql>
 
     <!-- 查询Writer详情 -->
     <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
-        from yryz_writer
-        where kid = #{kid,jdbcType=BIGINT}
+        from yryz_writer  where kid = #{kid,jdbcType=BIGINT}
     </select>
     
     <!-- 删除Writer-->
     <delete id="delete" parameterType="java.lang.Long">
-        update yryz_writer
-        set del_flag = 1
-        where kid = #{kid,jdbcType=BIGINT}
+        delete from yryz_writer where kid = #{kid,jdbcType=BIGINT}
     </delete>
   
   

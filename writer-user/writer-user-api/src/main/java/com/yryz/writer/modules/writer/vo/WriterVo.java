@@ -58,10 +58,15 @@ public class WriterVo implements Serializable{
 	 */	 
     private  String provice;
     
+    private  String proviceName;
+    
+    
 	/**
 	 * 市
 	 */	 
     private  String city;
+    
+    private  String cityName;
     
 	/**
 	 * 联系电话
@@ -87,6 +92,8 @@ public class WriterVo implements Serializable{
 	 * 极光唯一注册ID
 	 */	 
     private  String jpushRegistrationId;
+    
+    private String remark;
     
 
 	public String getAccount() {
@@ -208,5 +215,32 @@ public class WriterVo implements Serializable{
 	public void setJpushRegistrationId(String jpushRegistrationId) {
 		this.jpushRegistrationId = jpushRegistrationId;
 	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getProviceName() {
+		return proviceName;
+	}
+
+	public void setProviceName(String proviceName) {
+		this.proviceName = proviceName;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+	
+	
+	
 		
 }

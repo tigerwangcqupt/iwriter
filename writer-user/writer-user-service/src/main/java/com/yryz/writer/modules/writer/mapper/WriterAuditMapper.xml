@@ -74,6 +74,13 @@
         and h.kid = #{kid,jdbcType=BIGINT}
     </select>
     
+    <!-- 查询WriterAudit详情 -->
+    <select id="selectAuditDetail" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select h.* from yryz_writer_audit_history h
+        WHERE h.writer_kid = #{writerKid,jdbcType=BIGINT}
+        order by h.audit_date DESC limit 0,1
+    </select>
+    
     <!-- 删除WriterAudit-->
     <delete id="delete" parameterType="java.lang.Long">
         update yryz_writer_audit_history
