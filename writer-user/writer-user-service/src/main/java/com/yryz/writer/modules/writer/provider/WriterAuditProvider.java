@@ -38,9 +38,6 @@ public class WriterAuditProvider implements WriterAuditApi {
 	@Autowired
 	private CityApi cityApi;
 	
-	@Autowired
-	private ProfitApi profitApi;
-	
 
 	/**
 	*  获取WriterAudit明细
@@ -108,18 +105,7 @@ public class WriterAuditProvider implements WriterAuditApi {
 	@Override
 	public RpcResponse<Integer> audit(WriterAuditVo writerAuditVo) {
 		 try {
-			 Integer count = writerAuditService.audit(writerAuditVo);
-			 if(writerAuditVo.getAuditStatus().intValue()==2){
-				 //审核通过，绑定资金主体
-				 Writer writer = new Writer();
-				 BeanUtils.copyProperties(writerAuditVo, writer);
-				 writer.setKid(writerAuditVo.getWriterKid());
-				 RpcResponse<Writer> result  = profitApi.bindCapital(writer);
-				 if(!result.success()){
-					 logger.error("profitApi bindCapital：绑定资金主体失败");
-				 }
-			 }
-			 return ResponseModel.returnObjectSuccess(count);
+			 return ResponseModel.returnObjectSuccess(writerAuditService.audit(writerAuditVo));
         } catch (Exception e) {
         	 logger.error("更新WriterAudit状态失败", e);
        		 return ResponseModel.returnException(e);
