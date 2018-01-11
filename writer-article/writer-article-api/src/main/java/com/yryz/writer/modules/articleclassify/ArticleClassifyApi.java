@@ -64,4 +64,27 @@ public interface ArticleClassifyApi {
 	 * @return
 	 */
 	RpcResponse<Boolean> shelveOff(Long articleClassifyId);
+
+	/**
+	 * 删除分类
+	 * @param articleClassifyId
+	 * @return
+	 */
+	RpcResponse<Boolean> delete(Long articleClassifyId, String lastUpdateUserId);
+
+	/**
+	 * 恢复分类
+	 * @param articleClassifyId
+	 * @return
+	 */
+	RpcResponse<Boolean> recover(Long articleClassifyId, String lastUpdateUserId);
+
+	/**
+	 * 检查该分类是否可以作为父类
+	 * 即该分类下是否包含文章
+	 * 若有文章就是末级分类 不能以它做父类
+	 * @param kid
+	 * @return
+	 */
+	RpcResponse<Boolean> checkArticleClassify(Long kid);
 }

@@ -30,18 +30,31 @@
         select
         <include refid="Base_Column_List"/>
         from yryz_articleclassify
-        where del_flag = 0
-		and kid = #{kid,jdbcType=BIGINT}
+        where kid = #{kid,jdbcType=BIGINT}
     </select>
     
     <!-- 删除ArticleClassify-->
-    <delete id="delete" parameterType="java.lang.Long">
+    <delete id="deleteArticleClassify" >
         update yryz_articleclassify
-        set del_flag = 1
+        set del_flag = 1,
+        	last_update_date=NOW(),
+			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+			recommend_flag = 0,
+			sort = 9999,
+			shelve_flag = 1
         where kid = #{kid,jdbcType=BIGINT}
+
     </delete>
-  
-  
+
+	<!--  恢复分类 -->
+	<update id="recoverClassify" >
+		update yryz_articleclassify
+        set del_flag = 0,
+        	last_update_date=NOW(),
+			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR}
+        where kid = #{kid,jdbcType=BIGINT}
+	</update>
+
 
 	
 	<!--按需新增ArticleClassify-->
@@ -84,12 +97,8 @@
         <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
 			last_update_user_id,
 	    </if>
-		<if test="createDate != null">
 			create_date,
-		</if>
-		<if test="lastUpdateDate != null">
-			last_update_date,
-		</if>
+			last_update_date
 	    </trim>
 	    <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="kid != null">
@@ -182,23 +191,30 @@
         <include refid="Base_Column_List"/>
         from yryz_articleclassify
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			shelve_flag = 0
-			AND del_flag = 0
+			<if test="shelveFlag != null">
+				shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+			</if>
+			<if test="delFlag != null">
+				AND del_flag = #{delFlag,jdbcType=TINYINT},
+			</if>
 			<if test="classifyName != null and classifyName != '' " >
 				AND classify_name like CONCAT('%',trim(#{classifyName}),'%')
 			</if>
-
-			<if test="orderStr != null and orderStr != '' " >
-				${orderStr}
-			</if>
-
 		</trim>
+		<if test="orderStr != null and orderStr != '' " >
+			${orderStr}
+		</if>
 
     </select>
 
 	<!--  查询子分类是上架状态的个数 -->
 	<select id="selectShelveOnChildCount" resultType="int">
 		select count(1) from yryz_classify t where t.parent_id=#{id} and t.del_flag=0 and t.shelve_flag=0
+	</select>
+
+	<!--  分类下是否包含文章个数  -->
+	<select id="countArticleByClassifyId" parameterType="Long"  resultType="int" >
+		SELECT COUNT(1) FROM yryz_article_articleclasssfy WHERE classfy_id=#{articleClassifyId}
 	</select>
     
 </mapper>

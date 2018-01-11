@@ -2,6 +2,7 @@ package com.yryz.writer.modules.articleclassify.service.impl;
 
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.exception.BaseException;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
@@ -70,10 +71,20 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
 
     public ArticleClassifyVo detail(Long articleClassifyId) {
         ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class,articleClassifyId);
+        ArticleClassify parentArticleClassify = null;
+        Long parentId = articleClassify.getParentId();
         ArticleClassifyVo articleClassifyVo = new ArticleClassifyVo();
         if (articleClassifyVo != null) {
             //ArticleClassify to ArticleClassifyVo
             BeanUtils.copyProperties(articleClassify, articleClassifyVo);
+        }
+        //设置父类别属性
+        if (parentId != null && parentId > 0) {
+            parentArticleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, parentId);
+            articleClassifyVo.setParentClassifyName(parentArticleClassify.getClassifyName());
+        } else {
+            articleClassifyVo.setParentId(0L);
+            articleClassifyVo.setParentClassifyName("全部分类");
         }
         return articleClassifyVo;
     }
@@ -81,17 +92,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     @Override
     public Boolean insert(ArticleClassify articleClassify) {
         try {
-            //查父级分类
-            ArticleClassify parent = articleClassifyDao.selectByKid(ArticleClassify.class, articleClassify.getParentId());
-            //父级分类是末级分类时
-            if (null != parent && ArticleClassifyConstant.LAST_STAGE_YES == parent.getLastStageFlag()) {
-                //父级分类为末级分类，需要修改为非末级分类
-                ArticleClassify updateClassify = new ArticleClassify();
-                updateClassify.setId(parent.getId());
-                updateClassify.setLastStageFlag(ArticleClassifyConstant.LAST_STAGE_NO);
-                updateClassify.setLastUpdateUserId(articleClassify.getLastUpdateUserId());
-                articleClassifyDao.update(updateClassify);
-            }
+            changeToNoFloor(articleClassify.getParentId(), articleClassify.getLastUpdateUserId());
             Long kid = idApi.getId("yryz_articleclassify");
             articleClassify.setKid(kid);
             articleClassify.setRecommendFlag(Integer.valueOf(ArticleClassifyConstant.RECOMMEND_NO));
@@ -111,8 +112,28 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         return true;
     }
 
+    /**
+     * 将父分类是末级分类的修改为非末级分类
+     * @param parentId
+     * @param lastUpdateUserId
+     */
+    private void changeToNoFloor(Long parentId, String lastUpdateUserId){
+        //查父级分类
+        ArticleClassify parent = articleClassifyDao.selectByKid(ArticleClassify.class, parentId);
+        //父级分类是末级分类时
+        if (null != parent && ArticleClassifyConstant.LAST_STAGE_YES == parent.getLastStageFlag()) {
+            //父级分类为末级分类，需要修改为非末级分类
+            ArticleClassify updateClassify = new ArticleClassify();
+            updateClassify.setId(parent.getId());
+            updateClassify.setLastStageFlag(ArticleClassifyConstant.LAST_STAGE_NO);
+            updateClassify.setLastUpdateUserId(lastUpdateUserId);
+            articleClassifyDao.update(updateClassify);
+        }
+    }
+
     public Boolean update(ArticleClassify articleClassify) {
         try {
+
             int successNum = articleClassifyDao.update(articleClassify);
             if (successNum < 1){
                 return false;
@@ -128,24 +149,24 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         try {
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, articleClassifyId);
             if (null == articleClassify) {
-                throw new Exception("文章分类不存在");
+                throw new BaseException("文章分类不存在");
             }
 
             if (ArticleClassifyConstant.LAST_STAGE_YES == articleClassify.getLastStageFlag()) {
                 ArticleClassify parentClassify = articleClassifyDao.selectByKid(ArticleClassify.class, articleClassify.getParentId());
                 //父级分类为下架，不能下架该分类
                 if(parentClassify !=null && parentClassify.getShelveFlag()==1){
-                    throw new Exception("该分类的父级分类为下架，请先上架父级分类再上架该分类");
+                    throw new BaseException("该分类的父级分类为下架，请先上架父级分类再上架该分类");
                 }
             }
             //上架
-            articleClassify.setLastStageFlag(0);
+            articleClassify.setShelveFlag(0);
             int successNum = articleClassifyDao.update(articleClassify);
-            return successNum > 1 ? true : false;
+            return successNum > 0 ? true : false;
         }catch (Exception e){
             logger.error("上架文章分类操作失败", e);
+            throw e;
         }
-        return false;
     }
 
     @Override
@@ -153,24 +174,104 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         try {
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class,articleClassifyId);
             if (null == articleClassify) {
-                throw new Exception("文章分类不存在");
+                throw new BaseException("文章分类不存在");
             }
-            //末级分类
+            //非末级分类
             if (ArticleClassifyConstant.LAST_STAGE_YES != articleClassify.getLastStageFlag()) {
                 //该分类下子分类存在上架的，不能直接下架
                 int count = articleClassifyDao.selectShelveOnChildCount(articleClassifyId);
                 if (count > 0) {
-                    throw new Exception("该分类下存在上架子分类，请先下架下子分类再下架该分类");
+                    throw new BaseException("该分类下存在上架子分类，请先下架下子分类再下架该分类");
                 }
-
             }
-
-            articleClassify.setLastStageFlag(1);
+            articleClassify.setShelveFlag(1);
             int successNum = articleClassifyDao.update(articleClassify);
-            return successNum > 1 ? true : false;
+            return successNum > 0 ? true : false;
         }catch (Exception e){
             logger.error("下架文章分类操作失败", e);
+            throw e;
         }
-        return false;
+    }
+
+    @Override
+    public Boolean deleteArticleClassify(Long kid, String lastUpdateUserId) {
+        try {
+            ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);
+            if (null == articleClassify) {
+                throw new BaseException("文章分类不存在");
+            }
+            //非末级分类
+            if (ArticleClassifyConstant.LAST_STAGE_YES != articleClassify.getLastStageFlag()) {
+                throw new BaseException("该分类下有子分类，请移除分类下子分类再删除");
+            }
+            int successNum = articleClassifyDao.deleteArticleClassify(kid, lastUpdateUserId);
+            //判断该分类的父级分类是否存在其他子分类
+            int count = articleClassifyDao.selectShelveOnChildCount(articleClassify.getParentId());
+            if (count == 0) {
+                //修改为末级分类
+                ArticleClassify updateClassify = new ArticleClassify();
+                updateClassify.setId(articleClassify.getParentId());
+                updateClassify.setLastStageFlag(ArticleClassifyConstant.LAST_STAGE_YES);
+                updateClassify.setLastUpdateUserId(lastUpdateUserId);
+                articleClassifyDao.update(updateClassify);
+            }
+
+            return successNum > 0 ? true : false;
+        }catch (Exception e){
+            logger.error("删除文章分类操作失败", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public Boolean recoverArticleClassify(Long kid, String lastUpdateUserId) {
+        try {
+            ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);
+            if (null == articleClassify) {
+                throw new BaseException("文章分类不存在");
+            }
+            ArticleClassify parent = articleClassifyDao.selectByKid(ArticleClassify.class, articleClassify.getParentId());
+            //末级分类
+            if (null != parent && ArticleClassifyConstant.LAST_STAGE_YES == parent.getLastStageFlag()) {
+                //父级分类上关联了文章
+                if (articleClassifyDao.countArticleByClassifyId(articleClassify.getParentId()) > 0) {
+                    throw new BaseException("父级分类下有文章，请移除文章再恢复该分类");
+                }
+
+                //父级分类为末级分类，需要修改为非末级分类
+                ArticleClassify updateClassify = new ArticleClassify();
+                updateClassify.setId(parent.getId());
+                updateClassify.setLastStageFlag(ArticleClassifyConstant.LAST_STAGE_NO);
+                updateClassify.setLastUpdateUserId(lastUpdateUserId);
+                articleClassifyDao.update(updateClassify);
+            }
+            int successNum =  articleClassifyDao.recoverClassify(kid, lastUpdateUserId);
+
+            return successNum > 0 ? true : false;
+        }catch (Exception e){
+            logger.error("删除文章分类操作失败", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public Boolean checkArticleClassify(Long kid) {
+        try {
+            ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);
+            if (null == articleClassify) {
+                throw new BaseException("文章分类不存在");
+            }
+            //该分类是末级分类
+            if (ArticleClassifyConstant.LAST_STAGE_YES == articleClassify.getLastStageFlag()) {
+                //该末级分类上关联着文章
+                int count = articleClassifyDao.countArticleByClassifyId(kid);
+                return count > 0 ? false : true;
+            }
+
+        }catch (Exception e){
+            logger.error("检查文章分类操作失败", e);
+            throw e;
+        }
+        return true;
     }
 }

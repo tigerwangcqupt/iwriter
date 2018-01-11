@@ -3,6 +3,7 @@ package com.yryz.writer.modules.articleclassify.dao.persistence;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
 import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,4 +45,26 @@ public interface ArticleClassifyDao extends BaseDao {
      */
     int selectShelveOnChildCount(Long id);
 
+    /**
+     * 逻辑删除文章分类
+     * @param kid
+     * @param lastUpdateUserId
+     * @return
+     */
+    int deleteArticleClassify(@Param("kid") Long kid, @Param("lastUpdateUserId") String lastUpdateUserId);
+
+    /**
+     * 恢复文章分类
+     * @param kid
+     * @param lastUpdateUserId
+     * @return
+     */
+    int recoverClassify(@Param("kid") Long kid, @Param("lastUpdateUserId") String lastUpdateUserId);
+
+    /**
+     *分类下是否包含文章个数
+     * @param articleClassifyId
+     * @return
+     */
+    int countArticleByClassifyId(@Param("articleClassifyId")Long articleClassifyId);
 }

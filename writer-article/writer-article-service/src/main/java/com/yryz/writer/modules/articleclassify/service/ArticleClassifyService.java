@@ -49,4 +49,26 @@ public interface ArticleClassifyService extends BaseService {
     */
    Boolean shelveOff(Long articleClassifyId);
 
+   /**
+    * 删除分类
+    * @param kid  分类id
+    * @return
+    */
+   Boolean deleteArticleClassify(Long kid, String lastUpdateUserId);
+
+   /**
+    * 恢复分类
+    * @param kid  分类id
+    * @return
+    */
+   Boolean recoverArticleClassify(Long kid, String lastUpdateUserId);
+
+   /**
+    * 检查该分类是否可以作为父类
+    * 即该分类下是否包含文章
+    * 若有文章就是末级分类 不能以它做父类
+    * @param kid
+    * @return
+    */
+   Boolean checkArticleClassify(Long kid);
 }

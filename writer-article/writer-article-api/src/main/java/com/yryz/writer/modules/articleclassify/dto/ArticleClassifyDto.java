@@ -33,6 +33,17 @@ public class ArticleClassifyDto extends PageList {
     /** 排序 */
     private String orderStr;
 
+    /**
+     * 是否上架: 0上架1下架
+     */
+    private  Integer shelveFlag;
+
+
+    /**
+     * 是否删除:0正常1已删除
+     */
+    private  Integer delFlag;
+
     public void setClassifyName(String classifyName) {
         this.classifyName = classifyName;
     }
@@ -83,5 +94,22 @@ public class ArticleClassifyDto extends PageList {
 
     public void setParentClassifyName(String parentClassifyName) {
         this.parentClassifyName = parentClassifyName;
+    }
+
+    public void setShelveFlag(Integer shelveFlag) {
+        this.shelveFlag = shelveFlag;
+    }
+
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public Integer getShelveFlag() {
+
+        return shelveFlag;
+    }
+
+    public Integer getDelFlag() {
+        return delFlag;
     }
 }

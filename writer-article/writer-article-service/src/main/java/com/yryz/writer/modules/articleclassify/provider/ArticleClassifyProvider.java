@@ -98,9 +98,39 @@ public class ArticleClassifyProvider implements ArticleClassifyApi {
 	@Override
 	public RpcResponse<Boolean> shelveOff(Long articleClassifyId) {
 		try {
-			return ResponseModel.returnObjectSuccess(articleClassifyService.shelveOn(articleClassifyId));
+			return ResponseModel.returnObjectSuccess(articleClassifyService.shelveOff(articleClassifyId));
 		} catch (Exception e) {
 			logger.error("下架ArticleClassify失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Boolean> delete(Long articleClassifyId, String lastUpdateUserId) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleClassifyService.deleteArticleClassify(articleClassifyId, lastUpdateUserId));
+		} catch (Exception e) {
+			logger.error("删除ArticleClassify失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Boolean> recover(Long articleClassifyId, String lastUpdateUserId) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleClassifyService.recoverArticleClassify(articleClassifyId, lastUpdateUserId));
+		} catch (Exception e) {
+			logger.error("删除ArticleClassify失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Boolean> checkArticleClassify(Long kid) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleClassifyService.checkArticleClassify(kid));
+		} catch (Exception e) {
+			logger.error("删除ArticleClassify失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}
