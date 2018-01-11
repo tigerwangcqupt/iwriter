@@ -11,6 +11,7 @@ import com.yryz.service.api.user.entity.CustInfo;
 import com.yryz.service.api.user.entity.UserAuth;
 import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.exception.BaseException;
 import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.platform.SmsCommonApi;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -291,6 +294,7 @@ public class UserAppController extends BaseController {
             String token = isSuccess(tokenRpcResponse);
             authInfoVo.setCustPhone(custRegisterDto.getCustPhone());
             authInfoVo.setToken(token);
+            authInfoVo.setUserId(user.getKid());
 
             return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
         }
@@ -299,6 +303,7 @@ public class UserAppController extends BaseController {
                 ExceptionEnum.PIN_ERROR.getMsg(),
                 ExceptionEnum.PIN_ERROR.getErrorMsg());
     }
+
 
     /**
      * 手机号登陆
@@ -343,6 +348,7 @@ public class UserAppController extends BaseController {
             }
         }
 
+        authInfoVo.setUserId(user.getKid());
         authInfoVo.setCustPhone(phone);
         return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
     }
