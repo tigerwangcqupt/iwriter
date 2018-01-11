@@ -39,6 +39,19 @@ public class CustRegisterDto extends CustRegister {
      */
     private String installChannel;
 
+    /**
+     * 图形验证码
+     */
+    private String imageCode;
+
+    public String getImageCode() {
+        return imageCode;
+    }
+
+    public void setImageCode(String imageCode) {
+        this.imageCode = imageCode;
+    }
+
     public String getInstallChannel() {
         return installChannel;
     }

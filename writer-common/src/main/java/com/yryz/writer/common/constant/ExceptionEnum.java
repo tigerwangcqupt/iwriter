@@ -38,7 +38,7 @@ public enum ExceptionEnum {
     PHONE_UNBIND("5015", "该手机号未绑定，无法设置密码！", "该手机号未绑定，无法设置密码！"),
     HAS_SET_PASSWORD("5016", "已设置过密码！", "已设置过密码！"),
     PIN_FREQUENTLY("5024", "发送验证码过于频繁，请稍候再试！", "发送验证码过于频繁，请稍候再试！"),
-
+    IMAGE_CODE_ERROR("5025", "图形验证码错误！", "图形验证码错误！"),
 
     AddOwnerException("6001", "增加资金主体异常", "增加资金主体异常"),
 

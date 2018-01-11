@@ -58,6 +58,24 @@ public interface WriterApi {
 	 * */
 	RpcResponse<Writer> selectByPhone(String phone);
 
+
+	/**
+	 *  获取图形验证码
+	 *  @param  phone
+	 *  @return
+	 * */
+	RpcResponse<String> getImageCode(String phone);
+
+	/**
+	 *  检查图形验证码
+	 *  @param  phone
+	 *  @param  imageCode
+	 *  @return
+	 * */
+	RpcResponse<Boolean> checkImageCode(String phone,String imageCode);
+
+
+
 	/**
 	 *  获取用户token
 	 *  @param  custId

@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.writer.service;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
@@ -41,6 +42,10 @@ public interface WriterService extends BaseService {
    PageList<WriterAdminVo> selectListAdmin(WriterDto writerDto);
 
    Writer selectByPhone(String phone);
+
+   String getImageCode (String phone);
+
+   Boolean checkImageCode(String phone, String imageCode);
 
    WriterModelVo selectWriterByParameters(WriterDto writerDto);
 

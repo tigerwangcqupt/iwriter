@@ -274,7 +274,38 @@ public class WriterProvider implements WriterApi {
 			return ResponseModel.returnException(e);
 		}
 	}
-	
+
+	/**
+	 *  获取图形验证码
+	 *  @param  phone
+	 *  @return
+	 * */
+	public RpcResponse<String> getImageCode(String phone) {
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.getImageCode(phone));
+		} catch (Exception e) {
+			logger.error("获取图形验证码失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	/**
+	 *  检查图形验证码
+	 *  @param  phone
+	 *  @param  imageCode
+	 *  @return
+	 * */
+	public RpcResponse<Boolean> checkImageCode(String phone,String imageCode){
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.checkImageCode(phone,imageCode));
+		} catch (Exception e) {
+			logger.error(" 检查图形验证码失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+
+
 	/**
 	 * 获取用户token
 	 * @param  custId

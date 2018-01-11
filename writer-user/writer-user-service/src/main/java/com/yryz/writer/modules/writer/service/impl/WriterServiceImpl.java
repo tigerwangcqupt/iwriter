@@ -1,6 +1,9 @@
 package com.yryz.writer.modules.writer.service.impl;
 
 import com.yryz.service.api.api.exception.RedisOptException;
+import com.yryz.service.api.api.exception.ServiceException;
+import com.yryz.service.api.basic.api.SmsAPI;
+import com.yryz.writer.common.exception.QsourceException;
 import com.yryz.writer.common.redis.utils.JedisUtils;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.dao.BaseDao;
@@ -8,6 +11,7 @@ import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 
+import com.yryz.writer.modules.platform.service.impl.SmsCommonServiceImpl;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterModelVo;
@@ -35,9 +39,14 @@ import java.util.UUID;
 @Service
 public class WriterServiceImpl extends BaseServiceImpl implements WriterService {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(WriterServiceImpl.class);
+
     @Autowired
     private WriterDao writerDao;
-    
+
+    @Autowired
+    private SmsAPI smsAPI;
+
     @Autowired
     private WriterAuditDao writerAuditDao;
 
@@ -128,6 +137,35 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         return writer;
     }
 
+    @Override
+    public String getImageCode(String phone) {
+        String code = null;
+        try {
+            code = smsAPI.getSmsImgCode(phone);
+        } catch (com.yryz.service.api.api.exception.ServiceException e) {
+            LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
+            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
+        } catch (Exception e) {
+            LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
+            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMessage());
+        }
+        return code;
+    }
+
+    @Override
+    public Boolean checkImageCode(String phone,String imageCode) {
+        Boolean codeFlag = null;
+        try {
+            codeFlag = smsAPI.checkSmsImgCode(phone,imageCode);
+        } catch (com.yryz.service.api.api.exception.ServiceException e) {
+            LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
+            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
+        } catch (Exception e) {
+            LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
+            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMessage());
+        }
+        return codeFlag;
+    }
 
     @Override
     public String getUserToken(String custId){

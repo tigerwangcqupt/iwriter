@@ -6,13 +6,11 @@ import com.yryz.component.rpc.internal.DubboResponse;
 import com.yryz.service.api.basic.constants.SmsContants;
 import com.yryz.service.api.basic.entity.SmsReqVo;
 import com.yryz.service.api.basic.entity.SmsVerifyCode;
-import com.yryz.service.api.user.entity.AuthInfo;
-import com.yryz.service.api.user.entity.CustInfo;
-import com.yryz.service.api.user.entity.UserAuth;
 import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.exception.BaseException;
 import com.yryz.writer.common.exception.YyrzPcException;
+import com.yryz.writer.common.utils.ImageUtils;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.platform.SmsCommonApi;
 import com.yryz.writer.modules.platform.constants.SmsTypeEnum;
@@ -269,16 +267,28 @@ public class UserAppController extends BaseController {
         Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
         Assert.notNull(custRegisterDto.getCode(), "功能码不能为空！");
         Assert.notNull(custRegisterDto.getVeriCode(), "验证码不能为空！");
+        Assert.hasText(custRegisterDto.getImageCode(), "图形验证码不能为空！");
 
         Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
         Assert.hasText(custRegisterDto.getCode(), "功能码不能为空！");
         Assert.hasText(custRegisterDto.getVeriCode(), "验证码不能为空！");
 
+        Assert.hasText(custRegisterDto.getImageCode(), "图形验证码不能为空！");
+
+        //第一步验证图形验证码
+        RpcResponse<Boolean> iamgeRpcResponse = writerApi.checkImageCode(custRegisterDto.getCustPhone(),custRegisterDto.getImageCode());
+        boolean iamgeFlag = isSuccess(iamgeRpcResponse);
+        if(!iamgeFlag){
+            throw new YyrzPcException(
+                    ExceptionEnum.IMAGE_CODE_ERROR.getCode(),
+                    ExceptionEnum.IMAGE_CODE_ERROR.getMsg(),
+                    ExceptionEnum.IMAGE_CODE_ERROR.getErrorMsg());
+        }
+
         //校验验证码
         RpcResponse<Boolean> rpcResponse = smsCommonApi.checkVerifyCode(custRegisterDto.getCustPhone(), custRegisterDto.getCode(), custRegisterDto.getVeriCode());
         Boolean aBoolean = isSuccessNotNull(rpcResponse);
-
-        if (aBoolean) {
+        if (aBoolean){
 
             //查询用户
             RpcResponse<Writer> userRpcResponse = writerApi.selectByPhone(custRegisterDto.getCustPhone());
@@ -305,6 +315,46 @@ public class UserAppController extends BaseController {
                 ExceptionEnum.PIN_ERROR.getErrorMsg());
     }
 
+    /**
+     * 获取图形验证码图
+     * @param phone
+     * @param response
+     */
+    @RequestMapping(value = "image", method = {RequestMethod.GET})
+    @NotLogin
+    public void image(String phone,HttpServletResponse response){
+
+        Assert.notNull(phone, "手机号不能为空！");
+        Assert.hasText(phone, "手机号不能为空！");
+
+        //设置服务器到客户端的响应内容类型-〉mime图片格式
+        response.setContentType("image/jpeg");
+
+        //设置客户端浏览器显示图像不缓存
+        response.setHeader("pragma", "no-cache");
+        response.setHeader("cache-control", "no-cache");
+        response.setDateHeader("expires", 0);
+        try {
+            //查询用户
+            RpcResponse<String> userRpcResponse = writerApi.getImageCode(phone);
+            String code = isSuccess(userRpcResponse);
+            ImageUtils.getSmsImgByCode(code, response);
+        }  catch (BaseException e) {
+            return;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return;
+        } finally {
+            try {
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     /**
      * 手机号登陆
@@ -321,12 +371,24 @@ public class UserAppController extends BaseController {
 
         Assert.notNull(map.get("phone"), "手机号不能为空！");
         Assert.notNull(map.get("password"), "密码不能为空！");
+        Assert.notNull(map.get("imageCode"), "图形验证码不能为空！");
 
         String  phone = (String) map.get("phone");
         String  password = (String) map.get("password");
+        String  imageCode = (String) map.get("imageCode");
         Assert.hasText(phone, "手机号不能为空！");
         Assert.hasText(password, "密码不能为空！");
+        Assert.hasText(imageCode, "图形验证码不能为空！");
 
+        //第一步验证图形验证码
+        RpcResponse<Boolean> iamgeRpcResponse = writerApi.checkImageCode(phone,imageCode);
+        boolean iamgeFlag = isSuccess(iamgeRpcResponse);
+        if(!iamgeFlag){
+            throw new YyrzPcException(
+                    ExceptionEnum.IMAGE_CODE_ERROR.getCode(),
+                    ExceptionEnum.IMAGE_CODE_ERROR.getMsg(),
+                    ExceptionEnum.IMAGE_CODE_ERROR.getErrorMsg());
+        }
 
         //查询用户
         RpcResponse<Writer> userRpcResponse = writerApi.selectByPhone(phone);
