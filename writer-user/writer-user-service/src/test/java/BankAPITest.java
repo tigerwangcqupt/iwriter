@@ -30,8 +30,10 @@ public class BankAPITest {
    /* @Autowired
     IdAPI idAPI;*/
 
+/*
    @Autowired
     OpenTransactionApi openTransactionApi;
+*/
 
     @Autowired
     ProfitApi profitApi;
@@ -44,14 +46,14 @@ public class BankAPITest {
     public void after() throws Exception {
     }
 
-/*    //绑定资金主体
+   //绑定资金主体
     @Test
     public void bindCapital(){
         Writer writer = new Writer();
-        writer.setUserName("tiger_test003");
+        writer.setUserName("tiger_test006");
         RpcResponse<Writer> rpcResponse =  profitApi.bindCapital(writer);
         System.out.println(rpcResponse);
-    }*/
+    }
 
 /*    //绑定流水
     public void bindFlow(Draft draft){
@@ -64,7 +66,7 @@ public class BankAPITest {
         System.out.println(rpcResponse);
     }*/
 
-   @Test
+  /* @Test
     public void getIdTest() {
         RpcContext.getContext().setAttachment("clientCode", "yryzpc");
         TransactionFlowRecord record = new TransactionFlowRecord();
@@ -120,7 +122,7 @@ public class BankAPITest {
         record.setFlowList(flowList);
         openTransactionApi.add(record);
     }
-
+*/
 
 
 

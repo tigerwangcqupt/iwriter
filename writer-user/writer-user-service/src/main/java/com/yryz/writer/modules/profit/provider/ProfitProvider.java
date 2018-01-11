@@ -8,6 +8,7 @@ import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
+import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.service.ProfitService;
@@ -148,6 +149,21 @@ public class ProfitProvider implements ProfitApi {
 			logger.error("获取提现管理列表失败", e);
 			return ResponseModel.returnException(e);
 		}
+	}
+
+	@Override
+	public RpcResponse<ProfitStaticsVo> staticsProfitVo(Long userId) {
+		try {
+			return ResponseModel.returnObjectSuccess(profitService.staticsProfitVo(userId));
+		} catch (Exception e) {
+			logger.error("查询写手统计信息失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<ProfitStaticsVo> staticsProfitListVo(Long userId) {
+		return null;
 	}
 
 }

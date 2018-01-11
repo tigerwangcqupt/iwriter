@@ -1,10 +1,9 @@
-package com.yryz.writer.modules.writer.vo;
-
+package com.yryz.writer.modules.profit.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class WriterModelVo implements Serializable{
+
+public class ProfitStaticsVo implements Serializable {
 
     //写手姓名
     private  String userName;
@@ -12,10 +11,7 @@ public class WriterModelVo implements Serializable{
     private  String phone;
     //主键
     private Long kid;
-    //主体编码
-    private Long ownerCode;
-    //主体外码
-    private String ownerFcode;
+
     //最近提现金额
     private BigDecimal latelyWithdrawAmount;
     //可提现金额
@@ -31,12 +27,20 @@ public class WriterModelVo implements Serializable{
      */
     private Integer settlementType;
 
-    public Integer getSettlementType() {
-        return settlementType;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setSettlementType(Integer settlementType) {
-        this.settlementType = settlementType;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Long getKid() {
@@ -45,22 +49,6 @@ public class WriterModelVo implements Serializable{
 
     public void setKid(Long kid) {
         this.kid = kid;
-    }
-
-    public Long getOwnerCode() {
-        return ownerCode;
-    }
-
-    public void setOwnerCode(Long ownerCode) {
-        this.ownerCode = ownerCode;
-    }
-
-    public String getOwnerFcode() {
-        return ownerFcode;
-    }
-
-    public void setOwnerFcode(String ownerFcode) {
-        this.ownerFcode = ownerFcode;
     }
 
     public BigDecimal getLatelyWithdrawAmount() {
@@ -87,27 +75,19 @@ public class WriterModelVo implements Serializable{
         this.sumWithdrawAmount = sumWithdrawAmount;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public String getWithdrawDate() {
         return withdrawDate;
     }
 
     public void setWithdrawDate(String withdrawDate) {
         this.withdrawDate = withdrawDate;
+    }
+
+    public Integer getSettlementType() {
+        return settlementType;
+    }
+
+    public void setSettlementType(Integer settlementType) {
+        this.settlementType = settlementType;
     }
 }

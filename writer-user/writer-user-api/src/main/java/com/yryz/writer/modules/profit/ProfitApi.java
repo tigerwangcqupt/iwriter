@@ -6,6 +6,7 @@ import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
+import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.entity.Profit;
@@ -94,4 +95,19 @@ public interface ProfitApi {
 	 * @return
 	 */
 	RpcResponse<List<ProfitAdminVo>> selectAllProfitAdminVoList(ProfitDto profitDto);
+
+	/**
+	 *  根据用户id获取Profit统计数据
+	 *  @param  userId
+	 *  @return
+	 * */
+	RpcResponse<ProfitStaticsVo> staticsProfitVo(Long userId);
+
+	/**
+	 *  根据用户id获取Profit明细数据
+	 *  @param  userId
+	 *  @return
+	 * */
+	RpcResponse<ProfitStaticsVo> staticsProfitListVo(Long userId);
+
 }

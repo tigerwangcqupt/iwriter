@@ -7,6 +7,7 @@
 		<id column="id" property="id" jdbcType="BIGINT"/>
 		<result column="kid" property="kid" jdbcType="BIGINT"/>
 		<result column="account" property="account" jdbcType="VARCHAR"/>
+		<result column="pwd" property="pwd" jdbcType="VARCHAR"/>
 		<result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
 		<result column="head_img" property="headImg" jdbcType="VARCHAR"/>
 		<result column="phone" property="phone" jdbcType="VARCHAR"/>
@@ -27,7 +28,7 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,account,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
+	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
     </sql>
 
     <!-- 查询Writer详情 -->
@@ -451,7 +452,7 @@
 	<!-- 查询Writer关联资金 -->
 	<select id="selectWriterByParameters" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterModelVo">
 		select user_name,phone,kid,owner_code,owner_fcode,lately_withdraw_amount,
-		withdraw_amount,sum_withdraw_amount,withdraw_date
+		withdraw_amount,sum_withdraw_amount,date_format(withdraw_date,'%Y-%m-%d') as withdraw_date,settlement_type
 		from yryz_writer where 1=1
 		<if test="keyWord != null and keyWord != '' ">
 			AND  nick_name like CONCAT('%',trim(#{keyWord}),'%')
