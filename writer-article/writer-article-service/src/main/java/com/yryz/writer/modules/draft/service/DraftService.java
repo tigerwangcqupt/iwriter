@@ -24,7 +24,7 @@ public interface DraftService extends BaseService {
 
     DraftVo detail(Long draftId);
 
-    int add(Draft draft);
+    Long add(Draft draft);
 
     List<AppVo> selectAppByAppliName(String appliName);
 }

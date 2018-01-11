@@ -77,9 +77,9 @@ public class DraftProvider implements DraftApi {
      * @param draft
      * @return
      */
-    public RpcResponse<Integer> add(Draft draft) {
+    public RpcResponse<Long> add(Draft draft) {
         try {
-            return ResponseModel.returnListSuccess(draftService.add(draft));
+            return ResponseModel.returnObjectSuccess(draftService.add(draft));
         } catch (Exception e) {
             logger.error("发布稿件失败", e);
             return ResponseModel.returnException(e);

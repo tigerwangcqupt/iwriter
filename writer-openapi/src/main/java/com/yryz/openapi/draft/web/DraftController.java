@@ -38,7 +38,7 @@ public class DraftController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public RpcResponse<Integer> add(@RequestBody Draft draft) {
+    public RpcResponse<Long> add(@RequestBody Draft draft) {
         String userId = request.getHeader("userId");
         Assert.notNull(userId, "用户id不能为空");
         draft.setCreateUserId(userId);

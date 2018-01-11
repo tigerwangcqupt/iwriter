@@ -1,6 +1,8 @@
 package com.yryz.writer.modules.draft.service.impl;
 
+import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.redis.utils.StringUtils;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.DateUtil;
@@ -105,15 +107,22 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
     }
 
     @Override
-    public int add(Draft draft) {
-        Long kid = draft.getKid();
-        if (kid == null) {
-            Long id = idAPI.getId("yryz_draft");
-            draft.setKid(id);
-            Long appId = draft.getAppId();
-            return draftDao.insertByPrimaryKeySelective(draft);
-        } else {
-            return draftDao.update(draft);
+    public Long add(Draft draft) {
+        try {
+            Long kid = draft.getKid();
+            if (kid == null) {
+                kid = idAPI.getId("yryz_draft");
+                draft.setKid(kid);
+                Long appId = draft.getAppId();
+                draftDao.insertByPrimaryKeySelective(draft);
+
+            } else {
+                draftDao.update(draft);
+            }
+            return kid;
+        } catch (Exception E) {
+            throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), ExceptionEnum.BusiException.getMsg(),
+                    ExceptionEnum.BusiException.getErrorMsg());
         }
     }
 
@@ -143,6 +152,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         if (appId != null && appId != 0) {
             TaskVo app = taskDao.selectAppById(appId);
             if (app != null) {
+                draftVo.setAppId(appId);
                 draftVo.setAppliName(app.getAppliName());
                 draftVo.setIcon(app.getIcon());
             }

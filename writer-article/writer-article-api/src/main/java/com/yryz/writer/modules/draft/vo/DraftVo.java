@@ -73,6 +73,11 @@ public class DraftVo implements Serializable {
     private BigDecimal draftFee;
 
     /**
+     * 应用id
+     */
+    private Long appId;
+
+    /**
      * 应用名
      */
     private String appliName;
@@ -307,5 +312,13 @@ public class DraftVo implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public Long getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Long appId) {
+        this.appId = appId;
     }
 }

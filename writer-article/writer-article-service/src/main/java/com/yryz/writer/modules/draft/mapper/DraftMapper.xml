@@ -375,6 +375,7 @@
 		WHERE
 			a.kid = #{kid}
 		AND a.kid = b.writer_kid
+		AND b.audit_status = 2
     </select>
 
 </mapper>

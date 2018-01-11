@@ -47,7 +47,7 @@ public interface DraftApi {
      * @param draft
      * @return
      */
-    RpcResponse<Integer> add(Draft draft);
+    RpcResponse<Long> add(Draft draft);
 
     RpcResponse<Integer> check(Draft draft);
 
