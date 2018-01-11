@@ -4,9 +4,12 @@ import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.vo.DraftVo;
+import com.yryz.writer.modules.task.vo.AppVo;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
+
+import java.util.List;
 
 /**
  * @author luohao
@@ -22,4 +25,6 @@ public interface DraftService extends BaseService {
     DraftVo detail(Long draftId);
 
     int add(Draft draft);
+
+    List<AppVo> selectAppByAppliName(String appliName);
 }

@@ -17,6 +17,7 @@ import com.yryz.writer.modules.task.TaskApi;
 import com.yryz.writer.modules.task.dao.persistence.TaskDao;
 import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.service.TaskService;
+import com.yryz.writer.modules.task.vo.AppVo;
 import com.yryz.writer.modules.task.vo.TaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 draftVoList.add(draftVo);
             }
         }
-        return new PageModel<DraftVo>().getPageList(list,draftVoList);
+        return new PageModel<DraftVo>().getPageList(list, draftVoList);
     }
 
 
@@ -114,6 +115,10 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         } else {
             return draftDao.update(draft);
         }
+    }
+
+    public List<AppVo> selectAppByAppliName(String appliName) {
+        return taskDao.selectAppByAppliName(appliName);
     }
 
     private DraftVo toDraftVo(Draft draft) {
