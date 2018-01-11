@@ -117,9 +117,11 @@ public class Writer extends GenericEntity{
 	/**
 	 *资金主体外码
 	 */
-     private String ownerFcode;
+    private String ownerFcode;
      
-     private String remark;
+    private String remark;
+     
+    private Integer SettlementType;
      
 
 	public String getProfitSn() {
@@ -296,6 +298,14 @@ public class Writer extends GenericEntity{
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Integer getSettlementType() {
+		return SettlementType;
+	}
+
+	public void setSettlementType(Integer settlementType) {
+		SettlementType = settlementType;
 	}
 	
 	
