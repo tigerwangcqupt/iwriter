@@ -295,7 +295,8 @@ public class UserAppController extends BaseController {
             authInfoVo.setCustPhone(custRegisterDto.getCustPhone());
             authInfoVo.setToken(token);
             authInfoVo.setUserId(user.getKid());
-
+            authInfoVo.setCustImg(user.getHeadImg());
+            authInfoVo.setCustNname(user.getNickName());
             return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
         }
         throw new YyrzPcException(
@@ -350,6 +351,8 @@ public class UserAppController extends BaseController {
 
         authInfoVo.setUserId(user.getKid());
         authInfoVo.setCustPhone(phone);
+        authInfoVo.setCustImg(user.getHeadImg());
+        authInfoVo.setCustNname(user.getNickName());
         return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
     }
 
