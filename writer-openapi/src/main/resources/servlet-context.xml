@@ -58,10 +58,10 @@
          </mvc:interceptor>
 
         <!-- token拦截 -->
-        <mvc:interceptor>
+<!--        <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.yryz.openapi.core.interceptor.SecurityInterceptor"/>
-        </mvc:interceptor>
+        </mvc:interceptor>-->
 
      </mvc:interceptors>
 

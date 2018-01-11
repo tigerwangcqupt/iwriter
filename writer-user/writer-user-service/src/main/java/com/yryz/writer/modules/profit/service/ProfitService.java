@@ -1,11 +1,13 @@
 package com.yryz.writer.modules.profit.service;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
+import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.writer.entity.Writer;
 import org.springframework.stereotype.Repository;
@@ -63,5 +65,12 @@ public interface ProfitService extends BaseService {
     * @return
     */
    List<ProfitAdminVo> selectAllProfitAdminVoList(ProfitDto profitDto);
+
+   /**
+    *  根据用户id获取Profit明细数据
+    *  @param  userId
+    *  @return
+    * */
+   ProfitStaticsVo staticsProfitVo(Long userId);
 
 }

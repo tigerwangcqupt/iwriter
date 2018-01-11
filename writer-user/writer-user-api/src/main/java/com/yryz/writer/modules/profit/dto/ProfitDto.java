@@ -2,6 +2,8 @@ package com.yryz.writer.modules.profit.dto;
 
 import com.yryz.component.rpc.dto.PageList;
 
+import java.math.BigDecimal;
+
 /**
  * @ClassName: ProfitDto
  * @Description: ProfitDto
@@ -40,6 +42,12 @@ public class ProfitDto extends PageList {
      * 生成排序字符串
      */
     private String orderStr;
+
+    //提现金额
+    private BigDecimal settlementAmount;
+
+    //提现消息
+    private String settlementMsg;
 
     public Long getCreateUserId() {
         return createUserId;
@@ -118,5 +126,21 @@ public class ProfitDto extends PageList {
 
     public void setFlowId(Long flowId) {
         this.flowId = flowId;
+    }
+
+    public BigDecimal getSettlementAmount() {
+        return settlementAmount;
+    }
+
+    public void setSettlementAmount(BigDecimal settlementAmount) {
+        this.settlementAmount = settlementAmount;
+    }
+
+    public String getSettlementMsg() {
+        return settlementMsg;
+    }
+
+    public void setSettlementMsg(String settlementMsg) {
+        this.settlementMsg = settlementMsg;
     }
 }

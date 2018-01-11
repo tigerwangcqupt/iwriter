@@ -447,7 +447,7 @@
 	<!-- 查询Writer关联资金 -->
 	<select id="selectWriterByParameters" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterModelVo">
 		select user_name,phone,kid,owner_code,owner_fcode,lately_withdraw_amount,
-		withdraw_amount,sum_withdraw_amount,withdraw_date
+		withdraw_amount,sum_withdraw_amount,date_format(withdraw_date,'%Y-%m-%d') as withdraw_date,settlement_type
 		from yryz_writer where 1=1
 		<if test="keyWord != null and keyWord != '' ">
 			AND  nick_name like CONCAT('%',trim(#{keyWord}),'%')

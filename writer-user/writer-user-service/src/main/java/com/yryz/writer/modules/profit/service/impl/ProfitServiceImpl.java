@@ -22,10 +22,14 @@ import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.service.BankService;
 import com.yryz.writer.modules.id.api.IdAPI;
+import com.yryz.writer.modules.message.MessageApi;
+import com.yryz.writer.modules.message.vo.NoticeReceiveWriter;
+import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
 import com.yryz.writer.modules.profit.constant.ProfitConstants;
 import com.yryz.writer.modules.profit.constant.ProfitEnum;
 import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
+import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.service.WriterService;
@@ -76,6 +80,9 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 
     @Autowired
     private OpenTransactionApi openTransactionApi;
+
+    @Autowired
+    private MessageApi messageApi;
 
     @Value("${clientCode}")
     private String clientCode;
@@ -180,8 +187,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         try {
             //提现日期
             Date settlementDate = new Date();
-            String profitSn = String.valueOf(idAPI.getSnowflakeId());
-            profit.setProfitSn(profitSn);
             //分布式锁控制用户频繁操作
             lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getCreateUserId());
             WriterDto writerDto = new WriterDto();
@@ -224,6 +229,9 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             profit.setSettlementAmount(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
             //如果是提现
             if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FEE.getCode()){
+                //设置流水号
+                String profitSn = String.valueOf(idAPI.getSnowflakeId());
+                profit.setProfitSn(profitSn);
                 //手续费扩大一万倍
                 profit.setChargeFee(MoneyUtils.setBigDecimal(new BigDecimal(ProfitConstants.CHARGEFEE)));
                 //剩余提现金额扩大一万倍
@@ -271,8 +279,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         //提现日期
         Date settlementDate = new Date();
         Profit profitData = profitDao.selectByKid(Profit.class,profit.getKid());
+        //修改记录
+        profitDao.update(profitData);
         Long kid  = idAPI.getId(ProfitConstants.PROFITTABLE);
-        profit.setKid(kid);
+        profitData.setKid(kid);
         profitData.setSettlementDate(settlementDate);
 
         WriterDto writerDto = new WriterDto();
@@ -306,6 +316,18 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
          }
          //提现失败
          else if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FAIL.getCode()){
+             //调用消息发送接口
+             WriterNoticeMessageVo writerNoticeMessageVo = new WriterNoticeMessageVo();
+             writerNoticeMessageVo.setContent(profit.getSettlementMsg());
+             writerNoticeMessageVo.setTriggerType(3);
+             writerNoticeMessageVo.setSendUserId(Long.valueOf(profit.getLastUpdateUserId()));
+             List<NoticeReceiveWriter> receiveWriters = new ArrayList<>();
+             NoticeReceiveWriter noticeReceiveWriter = new NoticeReceiveWriter();
+             noticeReceiveWriter.setKid(profit.getWriterId());
+             receiveWriters.add(noticeReceiveWriter);
+             writerNoticeMessageVo.setReceiveWriter(receiveWriters);
+             messageApi.saveWriterNoticeMessage(writerNoticeMessageVo);
+
              //更新流水,把钱加回去,加入剩余可提现金额
              profitData.setSettlementType(profit.getSettlementType());
              BigDecimal surplusAmount = profitData.getSurplusAmount().add(profit.getSettlementAmount());
@@ -442,6 +464,19 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
         List<ProfitAdminVo> profitAdminVoList = fillProfitData(list);
         return profitAdminVoList;
+    }
+
+    @Override
+    public ProfitStaticsVo staticsProfitVo(Long userId) {
+        ProfitStaticsVo profitStaticsVo = new ProfitStaticsVo();
+        WriterDto writerDto = new WriterDto();
+        writerDto.setKid(userId);
+        WriterModelVo writerModelVo =  writerService.selectWriterByParameters(writerDto);
+        BeanUtils.copyProperties(writerModelVo,profitStaticsVo);
+        profitStaticsVo.setLatelyWithdrawAmount(MoneyUtils.getMoney(profitStaticsVo.getLatelyWithdrawAmount()));
+        profitStaticsVo.setSumWithdrawAmount(MoneyUtils.getMoney(profitStaticsVo.getSumWithdrawAmount()));
+        profitStaticsVo.setWithdrawAmount(MoneyUtils.getMoney(profitStaticsVo.getWithdrawAmount()));
+        return profitStaticsVo;
     }
 
     /**
