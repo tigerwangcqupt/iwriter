@@ -275,8 +275,11 @@ public class UserAppController extends BaseController {
 
         Assert.hasText(custRegisterDto.getImageCode(), "图形验证码不能为空！");
 
+        Assert.notNull(custRegisterDto.getKey(), "唯一标识不能为空！");
+        Assert.hasText(custRegisterDto.getKey(), "唯一标识不能为空！");
+
         //第一步验证图形验证码
-        RpcResponse<Boolean> iamgeRpcResponse = writerApi.checkImageCode(custRegisterDto.getCustPhone(),custRegisterDto.getImageCode());
+        RpcResponse<Boolean> iamgeRpcResponse = writerApi.checkImageCode(custRegisterDto.getKey(),custRegisterDto.getImageCode());
         boolean iamgeFlag = isSuccess(iamgeRpcResponse);
         if(!iamgeFlag){
             throw new YyrzPcException(
@@ -322,10 +325,10 @@ public class UserAppController extends BaseController {
      */
     @RequestMapping(value = "image", method = {RequestMethod.GET})
     @NotLogin
-    public void image(String phone,HttpServletResponse response){
+    public void image(String key,HttpServletResponse response){
 
-        Assert.notNull(phone, "手机号不能为空！");
-        Assert.hasText(phone, "手机号不能为空！");
+        Assert.notNull(key, "唯一标识不能为空！");
+        Assert.hasText(key, "唯一标识不能为空！");
 
         //设置服务器到客户端的响应内容类型-〉mime图片格式
         response.setContentType("image/jpeg");
@@ -336,7 +339,7 @@ public class UserAppController extends BaseController {
         response.setDateHeader("expires", 0);
         try {
             //查询用户
-            RpcResponse<String> userRpcResponse = writerApi.getImageCode(phone);
+            RpcResponse<String> userRpcResponse = writerApi.getImageCode(key);
             String code = isSuccess(userRpcResponse);
             ImageUtils.getSmsImgByCode(code, response);
         }  catch (BaseException e) {
@@ -372,16 +375,20 @@ public class UserAppController extends BaseController {
         Assert.notNull(map.get("phone"), "手机号不能为空！");
         Assert.notNull(map.get("password"), "密码不能为空！");
         Assert.notNull(map.get("imageCode"), "图形验证码不能为空！");
+        Assert.notNull(map.get("key"), "唯一标识不能为空！");
 
         String  phone = (String) map.get("phone");
         String  password = (String) map.get("password");
         String  imageCode = (String) map.get("imageCode");
+        String  key = (String) map.get("key");
+
         Assert.hasText(phone, "手机号不能为空！");
         Assert.hasText(password, "密码不能为空！");
         Assert.hasText(imageCode, "图形验证码不能为空！");
+        Assert.hasText(key, "唯一标识不能为空！");
 
         //第一步验证图形验证码
-        RpcResponse<Boolean> iamgeRpcResponse = writerApi.checkImageCode(phone,imageCode);
+        RpcResponse<Boolean> iamgeRpcResponse = writerApi.checkImageCode(key,imageCode);
         boolean iamgeFlag = isSuccess(iamgeRpcResponse);
         if(!iamgeFlag){
             throw new YyrzPcException(

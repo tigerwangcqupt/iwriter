@@ -44,6 +44,19 @@ public class CustRegisterDto extends CustRegister {
      */
     private String imageCode;
 
+    /**
+     * 唯一标识码
+     */
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getImageCode() {
         return imageCode;
     }
