@@ -4,11 +4,15 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
+import com.yryz.writer.modules.message.MessageApi;
+import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
+import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.province.ProvinceApi;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.WriterAuditApi;
 import com.yryz.writer.modules.writer.vo.WriterAuditVo;
 import com.yryz.writer.modules.writer.dto.WriterAuditDto;
+import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
 import com.yryz.writer.modules.writer.service.WriterAuditService;
 
@@ -16,6 +20,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +37,10 @@ public class WriterAuditProvider implements WriterAuditApi {
 	
 	@Autowired
 	private CityApi cityApi;
+	
+	@Autowired
+	private ProfitApi profitApi;
+	
 
 	/**
 	*  获取WriterAudit明细
@@ -99,7 +108,18 @@ public class WriterAuditProvider implements WriterAuditApi {
 	@Override
 	public RpcResponse<Integer> audit(WriterAuditVo writerAuditVo) {
 		 try {
-			 return ResponseModel.returnObjectSuccess(writerAuditService.audit(writerAuditVo));
+			 Integer count = writerAuditService.audit(writerAuditVo);
+			 if(writerAuditVo.getAuditStatus().intValue()==2){
+				 //审核通过，绑定资金主体
+				 Writer writer = new Writer();
+				 BeanUtils.copyProperties(writerAuditVo, writer);
+				 writer.setKid(writerAuditVo.getWriterKid());
+				 RpcResponse<Writer> result  = profitApi.bindCapital(writer);
+				 if(!result.success()){
+					 logger.error("profitApi bindCapital：绑定资金主体失败");
+				 }
+			 }
+			 return ResponseModel.returnObjectSuccess(count);
         } catch (Exception e) {
         	 logger.error("更新WriterAudit状态失败", e);
        		 return ResponseModel.returnException(e);
