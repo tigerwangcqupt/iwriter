@@ -10,10 +10,13 @@ import com.yryz.writer.modules.draft.vo.DraftVo;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.service.DraftService;
 
+import com.yryz.writer.modules.task.vo.AppVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DraftProvider implements DraftApi {
@@ -86,6 +89,13 @@ public class DraftProvider implements DraftApi {
     @Override
     public RpcResponse<Integer> check(Draft draft) {
         return ResponseModel.returnObjectSuccess(draftService.update(draft));
+    }
+
+    /**
+     * 查询应用
+     */
+    public RpcResponse<List<AppVo>> selectAppByAppliName(String appliName) {
+        return ResponseModel.returnListSuccess(draftService.selectAppByAppliName(appliName));
     }
 
 }

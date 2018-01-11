@@ -7,13 +7,13 @@ import com.yryz.writer.modules.draft.DraftApi;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.vo.DraftVo;
+import com.yryz.writer.modules.task.vo.AppVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("services/app/v1/draft")
@@ -43,6 +43,12 @@ public class DraftController extends BaseController {
         Assert.notNull(userId, "用户id不能为空");
         draft.setCreateUserId(userId);
         return draftApi.add(draft);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/searchApp", method = RequestMethod.GET)
+    public RpcResponse<List<AppVo>> selectAppByAppliName(@RequestParam("appliName") String appliName) {
+        return draftApi.selectAppByAppliName(appliName);
     }
 
 }

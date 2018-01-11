@@ -5,6 +5,9 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.vo.DraftVo;
 import com.yryz.writer.modules.draft.entity.Draft;
+import com.yryz.writer.modules.task.vo.AppVo;
+
+import java.util.List;
 
 /**
  * @author luohao
@@ -47,5 +50,9 @@ public interface DraftApi {
     RpcResponse<Integer> add(Draft draft);
 
     RpcResponse<Integer> check(Draft draft);
+
+    RpcResponse<List<AppVo>> selectAppByAppliName(String appliName);
+
+
 
 }

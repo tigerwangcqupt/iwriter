@@ -252,42 +252,6 @@
             OR accept_task_num &gt;= task_close_num
             OR task_close_flag = 1
         </if>
-        <if test="order == 1">
-            ORDER BY create_date ASC
-        </if>
-        <if test="order == 2">
-            ORDER BY create_date DESC
-        </if>
-        <if test="order == 3">
-            ORDER BY end_date ASC
-        </if>
-        <if test="order == 4">
-            ORDER BY end_date DESC
-        </if>
-        <if test="order == 5">
-            ORDER BY draft_fee ASC
-        </if>
-        <if test="order == 6">
-            ORDER BY draft_fee DESC
-        </if>
-        <if test="order == 7">
-            ORDER BY accept_task_num ASC
-        </if>
-        <if test="order == 8">
-            ORDER BY accept_task_num DESC
-        </if>
-        <if test="order == 9">
-
-        </if>
-        <if test="order == 10">
-
-        </if>
-        <if test="order == 11">
-
-        </if>
-        <if test="order == 12">
-
-        </if>
     </select>
 
     <!-- 查询应用 -->
@@ -301,6 +265,15 @@
         WHERE
 	      a.id = #{id}
         AND a.owner_id = b.id
+    </select>
+
+    <select id="selectAppByAppliName" parameterType="java.lang.String" resultType="com.yryz.writer.modules.task.vo.AppVo">
+        SELECT
+        a.id,a.appli_name,a.appli_icon icon
+        FROM
+        yryz_application a
+        WHERE
+        a.appli_name LIKE CONCAT('%',#{appliName},'%')
     </select>
 
     <!-- 接受任务 -->

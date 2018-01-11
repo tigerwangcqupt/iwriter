@@ -4,6 +4,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.dto.TaskDto;
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.modules.task.vo.AppVo;
 import com.yryz.writer.modules.task.vo.TaskVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,8 @@ public interface TaskDao extends BaseDao {
 
     //根据id查询应用id,应用名,应用icon
     TaskVo selectAppById(@Param("id") Long id);
+
+    List<AppVo> selectAppByAppliName(@Param("appliName") String appliName);
 
     int acceptTask(@Param("kid") Long kid);
 
