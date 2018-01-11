@@ -21,7 +21,8 @@ public class WriterNoticeMessageVo implements Serializable {
     private String messageId;
 
     /**
-     * 触发类型 1写手资料通过审核  2写手信息管理后台发送通知 3提现后台发送提现失败通知 4写手稿件过审 5写手稿件未过审
+     * 触发类型 1写手资料通过审核  2写手信息管理后台发送通知 3提现后台发送提现失败通知
+     * 4写手稿件过审 5写手稿件未过审 6稿件或文章被后台推荐 7稿件文章或视频被关联到专题
      */
     private Integer triggerType;
 

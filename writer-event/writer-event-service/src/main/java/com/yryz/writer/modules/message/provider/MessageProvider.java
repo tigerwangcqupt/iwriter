@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -84,6 +85,13 @@ public class MessageProvider implements MessageApi {
     @Override
     public RpcResponse<Boolean> saveWriterNoticeMessage(WriterNoticeMessageVo writerNoticeMessageVo) {
         try {
+            Assert.hasText(writerNoticeMessageVo.getContent(), "消息内容不能为空");
+            Assert.notNull(writerNoticeMessageVo.getTriggerType(), "消息类型不能为空");
+            Assert.notNull(writerNoticeMessageVo.getSendUserId(), "发送者不能为空");
+            List<NoticeReceiveWriter> list = writerNoticeMessageVo.getReceiveWriter();
+            if (list == null || list.isEmpty()){
+                throw new IllegalArgumentException("接受者不能为空");
+            }
             return ResponseModel.returnObjectSuccess(messageService.saveWriterNoticeMessage(writerNoticeMessageVo));
         } catch (Exception e) {
             logger.error("返回某个消息栏目缓存数失败", e);
