@@ -202,7 +202,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
             if(!CommonUtils.checkIntNumber(settlementAmount.toString())){
-                 logger.error("提现金额不是正整数");
+                logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
             }
@@ -260,7 +260,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 profit.setSurplusAmount(MoneyUtils.setBigDecimal(withdrawAmount.add(settlementAmount)));
                 //提现消息
                 profit.setSettlementMsg(ProfitEnum.ROYALTIES_FEE.getMsg());
-                insert(profit);
+                insertByPrimaryKeySelective(profit);
                 writer.setWithdrawAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
                 //最后修改信息
                 writerService.update(writer);
@@ -595,13 +595,13 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //发生额(元*10000)
             flow2.setAmount(amount);
             //币种编码
-            flow.setCurrencyCode(currencyCode);
+            flow2.setCurrencyCode(currencyCode);
             //记账标识(10入账)
             flow2.setAccountingFlag(ProfitConstants.ACCOUNTINGFLAG);
             //现金标识(10现金，20非现金)
             flow2.setCashFlag(ProfitConstants.NOTCASHFLAG);
             //核算标识(10核算，20不核算)
-            flow.setCheckFlag(ProfitConstants.CHECKFLAG);
+            flow2.setCheckFlag(ProfitConstants.CHECKFLAG);
             flowList.add(flow2);
             record.setFlowList(flowList);
             openTransactionApi.add(record);
@@ -690,7 +690,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //现金标识(10现金，20非现金)
             flow2.setCashFlag(ProfitConstants.CASHFLAG);
             //核算标识(10核算，20不核算)
-            flow.setCheckFlag(ProfitConstants.CHECKFLAG);
+            flow2.setCheckFlag(ProfitConstants.CHECKFLAG);
             flowList.add(flow2);
             record.setFlowList(flowList);
             openTransactionApi.add(record);
