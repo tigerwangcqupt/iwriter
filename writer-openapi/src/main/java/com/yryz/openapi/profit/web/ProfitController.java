@@ -7,6 +7,7 @@ import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.utils.MoneyUtils;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.bank.entity.Bank;
+import com.yryz.writer.modules.profit.constant.ProfitEnum;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
 import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
 import com.yryz.writer.modules.profit.vo.ProfitVo;
@@ -91,6 +92,8 @@ public class ProfitController extends BaseController{
    public RpcResponse<Profit> addProfit(@RequestBody Profit profit, @RequestHeader Long userId){
       Assert.notNull(userId, "用户id为空!");
       profit.setWriterId(userId);
+      profit.setCreateUserId(userId+"");
+      profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
       return profitApi.insertProfit(profit);
    }
 }

@@ -39,11 +39,11 @@ public class ResourceValidateHandler {
         }
 
         //得到参数值集合(开始)
-        Object[] paramValues = jp.getArgs();
+/*        Object[] paramValues = jp.getArgs();
         String[] paramNames = ((CodeSignature) signature).getParameterNames();
         for(int i=0;i<paramNames.length;i++){
             System.out.println(paramNames[i]+","+paramValues[i]);
-        }
+        }*/
         //得到参数值集合(结束)
 
 
