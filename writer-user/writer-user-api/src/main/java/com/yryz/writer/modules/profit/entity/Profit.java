@@ -37,7 +37,7 @@ public class Profit extends GenericEntity{
     
 
 	/**
-	 * 1提现，1稿费
+	 * 1提现，4稿费
 	 */
 	@NotNull
     private  Integer settlementType;
