@@ -88,6 +88,11 @@ public class DraftVo implements Serializable {
     private String icon;
 
     /**
+     * 写手id
+     */
+    private Long writerId;
+
+    /**
      * 写手姓名
      */
     private String writerName;
@@ -121,6 +126,16 @@ public class DraftVo implements Serializable {
     private Date taskCreateDate;
 
     private Integer taskAcceptTaskNum;
+
+    private Integer shelveFlag;
+
+    public Integer getShelveFlag() {
+        return shelveFlag;
+    }
+
+    public void setShelveFlag(Integer shelveFlag) {
+        this.shelveFlag = shelveFlag;
+    }
 
     public Long getKid() {
         return kid;
@@ -320,5 +335,13 @@ public class DraftVo implements Serializable {
 
     public void setAppId(Long appId) {
         this.appId = appId;
+    }
+
+    public Long getWriterId() {
+        return writerId;
+    }
+
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
     }
 }

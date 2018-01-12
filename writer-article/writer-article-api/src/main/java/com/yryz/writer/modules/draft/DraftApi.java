@@ -53,6 +53,7 @@ public interface DraftApi {
 
     RpcResponse<List<AppVo>> selectAppByAppliName(String appliName);
 
+    void del(Long kid);
 
 
 }

@@ -148,6 +148,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         draftVo.setCreateDate(DateUtil.getString(draft.getCreateDate()));
         draftVo.setClassifyName(draft.getClassifyName());
         draftVo.setLabelName(draft.getLabelName());
+        draftVo.setShelveFlag(draft.getShelveFlag());
         Long appId = draft.getAppId();
         if (appId != null && appId != 0) {
             TaskVo app = taskDao.selectAppById(appId);
@@ -159,6 +160,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         }
         String createUserId = draft.getCreateUserId();
         if (StringUtils.isNotBlank(createUserId)) {
+            draftVo.setWriterId(Long.valueOf(createUserId));
             DraftVo writer = draftDao.selectWriterByKid(createUserId);
             if (writer != null) {
                 draftVo.setWriterName(writer.getWriterName());

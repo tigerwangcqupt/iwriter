@@ -51,4 +51,10 @@ public class DraftController extends BaseController {
         return draftApi.selectAppByAppliName(appliName);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/del", method = RequestMethod.GET)
+    public void del(@RequestParam("kid") Long kid) {
+        draftApi.del(kid);
+    }
+
 }
