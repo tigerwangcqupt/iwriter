@@ -40,21 +40,24 @@ public enum ExceptionEnum {
     PIN_FREQUENTLY("5024", "发送验证码过于频繁，请稍候再试！", "发送验证码过于频繁，请稍候再试！"),
     IMAGE_CODE_ERROR("5025", "图形验证码错误！", "图形验证码错误！"),
 
-    AddOwnerException("6001", "增加资金主体异常", "增加资金主体异常"),
+    ADD_OWNER_EXCEPTION("6001", "增加资金主体异常", "增加资金主体异常"),
 
-    AddAccountException("6002", "增加资金账户异常", "增加资金账户异常"),
+    ADD_ACCOUNT_EXCEPTION("6002", "增加资金账户异常", "增加资金账户异常"),
 
-    BindBankException("6003", "绑定银行卡异常", "绑定银行卡异常"),
+    BIND_BANK_EXCEPTION("6003", "绑定银行卡异常", "绑定银行卡异常"),
 
-    TxMoreThanSurplusException("6004", "当前提现金额大于剩余可提现金额", "当前提现金额大于剩余可提现金额"),
+    TX_MORETHANSURPLUS_EXCEPTION("6004", "当前提现金额大于剩余可提现金额", "当前提现金额大于剩余可提现金额"),
 
-    TxNotIntException("6005", "当前提现金额不是整数", "当前提现金额不是整数"),
+    TX_NOTINT_EXCEPTION("6005", "当前提现金额不是整数", "当前提现金额不是整数"),
 
-    FindModelFailException("6006", "查不到资金主体", "查不到资金主体"),
+    FINDMODELFAIL_EXCEPTION("6006", "查不到资金主体", "查不到资金主体"),
 
-    addRoyalFlowFailException("6007", "稿费流水插入资金系统失败", "稿费流水插入资金系统失败"),
+    ADD_ROYALFLOWFAIL_EXCEPTION("6007", "稿费流水插入资金系统失败", "稿费流水插入资金系统失败"),
 
-    addTxFlowFailException("6008", "提现流水插入资金系统失败", "提现流水插入资金系统失败"),
+    ADD_TXFLOWFAIL_EXCEPTION("6008", "提现流水插入资金系统失败", "提现流水插入资金系统失败"),
+
+    EXSITS_TXFLOW_EXCEPTION("6009", "已经存在该流水", "已经存在该流水"),
+
     //写手消息的异常码由8000开始
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),
 	

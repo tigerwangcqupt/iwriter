@@ -1,12 +1,11 @@
 package com.yryz.writer.modules.writer.service;
 
-import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
-import com.yryz.writer.modules.writer.vo.WriterModelVo;
+import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +46,7 @@ public interface WriterService extends BaseService {
 
    Boolean checkImageCode(String phone, String imageCode);
 
-   WriterModelVo selectWriterByParameters(WriterDto writerDto);
+   WriterCapitalVo selectWriterByParameters(WriterDto writerDto);
 
    /**
     * 后台查询写手收益列表

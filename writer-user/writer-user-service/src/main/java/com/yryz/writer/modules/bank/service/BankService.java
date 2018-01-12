@@ -27,7 +27,7 @@ public interface BankService extends BaseService {
 
    Bank updateBank(Bank bank);
 
-   Bank selectByParameters(BankDto bankDto);
+   BankVo selectByParameters(BankDto bankDto);
 
    List<Bank> selectListByWriterIds(BankDto bankDto);
 

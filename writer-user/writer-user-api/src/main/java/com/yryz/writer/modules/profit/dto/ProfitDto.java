@@ -49,6 +49,15 @@ public class ProfitDto extends PageList {
     //提现消息
     private String settlementMsg;
 
+    //修改人
+    private String lastUpdateUserId;
+
+    //处理标识,0代表未处理 1代表处理
+    private Integer handleFlag;
+
+    //流水号
+    private  String profitSn;
+
     public Long getCreateUserId() {
         return createUserId;
     }
@@ -142,5 +151,29 @@ public class ProfitDto extends PageList {
 
     public void setSettlementMsg(String settlementMsg) {
         this.settlementMsg = settlementMsg;
+    }
+
+    public String getLastUpdateUserId() {
+        return lastUpdateUserId;
+    }
+
+    public void setLastUpdateUserId(String lastUpdateUserId) {
+        this.lastUpdateUserId = lastUpdateUserId;
+    }
+
+    public Integer getHandleFlag() {
+        return handleFlag;
+    }
+
+    public void setHandleFlag(Integer handleFlag) {
+        this.handleFlag = handleFlag;
+    }
+
+    public String getProfitSn() {
+        return profitSn;
+    }
+
+    public void setProfitSn(String profitSn) {
+        this.profitSn = profitSn;
     }
 }

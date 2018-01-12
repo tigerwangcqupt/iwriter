@@ -7,15 +7,15 @@
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-   <!--  <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/> -->
+   <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
-    <!-- <bean id="resourceValidateAspect" class="com.yryz.openapi.core.validator.handler.ResourceValidateHandler"/> -->
+     <bean id="resourceValidateAspect" class="com.yryz.openapi.core.validator.handler.ResourceValidateHandler"/>
 
-    <!-- <aop:config proxy-target-class="true">
+    <aop:config proxy-target-class="true">
         <aop:aspect order="8" ref="resourceValidateAspect">
             <aop:pointcut id="resourceValidatePointCut" expression="execution(* com.yryz.openapi..*Controller.*(..)) "/>
             <aop:before method="validate" pointcut-ref="resourceValidatePointCut"/>
         </aop:aspect>
-    </aop:config> -->
+    </aop:config>
 
 </beans>

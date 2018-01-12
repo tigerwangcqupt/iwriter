@@ -71,4 +71,6 @@
     <!-- 统一异常处理 -->
     <bean id="exceptionHandler" class="com.yryz.writer.common.exception.ExceptionHandler"/>
 
+    <!-- 统一验证处理 -->
+    <import resource="spring-validate.xml"/>
 </beans>

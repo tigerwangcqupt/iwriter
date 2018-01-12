@@ -56,6 +56,17 @@ public class BankVo implements Serializable {
      */
     private  String city;
 
+    /**
+     * 省
+     */
+    private  String proviceName;
+
+
+    /**
+     * 城市
+     */
+    private  String cityName;
+
 
     /**
      * 开发支行
@@ -132,5 +143,21 @@ public class BankVo implements Serializable {
 
     public void setUserAccountOpenBank(String userAccountOpenBank) {
         this.userAccountOpenBank = userAccountOpenBank;
+    }
+
+    public String getProviceName() {
+        return proviceName;
+    }
+
+    public void setProviceName(String proviceName) {
+        this.proviceName = proviceName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }

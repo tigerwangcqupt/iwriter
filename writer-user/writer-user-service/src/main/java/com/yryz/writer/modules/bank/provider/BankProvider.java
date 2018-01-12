@@ -93,7 +93,7 @@ public class BankProvider implements BankApi {
 	}
 
 	@Override
-	public RpcResponse<Bank> selectByParameters(BankDto bankDto) {
+	public RpcResponse<BankVo> selectByParameters(BankDto bankDto) {
 		try {
 			return ResponseModel.returnObjectSuccess(bankService.selectByParameters(bankDto));
 		} catch (Exception e) {

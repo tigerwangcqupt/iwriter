@@ -1,15 +1,13 @@
 package com.yryz.writer.modules.writer;
 
 import java.util.List;
-import java.util.Map;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
-import com.yryz.writer.modules.writer.vo.WriterModelVo;
+import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
-import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 
@@ -153,7 +151,7 @@ public interface WriterApi {
 	 * @param writerDto
 	 * @return
 	 */
-	RpcResponse<WriterModelVo> selectWriterByParameters(WriterDto writerDto);
+	RpcResponse<WriterCapitalVo> selectWriterByParameters(WriterDto writerDto);
 
 
 	RpcResponse<Integer> deleteUserToken(String custId);

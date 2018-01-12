@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class WriterModelVo implements Serializable{
+public class WriterCapitalVo implements Serializable{
 
     //写手姓名
     private  String userName;

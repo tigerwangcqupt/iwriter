@@ -13,13 +13,17 @@ import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.qstone.entity.base.model.BankCard;
 import com.yryz.qstone.modules.base.api.OpenBankCardApi;
+import com.yryz.writer.modules.bank.constant.BankConstant;
 import com.yryz.writer.modules.bank.dao.persistence.BankDao;
 import com.yryz.writer.modules.bank.service.BankService;
+import com.yryz.writer.modules.city.CityApi;
+import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
+import com.yryz.writer.modules.province.ProvinceApi;
+import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.service.WriterService;
-import com.yryz.writer.modules.writer.vo.WriterModelVo;
-import com.yryz.writer.modules.writer.vo.WriterVo;
+import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -30,10 +34,12 @@ import org.springframework.stereotype.Service;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.dto.BankDto;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Transactional
 @Service
 public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
@@ -49,6 +55,12 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Autowired
     private IdAPI idAPI;
+
+    @Autowired
+    private ProvinceApi provinceApi;
+
+    @Autowired
+    private CityApi cityApi;
 
 
     @Autowired
@@ -81,6 +93,10 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         BankVo bankVo = new BankVo();
         if (bank != null) {
             BeanUtils.copyProperties(bank,bankVo);
+            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice());
+            CityVo cityVo = cityApi.selectCity(bank.getCity());
+            bankVo.setProviceName(provinceVo.getProvinceName());
+            bankVo.setCityName(cityVo.getCityName());
             return bankVo;
         }
         return null;
@@ -96,14 +112,14 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         WriterDto writerDto = new WriterDto();
         //写手id
         writerDto.setKid(Long.valueOf(bank.getCreateUserId()));
-        WriterModelVo writerModelVo = writerService.selectWriterByParameters(writerDto);
+        WriterCapitalVo writerModelVo = writerService.selectWriterByParameters(writerDto);
         Owner owner = new Owner();
         owner.setOwnerFcode(Long.valueOf(writerModelVo.getOwnerFcode()));
         owner = openOwnerApi.detail(owner);
         if(null == owner){
             logger.error("根据银行卡拥有者查不到资金主体账号");
-            throw new YyrzPcException(ExceptionEnum.FindModelFailException.getCode(),ExceptionEnum.FindModelFailException.getMsg(),
-                    ExceptionEnum.FindModelFailException.getErrorMsg());
+            throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
+                    ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
         }
         return owner.getOwnerCode();
     }
@@ -111,29 +127,30 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
     @Override
     public Bank insertBank(Bank bank) {
         try{
+            Long kid  = idAPI.getId(BankConstant.BANKTABLE);
+            bank.setKid(kid);
+            bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
+            bankDao.insert(bank);
+
             BankCard bankCard=new BankCard();
             //银行卡号
             bankCard.setBankCardNo(bank.getUserBankCart());
             //个人银行卡
-            bankCard.setBankCardType((byte)10);
+            bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
             //银行名称
             bankCard.setBankName(bank.getUserAccountOpenBank());
             //状态生效
-            bankCard.setStatus((byte)1);
+            bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
             //身份证
             bankCard.setCertNo(bank.getUserCart());
             //资金主体编码
             bankCard.setOwnerCode(findOwnerByWriter(bank));
             RpcContext.getContext().setAttachment("clientCode", clientCode);
-            openBankCardApi.add(bankCard);
-            Long kid  = idAPI.getId("yryz_bank");
-            bank.setKid(kid);
-            bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
-            bankDao.insert(bank);
+            openBankCardApi.add(bankCard);;
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
-            throw new YyrzPcException(ExceptionEnum.BindBankException.getCode(),ExceptionEnum.BindBankException.getMsg(),
-                    ExceptionEnum.BindBankException.getErrorMsg()
+            throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),
+                    ExceptionEnum.BIND_BANK_EXCEPTION.getErrorMsg()
             );
         }
         return bank;
@@ -142,30 +159,44 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
     @Override
     public Bank updateBank(Bank bank) {
         try{
+            bankDao.update(bank);
             BankCard bankCard=new BankCard();
             //银行卡号
             bankCard.setBankCardNo(bank.getUserBankCart());
-            bankCard.setBankCardType((byte)10);
+            //个人银行卡
+            bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
+            //银行名称
             bankCard.setBankName(bank.getUserAccountOpenBank());
-            bankCard.setStatus((byte)1);
-            bankCard.setCertNo("身份证");
+            //状态生效
+            bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
+            //身份证
+            bankCard.setCertNo(bank.getUserCart());
+            //资金主体外码
             bankCard.setOwnerCode(findOwnerByWriter(bank));
             RpcContext.getContext().setAttachment("clientCode", clientCode);
-            openBankCardApi.add(bankCard);
-
-            bankDao.update(bank);
+            openBankCardApi.updateBankCard(bankCard);
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
-            throw new YyrzPcException(ExceptionEnum.BindBankException.getCode(),ExceptionEnum.BindBankException.getMsg(),
-                    ExceptionEnum.BindBankException.getErrorMsg()
+            throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),
+                    ExceptionEnum.BIND_BANK_EXCEPTION.getErrorMsg()
             );
         }
         return bank;
     }
 
     @Override
-    public Bank selectByParameters(BankDto bankDto) {
-        return bankDao.selectByParameters(bankDto);
+    public BankVo selectByParameters(BankDto bankDto) {
+        BankVo bankVo = new BankVo();
+        Bank bank =  bankDao.selectByParameters(bankDto);
+        if (bank != null) {
+            BeanUtils.copyProperties(bank,bankVo);
+            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice());
+            CityVo cityVo = cityApi.selectCity(bank.getCity());
+            bankVo.setProviceName(provinceVo.getProvinceName());
+            bankVo.setCityName(cityVo.getCityName());
+            return bankVo;
+        }
+        return null;
     }
 
     @Override

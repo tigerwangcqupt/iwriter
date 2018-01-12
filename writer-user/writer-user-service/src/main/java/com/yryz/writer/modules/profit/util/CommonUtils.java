@@ -22,4 +22,19 @@ public class CommonUtils {
         }
         return true;
     }
+
+    /**
+     * 判断是否是正整数
+     * @param str
+     * @return
+     */
+    public static boolean checkIntNumber(String str) {
+        String rex = "^\\+?[1-9][0-9]*$";
+        Pattern p = Pattern.compile(rex);
+        Matcher m = p.matcher(str);
+        if(m.find()){
+            return true;
+        }
+        return false;
+    }
 }

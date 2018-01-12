@@ -1,7 +1,6 @@
 package com.yryz.writer.modules.writer.service.impl;
 
 import com.yryz.service.api.api.exception.RedisOptException;
-import com.yryz.service.api.api.exception.ServiceException;
 import com.yryz.service.api.basic.api.SmsAPI;
 import com.yryz.writer.common.exception.QsourceException;
 import com.yryz.writer.common.redis.utils.JedisUtils;
@@ -11,10 +10,9 @@ import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 
-import com.yryz.writer.modules.platform.service.impl.SmsCommonServiceImpl;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
-import com.yryz.writer.modules.writer.vo.WriterModelVo;
+import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -253,7 +251,7 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
 
 
     @Override
-    public WriterModelVo selectWriterByParameters(WriterDto writerDto) {
+    public WriterCapitalVo selectWriterByParameters(WriterDto writerDto) {
         return writerDao.selectWriterByParameters(writerDto);
     }
 

@@ -1,6 +1,7 @@
 package com.yryz.writer.modules.profit.service.impl;
 
 import com.alibaba.dubbo.rpc.RpcContext;
+import com.alibaba.fastjson.JSON;
 import com.yryz.qstone.entity.transaction.dto.TransactionFlowRecord;
 import com.yryz.qstone.modules.transaction.api.OpenTransactionApi;
 import com.yryz.writer.common.constant.ExceptionEnum;
@@ -21,21 +22,27 @@ import com.yryz.qstone.modules.base.api.OpenOwnerApi;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.service.BankService;
+import com.yryz.writer.modules.city.CityApi;
+import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.vo.NoticeReceiveWriter;
 import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
 import com.yryz.writer.modules.profit.constant.ProfitConstants;
 import com.yryz.writer.modules.profit.constant.ProfitEnum;
+import com.yryz.writer.modules.profit.util.CommonUtils;
 import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
 import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
+import com.yryz.writer.modules.province.ProvinceApi;
+import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
-import com.yryz.writer.modules.writer.vo.WriterModelVo;
+import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -48,18 +55,20 @@ import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.dao.persistence.ProfitDao;
 import com.yryz.writer.modules.profit.service.ProfitService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+@Transactional
 @Service
 public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 {
     private static final Logger logger = LoggerFactory.getLogger(ProfitServiceImpl.class);
     private static final String LOCK_PROFIT_ADD = "PROFIT_ADD";
+    private static final String LOCK_PROFIT_UPDATE = "LOCK_PROFIT_UPDATE";
     @Autowired
     private ProfitDao profitDao;
 
@@ -83,6 +92,12 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 
     @Autowired
     private MessageApi messageApi;
+
+    @Autowired
+    private ProvinceApi provinceApi;
+
+    @Autowired
+    private CityApi cityApi;
 
     @Value("${clientCode}")
     private String clientCode;
@@ -113,7 +128,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         if(list != null && list.size() > 0) {
             for(Profit profit : list){
                 ProfitVo profitVo = new ProfitVo();
-                //Profit to ProfitVo
                 profitVoList.add(profitVo);
             }
         }
@@ -125,7 +139,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         Profit profit = profitDao.selectByKid(Profit.class,profitId);
         ProfitVo profitVo = new ProfitVo();
         if (profitVo != null) {
-            //Profit to ProfitVo
         }
         return profitVo;
     }
@@ -185,24 +198,30 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public Profit insertProfit(Profit profit) {
         String lockKey = null;
         try {
+            //当前提现金额
+            BigDecimal settlementAmount = profit.getSettlementAmount();
+            //提现金额不是正整数
+            if(!CommonUtils.checkIntNumber(settlementAmount.toString())){
+                 logger.error("提现金额不是正整数");
+                throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
+                        ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
+            }
             //提现日期
             Date settlementDate = new Date();
             //分布式锁控制用户频繁操作
             lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getCreateUserId());
             WriterDto writerDto = new WriterDto();
             writerDto.setKid(profit.getWriterId());
-            WriterModelVo writerModelVo =writerService.selectWriterByParameters(writerDto);
+            WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
             //剩余可提现金额
             BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
-            //当前提现金额
-            BigDecimal settlementAmount = profit.getSettlementAmount();
             //稿费的时候不去判断
             if(profit.getSettlementType() != ProfitEnum.ROYALTIES_FEE.getCode()){
                 //当剩余金额小于当前提现金额时
                 if(null != withdrawAmount && withdrawAmount.compareTo(settlementAmount)==-1){
                     logger.error("当前提现金额大于剩余可提现金额");
-                    throw new YyrzPcException(ExceptionEnum.TxMoreThanSurplusException.getCode(),ExceptionEnum.TxMoreThanSurplusException.getMsg(),
-                            ExceptionEnum.TxMoreThanSurplusException.getErrorMsg());
+                    throw new YyrzPcException(ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getCode(),ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getMsg(),
+                            ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getErrorMsg());
                 }
             }
             //更新写手信息
@@ -210,16 +229,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             writer.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
             writer.setKid(profit.getWriterId());
             writer.setWithdrawDate(settlementDate);
-
-            //如果是提现
-            if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FEE.getCode()){
-                writer.setLatelyWithdrawAmount(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
-                //writer.setWithdrawAmount(MoneyUtils.setBigDecimal(withdrawAmount.subtract(settlementAmount)));
-            }
-            //如果是稿费
-            else if(profit.getSettlementType() == ProfitEnum.ROYALTIES_FEE.getCode()){
-                writer.setWithdrawAmount(MoneyUtils.setBigDecimal(withdrawAmount.add(settlementAmount)));
-            }
             //同步插入到profit流水表
             Long kid  = idAPI.getId(ProfitConstants.PROFITTABLE);
             profit.setKid(kid);
@@ -229,6 +238,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             profit.setSettlementAmount(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
             //如果是提现
             if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FEE.getCode()){
+                writer.setLatelyWithdrawAmount(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
                 //设置流水号
                 String profitSn = String.valueOf(idAPI.getSnowflakeId());
                 profit.setProfitSn(profitSn);
@@ -238,23 +248,25 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 profit.setSurplusAmount(MoneyUtils.setBigDecimal(withdrawAmount.subtract(settlementAmount)));
                 //提现消息
                 profit.setSettlementMsg(ProfitEnum.WITHDRAWALS_FEE.getMsg());
+                insert(profit);
                 //最后修改信息
                 writerService.updateWriterProfit(writer);
             }
             //如果是稿费
             else if(profit.getSettlementType() == ProfitEnum.ROYALTIES_FEE.getCode()){
-                //增加流水到资金主体
-                addRoyalFlow(profit);
                 //手续费扩大一万倍
                 profit.setChargeFee(new BigDecimal(0));
                 //剩余提现金额扩大一万倍
                 profit.setSurplusAmount(MoneyUtils.setBigDecimal(withdrawAmount.add(settlementAmount)));
                 //提现消息
                 profit.setSettlementMsg(ProfitEnum.ROYALTIES_FEE.getMsg());
+                insert(profit);
+                writer.setWithdrawAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
                 //最后修改信息
                 writerService.update(writer);
+                //增加流水到资金主体
+                addRoyalFlow(profit);
             }
-            insert(profit);
             return profit;
         }catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -276,72 +288,113 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
      */
     @Override
     public Profit updateProfit(Profit profit) {
-        //提现日期
-        Date settlementDate = new Date();
-        Profit profitData = profitDao.selectByKid(Profit.class,profit.getKid());
-        //修改记录
-        profitDao.update(profitData);
-        Long kid  = idAPI.getId(ProfitConstants.PROFITTABLE);
-        profitData.setKid(kid);
-        profitData.setSettlementDate(settlementDate);
+        String lockKey = null;
+        try {
+            //分布式锁控制用户频繁操作
+            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_UPDATE, profit.getCreateUserId());
+            ProfitDto profitDto = new ProfitDto();
+            profitDto.setWriterId(profit.getWriterId());
+            profitDto.setProfitSn(profit.getProfitSn());
+            profitDto.setSettlementType(profit.getSettlementType());
+            List<ProfitDetailVo> existFlows = profitDao.selectFlowList(profitDto);
+            if(CollectionUtils.isNotEmpty(existFlows)){
+                logger.error("已经存在该流水:"+ JSON.toJSONString(profit));
+                throw new YyrzPcException(ExceptionEnum.EXSITS_TXFLOW_EXCEPTION.getCode(),ExceptionEnum.EXSITS_TXFLOW_EXCEPTION.getMsg(),
+                        ExceptionEnum.EXSITS_TXFLOW_EXCEPTION.getErrorMsg()
+                );
+            }
+            Profit profitBase = new Profit();
+            Profit profitData = profitDao.selectByKid(Profit.class, profit.getKid());
+            BeanUtils.copyProperties(profitData, profitBase);
+            Long oldKid = profitData.getKid();
 
-        WriterDto writerDto = new WriterDto();
-        writerDto.setKid(profit.getWriterId());
-        WriterModelVo writerModelVo =writerService.selectWriterByParameters(writerDto);
-        //剩余可提现金额
-        BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
-        //当前提现金额
-        BigDecimal settlementAmount = profit.getSettlementAmount();
-        //提现成功,只更新写手表的累计提现金额
-         if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_SUCCESS.getCode()){
-             //当剩余金额小于当前提现金额时
-             if(null != withdrawAmount && withdrawAmount.compareTo(settlementAmount)==-1){
-                 logger.error("当前提现金额大于剩余可提现金额");
-                 throw new YyrzPcException(ExceptionEnum.TxMoreThanSurplusException.getCode(),ExceptionEnum.TxMoreThanSurplusException.getMsg(),
-                         ExceptionEnum.TxMoreThanSurplusException.getErrorMsg());
-             }
-             //提现流水
-             addTxFlow(profitData);
-             //更新流水,只改变状态
-             profitData.setSettlementType(profit.getSettlementType());
-             profitData.setSettlementMsg(ProfitEnum.WITHDRAWALS_SUCCESS.getMsg());
-             insert(profitData);
-             //更新写手信息,只改累计提现金额
-             Writer writer = new Writer();
-             writer.setSettlementType(ProfitEnum.WITHDRAWALS_SUCCESS.getCode());
-             writer.setKid(profit.getWriterId());
-             writer.setWithdrawDate(settlementDate);
-             writer.setSumWithdrawAmount(MoneyUtils.setBigDecimal(writerModelVo.getSumWithdrawAmount().add(profit.getSettlementAmount())));
-             writerService.update(writer);
-         }
-         //提现失败
-         else if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FAIL.getCode()){
-             //调用消息发送接口
-             WriterNoticeMessageVo writerNoticeMessageVo = new WriterNoticeMessageVo();
-             writerNoticeMessageVo.setContent(profit.getSettlementMsg());
-             writerNoticeMessageVo.setTriggerType(3);
-             writerNoticeMessageVo.setSendUserId(Long.valueOf(profit.getLastUpdateUserId()));
-             List<NoticeReceiveWriter> receiveWriters = new ArrayList<>();
-             NoticeReceiveWriter noticeReceiveWriter = new NoticeReceiveWriter();
-             noticeReceiveWriter.setKid(profit.getWriterId());
-             receiveWriters.add(noticeReceiveWriter);
-             writerNoticeMessageVo.setReceiveWriter(receiveWriters);
-             messageApi.saveWriterNoticeMessage(writerNoticeMessageVo);
+            //提现日期
+            Date settlementDate = new Date();
+            Long kid = idAPI.getId(ProfitConstants.PROFITTABLE);
+            profitData.setKid(kid);
+            profitData.setSettlementDate(settlementDate);
 
-             //更新流水,把钱加回去,加入剩余可提现金额
-             profitData.setSettlementType(profit.getSettlementType());
-             BigDecimal surplusAmount = profitData.getSurplusAmount().add(profit.getSettlementAmount());
-             profitData.setSurplusAmount(MoneyUtils.setBigDecimal(surplusAmount));
-             insert(profitData);
-             //更新写手信息,把钱加回去,加入剩余可提现金额
-             Writer writer = new Writer();
-             writer.setSettlementType(ProfitEnum.WITHDRAWALS_FAIL.getCode());
-             writer.setKid(profit.getWriterId());
-             writer.setWithdrawDate(settlementDate);
-             writer.setWithdrawAmount(MoneyUtils.setBigDecimal(writerModelVo.getWithdrawAmount().add(profit.getSettlementAmount())));
-             writerService.update(writer);
-         }
-         return profit;
+            WriterDto writerDto = new WriterDto();
+            writerDto.setKid(profit.getWriterId());
+            WriterCapitalVo writerModelVo = writerService.selectWriterByParameters(writerDto);
+            //剩余可提现金额
+            BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
+            //当前提现金额
+            BigDecimal settlementAmount = profit.getSettlementAmount();
+            //提现成功,只更新写手表的累计提现金额
+            if (profit.getSettlementType() == ProfitEnum.WITHDRAWALS_SUCCESS.getCode()) {
+                //当剩余金额小于当前提现金额时
+                if (null != withdrawAmount && withdrawAmount.compareTo(settlementAmount) == -1) {
+                    logger.error("当前提现金额大于剩余可提现金额");
+                    throw new YyrzPcException(ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getCode(), ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getMsg(),
+                            ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getErrorMsg());
+                }
+                //更新流水,只改变状态
+                profitData.setSettlementType(profit.getSettlementType());
+                profitData.setSettlementMsg(ProfitEnum.WITHDRAWALS_SUCCESS.getMsg());
+                BigDecimal surplusAmount = profitData.getSurplusAmount().subtract(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
+                profitData.setSurplusAmount(surplusAmount);
+                insert(profitData);
+                //更新写手信息,只改累计提现金额
+                Writer writer = new Writer();
+                writer.setSettlementType(ProfitEnum.WITHDRAWALS_SUCCESS.getCode());
+                writer.setKid(profit.getWriterId());
+                writer.setWithdrawDate(settlementDate);
+                writer.setSumWithdrawAmount(MoneyUtils.setBigDecimal(writerModelVo.getSumWithdrawAmount().add(profit.getSettlementAmount())));
+                writerService.update(writer);
+
+                //修改记录
+                profitBase.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
+                profitBase.setLastUpdateUserId(profit.getLastUpdateUserId());
+                profitBase.setKid(oldKid);
+                profitDao.update(profitBase);
+                //提现流水
+                addTxFlow(profitData);
+            }
+            //提现失败
+            else if (profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FAIL.getCode()) {
+                //调用消息发送接口
+                WriterNoticeMessageVo writerNoticeMessageVo = new WriterNoticeMessageVo();
+                writerNoticeMessageVo.setContent(profit.getSettlementMsg());
+                writerNoticeMessageVo.setTriggerType(3);
+                writerNoticeMessageVo.setSendUserId(Long.valueOf(profit.getLastUpdateUserId()));
+                List<NoticeReceiveWriter> receiveWriters = new ArrayList<>();
+                NoticeReceiveWriter noticeReceiveWriter = new NoticeReceiveWriter();
+                noticeReceiveWriter.setKid(profit.getWriterId());
+                receiveWriters.add(noticeReceiveWriter);
+                writerNoticeMessageVo.setReceiveWriter(receiveWriters);
+                messageApi.saveWriterNoticeMessage(writerNoticeMessageVo);
+
+                //更新流水,把钱加回去,加入剩余可提现金额
+                profitData.setSettlementType(profit.getSettlementType());
+                BigDecimal surplusAmount = profitData.getSurplusAmount().add(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
+                profitData.setSettlementMsg(profit.getSettlementMsg());
+                profitData.setSurplusAmount(surplusAmount);
+                insert(profitData);
+
+                //修改记录
+                profitBase.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
+                profitBase.setLastUpdateUserId(profit.getLastUpdateUserId());
+                profitBase.setKid(oldKid);
+                profitDao.update(profitBase);
+
+                //更新写手信息,把钱加回去,加入剩余可提现金额
+                Writer writer = new Writer();
+                writer.setSettlementType(ProfitEnum.WITHDRAWALS_FAIL.getCode());
+                writer.setKid(profit.getWriterId());
+                writer.setWithdrawDate(settlementDate);
+                writer.setWithdrawAmount(writerModelVo.getWithdrawAmount().add(MoneyUtils.setBigDecimal(profit.getSettlementAmount())));
+                writerService.update(writer);
+            }
+        }catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (null != lockKey) {
+                DistributedLockUtils.unlock(LOCK_PROFIT_UPDATE, lockKey);
+            }
+        }
+        return profit;
     }
 
     /**
@@ -365,8 +418,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             data = openOwnerApi.detail(data);
         }catch(Exception e){
             logger.error("调用资金系统插入资金主体表出现异常:", e);
-            throw new YyrzPcException(ExceptionEnum.AddOwnerException.getCode(),ExceptionEnum.AddOwnerException.getMsg(),
-                    ExceptionEnum.AddOwnerException.getErrorMsg()
+            throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),
+                    ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg()
                     );
         }
         try{
@@ -380,8 +433,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             openAccountApi.add(account);
         }catch(Exception e){
             logger.error("调用资金系统插入账户出现异常:" , e);
-            throw new YyrzPcException(ExceptionEnum.AddAccountException.getCode(),ExceptionEnum.AddAccountException.getMsg(),
-                    ExceptionEnum.AddAccountException.getErrorMsg()
+            throw new YyrzPcException(ExceptionEnum.ADD_ACCOUNT_EXCEPTION.getCode(),ExceptionEnum.ADD_ACCOUNT_EXCEPTION.getMsg(),
+                    ExceptionEnum.ADD_ACCOUNT_EXCEPTION.getErrorMsg()
             );
         }
         Writer writer1 = new Writer();
@@ -438,8 +491,18 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 for(Bank bank : bankList){
                     for(ProfitAdminVo profitAdminVo : profitAdminVoList){
                         if(bank.getCreateUserId().equals(profitAdminVo.getWriterId())){
+                            String location = "";
                             String userName = profitAdminVo.getUserName();
                             BeanUtils.copyProperties(bank,profitAdminVo);
+                            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice());
+                            CityVo cityVo = cityApi.selectCity(bank.getCity());
+                            if(null != provinceVo && StringUtils.isNotEmpty(provinceVo.getProvinceName())){
+                                location = provinceVo.getProvinceName();
+                            }
+                            if(null != cityVo && StringUtils.isNotEmpty(cityVo.getCityName())){
+                                location =location+" "+cityVo.getCityName();
+                            }
+                            profitAdminVo.setLocation(location);
                             profitAdminVo.setUserRefBankName(bank.getUserName());
                             profitAdminVo.setUserName(userName);
                         }
@@ -471,7 +534,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         ProfitStaticsVo profitStaticsVo = new ProfitStaticsVo();
         WriterDto writerDto = new WriterDto();
         writerDto.setKid(userId);
-        WriterModelVo writerModelVo =  writerService.selectWriterByParameters(writerDto);
+        WriterCapitalVo writerModelVo =  writerService.selectWriterByParameters(writerDto);
         BeanUtils.copyProperties(writerModelVo,profitStaticsVo);
         profitStaticsVo.setLatelyWithdrawAmount(MoneyUtils.getMoney(profitStaticsVo.getLatelyWithdrawAmount()));
         profitStaticsVo.setSumWithdrawAmount(MoneyUtils.getMoney(profitStaticsVo.getSumWithdrawAmount()));
@@ -488,7 +551,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //得到写手的个人基本信息
             WriterDto writerDto = new WriterDto();
             writerDto.setKid(profit.getWriterId());
-            WriterModelVo writerModelVo =writerService.selectWriterByParameters(writerDto);
+            WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
             Long userFcode = Long.valueOf(writerModelVo.getOwnerFcode());
 
             BigDecimal amount = profit.getSettlementAmount();
@@ -504,7 +567,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //总金额扩大10000倍
             record.setTotalAmount(amount);
             //总条数
-            record.setTotalCount(2);
+            record.setTotalCount(ProfitConstants.ROYALTIESFLOWNUM);
             //流水记录集合
             List<TransactionFlowRecord.Flow> flowList = new ArrayList<TransactionFlowRecord.Flow>();
             //平台收益
@@ -544,8 +607,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             openTransactionApi.add(record);
         }catch (Exception e){
             logger.error("稿费流水插入资金系统失败",e);
-            throw new YyrzPcException(ExceptionEnum.addRoyalFlowFailException.getCode(),ExceptionEnum.addRoyalFlowFailException.getMsg(),
-                    ExceptionEnum.addRoyalFlowFailException.getErrorMsg()
+            throw new YyrzPcException(ExceptionEnum.ADD_ROYALFLOWFAIL_EXCEPTION.getCode(),ExceptionEnum.ADD_ROYALFLOWFAIL_EXCEPTION.getMsg(),
+                    ExceptionEnum.ADD_ROYALFLOWFAIL_EXCEPTION.getErrorMsg()
             );
         }
     }
@@ -559,7 +622,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //得到写手的个人基本信息
             WriterDto writerDto = new WriterDto();
             writerDto.setKid(profit.getWriterId());
-            WriterModelVo writerModelVo =writerService.selectWriterByParameters(writerDto);
+            WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
             Long userFcode = Long.valueOf(writerModelVo.getOwnerFcode());
 
             BigDecimal amount = profit.getSettlementAmount();
@@ -575,7 +638,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //总金额扩大10000倍
             record.setTotalAmount(amount);
             //总条数
-            record.setTotalCount(3);
+            record.setTotalCount(ProfitConstants.TXFLOWNUM);
             //流水记录集合
             List<TransactionFlowRecord.Flow> flowList = new ArrayList<TransactionFlowRecord.Flow>();
 
@@ -633,8 +696,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             openTransactionApi.add(record);
         }catch (Exception e){
             logger.error("提现流水插入资金系统失败",e);
-            throw new YyrzPcException(ExceptionEnum.addTxFlowFailException.getCode(),ExceptionEnum.addTxFlowFailException.getMsg(),
-                    ExceptionEnum.addTxFlowFailException.getErrorMsg()
+            throw new YyrzPcException(ExceptionEnum.ADD_TXFLOWFAIL_EXCEPTION.getCode(),ExceptionEnum.ADD_TXFLOWFAIL_EXCEPTION.getMsg(),
+                    ExceptionEnum.ADD_TXFLOWFAIL_EXCEPTION.getErrorMsg()
             );
         }
     }

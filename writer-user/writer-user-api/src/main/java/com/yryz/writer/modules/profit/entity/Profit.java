@@ -2,6 +2,8 @@ package com.yryz.writer.modules.profit.entity;
 
 import com.yryz.writer.common.entity.GenericEntity;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 /**
@@ -29,13 +31,15 @@ public class Profit extends GenericEntity{
 
 	/**
 	 * 结算金额
-	 */	 
+	 */
+	@NotNull
     private BigDecimal settlementAmount;
     
 
 	/**
 	 * 1提现，1稿费
-	 */	 
+	 */
+	@NotNull
     private  Integer settlementType;
     
 
@@ -53,13 +57,15 @@ public class Profit extends GenericEntity{
 
 	/**
 	 * 提现银行卡
-	 */	 
+	 */
+	@NotEmpty
     private  String bankCard;
     
 
 	/**
 	 * 提现银行
-	 */	 
+	 */
+	@NotEmpty
     private  String bankCash;
     
 

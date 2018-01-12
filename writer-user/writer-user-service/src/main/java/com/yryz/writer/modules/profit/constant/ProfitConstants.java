@@ -44,4 +44,10 @@ public class ProfitConstants {
     //账户状态,生效
     public static final Byte ACCOUNTSTATUS = 1;
 
+    //稿费流水条数
+    public static final Byte ROYALTIESFLOWNUM = 2;
+
+    //提现流水
+    public static final Byte TXFLOWNUM = 3;
+
 }

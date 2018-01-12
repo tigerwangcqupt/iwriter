@@ -60,6 +60,6 @@ public interface BankApi {
 
 
 
-	RpcResponse<Bank> selectByParameters(BankDto bankDto);
+	RpcResponse<BankVo> selectByParameters(BankDto bankDto);
 
 }

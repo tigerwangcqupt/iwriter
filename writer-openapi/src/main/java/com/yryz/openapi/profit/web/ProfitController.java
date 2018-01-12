@@ -17,6 +17,7 @@ import com.yryz.writer.modules.profit.ProfitApi;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -87,8 +88,9 @@ public class ProfitController extends BaseController{
     */
    @RequestMapping(value="/add", method = RequestMethod.POST)
    @ResponseBody
-   public RpcResponse<Profit> addProfit(@RequestBody Profit profit, @RequestHeader String userId){
-      profit.setCreateUserId(userId);
+   public RpcResponse<Profit> addProfit(@RequestBody Profit profit, @RequestHeader Long userId){
+      Assert.notNull(userId, "用户id为空!");
+      profit.setWriterId(userId);
       return profitApi.insertProfit(profit);
    }
 }

@@ -10,7 +10,7 @@ import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.WriterApi;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
-import com.yryz.writer.modules.writer.vo.WriterModelVo;
+import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
@@ -19,10 +19,7 @@ import com.yryz.writer.modules.writer.service.WriterAuditService;
 import com.yryz.writer.modules.writer.service.WriterService;
 
 import java.util.List;
-import java.util.UUID;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,7 +222,7 @@ public class WriterProvider implements WriterApi {
 	}
 
 	@Override
-	public RpcResponse<WriterModelVo> selectWriterByParameters(WriterDto writerDto) {
+	public RpcResponse<WriterCapitalVo> selectWriterByParameters(WriterDto writerDto) {
 		try {
 			return ResponseModel.returnListSuccess(writerService.selectWriterByParameters(writerDto));
 		} catch (Exception e) {

@@ -48,6 +48,9 @@ public class ProfitAdminVo implements Serializable {
     //流水消息
     private  String settlementMsg;
 
+    //流水类型
+    private  String settlementType;
+
     public String getSettlementDate() {
         return settlementDate;
     }
@@ -158,5 +161,13 @@ public class ProfitAdminVo implements Serializable {
 
     public void setSettlementMsg(String settlementMsg) {
         this.settlementMsg = settlementMsg;
+    }
+
+    public String getSettlementType() {
+        return settlementType;
+    }
+
+    public void setSettlementType(String settlementType) {
+        this.settlementType = settlementType;
     }
 }
