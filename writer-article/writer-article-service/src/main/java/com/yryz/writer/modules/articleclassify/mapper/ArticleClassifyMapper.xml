@@ -34,7 +34,7 @@
     </select>
     
     <!-- 删除ArticleClassify-->
-    <delete id="deleteArticleClassify" >
+    <update id="deleteArticleClassify" >
         update yryz_articleclassify
         set del_flag = 1,
         	last_update_date=NOW(),
@@ -44,7 +44,7 @@
 			shelve_flag = 1
         where kid = #{kid,jdbcType=BIGINT}
 
-    </delete>
+    </update>
 
 	<!--  恢复分类 -->
 	<update id="recoverClassify" >
@@ -214,7 +214,7 @@
 
 	<!--  分类下是否包含文章个数  -->
 	<select id="countArticleByClassifyId" parameterType="Long"  resultType="int" >
-		SELECT COUNT(1) FROM yryz_article_articleclasssfy WHERE classfy_id=#{articleClassifyId}
+		SELECT COUNT(1) FROM yryz_article_articleclassify WHERE classify_id=#{articleClassifyId}
 	</select>
     
 </mapper>

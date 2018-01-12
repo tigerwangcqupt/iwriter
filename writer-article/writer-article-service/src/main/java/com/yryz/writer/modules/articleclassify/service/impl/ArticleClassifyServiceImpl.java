@@ -60,6 +60,9 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 articleClassifyVo.setParentId(articleClassify.getParentId());
                 articleClassifyVo.setShelveFlag(articleClassify.getShelveFlag());
                 articleClassifyVo.setKid(articleClassify.getKid());
+                //查询分类下的文章个数
+                long articleCount = articleClassifyDao.countArticleByClassifyId(articleClassify.getKid());
+                articleClassifyVo.setArticleAmount(articleCount);
                 Date createDate = articleClassify.getCreateDate();
                 articleClassifyVo.setCreateDate(createDate == null ? "" : DATETIME_PATTERN.format(articleClassify.getCreateDate()));
                 articleClassifyVoList.add(articleClassifyVo);
@@ -122,6 +125,10 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         ArticleClassify parent = articleClassifyDao.selectByKid(ArticleClassify.class, parentId);
         //父级分类是末级分类时
         if (null != parent && ArticleClassifyConstant.LAST_STAGE_YES == parent.getLastStageFlag()) {
+            //父级分类上关联了文章
+            if (articleClassifyDao.countArticleByClassifyId(parent.getKid()) > 0) {
+                throw new BaseException("父级分类下有文章，请移除文章再添加该分类");
+            }
             //父级分类为末级分类，需要修改为非末级分类
             ArticleClassify updateClassify = new ArticleClassify();
             updateClassify.setId(parent.getId());
@@ -133,7 +140,6 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
 
     public Boolean update(ArticleClassify articleClassify) {
         try {
-
             int successNum = articleClassifyDao.update(articleClassify);
             if (successNum < 1){
                 return false;
@@ -183,6 +189,11 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 if (count > 0) {
                     throw new BaseException("该分类下存在上架子分类，请先下架下子分类再下架该分类");
                 }
+            }else{//末级分类
+                //该分类上关联了文章
+                if (articleClassifyDao.countArticleByClassifyId(articleClassify.getKid()) > 0) {
+                    throw new BaseException("分类下有文章，请移除文章再下架该分类");
+                }
             }
             articleClassify.setShelveFlag(1);
             int successNum = articleClassifyDao.update(articleClassify);
@@ -203,6 +214,11 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
             //非末级分类
             if (ArticleClassifyConstant.LAST_STAGE_YES != articleClassify.getLastStageFlag()) {
                 throw new BaseException("该分类下有子分类，请移除分类下子分类再删除");
+            }else{//末级分类
+                //该分类上关联了文章
+                if (articleClassifyDao.countArticleByClassifyId(articleClassify.getKid()) > 0) {
+                    throw new BaseException("分类下有文章，请移除文章再删除该分类");
+                }
             }
             int successNum = articleClassifyDao.deleteArticleClassify(kid, lastUpdateUserId);
             //判断该分类的父级分类是否存在其他子分类

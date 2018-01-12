@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.articlelabel.dao.persistence.ArticleLabelDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.articlelabel.entity.ArticleLabel">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="label_name" property="labelName" jdbcType="VARCHAR"/>
+		<result column="label_description" property="labelDescription" jdbcType="VARCHAR"/>
+		<result column="icon" property="icon" jdbcType="VARCHAR"/>
+		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
+		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+		<result column="sort" property="sort" jdbcType="INTEGER"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,label_name,label_description,icon,shelve_flag,del_flag,sort,create_date,last_update_date,create_user_id,last_update_user_id
+    </sql>
+
+     <!-- 查询ArticleLabel详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_articlelabel
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除ArticleLabel-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_articlelabel
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增ArticleLabel-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.yryz.writer.modules.articlelabel.entity.ArticleLabel">
+	    insert into yryz_articlelabel (kid,label_name,label_description,icon,shelve_flag,del_flag,sort,create_date,last_update_date,create_user_id,last_update_user_id)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{labelName,jdbcType=VARCHAR}
+				,#{labelDescription,jdbcType=VARCHAR}
+				,#{icon,jdbcType=VARCHAR}
+				,#{shelveFlag,jdbcType=TINYINT}
+				,#{delFlag,jdbcType=TINYINT}
+				,#{sort,jdbcType=INTEGER}
+			,NOW()
+			,NOW()
+				,#{createUserId,jdbcType=VARCHAR}
+				,#{lastUpdateUserId,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<!--按需新增ArticleLabel-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.articlelabel.entity.ArticleLabel">
+	    insert into yryz_articlelabel 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="labelName != null and labelName != ''">
+			label_name,
+	    </if>
+        <if test="labelDescription != null and labelDescription != ''">
+			label_description,
+	    </if>
+        <if test="icon != null and icon != ''">
+			icon,
+	    </if>
+        <if test="shelveFlag != null">
+			shelve_flag,
+	    </if>
+        <if test="delFlag != null">
+			del_flag,
+	    </if>
+        <if test="sort != null">
+			sort,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			last_update_user_id,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="labelName != null and labelName != ''">
+			#{labelName,jdbcType=VARCHAR},
+	    </if>
+        <if test="labelDescription != null and labelDescription != ''">
+			#{labelDescription,jdbcType=VARCHAR},
+	    </if>
+        <if test="icon != null and icon != ''">
+			#{icon,jdbcType=VARCHAR},
+	    </if>
+        <if test="shelveFlag != null">
+			#{shelveFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="delFlag != null">
+			#{delFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="sort != null">
+			#{sort,jdbcType=INTEGER},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			#{lastUpdateUserId,jdbcType=VARCHAR},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改ArticleLabel-->   
+    <update id="update" parameterType="com.yryz.writer.modules.articlelabel.entity.ArticleLabel">
+        update yryz_articlelabel
+        <set>
+            <if test="labelName != null and labelName != ''">
+    			label_name = #{labelName,jdbcType=VARCHAR},
+    		</if>
+            <if test="labelDescription != null and labelDescription != ''">
+    			label_description = #{labelDescription,jdbcType=VARCHAR},
+    		</if>
+            <if test="icon != null and icon != ''">
+    			icon = #{icon,jdbcType=VARCHAR},
+    		</if>
+             <if test="shelveFlag != null">
+    			shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+    		</if>
+             <if test="delFlag != null">
+    			del_flag = #{delFlag,jdbcType=TINYINT},
+    		</if>
+             <if test="sort != null">
+    			sort = #{sort,jdbcType=INTEGER},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询ArticleLabel列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_articlelabel
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="labelName != null and labelName != '' ">
+				AND label_name like CONCAT('%',trim(#{labelName}),'%')
+			</if>
+			<if test="shelveFlag != null">
+				shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+			</if>
+			<if test="delFlag != null">
+				AND del_flag = #{delFlag,jdbcType=TINYINT},
+			</if>
+		</trim>
+    </select>
+
+	<!-- 删除文章标签-->
+	<update id="deleteArticleLabel" >
+		update yryz_articlelabel
+		set del_flag = 1,
+		last_update_date=NOW(),
+		last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+		sort = 9999,
+		shelve_flag = 1
+		where kid = #{kid,jdbcType=BIGINT}
+
+	</update>
+
+	<!--  恢复文章标签 -->
+	<update id="recoverArticleLabel" >
+		update yryz_articlelabel
+		set del_flag = 0,
+		last_update_date=NOW(),
+		last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR}
+		where kid = #{kid,jdbcType=BIGINT}
+	</update>
+
+	<!--  标签下是否包含文章个数  -->
+	<select id="countArticleByLabelId" parameterType="Long"  resultType="int" >
+		SELECT COUNT(1) FROM yryz_article_articlelabel WHERE label_id = #{kid}
+	</select>
+
+</mapper>
