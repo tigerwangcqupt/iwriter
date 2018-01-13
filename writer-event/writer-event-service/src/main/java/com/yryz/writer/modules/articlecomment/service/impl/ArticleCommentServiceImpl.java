@@ -77,16 +77,17 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
         List<ArticleComment> list = articleCommentDao.selectListByWriter(articleCommentDto);
         List<ArticleCommentVo> articleCommentVoList = new ArrayList<ArticleCommentVo>();
         if (list != null && list.size() > 0) {
-            for (ArticleComment articleComment : list) {
-                if (articleComment == null) continue;
-                ArticleCommentVo articleCommentVo = new ArticleCommentVo();
-                //ArticleComment to ArticleCommentVo
-                articleCommentVo.setCommentUserNickname(articleComment.getCommentUserNickname() == null ? "": articleComment.getCommentUserNickname());
-                articleCommentVo.setContent(articleComment.getContent() == null ? "": articleComment.getContent());
-                articleCommentVo.setArticleTitle(articleComment.getArticleTitle() == null ? "": articleComment.getArticleTitle());
-                articleCommentVo.setCreateDate(articleComment.getCreateDate());
-                articleCommentVoList.add(articleCommentVo);
-            }
+            list.stream().forEach(articleComment -> {
+                if (articleComment != null){
+                    ArticleCommentVo articleCommentVo = new ArticleCommentVo();
+                    //ArticleComment to ArticleCommentVo
+                    articleCommentVo.setCommentUserNickname(articleComment.getCommentUserNickname() == null ? "": articleComment.getCommentUserNickname());
+                    articleCommentVo.setContent(articleComment.getContent() == null ? "": articleComment.getContent());
+                    articleCommentVo.setArticleTitle(articleComment.getArticleTitle() == null ? "": articleComment.getArticleTitle());
+                    articleCommentVo.setCreateDate(articleComment.getCreateDate());
+                    articleCommentVoList.add(articleCommentVo);
+                }
+            });
         }
         return new PageModel<ArticleCommentVo>().getPageList(list, articleCommentVoList);
     }

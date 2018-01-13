@@ -75,16 +75,18 @@ public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleS
         List<ArticleShare> list = articleShareDao.selectListByWriter(articleShareDto);
         List<ArticleShareVo> articleShareVoList = new ArrayList <ArticleShareVo>();
         try {
-            if(list != null && list.size() > 0) {
-                for(ArticleShare articleShare : list){
-                    StringBuilder content = new StringBuilder();
-                    ArticleShareVo articleShareVo = new ArticleShareVo();
-                    BeanUtils.copyProperties(articleShare, articleShareVo);
-                    //ArticleFavorite to ArticleFavoriteVo
-                    content.append(articleShare.getCreateUserNickname()).append(shareTemplate);
-                    articleShareVo.setContent(content.toString().replace("$content", articleShare.getArticleTitle()));
-                    articleShareVoList.add(articleShareVo);
-                }
+            if (list != null && list.size() > 0) {
+                list.stream().forEach(articleShare -> {
+                    if (articleShare != null){
+                        ArticleShareVo articleShareVo = new ArticleShareVo();
+                        //ArticleComment to ArticleCommentVo
+                        BeanUtils.copyProperties(articleShare, articleShareVo);
+                        StringBuilder content = new StringBuilder();
+                        content.append(articleShare.getCreateUserNickname()).append(shareTemplate);
+                        articleShareVo.setContent(content.toString().replace("$content", articleShare.getArticleTitle()));
+                        articleShareVoList.add(articleShareVo);
+                    }
+                });
             }
             messageApi.cleanMessageTips(ModuleEnum.SHARE, articleShareDto.getCustId());
         }catch (Exception e) {

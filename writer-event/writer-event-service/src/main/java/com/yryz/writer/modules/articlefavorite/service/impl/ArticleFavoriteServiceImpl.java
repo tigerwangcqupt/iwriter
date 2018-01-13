@@ -74,13 +74,15 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
         List<ArticleFavorite> list = articleFavoriteDao.selectListByWriter(articleFavoriteDto);
         List<ArticleFavoriteVo> articleFavoriteVoList = new ArrayList <ArticleFavoriteVo>();
         try {
-            if(list != null && list.size() > 0) {
-                for(ArticleFavorite articleFavorite : list){
-                    ArticleFavoriteVo articleFavoriteVo = new ArticleFavoriteVo();
-                    BeanUtils.copyProperties(articleFavorite, articleFavoriteVo);
-                    //ArticleFavorite to ArticleFavoriteVo
-                    articleFavoriteVoList.add(articleFavoriteVo);
-                }
+            if (list != null && list.size() > 0) {
+                list.stream().forEach(articleFavorite -> {
+                    if (articleFavorite != null){
+                        ArticleFavoriteVo articleFavoriteVo = new ArticleFavoriteVo();
+                        //ArticleComment to ArticleCommentVo
+                        BeanUtils.copyProperties(articleFavorite, articleFavoriteVo);
+                        articleFavoriteVoList.add(articleFavoriteVo);
+                    }
+                });
             }
             messageApi.cleanMessageTips(ModuleEnum.FAVORITE, articleFavoriteDto.getCustId());
         }catch (Exception e) {
