@@ -231,7 +231,6 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 updateClassify.setLastUpdateUserId(lastUpdateUserId);
                 articleClassifyDao.update(updateClassify);
             }
-
             return successNum > 0 ? true : false;
         }catch (Exception e){
             logger.error("删除文章分类操作失败", e);
@@ -253,7 +252,6 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 if (articleClassifyDao.countArticleByClassifyId(articleClassify.getParentId()) > 0) {
                     throw new BaseException("父级分类下有文章，请移除文章再恢复该分类");
                 }
-
                 //父级分类为末级分类，需要修改为非末级分类
                 ArticleClassify updateClassify = new ArticleClassify();
                 updateClassify.setId(parent.getId());
@@ -283,7 +281,6 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 int count = articleClassifyDao.countArticleByClassifyId(kid);
                 return count > 0 ? false : true;
             }
-
         }catch (Exception e){
             logger.error("检查文章分类操作失败", e);
             throw e;
