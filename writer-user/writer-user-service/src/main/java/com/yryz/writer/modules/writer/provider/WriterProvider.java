@@ -337,6 +337,29 @@ public class WriterProvider implements WriterApi {
 		}
 	}
 
+
+	@Override
+	public RpcResponse<String> addUserPhoneVeriCode(String custId,String veriCode){
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.addUserPhoneVeriCode(custId,veriCode));
+		} catch (Exception e) {
+			logger.error("添加用户手机验证码失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<String> getUserPhoneVeriCode(String custId){
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.getUserPhoneVeriCode(custId));
+		} catch (Exception e) {
+			logger.error("获取用户验证码失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+
+
 	@Override
 	public RpcResponse<List<Writer>> checkNickName(Writer writer) {
 		try {

@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.writer.service;
 
+import com.yryz.writer.common.redis.utils.JedisUtils;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
@@ -69,5 +70,9 @@ public interface WriterService extends BaseService {
    String addUserToken(String custId);
 
    Integer updateWriterProfit(Writer writer);
+
+   String addUserPhoneVeriCode(String custId,String veriCode);
+
+   String getUserPhoneVeriCode(String custId);
 
 }

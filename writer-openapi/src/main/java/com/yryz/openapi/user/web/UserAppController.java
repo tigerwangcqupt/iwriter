@@ -320,7 +320,7 @@ public class UserAppController extends BaseController {
 
     /**
      * 获取图形验证码图
-     * @param phone
+     * @param key
      * @param response
      */
     @RequestMapping(value = "image", method = {RequestMethod.GET})
@@ -555,6 +555,11 @@ public class UserAppController extends BaseController {
         if (b) {
             Map<String,Object> mapResult = new HashMap <String,Object>();
             mapResult.put("custPhone",user.getPhone());
+            mapResult.put("veriCode",custRegisterDto.getVeriCode());
+
+            //将旧手机号的验证码保存到redis
+            writerApi.addUserPhoneVeriCode(userId,custRegisterDto.getVeriCode());
+
             return new DubboResponse<Map<String,Object>>(true, "200", "success", "", mapResult);
         } else {
             throw new YyrzPcException(
@@ -579,8 +584,30 @@ public class UserAppController extends BaseController {
         Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
         Assert.hasText(custRegisterDto.getCustPhone(), "手机号不能为空！");
 
-        Assert.notNull(custRegisterDto.getVeriCode(), "验证码不能为空！");
-        Assert.hasText(custRegisterDto.getVeriCode(), "验证码不能为空！");
+        Assert.notNull(custRegisterDto.getVeriCode(), "新手机验证码不能为空！");
+        Assert.hasText(custRegisterDto.getVeriCode(), "新手机验证码不能为空！");
+
+        Assert.notNull(custRegisterDto.getOldVeriCode(), "旧手机验证码不能为空！");
+        Assert.hasText(custRegisterDto.getOldVeriCode(), "旧手机验证码不能为空！");
+
+        RpcResponse<Writer> rpcResponseRegister = writerApi.get(Long.valueOf(userId));
+        Writer userRegister = isSuccess(rpcResponseRegister);
+        if (userRegister == null) {
+            throw new YyrzPcException(
+                    ExceptionEnum.USER_UNREGISTERED.getCode(),
+                    ExceptionEnum.USER_UNREGISTERED.getMsg(),
+                    ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
+        }
+
+        //验证旧手机号是否正确
+        RpcResponse<String> rpcResponseWriterRedis  = writerApi.getUserPhoneVeriCode(userId);
+        String oldVericodeRedis =  isSuccess(rpcResponseWriterRedis);
+        if(oldVericodeRedis!=null && !oldVericodeRedis.equals(custRegisterDto.getOldVeriCode())){
+            throw new YyrzPcException(
+                    ExceptionEnum.OLD_PHONE_VERICODE_ERROR.getCode(),
+                    ExceptionEnum.OLD_PHONE_VERICODE_ERROR.getMsg(),
+                    ExceptionEnum.OLD_PHONE_VERICODE_ERROR.getErrorMsg());
+        }
 
 
         RpcResponse<Boolean> booleanRpcResponse = smsCommonApi.checkVerifyCode(custRegisterDto.getCustPhone(), SmsTypeEnum.CODE_CHANGE_PHONE, custRegisterDto.getVeriCode());
@@ -589,6 +616,7 @@ public class UserAppController extends BaseController {
             RpcResponse<Writer> rpcResponseWriter = writerApi.selectByPhone(custRegisterDto.getCustPhone());
             Writer user = isSuccess(rpcResponseWriter);
             if (user == null) {
+
                 //可以绑定
                 RpcResponse<Writer> rpcResponseWriterSave = writerApi.get(Long.valueOf(userId));
                 Writer writer = isSuccess(rpcResponseWriterSave);
@@ -600,9 +628,9 @@ public class UserAppController extends BaseController {
                 return new DubboResponse<Map<String,Object>>(true, "200", "success", "", mapResult);
             }else{
                 throw new YyrzPcException(
-                        ExceptionEnum.BIND_UNSUCCESSFUL.getCode(),
-                        ExceptionEnum.BIND_UNSUCCESSFUL.getMsg(),
-                        ExceptionEnum.BIND_UNSUCCESSFUL.getErrorMsg());
+                        ExceptionEnum.BIND_PHONE_UNSUCCESSFUL.getCode(),
+                        ExceptionEnum.BIND_PHONE_UNSUCCESSFUL.getMsg(),
+                        ExceptionEnum.BIND_PHONE_UNSUCCESSFUL.getErrorMsg());
             }
         } else {
             throw new YyrzPcException(

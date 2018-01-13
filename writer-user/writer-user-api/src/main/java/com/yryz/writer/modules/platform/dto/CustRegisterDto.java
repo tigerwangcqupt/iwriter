@@ -13,6 +13,13 @@ public class CustRegisterDto extends CustRegister {
      * 验证码
      */
     private String veriCode;
+
+    /**
+     * 旧验证码
+     */
+    private String oldVeriCode;
+
+
     /**
      * 邀请码
      */
@@ -48,6 +55,14 @@ public class CustRegisterDto extends CustRegister {
      * 唯一标识码
      */
     private String key;
+
+    public String getOldVeriCode() {
+        return oldVeriCode;
+    }
+
+    public void setOldVeriCode(String oldVeriCode) {
+        this.oldVeriCode = oldVeriCode;
+    }
 
     public String getKey() {
         return key;

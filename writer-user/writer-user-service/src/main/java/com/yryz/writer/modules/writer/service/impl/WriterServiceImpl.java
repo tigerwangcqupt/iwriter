@@ -55,6 +55,8 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
 
     public static final String MESSAGE = "yryz.writer.token";
 
+    public static final String VERICODE_MESSAGE = "yryz.writer.vericode";
+
     public static String getMessagekey(String custId){
         return MESSAGE +"."+ custId;
     }
@@ -187,6 +189,20 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
             return tokenValue;
         }
         return null;
+    }
+
+    @Override
+    public String addUserPhoneVeriCode(String custId,String veriCode){
+        String key = VERICODE_MESSAGE + "." + custId;
+        JedisUtils.set(key, veriCode,0 );
+        return veriCode;
+    }
+
+    @Override
+    public String getUserPhoneVeriCode(String custId){
+        String key = VERICODE_MESSAGE + "." + custId;
+        String value = JedisUtils.get(key);
+        return value;
     }
 
     @Override

@@ -39,6 +39,8 @@ public enum ExceptionEnum {
     HAS_SET_PASSWORD("5016", "已设置过密码！", "已设置过密码！"),
     PIN_FREQUENTLY("5024", "发送验证码过于频繁，请稍候再试！", "发送验证码过于频繁，请稍候再试！"),
     IMAGE_CODE_ERROR("5025", "图形验证码错误！", "图形验证码错误！"),
+    OLD_PHONE_VERICODE_ERROR("5026", "旧手机验证码不正确！", "旧手机验证码不正确！"),
+    BIND_PHONE_UNSUCCESSFUL("5027", "绑定失败！该手机号已被其它账户绑定！", "绑定失败！该手机号已被其它账户绑定！"),
 
     ADD_OWNER_EXCEPTION("6001", "增加资金主体异常", "增加资金主体异常"),
 
