@@ -24,6 +24,7 @@ import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -113,19 +114,21 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         //写手id
         writerDto.setKid(Long.valueOf(bank.getCreateUserId()));
         WriterCapitalVo writerModelVo = writerService.selectWriterByParameters(writerDto);
-        Owner owner = new Owner();
-        owner.setOwnerFcode(Long.valueOf(writerModelVo.getOwnerFcode()));
-        owner = openOwnerApi.detail(owner);
-        if(null == owner){
-            logger.error("根据银行卡拥有者查不到资金主体账号");
-            throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
-                    ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
+        if(null != writerModelVo && StringUtils.isNotEmpty(writerModelVo.getOwnerFcode())){
+            return Long.valueOf(writerModelVo.getOwnerFcode());
         }
-        return owner.getOwnerCode();
+        return null;
     }
 
     @Override
     public Bank insertBank(Bank bank) {
+        //资金主体外码
+        Long ownerFcode = findOwnerByWriter(bank);
+        if(null == ownerFcode){
+            logger.error("查询资金主体外码失败");
+            throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
+                    ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
+        }
         try{
             Long kid  = idAPI.getId(BankConstant.BANKTABLE);
             bank.setKid(kid);
@@ -144,7 +147,7 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             //身份证
             bankCard.setCertNo(bank.getUserCart());
             //资金主体编码
-            bankCard.setOwnerCode(findOwnerByWriter(bank));
+            bankCard.setOwnerCode(ownerFcode);
             RpcContext.getContext().setAttachment("clientCode", clientCode);
             openBankCardApi.add(bankCard);;
         }catch(Exception e){
@@ -158,6 +161,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Override
     public Bank updateBank(Bank bank) {
+        //资金主体外码
+        Long ownerFcode = findOwnerByWriter(bank);
+        if(null == ownerFcode){
+            logger.error("查询资金主体外码失败");
+            throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
+                    ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
+        }
         try{
             bankDao.update(bank);
             BankCard bankCard=new BankCard();
@@ -172,7 +182,7 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             //身份证
             bankCard.setCertNo(bank.getUserCart());
             //资金主体外码
-            bankCard.setOwnerCode(findOwnerByWriter(bank));
+            bankCard.setOwnerCode(ownerFcode);
             RpcContext.getContext().setAttachment("clientCode", clientCode);
             openBankCardApi.updateBankCard(bankCard);
         }catch(Exception e){

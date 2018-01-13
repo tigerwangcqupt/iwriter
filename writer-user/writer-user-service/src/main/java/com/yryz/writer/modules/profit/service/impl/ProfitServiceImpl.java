@@ -2,6 +2,9 @@ package com.yryz.writer.modules.profit.service.impl;
 
 import com.alibaba.dubbo.rpc.RpcContext;
 import com.alibaba.fastjson.JSON;
+import com.yryz.qstone.entity.base.constants.AccountConstants;
+import com.yryz.qstone.entity.base.constants.OwnerConstants;
+import com.yryz.qstone.entity.base.dto.OpenAccountDto;
 import com.yryz.qstone.entity.transaction.dto.TransactionFlowRecord;
 import com.yryz.qstone.modules.transaction.api.OpenTransactionApi;
 import com.yryz.writer.common.constant.ExceptionEnum;
@@ -404,43 +407,40 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
      */
     @Override
     public Writer bindCapital(Writer writer) {
-        Owner data=new Owner();
+        OpenAccountDto data=new OpenAccountDto();
         try{
             Owner owner=new Owner();
-            RpcContext.getContext().setAttachment("clientCode", clientCode);
             //资金主体名称
             owner.setOwnerName(writer.getUserName());
             //个人
-            owner.setOwnerType(ProfitConstants.OWNERTYPE);
-            openOwnerApi.add(owner);
-            data.setOwnerName(writer.getUserName());
+            owner.setOwnerType(OwnerConstants.Type.PERSONAL);
+            Account account=new Account();
+            //账户名称
+            account.setAccountName(writer.getUserName());
+            //用户账户
+            account.setAccountTypeCode(AccountConstants.Type.USER_PROFIT);
+            //币种
+            account.setCurrencyCode(currencyCode);
+            //账户可以透支
+            account.setOverdraftFlag(AccountConstants.OverdraftFlag.YES);
+            //状态正常
+            account.setStatus(AccountConstants.Status.VALID);
+            OpenAccountDto openAccountDto = new OpenAccountDto();
+            openAccountDto.setOwner(owner);
+            openAccountDto.setAccount(account);
             RpcContext.getContext().setAttachment("clientCode", clientCode);
-            data = openOwnerApi.detail(data);
+            data = openAccountApi.create(openAccountDto);
         }catch(Exception e){
             logger.error("调用资金系统插入资金主体表出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),
-                    ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg()
-                    );
-        }
-        try{
-            Account account=new Account();
-            account.setAccountName(writer.getUserName());
-            account.setAccountTypeCode(ProfitConstants.USERACCOUNTTYPECODE.byteValue());
-            account.setCurrencyCode(currencyCode);
-            account.setStatus(ProfitConstants.ACCOUNTSTATUS);
-            account.setOwnerCode(data.getOwnerCode());
-            RpcContext.getContext().setAttachment("clientCode", clientCode);
-            openAccountApi.add(account);
-        }catch(Exception e){
-            logger.error("调用资金系统插入账户出现异常:" , e);
-            throw new YyrzPcException(ExceptionEnum.ADD_ACCOUNT_EXCEPTION.getCode(),ExceptionEnum.ADD_ACCOUNT_EXCEPTION.getMsg(),
-                    ExceptionEnum.ADD_ACCOUNT_EXCEPTION.getErrorMsg()
-            );
+                    ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg());
         }
         Writer writer1 = new Writer();
         writer1.setKid(writer.getKid());
-        writer1.setOwnerFcode(data.getOwnerFcode()+"");
-        writerService.update(writer1);
+        if(null != data && null != data.getOwner() && null != data.getOwner().getOwnerFcode()){
+            writer1.setOwnerFcode(data.getOwner().getOwnerFcode()+"");
+            writerService.update(writer1);
+        }
         return writer;
     }
 
