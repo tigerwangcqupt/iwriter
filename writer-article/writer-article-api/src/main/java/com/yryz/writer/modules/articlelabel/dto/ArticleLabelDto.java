@@ -36,6 +36,12 @@ public class ArticleLabelDto extends PageList {
      */
     private  Integer delFlag;
 
+    /**
+     * 标签名称
+     */
+    private  String labelName;
+
+
     public void setOrderFiled(String orderFiled) {
         this.orderFiled = orderFiled;
     }
@@ -75,5 +81,14 @@ public class ArticleLabelDto extends PageList {
 
     public Integer getDelFlag() {
         return delFlag;
+    }
+
+    public void setLabelName(String labelName) {
+        this.labelName = labelName;
+    }
+
+    public String getLabelName() {
+
+        return labelName;
     }
 }

@@ -64,7 +64,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 long articleCount = articleClassifyDao.countArticleByClassifyId(articleClassify.getKid());
                 articleClassifyVo.setArticleAmount(articleCount);
                 Date createDate = articleClassify.getCreateDate();
-                articleClassifyVo.setCreateDate(createDate == null ? "" : DATETIME_PATTERN.format(articleClassify.getCreateDate()));
+                articleClassifyVo.setCreateDate(createDate == null ? "" : DATETIME_PATTERN.format(createDate));
                 articleClassifyVoList.add(articleClassifyVo);
             }
         }

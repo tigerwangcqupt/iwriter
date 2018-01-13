@@ -187,6 +187,9 @@
 				AND del_flag = #{delFlag,jdbcType=TINYINT},
 			</if>
 		</trim>
+		<if test="orderStr != null and orderStr != '' " >
+			${orderStr}
+		</if>
     </select>
 
 	<!-- 删除文章标签-->

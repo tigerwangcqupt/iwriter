@@ -12,5 +12,7 @@
     <!--  文章分类服务 -->
     <dubbo:service interface="com.yryz.writer.modules.articleclassify.ArticleClassifyApi" ref="articleClassifyProvider" />
 
+    <dubbo:service interface="com.yryz.writer.modules.articlelabel.ArticleLabelApi" ref="articleLabelProvider" />
+
 
 </beans>

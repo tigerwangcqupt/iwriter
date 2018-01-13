@@ -18,7 +18,10 @@ import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.dao.persistence.ArticleLabelDao;
 import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,6 +29,9 @@ import java.util.List;
 public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleLabelService {
 
     private static final Logger logger = LoggerFactory.getLogger(ArticleLabelServiceImpl.class);
+
+    /** 日期格式时分秒 */
+    private final static SimpleDateFormat DATETIME_PATTERN = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private ArticleLabelDao articleLabelDao;
@@ -44,11 +50,21 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
         if(list != null && list.size() > 0) {
             for(ArticleLabel articleLabel : list){
                 ArticleLabelVo articleLabelVo = new ArticleLabelVo();
+                //ArticleClassify to ArticleClassifyVo
+                articleLabelVo.setLabelName(articleLabel.getLabelName());
+                articleLabelVo.setCreateUserId(articleLabel.getCreateUserId());
+                articleLabelVo.setDelFlag(articleLabel.getDelFlag());
+                articleLabelVo.setShelveFlag(articleLabel.getShelveFlag());
+                articleLabelVo.setKid(articleLabel.getKid());
+                articleLabelVo.setIcon(articleLabel.getIcon());
+                articleLabelVo.setLabelDescription(articleLabel.getLabelDescription());
+                Date createDate = articleLabel.getCreateDate();
+                articleLabelVo.setCreateDate(createDate == null ? "" : DATETIME_PATTERN.format(createDate));
                 //ArticleLabel to ArticleLabelVo
                 articleLabelVoList.add(articleLabelVo);
             }
         }
-        return new PageModel<ArticleLabelVo>().getPageList(articleLabelVoList);
+        return new PageModel<ArticleLabelVo>().getPageList(list, articleLabelVoList);
     }
 
 
@@ -57,6 +73,16 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
         ArticleLabelVo articleLabelVo = new ArticleLabelVo();
         if (articleLabelVo != null) {
             //ArticleLabel to ArticleLabelVo
+            //ArticleClassify to ArticleClassifyVo
+            articleLabelVo.setLabelName(articleLabel.getLabelName());
+            articleLabelVo.setCreateUserId(articleLabel.getCreateUserId());
+            articleLabelVo.setDelFlag(articleLabel.getDelFlag());
+            articleLabelVo.setShelveFlag(articleLabel.getShelveFlag());
+            articleLabelVo.setKid(articleLabel.getKid());
+            Date createDate = articleLabel.getCreateDate();
+            articleLabelVo.setCreateDate(createDate == null ? "" : DATETIME_PATTERN.format(createDate));
+            articleLabelVo.setIcon(articleLabel.getIcon());
+            articleLabelVo.setLabelDescription(articleLabel.getLabelDescription());
         }
         return articleLabelVo;
     }

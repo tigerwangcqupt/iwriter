@@ -59,6 +59,9 @@ public class ArticleLabelVo implements Serializable {
      */
     private String createUserName;
 
+    /**  创建时间  */
+    private String createDate;
+
     public Long getKid() {
         return kid;
     }
@@ -129,5 +132,13 @@ public class ArticleLabelVo implements Serializable {
 
     public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 }
