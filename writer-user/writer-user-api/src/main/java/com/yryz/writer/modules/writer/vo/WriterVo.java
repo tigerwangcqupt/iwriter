@@ -95,6 +95,9 @@ public class WriterVo implements Serializable{
     
     private String remark;
     
+    //是否已设置过密码
+    private  Integer pwdFlag;
+    
 
 	public String getAccount() {
 		return this.account;
@@ -239,7 +242,14 @@ public class WriterVo implements Serializable{
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
-	
+
+	public Integer getPwdFlag() {
+		return pwdFlag;
+	}
+
+	public void setPwdFlag(Integer pwdFlag) {
+		this.pwdFlag = pwdFlag;
+	}
 	
 	
 		

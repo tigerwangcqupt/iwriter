@@ -13,6 +13,8 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -105,6 +107,12 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         	if(writerAudit !=null){
         		writerVo.setRemark(writerAudit.getRemark());        		
         	}
+        	if(StringUtils.isNotEmpty(writer.getPwd())){
+        		writerVo.setPwdFlag(1);
+        	}else{
+        		writerVo.setPwdFlag(0);
+        	}
+        	writerVo.setPwd("");
         }
         return writerVo;
     }
