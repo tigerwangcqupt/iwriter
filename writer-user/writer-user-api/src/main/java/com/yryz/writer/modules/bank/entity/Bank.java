@@ -1,10 +1,9 @@
 package com.yryz.writer.modules.bank.entity;
 
 import com.yryz.writer.common.entity.GenericEntity;
-import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
 
 /**
  * 
@@ -26,49 +25,49 @@ public class Bank extends GenericEntity{
 	/**
 	 * 提现用户名
 	 */
-	@NotEmpty
+	@NotBlank
     private  String userName;
     
 
 	/**
 	 * 身份证
 	 */
-	@NotEmpty
+	@NotBlank
     private  String userCart;
     
 
 	/**
 	 * 银行卡号
 	 */
-	@NotEmpty
+	@NotBlank
     private  String userBankCart;
     
 
 	/**
 	 * 交易银行
 	 */
-	@NotEmpty
+	@NotBlank
     private  String userTradeBankCart;
     
 
 	/**
 	 * 省
 	 */
-	@NotEmpty
+	@NotBlank
     private  String provice;
     
 
 	/**
 	 * 城市
 	 */
-	@NotEmpty
+	@NotBlank
     private  String city;
     
 
 	/**
 	 * 开户支行
 	 */
-	@NotEmpty
+	@NotBlank
     private  String userAccountOpenBank;
     
 

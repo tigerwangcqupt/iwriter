@@ -50,4 +50,12 @@ public class ProfitConstants {
     //提现流水
     public static final Byte TXFLOWNUM = 3;
 
+    //前台调用
+    public static final Integer CALLEDBYFRONT = 1;
+
+    //是否可提现标识 1:可提现 0:不可提现
+    public static final Integer WITHDRAWALSFLAG = 1;
+
+    //是否可提现标识 1:可提现 0:不可提现
+    public static final Integer NOTWITHDRAWALSFLAG = 0;
 }

@@ -7,6 +7,7 @@ import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.utils.MoneyUtils;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.bank.entity.Bank;
+import com.yryz.writer.modules.profit.constant.ProfitConstants;
 import com.yryz.writer.modules.profit.constant.ProfitEnum;
 import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
 import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
@@ -53,17 +54,11 @@ public class ProfitController extends BaseController{
    public RpcResponse<PageList<ProfitDetailVo>> staticsList(@RequestHeader Long userId) {
       ProfitDto profitDto = new ProfitDto();
       profitDto.setWriterId(userId);
+      profitDto.setFrontCall(ProfitConstants.CALLEDBYFRONT);
+      String orderStr = "order by settlement_date desc";
+      profitDto.setOrderStr(orderStr);
       RpcResponse<PageList<ProfitDetailVo>> rpcResponse = profitApi.selectFlowList(profitDto);
-      if(null != rpcResponse && null != rpcResponse.getData()){
-         List<ProfitDetailVo> list = rpcResponse.getData().getEntities();
-         if(CollectionUtils.isNotEmpty(list)){
-            for(ProfitDetailVo profitDetailVo : list){
-               profitDetailVo.setSettlementAmount(MoneyUtils.getMoney(profitDetailVo.getSettlementAmount()));
-               profitDetailVo.setSurplusAmount(MoneyUtils.getMoney(profitDetailVo.getSurplusAmount()));
-            }
-         }
-      }
-      return profitApi.selectFlowList(profitDto);
+      return rpcResponse;
    }
 
 

@@ -306,7 +306,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             Profit profitBase = new Profit();
             Profit profitData = profitDao.selectByKid(Profit.class, profit.getKid());
             BeanUtils.copyProperties(profitData, profitBase);
-            Long oldKid = profitData.getKid();
+            Long oldKid = profitBase.getKid();
 
             //提现日期
             Date settlementDate = new Date();
@@ -448,6 +448,12 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public PageList<ProfitDetailVo> selectFlowList(ProfitDto profitDto) {
         PageUtils.startPage(profitDto.getCurrentPage(), profitDto.getPageSize());
         List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
+        if(CollectionUtils.isNotEmpty(list)){
+                for(ProfitDetailVo profitDetailVo : list){
+                    profitDetailVo.setSettlementAmount(MoneyUtils.getMoney(profitDetailVo.getSettlementAmount()));
+                    profitDetailVo.setSurplusAmount(MoneyUtils.getMoney(profitDetailVo.getSurplusAmount()));
+                }
+        }
         return new PageModel<ProfitDetailVo>().getPageList(list);
     }
 
@@ -461,7 +467,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         List<ProfitAdminVo> profitAdminVoList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(list)){
             List<String> profitSnList = new ArrayList<>();
-            //把流水号拿到反差用户表的数据
+            //把流水号拿到用户表的数据
             for(ProfitDetailVo profitDetailVo : list){
                 ProfitAdminVo profitAdminVo = new ProfitAdminVo();
                 BeanUtils.copyProperties(profitDetailVo,profitAdminVo);
@@ -539,6 +545,12 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         profitStaticsVo.setLatelyWithdrawAmount(MoneyUtils.getMoney(profitStaticsVo.getLatelyWithdrawAmount()));
         profitStaticsVo.setSumWithdrawAmount(MoneyUtils.getMoney(profitStaticsVo.getSumWithdrawAmount()));
         profitStaticsVo.setWithdrawAmount(MoneyUtils.getMoney(profitStaticsVo.getWithdrawAmount()));
+        //如果当前可用金额不大于0，设置提现标识为不能提现
+        if(profitStaticsVo.getWithdrawAmount().compareTo(BigDecimal.ZERO) != 1){
+            profitStaticsVo.setWithdrawalsFlag(ProfitConstants.NOTWITHDRAWALSFLAG);
+        }else{
+            profitStaticsVo.setWithdrawalsFlag(ProfitConstants.WITHDRAWALSFLAG);
+        }
         return profitStaticsVo;
     }
 

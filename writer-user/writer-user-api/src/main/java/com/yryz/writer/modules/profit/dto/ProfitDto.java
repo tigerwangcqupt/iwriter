@@ -30,8 +30,7 @@ public class ProfitDto extends PageList {
 
     //排序字段
     private String orderFiled;
-    //排序字段 forward_cnt:转发次数，forward_amount:转发金额，beforward_cnt:被转发次数，
-    //integral_total:总收益，account_sum:消费账户余额,      integral_sum:积分账户余额，generalize_num:推广人数
+
     //排序方式 desc倒序,asc升序
     private String orderValue;
 
@@ -57,6 +56,9 @@ public class ProfitDto extends PageList {
 
     //流水号
     private  String profitSn;
+
+    //前台调用
+    private Integer frontCall;
 
     public Long getCreateUserId() {
         return createUserId;
@@ -175,5 +177,13 @@ public class ProfitDto extends PageList {
 
     public void setProfitSn(String profitSn) {
         this.profitSn = profitSn;
+    }
+
+    public Integer getFrontCall() {
+        return frontCall;
+    }
+
+    public void setFrontCall(Integer frontCall) {
+        this.frontCall = frontCall;
     }
 }

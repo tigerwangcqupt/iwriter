@@ -58,4 +58,17 @@ public interface AppConstants {
      * IOS官方唯一安装渠道，（不考虑越狱）
      */
     public static final String INSTALL_CHANNEL = "App Store";
+
+    /**
+     * 原文标识
+     */
+    public static final String originText ="originText";
+    /**
+     * 签名标识
+     */
+    public static final String sign ="sign";
+    /**
+     * 接口调用频率(1分钟)
+     */
+    public static final Integer diffMinutes = 1;
 }

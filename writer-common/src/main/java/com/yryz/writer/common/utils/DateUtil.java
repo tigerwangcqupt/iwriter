@@ -74,7 +74,58 @@ public class DateUtil {
 		calendar.add(Calendar.MINUTE, minute);
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
 	}
-	
+
+
+	/**
+	 * date to timestamp
+	 * @param s
+	 * @return
+	 */
+	public static String dateToStamp(String s){
+		String res="";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try{
+			Date date = simpleDateFormat.parse(s);
+			long ts = date.getTime();
+			res = String.valueOf(ts);
+		}catch(Exception e){
+			throw YyrzPcException.busiError( "日期转换异常！");
+		}
+		return res;
+	}
+
+	/**
+	 * timestamp to date
+	 * @param s
+	 * @return
+	 */
+	public static String stampToDate(String s){
+		String res="";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		long lt = new Long(s);
+		Date date = new Date(lt);
+		res = simpleDateFormat.format(date);
+		return res;
+	}
+
+	/**
+	 * 判断start和end相差多少分钟
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static int  getDiffMinutes(String start,Date end){
+		SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try{
+			long from = simpleFormat.parse(start).getTime();
+			long to = end.getTime();
+			int minutes = (int) ((to - from)/(1000 * 60));
+			return minutes;
+		}catch (Exception e){
+			throw YyrzPcException.busiError( "日期转换异常！");
+		}
+	}
+
 	public static void main(String[] args) throws ParseException {
 		String a = getTimeByMinute(-30);
 		System.out.println(a);

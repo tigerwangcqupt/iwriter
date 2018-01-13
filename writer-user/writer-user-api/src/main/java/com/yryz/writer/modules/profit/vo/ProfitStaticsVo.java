@@ -20,7 +20,8 @@ public class ProfitStaticsVo implements Serializable {
     private BigDecimal sumWithdrawAmount;
     //放款日期(最近提现金额日期)
     private String withdrawDate;
-
+    //是否可提现
+    private Integer withdrawalsFlag;
     /**
      * 流水类型
      * 1:申请提现 2:提现成功  3:提现失败 4:稿费
@@ -89,5 +90,13 @@ public class ProfitStaticsVo implements Serializable {
 
     public void setSettlementType(Integer settlementType) {
         this.settlementType = settlementType;
+    }
+
+    public Integer getWithdrawalsFlag() {
+        return withdrawalsFlag;
+    }
+
+    public void setWithdrawalsFlag(Integer withdrawalsFlag) {
+        this.withdrawalsFlag = withdrawalsFlag;
     }
 }

@@ -1,5 +1,6 @@
 package com.yryz.openapi.bank.web;
 
+import com.yryz.openapi.core.auth.annotation.InterFaceAuth;
 import com.yryz.openapi.core.validator.annotation.Validate;
 import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.web.BaseController;
@@ -36,7 +37,7 @@ public class BankController extends BaseController {
     @NotLogin
     @RequestMapping(value="/add", method = RequestMethod.POST)
     @ResponseBody
-    public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId,@RequestHeader String sign){
+    public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId,@RequestHeader String sign,@RequestHeader String originText){
         bank.setCreateUserId(userId);
         return bankApi.insertBank(bank);
     }

@@ -263,12 +263,14 @@
 		<if test="profitSn != null and profitSn != ''">
 			and profit_sn = #{profitSn}
 		</if>
-		<if test="handleFlag != null and handleFlag == 0">
-		<![CDATA[
-			and LENGTH(trim(last_update_user_id)) < 1
-			 ]]>
+		<if test="frontCall != null and frontCall != ''">
+			and settlement_type in(2,3,4)
 		</if>
-
+		<if test="handleFlag != null and handleFlag == 0">
+		  <![CDATA[
+			and LENGTH(trim(last_update_user_id)) < 1
+		  ]]>
+		</if>
 		<if test="orderStr != null and orderStr != ''">
 			${orderStr}
 		</if>

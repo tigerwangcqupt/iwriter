@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+
+    <bean id="authValidateAspect" class="com.yryz.openapi.core.auth.handler.ResourceAuthHandler"/>
+
+    <aop:config proxy-target-class="true">
+        <aop:aspect order="9" ref="authValidateAspect">
+            <aop:pointcut id="resourceValidatePointCut" expression="execution(* com.yryz.openapi..*Controller.*(..)) and (@annotation(com.yryz.openapi.core.auth.annotation.InterFaceAuth))"/>
+            <aop:before method="validateSign" pointcut-ref="resourceValidatePointCut"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

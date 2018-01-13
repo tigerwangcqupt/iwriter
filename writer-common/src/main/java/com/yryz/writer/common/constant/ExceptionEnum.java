@@ -4,6 +4,10 @@ public enum ExceptionEnum {
 
     SysException("1001", "系统异常", "系统异常"),
     ValidateException("2000", "数据验证失败！", "数据验证失败！"),
+    CallFrequentlyException("2001", "调用接口频率过高！", "调用接口频率过高！"),
+    NotValidSignException("2002", "接口签名不正确！", "接口签名不正确！"),
+    NullOriginException("2003", "原文为空！", "原文为空！"),
+    NullSignException("2004", "签名为空！", "签名为空！"),
     LockException("3000", "分布式锁异常", "分布式锁异常"),
     BusiException("4000", "业务逻辑异常", "业务逻辑异常"),
 

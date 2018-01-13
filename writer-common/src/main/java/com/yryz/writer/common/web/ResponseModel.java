@@ -20,11 +20,7 @@ public class ResponseModel extends ResponseProducer {
     }
 
     public static <T> RpcResponse<T> returnException(Exception e) {
-        if (e instanceof YyrzPcException) {
-            YyrzPcException qe = (YyrzPcException) e;
-            return new DubboResponse<T>(false, qe.getCode(), qe.getMsg(), qe.getErrorMsg(), null);
-        }
-        else if (e instanceof YyrzPcException) {
+       if (e instanceof YyrzPcException) {
             YyrzPcException qe = (YyrzPcException) e;
             return new DubboResponse<T>(false, qe.getCode(), qe.getMsg(), qe.getErrorMsg(), null);
         }
