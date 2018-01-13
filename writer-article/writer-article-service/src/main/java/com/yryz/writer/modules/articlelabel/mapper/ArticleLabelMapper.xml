@@ -27,8 +27,8 @@
         select
         <include refid="Base_Column_List"/>
         from yryz_articlelabel
-        where del_flag = 0
-		and kid = #{kid,jdbcType=BIGINT}
+        where kid = #{kid,jdbcType=BIGINT}
+		<!--  and del_flag = 0 -->
     </select>
     
     <!-- 删除ArticleLabel-->
