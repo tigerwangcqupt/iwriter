@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.distributed.lock.DistributedLockUtils;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.id.dao.persistence.IdDao;
@@ -67,7 +67,7 @@ public class IdServiceImpl implements IdService {
             }
         } catch (Exception e) {
             logger.error("getId error", e);
-            throw new QsourceException(ExceptionEnum.BusiException.getCode(),
+            throw new YyrzPcException(ExceptionEnum.BusiException.getCode(),
                     ExceptionEnum.BusiException.getMsg(),
                     "getId error for type: " + type);
         } finally {
@@ -128,7 +128,7 @@ public class IdServiceImpl implements IdService {
             codeModel = idDao.selectList(codeModelDto);
         } catch (Exception e) {
             logger.error("查询CodeModel列表信息失败！,codeModelDto:", e);
-            throw new QsourceException(ExceptionEnum.BusiException.getCode(),
+            throw new YyrzPcException(ExceptionEnum.BusiException.getCode(),
                     ExceptionEnum.BusiException.getMsg(),
                     "查询CodeModel列表信息失败！");
         }

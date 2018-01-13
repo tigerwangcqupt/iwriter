@@ -1,7 +1,7 @@
 package com.yryz.writer.modules.indexcolumn.service.impl;
 
 import com.yryz.writer.common.constant.ExceptionEnum;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.service.BaseServiceImpl;
@@ -96,7 +96,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
                     indexItemVo.setColumnUrl(indexColumn.getUrl());
                     ModuleEnum moduleEnum = ModuleEnumConstants.moduleEnumMap.get(columnName);
                     if (moduleEnum == null){
-                        throw new QsourceException(ExceptionEnum.MODULEENUM_NOTFOUND.getCode(),
+                        throw new YyrzPcException(ExceptionEnum.MODULEENUM_NOTFOUND.getCode(),
                                 ExceptionEnum.MODULEENUM_NOTFOUND.getMsg(),
                                 ExceptionEnum.MODULEENUM_NOTFOUND.getErrorMsg());
                     }

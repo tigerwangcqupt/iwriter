@@ -5,7 +5,7 @@ import com.yryz.service.api.api.exception.ServiceException;
 import com.yryz.service.api.basic.entity.SmsReqVo;
 import com.yryz.service.api.basic.entity.SmsVerifyCode;
 import com.yryz.writer.common.constant.ExceptionEnum;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.writer.modules.platform.SmsCommonApi;
 import com.yryz.writer.modules.platform.service.SmsCommonService;
@@ -38,8 +38,8 @@ public class SmsCommonProvider implements SmsCommonApi {
             return ResponseModel.returnObjectSuccess(smsService.sendVerifyCode(smsReq));
         } catch (Exception e) {
             LOGGER.error("发送验证码失败！" + e);
-            if (e instanceof QsourceException) {
-                QsourceException qsourceException = (QsourceException) e;
+            if (e instanceof YyrzPcException) {
+                YyrzPcException qsourceException = (YyrzPcException) e;
                 qsourceException.setCode(ExceptionEnum.PIN_FREQUENTLY.getCode());
                 qsourceException.setMsg(ExceptionEnum.PIN_FREQUENTLY.getMsg());
                 qsourceException.setErrorMsg(ExceptionEnum.PIN_FREQUENTLY.getErrorMsg());

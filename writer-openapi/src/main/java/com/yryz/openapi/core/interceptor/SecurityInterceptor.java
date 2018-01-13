@@ -1,17 +1,14 @@
 package com.yryz.openapi.core.interceptor;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import com.yryz.component.rpc.RpcResponse;
-import com.yryz.service.api.user.entity.AuthCheck;
 import com.yryz.writer.common.Annotation.Login;
 import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.constant.AppConstants;
 import com.yryz.writer.common.constant.ExceptionEnum;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.writer.WriterApi;
 import com.yryz.writer.modules.writer.entity.Writer;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,24 +59,24 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         }*/
 
         if(userId == null || userId.trim().length()==0){
-            throw new QsourceException(ExceptionEnum.NOT_LOGIN.getCode(), ExceptionEnum.NOT_LOGIN.getMsg(), ExceptionEnum.NOT_LOGIN.getErrorMsg());
+            throw new YyrzPcException(ExceptionEnum.NOT_LOGIN.getCode(), ExceptionEnum.NOT_LOGIN.getMsg(), ExceptionEnum.NOT_LOGIN.getErrorMsg());
         }
 
         if(token == null || token.trim().length()==0){
-            throw new QsourceException(ExceptionEnum.NOT_LOGIN.getCode(), ExceptionEnum.NOT_LOGIN.getMsg(), ExceptionEnum.NOT_LOGIN.getErrorMsg());
+            throw new YyrzPcException(ExceptionEnum.NOT_LOGIN.getCode(), ExceptionEnum.NOT_LOGIN.getMsg(), ExceptionEnum.NOT_LOGIN.getErrorMsg());
         }
 
         RpcResponse<Writer> rpcResponseWriterSave = writerApi.get(Long.valueOf(userId));
         Writer user = isSuccess(rpcResponseWriterSave);
         if (user == null) {
-            throw new QsourceException(ExceptionEnum.NOT_LOGIN.getCode(), ExceptionEnum.NOT_LOGIN.getMsg(), ExceptionEnum.NOT_LOGIN.getErrorMsg());
+            throw new YyrzPcException(ExceptionEnum.NOT_LOGIN.getCode(), ExceptionEnum.NOT_LOGIN.getMsg(), ExceptionEnum.NOT_LOGIN.getErrorMsg());
         }
 
 
         RpcResponse<String> tokenRpcResponse = writerApi.getUserToken(String.valueOf(userId));
         String tokenReids = isSuccess(tokenRpcResponse);
         if(!tokenReids.equals(token)){
-            throw new QsourceException(
+            throw new YyrzPcException(
                     ExceptionEnum.OTHER_DEVICE_LOGIN.getCode(),
                     ExceptionEnum.OTHER_DEVICE_LOGIN.getMsg(),
                     ExceptionEnum.OTHER_DEVICE_LOGIN.getErrorMsg());
@@ -101,7 +98,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         if (rpcResponse.success()) {
             return rpcResponse.getData();
         }
-        throw new QsourceException(rpcResponse.getCode(), rpcResponse.getMsg(), rpcResponse.getErrorMsg());
+        throw new YyrzPcException(rpcResponse.getCode(), rpcResponse.getMsg(), rpcResponse.getErrorMsg());
     }
 
 }

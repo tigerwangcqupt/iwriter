@@ -3,7 +3,7 @@ package com.yryz.writer.modules.id.web;
 
 import com.google.common.collect.Lists;
 import com.yryz.writer.common.constant.ExceptionEnum;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.id.service.IdGenerator;
 import com.yryz.writer.modules.id.service.IdService;
@@ -37,13 +37,13 @@ public class IdAPIImpl implements IdAPI {
         Long id = null;
         try {
             if (StringUtils.isBlank(type)) {
-                throw new QsourceException(ExceptionEnum.BusiException.getCode(),
+                throw new YyrzPcException(ExceptionEnum.BusiException.getCode(),
                         ExceptionEnum.BusiException.getMsg(),
                         "type can not be blank");
             }
             id = idService.getId(type);
             if (id == null) {
-                throw new QsourceException(ExceptionEnum.BusiException.getCode(),
+                throw new YyrzPcException(ExceptionEnum.BusiException.getCode(),
                         ExceptionEnum.BusiException.getMsg(),
                         "getId error");
             }
@@ -51,7 +51,7 @@ public class IdAPIImpl implements IdAPI {
             return id;
         } catch (Exception e) {
             logger.error("getId error", e);
-            throw new QsourceException(ExceptionEnum.BusiException.getCode(),
+            throw new YyrzPcException(ExceptionEnum.BusiException.getCode(),
                     ExceptionEnum.BusiException.getMsg(),
                     "getId error");
         }
@@ -66,7 +66,7 @@ public class IdAPIImpl implements IdAPI {
             logger.info("getSnowflakeId result:{}", orderId);
         } catch (Exception e) {
             logger.error("getSnowflakeId error", e);
-            throw new QsourceException(ExceptionEnum.BusiException.getCode(),
+            throw new YyrzPcException(ExceptionEnum.BusiException.getCode(),
                     ExceptionEnum.BusiException.getMsg(),
                     "getSnowflakeId error");
         }
@@ -84,7 +84,7 @@ public class IdAPIImpl implements IdAPI {
     public List<Long> getSnowflakeIds(Integer num) {
         List<Long> result = Lists.newArrayList();
         if (num == null || num < 0) {
-            throw new QsourceException(ExceptionEnum.BusiException.getCode(),
+            throw new YyrzPcException(ExceptionEnum.BusiException.getCode(),
                     ExceptionEnum.BusiException.getMsg(),
                     "num should be > 0");
         }
@@ -94,7 +94,7 @@ public class IdAPIImpl implements IdAPI {
             }
         } catch (Exception e) {
             logger.error("getSnowflakeIds error", e);
-            throw new QsourceException(ExceptionEnum.BusiException.getCode(),
+            throw new YyrzPcException(ExceptionEnum.BusiException.getCode(),
                     ExceptionEnum.BusiException.getMsg(),
                     "getSnowflakeIds error");
         }

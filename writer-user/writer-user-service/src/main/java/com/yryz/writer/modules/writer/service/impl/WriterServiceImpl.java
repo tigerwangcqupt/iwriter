@@ -2,7 +2,7 @@ package com.yryz.writer.modules.writer.service.impl;
 
 import com.yryz.service.api.api.exception.RedisOptException;
 import com.yryz.service.api.basic.api.SmsAPI;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.redis.utils.JedisUtils;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.dao.BaseDao;
@@ -142,10 +142,10 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
             code = smsAPI.getSmsImgCode(phone);
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMsg());
         } catch (Exception e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMessage());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMessage());
         }
         return code;
     }
@@ -157,10 +157,10 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
             codeFlag = smsAPI.checkSmsImgCode(phone,imageCode);
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMsg());
         } catch (Exception e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMessage());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMessage());
         }
         return codeFlag;
     }
