@@ -252,6 +252,15 @@
             OR accept_task_num &gt;= task_close_num
             OR task_close_flag = 1
         </if>
+        <if test="order != null and order == 0">
+            ORDER BY create_date DESC
+        </if>
+        <if test="order != null and order == 1">
+            ORDER BY draft_fee DESC
+        </if>
+        <if test="order != null and order == 2">
+            ORDER BY accept_task_num ASC
+        </if>
     </select>
 
     <!-- 查询应用 -->
