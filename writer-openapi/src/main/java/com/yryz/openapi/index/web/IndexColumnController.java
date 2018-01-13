@@ -1,6 +1,7 @@
 package com.yryz.openapi.index.web;
 
 import com.yryz.component.rpc.RpcResponse;
+import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.indexcolumn.IndexColumnApi;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("services/app/v1/indexColumn")
-public class IndexColumnController {
+public class IndexColumnController extends BaseController {
 
    private static final Logger logger = LoggerFactory.getLogger(IndexColumnController.class);
 
@@ -26,26 +27,27 @@ public class IndexColumnController {
    @ResponseBody
    @RequestMapping(value="/single", method = RequestMethod.GET)
    public RpcResponse<IndexColumnVo> detail(Long indexColumnId) {
-       return indexColumnApi.detail(indexColumnId);
+      String userId = request.getHeader("userId");
+      Assert.notNull(userId, "用户id不能为空");
+      return indexColumnApi.detail(indexColumnId);
    }
 
    @ResponseBody
    @RequestMapping(value="/list", method = RequestMethod.GET)
-   public RpcResponse<IndexColumnVo> list(IndexColumnDto indexColumnDto, @RequestHeader Long userId) {
-      Assert.notNull(userId, "写手id不能为空");
+   public RpcResponse<IndexColumnVo> list(IndexColumnDto indexColumnDto) {
+      String userId = request.getHeader("userId");
+      Assert.notNull(userId, "用户id不能为空");
       logger.info("------进入首页栏目controller-----");
-      indexColumnDto.setCustId(userId);
-//        return indexColumnApi.list(indexColumnDto);
+      indexColumnDto.setCustId(Long.valueOf(userId));
       return indexColumnApi.listByWriter(indexColumnDto);
    }
 
    @ResponseBody
    @RequestMapping(value="/getIndexTips", method = RequestMethod.GET)
-   public RpcResponse<List<IndexTipsVo>> getIndexTips(IndexColumnDto indexColumnDto, @RequestHeader Long userId) {
-//        return indexColumnApi.list(indexColumnDto);
-//      Assert.notNull(indexColumnDto.getCustId(), "写手id不能为空");
-      Assert.notNull(userId, "写手id不能为空");
-      indexColumnDto.setCustId(userId);
+   public RpcResponse<List<IndexTipsVo>> getIndexTips(IndexColumnDto indexColumnDto) {
+      String userId = request.getHeader("userId");
+      Assert.notNull(userId, "用户id不能为空");
+      indexColumnDto.setCustId(Long.valueOf(userId));
       return indexColumnApi.getIndexTips(indexColumnDto);
    }
 

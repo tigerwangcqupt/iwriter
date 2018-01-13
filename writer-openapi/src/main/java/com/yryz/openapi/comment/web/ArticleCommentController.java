@@ -2,6 +2,7 @@ package com.yryz.openapi.comment.web;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.articlecomment.ArticleCommentApi;
 import com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto;
 import com.yryz.writer.modules.articlecomment.entity.ArticleComment;
@@ -16,13 +17,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("services/app/v1/articleComment")
-public class ArticleCommentController {
+public class ArticleCommentController extends BaseController {
    @Autowired
    private ArticleCommentApi articleCommentApi;
 
    @ResponseBody
    @RequestMapping(value="/single", method = RequestMethod.GET)
    public RpcResponse<ArticleCommentVo> detail(Long articleCommentId) {
+      String userId = request.getHeader("userId");
+      Assert.notNull(userId, "用户id不能为空");
       Assert.notNull(articleCommentId, "评论id不能为空");
       return articleCommentApi.detail(articleCommentId);
    }
@@ -30,6 +33,8 @@ public class ArticleCommentController {
    @ResponseBody
    @RequestMapping(value="/list", method = RequestMethod.GET)
    public RpcResponse<PageList<ArticleCommentVo>> list(ArticleCommentDto articleCommentDto) {
+      String userId = request.getHeader("userId");
+      Assert.notNull(userId, "用户id不能为空");
       Assert.notNull(articleCommentDto.getCustId(), "写手id不能为空");
       return articleCommentApi.listByWriter(articleCommentDto);
    }
@@ -37,14 +42,15 @@ public class ArticleCommentController {
    @ResponseBody
    @RequestMapping(value="/saveWriterComment", method = RequestMethod.POST)
    public RpcResponse<Boolean> saveWriterComment(@RequestBody ArticleComment articleComment) {
-      Assert.notNull(articleComment, "文章收藏参数不能为空");
+      String userId = request.getHeader("userId");
+      Assert.notNull(userId, "用户id不能为空");
       Assert.notNull(articleComment.getTargetId(), "被回复评论不能为空");
       Assert.notNull(articleComment.getWriterId(), "写手不能为空");
       Assert.notNull(articleComment.getCommentUserId(), "评论用户不能为空");
-      Assert.notNull(articleComment.getCommentUserNickname(), "收藏者昵称不为空");
+      Assert.hasText(articleComment.getCommentUserNickname(), "收藏者昵称不为空");
       Assert.notNull(articleComment.getArticleId(), "文章不能为空");
       Assert.notNull(articleComment.getArticleTitle(), "文章标题不能为空");
-      Assert.notNull(articleComment.getContent(), "评论内容不能为空");
+      Assert.hasText(articleComment.getContent(), "评论内容不能为空");
       articleComment.setCommentType(1);
       articleComment.setCommentWriterId(articleComment.getWriterId());
       articleComment.setCreateUserId(articleComment.getWriterId().toString());
