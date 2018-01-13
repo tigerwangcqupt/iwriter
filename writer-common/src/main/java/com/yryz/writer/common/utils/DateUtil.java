@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 
 public class DateUtil {
 
@@ -36,7 +36,7 @@ public class DateUtil {
 		try {
 			parse = simpleDateFormat.parse(date);
 		} catch (ParseException e) {
-			throw QsourceException.busiError( "日期转换异常！");
+			throw YyrzPcException.busiError( "日期转换异常！");
 		}
 		return parse;
 	}

@@ -9,7 +9,7 @@ import java.util.Random;
 
 import com.yryz.writer.common.constant.CommonConstants;
 import com.yryz.writer.common.constant.ExceptionEnum;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.redis.utils.JedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +98,7 @@ public class DistributedLockUtils {
                         unlockByKey(key);
                     }
                 }
-                throw new QsourceException(ExceptionEnum.LockException.getCode(), ExceptionEnum.LockException.getMsg(),
+                throw new YyrzPcException(ExceptionEnum.LockException.getCode(), ExceptionEnum.LockException.getMsg(),
                         "批量获取分布式锁失败");
             }
         }
@@ -162,7 +162,7 @@ public class DistributedLockUtils {
             LOG.info("获取分布式锁失败，KEY={}", key);
 
         }
-        throw new QsourceException(ExceptionEnum.LockException.getCode(), ExceptionEnum.LockException.getMsg(),
+        throw new YyrzPcException(ExceptionEnum.LockException.getCode(), ExceptionEnum.LockException.getMsg(),
                 "获取分布式锁失败，KEY=" + key);
     }
 

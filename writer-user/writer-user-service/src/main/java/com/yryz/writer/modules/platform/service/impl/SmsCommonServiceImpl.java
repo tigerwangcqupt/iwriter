@@ -4,7 +4,7 @@ import com.alibaba.dubbo.rpc.RpcContext;
 import com.yryz.service.api.basic.api.SmsAPI;
 import com.yryz.service.api.basic.entity.SmsReqVo;
 import com.yryz.service.api.basic.entity.SmsVerifyCode;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.modules.platform.service.SmsCommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,10 +42,10 @@ public class SmsCommonServiceImpl implements SmsCommonService {
             return null;
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMsg());
         } catch (Exception e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMessage());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMessage());
         }
     }
 
@@ -62,10 +62,10 @@ public class SmsCommonServiceImpl implements SmsCommonService {
             return smsAPI.sendVerifyCode(smsReq);
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMsg());
         } catch (Exception e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMessage());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMessage());
         }
     }
 
@@ -84,10 +84,10 @@ public class SmsCommonServiceImpl implements SmsCommonService {
             return smsAPI.checkVerifyCode(phone, code, verifyCode);
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMsg());
         } catch (Exception e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMessage());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMessage());
         }
     }
 
@@ -106,10 +106,10 @@ public class SmsCommonServiceImpl implements SmsCommonService {
             return null;
         } catch (com.yryz.service.api.api.exception.ServiceException e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMsg());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMsg());
         } catch (Exception e) {
             LOGGER.error("调用平台PRC接口出错！详细原因：" + e);
-            throw QsourceException.busiError("调用平台PRC接口出错！" + e.getMessage());
+            throw YyrzPcException.busiError("调用平台PRC接口出错！" + e.getMessage());
         }
     }
 

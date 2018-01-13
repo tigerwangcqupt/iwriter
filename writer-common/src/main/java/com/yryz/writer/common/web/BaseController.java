@@ -1,7 +1,7 @@
 package com.yryz.writer.common.web;
 
 import com.yryz.writer.common.Annotation.Login;
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.component.rpc.RpcResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,11 +38,11 @@ public class BaseController {
         if (rpcResponse.success()) {
             T t = rpcResponse.getData();
             if (t == null) {
-                throw QsourceException.busiError("调用RPC接口，返回结果数据为：null");
+                throw YyrzPcException.busiError("调用RPC接口，返回结果数据为：null");
             }
             return t;
         }
-        throw new QsourceException(rpcResponse.getCode(), rpcResponse.getMsg(), rpcResponse.getErrorMsg());
+        throw new YyrzPcException(rpcResponse.getCode(), rpcResponse.getMsg(), rpcResponse.getErrorMsg());
     }
 
     /**
@@ -57,7 +57,7 @@ public class BaseController {
         if (rpcResponse.success()) {
             return rpcResponse.getData();
         }
-        throw new QsourceException(rpcResponse.getCode(), rpcResponse.getMsg(), rpcResponse.getErrorMsg());
+        throw new YyrzPcException(rpcResponse.getCode(), rpcResponse.getMsg(), rpcResponse.getErrorMsg());
     }
 
 }

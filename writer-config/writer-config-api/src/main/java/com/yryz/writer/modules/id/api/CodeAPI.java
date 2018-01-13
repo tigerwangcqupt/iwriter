@@ -1,6 +1,6 @@
 package com.yryz.writer.modules.id.api;
 
-import com.yryz.writer.common.exception.QsourceException;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.id.entity.CodeModel;
 import com.yryz.writer.modules.id.entity.CodeModelDto;
@@ -20,7 +20,7 @@ public interface CodeAPI {
      *
      * @return
      */
-    PageList<CodeModel> list(CodeModelDto codeModelDto) throws QsourceException;
+    PageList<CodeModel> list(CodeModelDto codeModelDto) throws YyrzPcException;
 
     /**
      * 增加业务类型，指定发号的宽度
@@ -28,7 +28,7 @@ public interface CodeAPI {
      * 给qshop_order发起始宽度为8的号码,后期发号递增
      *
      *
-     * @throws QsourceException
+     * @throws YyrzPcException
      */
-    IDResponse addType(IDRequest request) throws QsourceException;
+    IDResponse addType(IDRequest request) throws YyrzPcException;
 }
