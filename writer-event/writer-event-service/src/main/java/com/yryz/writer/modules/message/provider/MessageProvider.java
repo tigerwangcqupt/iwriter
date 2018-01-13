@@ -88,6 +88,9 @@ public class MessageProvider implements MessageApi {
             Assert.hasText(writerNoticeMessageVo.getContent(), "消息内容不能为空");
             Assert.notNull(writerNoticeMessageVo.getTriggerType(), "消息类型不能为空");
             Assert.notNull(writerNoticeMessageVo.getSendUserId(), "发送者不能为空");
+            if (writerNoticeMessageVo.getContent().length() > 200){
+                throw new IllegalArgumentException("消息长度不能超过200");
+            }
             List<NoticeReceiveWriter> list = writerNoticeMessageVo.getReceiveWriter();
             if (list == null || list.isEmpty()){
                 throw new IllegalArgumentException("接受者不能为空");

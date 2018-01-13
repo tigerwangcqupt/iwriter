@@ -45,7 +45,7 @@ public class ArticleComment extends GenericEntity{
 
 	/**
 	 * 评论内容
-	 */	 
+	 */
     private  String content;
     
 

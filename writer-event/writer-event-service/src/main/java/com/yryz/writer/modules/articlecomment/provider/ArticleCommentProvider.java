@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * 文章评论服务
@@ -86,6 +87,17 @@ public class ArticleCommentProvider implements ArticleCommentApi {
 	@Override
 	public RpcResponse<Boolean> saveArticleComment(ArticleComment articleComment) {
 		try {
+			Assert.notNull(articleComment.getTargetId(), "被回复评论不能为空");
+			Assert.notNull(articleComment.getWriterId(), "写手不能为空");
+			Assert.notNull(articleComment.getCommentUserId(), "评论用户不能为空");
+			Assert.hasText(articleComment.getCommentUserNickname(), "收藏者昵称不为空");
+			Assert.notNull(articleComment.getArticleId(), "文章不能为空");
+			Assert.notNull(articleComment.getArticleTitle(), "文章标题不能为空");
+			Assert.hasText(articleComment.getContent(), "评论内容不能为空");
+			Assert.notNull(articleComment.getCommentType(), "评论类型不能为空");
+			if (articleComment.getContent().length() > 200){
+				throw new IllegalArgumentException("评论长度不能超过200");
+			}
 			return ResponseModel.returnListSuccess(articleCommentService.saveArticleComment(articleComment));
 		} catch (Exception e) {
 			logger.error("保存ArticleComment失败", e);

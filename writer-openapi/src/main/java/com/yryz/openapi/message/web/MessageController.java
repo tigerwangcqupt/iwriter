@@ -40,6 +40,9 @@ public class MessageController extends BaseController {
       String userId = request.getHeader("userId");
       Assert.notNull(userId, "用户id不能为空");
       Assert.notNull(writerNoticeMessageVo.getContent(), "消息内容不能为空");
+      if (writerNoticeMessageVo.getContent().length() > 200){
+         throw new IllegalArgumentException("消息长度不能超过200");
+      }
       Assert.notEmpty(writerNoticeMessageVo.getReceiveWriter(), "消息接受者不能为空");
       return messageApi.saveWriterNoticeMessage(writerNoticeMessageVo);
    }

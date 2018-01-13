@@ -51,6 +51,9 @@ public class ArticleCommentController extends BaseController {
       Assert.notNull(articleComment.getArticleId(), "文章不能为空");
       Assert.notNull(articleComment.getArticleTitle(), "文章标题不能为空");
       Assert.hasText(articleComment.getContent(), "评论内容不能为空");
+      if (articleComment.getContent().length() > 200){
+         throw new IllegalArgumentException("评论长度不能超过200");
+      }
       articleComment.setCommentType(1);
       articleComment.setCommentWriterId(articleComment.getWriterId());
       articleComment.setCreateUserId(articleComment.getWriterId().toString());
