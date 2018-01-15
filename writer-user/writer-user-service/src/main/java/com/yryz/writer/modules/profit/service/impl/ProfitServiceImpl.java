@@ -329,9 +329,14 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             }
             Profit profitBase = new Profit();
             Profit profitData = profitDao.selectByKid(Profit.class, profit.getKid());
+            BigDecimal baseSettlementAmount = profitData.getSettlementAmount();
+            if(baseSettlementAmount.intValue() != MoneyUtils.setBigDecimal(profit.getSettlementAmount()).intValue()){
+                logger.error("当前提现金额不等于申请提现金额");
+                throw new YyrzPcException(ExceptionEnum.TX_NOTEQ_APPLY_EXCEPTION.getCode(), ExceptionEnum.TX_NOTEQ_APPLY_EXCEPTION.getMsg(),
+                        ExceptionEnum.TX_NOTEQ_APPLY_EXCEPTION.getErrorMsg());
+            }
             BeanUtils.copyProperties(profitData, profitBase);
             Long oldKid = profitBase.getKid();
-
             //提现日期
             Date settlementDate = new Date();
             Long kid = idAPI.getId(ProfitConstants.PROFITTABLE);
@@ -520,7 +525,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             if(CollectionUtils.isNotEmpty(bankList)){
                 for(Bank bank : bankList){
                     for(ProfitAdminVo profitAdminVo : profitAdminVoList){
-                        if(bank.getCreateUserId().equals(profitAdminVo.getWriterId())){
+                        if(bank.getCreateUserId().equals(profitAdminVo.getWriterId().toString())){
                             String location = "";
                             String userName = profitAdminVo.getUserName();
                             BeanUtils.copyProperties(bank,profitAdminVo);

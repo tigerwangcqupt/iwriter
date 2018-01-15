@@ -11,6 +11,7 @@ import com.yryz.component.rpc.dto.PageList;
 public class TaskDto extends PageList {
     private String title;
     private Long appId;
+    private String appliName;
     private Long taskId;
     private Integer status;
     private Long writerId;
@@ -46,6 +47,14 @@ public class TaskDto extends PageList {
 
     public void setAppId(Long appId) {
         this.appId = appId;
+    }
+
+    public String getAppliName() {
+        return appliName;
+    }
+
+    public void setAppliName(String appliName) {
+        this.appliName = appliName;
     }
 
     public Long getTaskId() {
