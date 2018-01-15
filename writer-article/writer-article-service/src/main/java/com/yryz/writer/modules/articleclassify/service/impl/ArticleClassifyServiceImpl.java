@@ -6,7 +6,7 @@ import com.yryz.writer.common.exception.BaseException;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
-import com.yryz.writer.modules.articleclassify.ArticleClassifyConstant;
+import com.yryz.writer.modules.articleclassify.constant.ArticleClassifyConstant;
 import com.yryz.writer.modules.articleclassify.dao.persistence.ArticleClassifyDao;
 import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
 import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;

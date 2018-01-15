@@ -1,4 +1,4 @@
-package com.yryz.writer.modules.articleclassify;
+package com.yryz.writer.modules.articleclassify.constant;
 
 /**
  * File Name: ArticleClassifyConstant
