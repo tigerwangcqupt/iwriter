@@ -66,6 +66,6 @@ public class ProfitConstants {
     public static final Integer MAX_AMOUNT = 10000;
 
     //申请提现是否处理, 0:未处理
-    public static final Integer HANDLEFLAG = 0;
+    public static final Integer NOT_HANDLEFLAG = 0;
 
 }
