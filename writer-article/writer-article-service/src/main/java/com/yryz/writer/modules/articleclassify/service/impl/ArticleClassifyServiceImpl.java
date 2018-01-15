@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -92,6 +93,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     }
 
     @Override
+    @Transactional
     public Boolean insert(ArticleClassify articleClassify) {
         try {
             changeToNoFloor(articleClassify.getParentId(), articleClassify.getLastUpdateUserId());
@@ -150,6 +152,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         return true;
     }
 
+    @Transactional
     public Boolean shelveOn(Long articleClassifyId){
         try {
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, articleClassifyId);
@@ -175,6 +178,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     }
 
     @Override
+    @Transactional
     public Boolean shelveOff(Long articleClassifyId) {
         try {
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class,articleClassifyId);
@@ -204,6 +208,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     }
 
     @Override
+    @Transactional
     public Boolean deleteArticleClassify(Long kid, String lastUpdateUserId) {
         try {
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);
@@ -238,6 +243,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     }
 
     @Override
+    @Transactional
     public Boolean recoverArticleClassify(Long kid, String lastUpdateUserId) {
         try {
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);

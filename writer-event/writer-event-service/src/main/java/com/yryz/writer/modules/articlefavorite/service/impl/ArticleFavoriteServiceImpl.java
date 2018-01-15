@@ -19,6 +19,7 @@ import com.yryz.writer.modules.articlefavorite.entity.ArticleFavorite;
 import com.yryz.writer.modules.articlefavorite.dto.ArticleFavoriteDto;
 import com.yryz.writer.modules.articlefavorite.dao.persistence.ArticleFavoriteDao;
 import com.yryz.writer.modules.articlefavorite.service.ArticleFavoriteService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -94,6 +95,7 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
     }
 
     @Override
+    @Transactional
     public Long saveFavorite(ArticleFavorite articleFavorite) {
         Assert.notNull(articleFavorite, "文章收藏参数不能为空");
         Assert.notNull(articleFavorite.getWriterId(), "文章作者不能为空");

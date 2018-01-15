@@ -18,6 +18,7 @@ import com.yryz.writer.modules.articlecomment.entity.ArticleComment;
 import com.yryz.writer.modules.articlecomment.dto.ArticleCommentDto;
 import com.yryz.writer.modules.articlecomment.dao.persistence.ArticleCommentDao;
 import com.yryz.writer.modules.articlecomment.service.ArticleCommentService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -93,6 +94,7 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
     }
 
     @Override
+    @Transactional
     public Boolean saveArticleComment(ArticleComment articleComment) {
         Assert.notNull(articleComment, "评论参数不能为空");
         Assert.notNull(articleComment.getWriterId(), "文章作者不能为空");

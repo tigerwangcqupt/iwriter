@@ -19,6 +19,7 @@ import com.yryz.writer.modules.articleshare.entity.ArticleShare;
 import com.yryz.writer.modules.articleshare.dto.ArticleShareDto;
 import com.yryz.writer.modules.articleshare.dao.persistence.ArticleShareDao;
 import com.yryz.writer.modules.articleshare.service.ArticleShareService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -98,6 +99,7 @@ public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleS
     }
 
     @Override
+    @Transactional
     public Long saveArticleShare(ArticleShare articleShare) {
         Assert.notNull(articleShare.getWriterId(), "文章作者不能为空");
         Long kid = idApi.getId("yryz_article_share");
