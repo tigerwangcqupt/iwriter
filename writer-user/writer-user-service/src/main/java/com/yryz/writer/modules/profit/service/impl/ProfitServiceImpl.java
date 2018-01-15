@@ -454,7 +454,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             openAccountDto.setOwner(owner);
             openAccountDto.setAccount(account);
             RpcContext.getContext().setAttachment("clientCode", clientCode);
-            data = openAccountApi.create(openAccountDto);
+            data = openAccountApi.unionCreate(openAccountDto);
         }catch(Exception e){
             logger.error("调用资金系统插入资金主体表出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),

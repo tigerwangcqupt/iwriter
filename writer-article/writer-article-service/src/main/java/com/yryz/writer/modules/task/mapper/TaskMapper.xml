@@ -14,6 +14,7 @@
         <result column="accept_task_num" property="acceptTaskNum" jdbcType="INTEGER"/>
         <result column="task_close_num" property="taskCloseNum" jdbcType="INTEGER"/>
         <result column="draft_type" property="draftType" jdbcType="TINYINT"/>
+        <result column="content_source" property="contentSource" jdbcType="VARCHAR"/>
         <result column="content_html" property="contentHtml" jdbcType="VARCHAR"/>
         <result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
         <result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
@@ -26,7 +27,7 @@
     </resultMap>
 
     <!--Base_Column_List-->
-    <sql id="Base_Column_List">id,kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_close_num,draft_type,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag,task_close_flag
+    <sql id="Base_Column_List">id,kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_close_num,draft_type,content_source,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag,task_close_flag
     </sql>
 
     <!-- 查询Task详情 -->
@@ -48,7 +49,7 @@
 
     <!-- 新增Task-->
     <insert id="insert" parameterType="com.yryz.writer.modules.task.entity.Task">
-	    insert into yryz_task (kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_close_num,draft_type,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
+	    insert into yryz_task (kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_close_num,draft_type,content_source,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{title,jdbcType=VARCHAR}
@@ -59,6 +60,7 @@
 				,#{acceptTaskNum,jdbcType=INTEGER}
 				,#{taskCloseNum,jdbcType=INTEGER}
 				,#{draftType,jdbcType=TINYINT}
+				,#{contentSource,jdbcType=VARCHAR}
 				,#{contentHtml,jdbcType=VARCHAR}
 				,#{moduleEnum,jdbcType=VARCHAR}
 				,#{createUserId,jdbcType=VARCHAR}
@@ -103,6 +105,9 @@
             </if>
             <if test="contentHtml != null and contentHtml != ''">
                 content_html,
+            </if>
+            <if test="contentSource != null and contentSource != ''">
+                content_source,
             </if>
             <if test="moduleEnum != null and moduleEnum != ''">
                 module_enum,
@@ -157,6 +162,9 @@
             <if test="contentHtml != null and contentHtml != ''">
                 #{contentHtml,jdbcType=VARCHAR},
             </if>
+            <if test="contentSource != null and contentSource != ''">
+                #{contentSource,jdbcType=VARCHAR},
+            </if>
             <if test="moduleEnum != null and moduleEnum != ''">
                 #{moduleEnum,jdbcType=VARCHAR},
             </if>
@@ -209,6 +217,9 @@
             </if>
             <if test="draftType != null">
                 draft_type = #{draftType,jdbcType=TINYINT},
+            </if>
+            <if test="contentSource != null and contentSource != ''">
+                content_source = #{contentHtml,jdbcType=VARCHAR},
             </if>
             <if test="contentHtml != null and contentHtml != ''">
                 content_html = #{contentHtml,jdbcType=VARCHAR},

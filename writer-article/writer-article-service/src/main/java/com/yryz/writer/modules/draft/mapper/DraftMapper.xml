@@ -11,6 +11,7 @@
 		<result column="task_kid" property="taskKid" jdbcType="BIGINT"/>
 		<result column="title" property="title" jdbcType="VARCHAR"/>
 		<result column="content_html" property="contentHtml" jdbcType="VARCHAR"/>
+		<result column="content_source" property="contentSource" jdbcType="VARCHAR"/>
 		<result column="video_url" property="videoUrl" jdbcType="VARCHAR"/>
 		<result column="cover_img_url" property="coverImgUrl" jdbcType="VARCHAR"/>
 		<result column="description" property="description" jdbcType="VARCHAR"/>
@@ -32,7 +33,7 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,draft_type,task_flag,task_kid,title,content_html,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
+	<sql id="Base_Column_List">id,kid,draft_type,task_flag,task_kid,title,content_html,content_source,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
     </sql>
 
      <!-- 查询Draft详情 -->
@@ -54,13 +55,14 @@
   
   	<!-- 新增Draft-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.draft.entity.Draft">
-	    insert into yryz_draft (kid,draft_type,task_flag,title,content_html,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
+	    insert into yryz_draft (kid,draft_type,task_flag,title,content_html,content_source,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{draftType,jdbcType=TINYINT}
 				,#{taskFlag,jdbcType=TINYINT}
 				,#{title,jdbcType=VARCHAR}
 				,#{contentHtml,jdbcType=VARCHAR}
+				,#{contentSource,jdbcType=VARCHAR}
 				,#{videoUrl,jdbcType=VARCHAR}
 				,#{coverImgUrl,jdbcType=VARCHAR}
 				,#{description,jdbcType=VARCHAR}
@@ -100,6 +102,9 @@
 	    </if>
         <if test="contentHtml != null and contentHtml != ''">
 			content_html,
+	    </if>
+        <if test="contentSource != null and contentSource != ''">
+			content_source,
 	    </if>
         <if test="videoUrl != null and videoUrl != ''">
 			video_url,
@@ -171,6 +176,9 @@
 	    </if>
         <if test="contentHtml != null and contentHtml != ''">
 			#{contentHtml,jdbcType=VARCHAR},
+	    </if>
+        <if test="contentSource != null and contentSource != ''">
+			#{contentSource,jdbcType=VARCHAR},
 	    </if>
         <if test="videoUrl != null and videoUrl != ''">
 			#{videoUrl,jdbcType=VARCHAR},
@@ -245,6 +253,9 @@
     		</if>
             <if test="contentHtml != null and contentHtml != ''">
     			content_html = #{contentHtml,jdbcType=VARCHAR},
+    		</if>
+            <if test="contentSource != null and contentSource != ''">
+				content_source = #{contentSource,jdbcType=VARCHAR},
     		</if>
             <if test="videoUrl != null and videoUrl != ''">
     			video_url = #{videoUrl,jdbcType=VARCHAR},

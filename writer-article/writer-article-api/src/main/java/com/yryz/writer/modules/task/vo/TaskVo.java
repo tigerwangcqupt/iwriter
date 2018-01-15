@@ -87,6 +87,7 @@ public class TaskVo implements Serializable {
      * 任务描述
      */
     private String contentHtml;
+    private String contentSource;
 
     /**
      * 创建时间
@@ -203,6 +204,14 @@ public class TaskVo implements Serializable {
 
     public void setContentHtml(String contentHtml) {
         this.contentHtml = contentHtml;
+    }
+
+    public String getContentSource() {
+        return contentSource;
+    }
+
+    public void setContentSource(String contentSource) {
+        this.contentSource = contentSource;
     }
 
     public String getAppliName() {

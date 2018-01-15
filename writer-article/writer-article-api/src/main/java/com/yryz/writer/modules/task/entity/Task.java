@@ -73,6 +73,11 @@ public class Task extends GenericEntity {
      */
     private String contentHtml;
 
+    /**
+     * 正文数据
+     */
+    private String contentSource;
+
 
     /**
      * 删除标记(0正常，1已删除)
@@ -194,4 +199,11 @@ public class Task extends GenericEntity {
         this.shelveFlag = shelveFlag;
     }
 
+    public String getContentSource() {
+        return contentSource;
+    }
+
+    public void setContentSource(String contentSource) {
+        this.contentSource = contentSource;
+    }
 }

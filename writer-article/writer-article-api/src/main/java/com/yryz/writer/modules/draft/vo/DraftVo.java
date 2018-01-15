@@ -34,6 +34,11 @@ public class DraftVo implements Serializable {
      */
     private String contentHtml;
 
+    /**
+     * 图文稿件正文
+     */
+    private String contentSource;
+
 
     /**
      * 视频稿件视频路径
@@ -175,6 +180,14 @@ public class DraftVo implements Serializable {
 
     public void setContentHtml(String contentHtml) {
         this.contentHtml = contentHtml;
+    }
+
+    public String getContentSource() {
+        return contentSource;
+    }
+
+    public void setContentSource(String contentSource) {
+        this.contentSource = contentSource;
     }
 
     public String getVideoUrl() {
