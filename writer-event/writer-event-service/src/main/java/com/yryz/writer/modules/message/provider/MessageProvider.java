@@ -73,6 +73,16 @@ public class MessageProvider implements MessageApi {
     }
 
     @Override
+    public RpcResponse<Boolean> setMessageTips(ModuleEnum moduleEnum, Long writerId, Long messageNum) {
+        try {
+            return ResponseModel.returnObjectSuccess(messageService.setMessageTips(moduleEnum, writerId, messageNum));
+        } catch (Exception e) {
+            logger.error("清空某个消息栏目缓存数失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
+
+    @Override
     public RpcResponse<Boolean> savePlatformTaskMessageTips() {
         try {
             return ResponseModel.returnObjectSuccess(messageService.saveCommonMessageTips(ModuleEnum.PLATFORM));

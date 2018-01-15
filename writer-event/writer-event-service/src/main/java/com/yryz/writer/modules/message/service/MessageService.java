@@ -32,6 +32,13 @@ public interface MessageService {
     public Boolean saveMessageTips(ModuleEnum moduleEnum, Long writerId);
 
     /**
+     * 设置写手的消息缓存数
+     * @param writerId
+     * @return
+     */
+    public Boolean setMessageTips(ModuleEnum moduleEnum, Long writerId, Long messageNum);
+
+    /**
      * 增加消息缓存数 （全局）
      * @return
      */

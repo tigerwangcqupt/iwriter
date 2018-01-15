@@ -132,6 +132,26 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     }
 
     @Override
+    public Boolean setMessageTips(ModuleEnum moduleEnum, Long writerId, Long messageNum) {
+        Assert.notNull(messageNum, "消息数不能为空");
+        String key = MessageConstant.getHashKey(writerId);
+        String field = MessageConstant.getHashField(moduleEnum.getValue());
+        boolean success = true;
+        String lock = null;
+        try {
+            //写手相关的消息业务 进行锁（避免同时新增时冲突）
+            lock = DistributedLockUtils.lock(ID_LOCK_NAME, moduleEnum.getValue() + writerId.toString());
+            //如果存在业务的缓存气泡数
+            success = JedisUtils.mapSetnx(key, field, messageNum.toString());
+        } catch (Exception e) {
+            logger.error("保存消息缓存气泡失败", e);
+        } finally {
+            DistributedLockUtils.unlock(ID_LOCK_NAME, lock);
+        }
+        return success;
+    }
+
+    @Override
     public Boolean saveCommonMessageTips(ModuleEnum moduleEnum) {
         String field = MessageConstant.getHashField(moduleEnum.getValue());
         boolean success = true;
