@@ -161,9 +161,4 @@ public class ProfitProvider implements ProfitApi {
 		}
 	}
 
-	@Override
-	public RpcResponse<ProfitStaticsVo> staticsProfitListVo(Long userId) {
-		return null;
-	}
-
 }

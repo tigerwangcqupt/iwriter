@@ -28,10 +28,11 @@ import java.util.Set;
 
 public class ResourceAuthHandler {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceAuthHandler.class);
+
     @Value("${appSercet}")
     protected String appSercet;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceAuthHandler.class);
     /**
      * 验证签名是否有效
      *

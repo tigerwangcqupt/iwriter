@@ -117,6 +117,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     @Value("${busiRoyalFCode}")
     private Long busiRoyalFCode;
 
+    //币种编码
     @Value("${currencyCode}")
     private Long  currencyCode;
 
@@ -204,10 +205,16 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if(!CommonUtils.checkIntNumber(settlementAmount.toString())){
+            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount.toString()))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
+            }
+            //提现金额区间(500--10000)
+            if(!CommonUtils.checkValidAmount(settlementAmount)){
+                logger.error("当前提现金额不正确");
+                throw new YyrzPcException(ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getCode(),ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getMsg(),
+                        ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
             }
             //提现日期
             Date settlementDate = new Date();
@@ -284,8 +291,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 
     /**
      * 提现成功|提现失败
-     * 提现成功:调用资金平账,插入流水
-     * 提现失败:插入流水
+     * 提现成功:调用资金插入流水,插入profit流水
+     * 提现失败:插入profit流水
      * @param profit
      * @return
      */
@@ -293,6 +300,20 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public Profit updateProfit(Profit profit) {
         String lockKey = null;
         try {
+            //当前提现金额
+            BigDecimal settlementAmount = profit.getSettlementAmount();
+            //提现金额不是正整数
+            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount.toString()))){
+                logger.error("提现金额不是正整数");
+                throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
+                        ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
+            }
+            //提现金额区间(500--10000)
+            if(!CommonUtils.checkValidAmount(settlementAmount)){
+                logger.error("当前提现金额不正确");
+                throw new YyrzPcException(ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getCode(),ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getMsg(),
+                        ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
+            }
             //分布式锁控制用户频繁操作
             lockKey = DistributedLockUtils.lock(LOCK_PROFIT_UPDATE, profit.getCreateUserId());
             ProfitDto profitDto = new ProfitDto();
@@ -322,8 +343,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             WriterCapitalVo writerModelVo = writerService.selectWriterByParameters(writerDto);
             //剩余可提现金额
             BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
-            //当前提现金额
-            BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现成功,只更新写手表的累计提现金额
             if (profit.getSettlementType() == ProfitEnum.WITHDRAWALS_SUCCESS.getCode()) {
                 //当剩余金额小于当前提现金额时
@@ -358,6 +377,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //调用消息发送接口
                 WriterNoticeMessageVo writerNoticeMessageVo = new WriterNoticeMessageVo();
                 writerNoticeMessageVo.setContent(profit.getSettlementMsg());
+                //3提现后台发送提现失败通知
                 writerNoticeMessageVo.setTriggerType(3);
                 writerNoticeMessageVo.setSendUserId(Long.valueOf(profit.getLastUpdateUserId()));
                 List<NoticeReceiveWriter> receiveWriters = new ArrayList<>();
@@ -466,6 +486,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public List<ProfitAdminVo> fillProfitData(List<ProfitDetailVo> list){
         List<ProfitAdminVo> profitAdminVoList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(list)){
+            //提现流水号集合
             List<String> profitSnList = new ArrayList<>();
             //把流水号拿到用户表的数据
             for(ProfitDetailVo profitDetailVo : list){
@@ -474,9 +495,11 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 profitSnList.add(profitDetailVo.getProfitSn());
                 profitAdminVoList.add(profitAdminVo);
             }
+            //写手id集合
             List<String> writerIdList = new ArrayList<>();
             WriterDto writerDto = new WriterDto();
             writerDto.setProfitSnList(profitSnList);
+            //根据收益流水集合查询用户信息
             List<WriterAdminRefProfit> writerRefProfitList = writerService.selectAllAdminProfitList(writerDto);
             if(CollectionUtils.isNotEmpty(writerRefProfitList)){
                 for(WriterAdminRefProfit writerAdminRefProfit : writerRefProfitList){
@@ -490,6 +513,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                     }
                 }
             }
+            //根据写手id查询银行信息
             BankDto bankDto = new BankDto();
             bankDto.setWriterIdList(writerIdList);
             List<Bank> bankList = bankService.selectListByWriterIds(bankDto);

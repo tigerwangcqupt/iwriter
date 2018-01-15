@@ -56,13 +56,15 @@ public enum ExceptionEnum {
 
     TX_NOTINT_EXCEPTION("6005", "当前提现金额不是整数", "当前提现金额不是整数"),
 
-    FINDMODELFAIL_EXCEPTION("6006", "查不到资金主体", "查不到资金主体"),
+    TX_AMMOUNT_NOTVALID_EXCEPTION("6006", "当前提现金额不正确", "当前提现金额不正确"),
 
-    ADD_ROYALFLOWFAIL_EXCEPTION("6007", "稿费流水插入资金系统失败", "稿费流水插入资金系统失败"),
+    FINDMODELFAIL_EXCEPTION("6007", "查不到资金主体", "查不到资金主体"),
 
-    ADD_TXFLOWFAIL_EXCEPTION("6008", "提现流水插入资金系统失败", "提现流水插入资金系统失败"),
+    ADD_ROYALFLOWFAIL_EXCEPTION("6008", "稿费流水插入资金系统失败", "稿费流水插入资金系统失败"),
 
-    EXSITS_TXFLOW_EXCEPTION("6009", "已经存在该流水", "已经存在该流水"),
+    ADD_TXFLOWFAIL_EXCEPTION("6009", "提现流水插入资金系统失败", "提现流水插入资金系统失败"),
+
+    EXSITS_TXFLOW_EXCEPTION("6010", "已经存在该流水", "已经存在该流水"),
 
     //写手消息的异常码由8000开始
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),

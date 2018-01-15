@@ -58,4 +58,14 @@ public class ProfitConstants {
 
     //是否可提现标识 1:可提现 0:不可提现
     public static final Integer NOTWITHDRAWALSFLAG = 0;
+
+    //提现最小金额
+    public static final Integer MIN_AMOUNT = 500;
+
+    //提现最大金额
+    public static final Integer MAX_AMOUNT = 10000;
+
+    //申请提现是否处理, 0:未处理
+    public static final Integer HANDLEFLAG = 0;
+
 }
