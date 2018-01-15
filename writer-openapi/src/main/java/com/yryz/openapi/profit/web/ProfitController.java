@@ -40,6 +40,7 @@ public class ProfitController extends BaseController{
    @ResponseBody
    @RequestMapping(value="/getcash/statics", method = RequestMethod.GET)
    public RpcResponse<ProfitStaticsVo> statics(@RequestHeader Long userId) {
+      Assert.notNull(userId, "用户id为空!");
       return profitApi.staticsProfitVo(userId);
    }
 
@@ -52,6 +53,7 @@ public class ProfitController extends BaseController{
    @ResponseBody
    @RequestMapping(value="/getcash/staticsList", method = RequestMethod.GET)
    public RpcResponse<PageList<ProfitDetailVo>> staticsList(@RequestHeader Long userId) {
+      Assert.notNull(userId, "用户id为空!");
       ProfitDto profitDto = new ProfitDto();
       profitDto.setWriterId(userId);
       profitDto.setFrontCall(ProfitConstants.CALLEDBYFRONT);
@@ -65,6 +67,7 @@ public class ProfitController extends BaseController{
    @ResponseBody
    @RequestMapping(value="/getcash/detail", method = RequestMethod.GET)
    public RpcResponse<ProfitVo> detail(@RequestHeader Long userId) {
+       Assert.notNull(userId, "用户id为空!");
        return profitApi.detailProfit(userId);
    }
 

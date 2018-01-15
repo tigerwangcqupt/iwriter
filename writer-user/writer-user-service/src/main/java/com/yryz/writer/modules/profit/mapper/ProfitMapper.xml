@@ -117,13 +117,12 @@
         <if test="settlementMsg != null and settlementMsg != ''">
 			settlement_msg,
 	    </if>
-			<if test="writerId != null and writerId != ''">
+        <if test="writerId != null and writerId != ''">
 				writer_id,
-			</if>
-			<if test="profitSn != null and profitSn != ''">
+        </if>
+        <if test="profitSn != null and profitSn != ''">
 				profit_sn,
-			</if>
-
+        </if>
 	    </trim>
 	    <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="kid != null">
@@ -171,12 +170,12 @@
         <if test="settlementMsg != null and settlementMsg != ''">
 			#{settlementMsg,jdbcType=VARCHAR},
 	    </if>
-			<if test="writerId != null and writerId != ''">
+        <if test="writerId != null and writerId != ''">
 				#{writerId},
-			</if>
-			<if test="profitSn != null and profitSn != ''">
+        </if>
+        <if test="profitSn != null and profitSn != ''">
 				#{profitSn},
-			</if>
+         </if>
 	    </trim>
 	</insert>
 	
@@ -263,9 +262,11 @@
 		<if test="profitSn != null and profitSn != ''">
 			and profit_sn = #{profitSn}
 		</if>
+		<!-- 前台查询列表(提现成功|提现失败|稿费)-->
 		<if test="frontCall != null and frontCall != ''">
 			and settlement_type in(2,3,4)
 		</if>
+		<!-- 查询申请列表，未处理 -->
 		<if test="handleFlag != null and handleFlag == 0">
 		  <![CDATA[
 			and LENGTH(trim(last_update_user_id)) < 1

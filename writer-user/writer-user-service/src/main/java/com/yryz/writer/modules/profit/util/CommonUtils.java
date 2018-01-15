@@ -1,5 +1,8 @@
 package com.yryz.writer.modules.profit.util;
 
+import com.yryz.writer.modules.profit.constant.ProfitConstants;
+
+import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,5 +39,22 @@ public class CommonUtils {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 判断提现金额是否正确
+     * @param amount
+     * @return
+     */
+    public static boolean checkValidAmount(BigDecimal amount) {
+        int value = amount.intValue();
+        if(value<= ProfitConstants.MAX_AMOUNT && value >= ProfitConstants.MIN_AMOUNT){
+            return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(checkValidAmount(new BigDecimal(2000.00)));
     }
 }
