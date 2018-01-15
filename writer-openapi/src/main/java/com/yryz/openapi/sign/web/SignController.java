@@ -27,16 +27,17 @@ public class SignController extends BaseController {
     /**
      * 根据原文得到签名信息
      * 返回原文加盐后的md5串
-     * @param origin
+     * @param originText
      * @return
      */
     @NotLogin
     @RequestMapping(value="/detail", method = RequestMethod.GET)
     @ResponseBody
-    public RpcResponse<SignInfo> getSign(String origin){
-        Assert.notNull(origin, "原文不能为空");
+    public RpcResponse<SignInfo> getSign(String originText){
+        Assert.notNull(originText, "原文不能为空");
         SignInfo signInfo = new SignInfo();
-        signInfo.setData(Md5Utils.encode(origin+appSercet));
+        signInfo.setOriginText(originText);
+        signInfo.setSign(Md5Utils.encode(originText+appSercet));
         return ResponseModel.returnObjectSuccess(signInfo);
     }
 }

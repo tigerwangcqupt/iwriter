@@ -103,11 +103,5 @@ public interface ProfitApi {
 	 * */
 	RpcResponse<ProfitStaticsVo> staticsProfitVo(Long userId);
 
-	/**
-	 *  根据用户id获取Profit明细数据
-	 *  @param  userId
-	 *  @return
-	 * */
-	RpcResponse<ProfitStaticsVo> staticsProfitListVo(Long userId);
 
 }
