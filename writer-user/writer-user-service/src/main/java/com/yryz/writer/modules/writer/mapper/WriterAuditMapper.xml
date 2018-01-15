@@ -57,7 +57,7 @@
         from yryz_writer_audit_history h,yryz_writer w 
         WHERE h.writer_kid = w.kid
         <if test="phone != null and phone != ''">
-    		and w.phone = #{phone,jdbcType=VARCHAR}
+    		and w.phone like CONCAT('%',trim(#{phone}),'%')
     	</if>
     	<if test="auditStatus != null">
     		and h.audit_status = #{auditStatus,jdbcType=TINYINT}

@@ -444,9 +444,9 @@
 	</select>
     
     <update id="updateWriter" parameterType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
-		update yryz_writer set remark= #{remark},
+		update yryz_writer_audit_history set remark= #{remark},
 		last_update_date = now(),last_update_user_id=#{lastUpdateUserId} 
-		where kid = #{kid}
+		where writer_kid = #{kid} and audit_status=2
     </update>
 
 	<!-- 查询Writer关联资金 -->
