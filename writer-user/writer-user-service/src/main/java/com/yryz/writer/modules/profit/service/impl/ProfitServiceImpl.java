@@ -264,8 +264,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //手续费扩大一万倍
                 profit.setChargeFee(new BigDecimal(0));
                 //剩余提现金额扩大一万倍
-                profit.setSurplusAmount(MoneyUtils.setBigDecimal(withdrawAmount.add(settlementAmount)));
-                //提现消息
+                profit.setSurplusAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
+                //稿费消息
                 profit.setSettlementMsg(ProfitEnum.ROYALTIES_FEE.getMsg());
                 insertByPrimaryKeySelective(profit);
                 writer.setWithdrawAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
