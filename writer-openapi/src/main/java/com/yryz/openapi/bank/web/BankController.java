@@ -42,6 +42,7 @@ public class BankController extends BaseController {
         return bankApi.insertBank(bank);
     }
 
+    @NotLogin
     @RequestMapping(value="/update", method = RequestMethod.POST)
     @ResponseBody
     public RpcResponse<Bank> updateBank(@RequestBody Bank bank, @RequestHeader String userId){

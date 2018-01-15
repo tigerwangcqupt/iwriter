@@ -135,21 +135,28 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
             bankDao.insert(bank);
 
-            BankCard bankCard=new BankCard();
-            //银行卡号
-            bankCard.setBankCardNo(bank.getUserBankCart());
-            //个人银行卡
-            bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
-            //银行名称
-            bankCard.setBankName(bank.getUserAccountOpenBank());
-            //状态生效
-            bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
-            //身份证
-            bankCard.setCertNo(bank.getUserCart());
-            //资金主体编码
-            bankCard.setOwnerCode(ownerFcode);
+
+            Owner owner = new Owner();
+            owner.setOwnerFcode(ownerFcode);
             RpcContext.getContext().setAttachment("clientCode", clientCode);
-            openBankCardApi.add(bankCard);;
+            owner = openOwnerApi.detail(owner);
+            if(null != owner){
+                BankCard bankCard=new BankCard();
+                //银行卡号
+                bankCard.setBankCardNo(bank.getUserBankCart());
+                //个人银行卡
+                bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
+                //银行名称
+                bankCard.setBankName(bank.getUserAccountOpenBank());
+                //状态生效
+                bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
+                //身份证
+                bankCard.setCertNo(bank.getUserCart());
+                //资金主体编码
+                bankCard.setOwnerCode(owner.getOwnerCode());
+                RpcContext.getContext().setAttachment("clientCode", clientCode);
+                openBankCardApi.add(bankCard);;
+            }
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),
@@ -170,21 +177,28 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         }
         try{
             bankDao.update(bank);
-            BankCard bankCard=new BankCard();
-            //银行卡号
-            bankCard.setBankCardNo(bank.getUserBankCart());
-            //个人银行卡
-            bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
-            //银行名称
-            bankCard.setBankName(bank.getUserAccountOpenBank());
-            //状态生效
-            bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
-            //身份证
-            bankCard.setCertNo(bank.getUserCart());
-            //资金主体外码
-            bankCard.setOwnerCode(ownerFcode);
+
+            Owner owner = new Owner();
+            owner.setOwnerFcode(ownerFcode);
             RpcContext.getContext().setAttachment("clientCode", clientCode);
-            openBankCardApi.updateBankCard(bankCard);
+            owner = openOwnerApi.detail(owner);
+            if(null != owner){
+                BankCard bankCard=new BankCard();
+                //银行卡号
+                bankCard.setBankCardNo(bank.getUserBankCart());
+                //个人银行卡
+                bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
+                //银行名称
+                bankCard.setBankName(bank.getUserAccountOpenBank());
+                //状态生效
+                bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
+                //身份证
+                bankCard.setCertNo(bank.getUserCart());
+                //资金主体外码
+                bankCard.setOwnerCode(owner.getOwnerCode());
+                RpcContext.getContext().setAttachment("clientCode", clientCode);
+                openBankCardApi.updateBankCard(bankCard);
+            }
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),
