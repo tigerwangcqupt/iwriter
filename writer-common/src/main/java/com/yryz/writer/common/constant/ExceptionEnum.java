@@ -70,6 +70,7 @@ public enum ExceptionEnum {
 
     //写手消息的异常码由8000开始
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),
+    AUDITPASS_SENDMSG_EXCEPTION("7001", "写手审核通过消息发送失败", "写手审核通过消息发送失败"),
 	
 	NICKNAME_REPEAT_EXCEPTION("8001", "昵称重复", "昵称重复");
 
