@@ -84,8 +84,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     @Autowired
     private IdAPI idAPI;
 
-    @Autowired
-    private OpenOwnerApi openOwnerApi;
 
     @Autowired
     private OpenAccountApi openAccountApi;
@@ -242,7 +240,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //同步插入到profit流水表
             Long kid  = idAPI.getId(ProfitConstants.PROFITTABLE);
             profit.setKid(kid);
-            profit.setModuleEnum(YyrzModuleEnumConstants.PROFIT_INFO);
             profit.setSettlementDate(settlementDate);
             //当前提现金额扩大一万倍
             profit.setSettlementAmount(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
@@ -446,8 +443,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             account.setAccountTypeCode(AccountConstants.Type.USER_PROFIT);
             //币种
             account.setCurrencyCode(currencyCode);
-            //账户可以透支
-            account.setOverdraftFlag(AccountConstants.OverdraftFlag.YES);
             //状态正常
             account.setStatus(AccountConstants.Status.VALID);
             OpenAccountDto openAccountDto = new OpenAccountDto();

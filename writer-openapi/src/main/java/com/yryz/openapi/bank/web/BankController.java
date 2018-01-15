@@ -3,9 +3,11 @@ package com.yryz.openapi.bank.web;
 import com.yryz.openapi.core.auth.annotation.InterFaceAuth;
 import com.yryz.openapi.core.validator.annotation.Validate;
 import com.yryz.writer.common.Annotation.NotLogin;
+import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.bank.BankApi;
+import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +31,10 @@ public class BankController extends BaseController {
     @RequestMapping(value="/detail", method = RequestMethod.GET)
     @ResponseBody
     @NotLogin
-    public RpcResponse<BankVo> detail(Long id){
-        return bankApi.detail(id);
+    public RpcResponse<BankVo> detail(@RequestHeader String userId){
+        BankDto bankDto = new BankDto();
+        bankDto.setCreateUserId(userId);
+        return bankApi.selectByParameters(bankDto);
     }
 
     @Validate
@@ -39,6 +43,7 @@ public class BankController extends BaseController {
     @ResponseBody
     public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId,@RequestHeader String sign,@RequestHeader String originText){
         bank.setCreateUserId(userId);
+        bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
         return bankApi.insertBank(bank);
     }
 

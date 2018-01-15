@@ -4,6 +4,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.common.Annotation.NotLogin;
+import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.utils.MoneyUtils;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.bank.entity.Bank;
@@ -91,6 +92,7 @@ public class ProfitController extends BaseController{
       Assert.notNull(userId, "用户id为空!");
       profit.setWriterId(userId);
       profit.setCreateUserId(userId+"");
+      profit.setModuleEnum(YyrzModuleEnumConstants.PROFIT_INFO);
       profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
       return profitApi.insertProfit(profit);
    }
