@@ -7,6 +7,7 @@ import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.bank.BankApi;
+import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,10 @@ public class BankController extends BaseController {
     @RequestMapping(value="/detail", method = RequestMethod.GET)
     @ResponseBody
     @NotLogin
-    public RpcResponse<BankVo> detail(Long id){
-        return bankApi.detail(id);
+    public RpcResponse<BankVo> detail(@RequestHeader String userId){
+        BankDto bankDto = new BankDto();
+        bankDto.setCreateUserId(userId);
+        return bankApi.selectByParameters(bankDto);
     }
 
     @Validate
