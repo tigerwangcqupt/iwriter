@@ -33,6 +33,8 @@ import java.util.List;
 @Service
 public class MessageServiceImpl extends BaseServiceImpl implements MessageService {
     private static final String ID_LOCK_NAME = "Message";
+
+    private static final String COMMON_KEY = "common_message_count";
     /** 首页消息通知栏目列表  */
     private static final ModuleEnum[] indexModuleEnums = {ModuleEnum.NOTICE,
             ModuleEnum.COMMENT, ModuleEnum.SHARE, ModuleEnum.FAVORITE};
@@ -79,8 +81,12 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
                 IndexTipsVo indexTipsVo = new IndexTipsVo();
                 indexTipsVo.setColumnName(moduleEnum.getName());
                 indexTipsVo.setColumnUrl(moduleEnum.getUrl());
-                Long tipsNum = this.getMessageTipsNum(moduleEnum, writerId);
-                indexTipsVo.setTipsNum(tipsNum != null ? tipsNum.toString() : "0");
+                if (moduleEnum == ModuleEnum.PLATFORM){
+                    indexTipsVo.setTipsNum(getPlatformTaskMessageTips(writerId).toString());
+                }else{
+                    Long tipsNum = this.getMessageTipsNum(moduleEnum, writerId);
+                    indexTipsVo.setTipsNum(tipsNum != null ? tipsNum.toString() : "0");
+                }
 
                 indexTips.add(indexTipsVo);
             }
@@ -123,6 +129,92 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             DistributedLockUtils.unlock(ID_LOCK_NAME, lock);
         }
         return success;
+    }
+
+    @Override
+    public Boolean saveCommonMessageTips(ModuleEnum moduleEnum) {
+        String field = MessageConstant.getHashField(moduleEnum.getValue());
+        boolean success = true;
+        try {
+            //写手相关的消息业务 进行锁（避免同时新增时冲突）
+            //如果存在业务的缓存气泡数
+            if (JedisUtils.mapExists(COMMON_KEY, field)) {
+                //写手的收藏数增加1
+                Long status = JedisUtils.mapIncrby(COMMON_KEY, field, 1);
+                //如果缓存没有设置成功 做什么
+                if (status == null) {
+                    success = false;
+                }
+            } else {
+                //写手的收藏数设置1
+                //是否设置成功
+                success = JedisUtils.mapSetnx(COMMON_KEY, field, "1");
+                if (!success) {
+                    //如果缓存没有设置成功 做什么
+                }
+            }
+        } catch (Exception e) {
+            logger.error("保存消息缓存气泡失败", e);
+        } finally {
+        }
+        return success;
+    }
+
+    @Override
+    public Long getCommonMessageTips(ModuleEnum moduleEnum) {
+        Assert.notNull(moduleEnum, "模块不能为空");
+        String field = MessageConstant.getHashField(moduleEnum.getValue());
+        Long result = null;
+        try {
+            //如果存在业务的缓存气泡数
+            if (JedisUtils.mapExists(COMMON_KEY, field)) {
+                String num = JedisUtils.mapHget(COMMON_KEY, field);
+                result = Long.valueOf(num);
+            }else{
+                return 0L;
+            }
+        } catch (Exception e) {
+            logger.error("获取消息缓存气泡失败:" + moduleEnum.getName(), e);
+            return 0L;
+        }
+        return result;
+    }
+
+    @Override
+    public Long getPlatformTaskMessageTips(Long writerId) {
+        Assert.notNull(writerId, "写手id不能为空");
+        String moduleValue = ModuleEnum.PLATFORM.getValue();
+        //平台任务总数缓存
+        String field = MessageConstant.getHashField(moduleValue);
+
+        //写手已查看平台任务缓存数
+        String writerKey = MessageConstant.getHashKey(writerId);
+        String writerField = MessageConstant.getHashField(moduleValue);
+        //平台任务总数
+        Long result = null;
+        Long lookedNum = 0l;
+        String lock = null;
+        try {
+            //如果存在业务的缓存气泡数
+            if (JedisUtils.mapExists(COMMON_KEY, field)) {
+                String num = JedisUtils.mapHget(COMMON_KEY, field);
+                result = Long.valueOf(num);
+            }else{
+                result = 0l;
+            }
+
+            //如果存在写手的平台任务已查看数的缓存气泡数
+            if (JedisUtils.mapExists(writerKey, writerField)) {
+                String num = JedisUtils.mapHget(writerKey, writerField);
+                lookedNum = Long.valueOf(num);
+            }
+            //写手当前的平台任务缓存数 = 平台任务的总缓存数 - 当前已查看数
+            result = result - lookedNum;
+        } catch (Exception e) {
+            logger.error("获取平台任务消息缓存气泡失败:" + writerId, e);
+            return 0L;
+        }
+        return result;
     }
 
 

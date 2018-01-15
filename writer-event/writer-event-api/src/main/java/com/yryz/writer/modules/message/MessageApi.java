@@ -50,6 +50,18 @@ public interface MessageApi {
     public RpcResponse<Boolean> saveMessageTips(ModuleEnum moduleEnum, Long writerId);
 
     /**
+     * 增加平台任务缓存数
+     * @return
+     */
+    public RpcResponse<Boolean> savePlatformTaskMessageTips();
+
+    /**
+     * 获取写手的平台任务数
+     * @return
+     */
+    public RpcResponse<Long> getPlatformTaskMessageTips(Long writerId);
+
+    /**
      * 获得写手某个栏目的气泡数
      * @param moduleEnum
      * @param writerId
