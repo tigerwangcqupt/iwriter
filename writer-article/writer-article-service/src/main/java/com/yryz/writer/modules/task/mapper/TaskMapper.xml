@@ -22,10 +22,11 @@
         <result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
         <result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
         <result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
+        <result column="task_close_flag" property="taskCloseFlag" jdbcType="TINYINT"/>
     </resultMap>
 
     <!--Base_Column_List-->
-    <sql id="Base_Column_List">id,kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_close_num,draft_type,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
+    <sql id="Base_Column_List">id,kid,title,app_id,draft_fee,start_date,end_date,accept_task_num,task_close_num,draft_type,content_html,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag,task_close_flag
     </sql>
 
     <!-- 查询Task详情 -->
@@ -232,6 +233,9 @@
             </if>
             <if test="shelveFlag != null">
                 shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+            </if>
+            <if test="taskCloseFlag != null">
+                task_close_flag = #{taskCloseFlag,jdbcType=TINYINT},
             </if>
         </set>
         where kid = #{kid,jdbcType=BIGINT}

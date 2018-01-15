@@ -85,6 +85,18 @@ public class Task extends GenericEntity {
      */
     private Integer shelveFlag;
 
+    /**
+     * 任务结束标识
+     */
+    private Integer taskCloseFlag;
+
+    public Integer getTaskCloseFlag() {
+        return taskCloseFlag;
+    }
+
+    public void setTaskCloseFlag(Integer taskCloseFlag) {
+        this.taskCloseFlag = taskCloseFlag;
+    }
 
     public String getTitle() {
         return this.title;

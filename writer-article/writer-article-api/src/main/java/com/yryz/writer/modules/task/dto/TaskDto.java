@@ -15,6 +15,8 @@ public class TaskDto extends PageList {
     private Integer status;
     private Long writerId;
     private Integer order;
+    //区分app和admin   0:app   1:admin
+    private Integer appOrAdmin;
     /**
      * 生成排序字符串
      */
@@ -100,5 +102,13 @@ public class TaskDto extends PageList {
 
     public void setOrderValue(String orderValue) {
         this.orderValue = orderValue;
+    }
+
+    public Integer getAppOrAdmin() {
+        return appOrAdmin;
+    }
+
+    public void setAppOrAdmin(Integer appOrAdmin) {
+        this.appOrAdmin = appOrAdmin;
     }
 }

@@ -38,8 +38,11 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
 
     public PageList<TaskVo> selectList(TaskDto taskDto) {
         PageUtils.startPage(taskDto.getCurrentPage(), taskDto.getPageSize());
-        //清除缓存中的任务数记录
-        messageApi.cleanMessageTips(ModuleEnum.PLATFORM, taskDto.getWriterId());
+        //平台任务的已查阅数
+        if (taskDto.getAppOrAdmin() == null && taskDto.getAppOrAdmin() == 0) {
+            RpcResponse<Long> platformTaskMessageTips = messageApi.getPlatformTaskMessageTips(taskDto.getWriterId());
+            messageApi.setMessageTips(ModuleEnum.PLATFORM, taskDto.getWriterId(), platformTaskMessageTips.getData());
+        }
 
         List<Task> list = taskDao.selectList(taskDto);
         List<TaskVo> taskVoList = new ArrayList<TaskVo>();
@@ -73,6 +76,7 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         Long kid = idAPI.getId("yryz_task");
         task.setKid(kid);
         int insert = taskDao.insertByPrimaryKeySelective(task);
+        messageApi.savePlatformTaskMessageTips();
         return ResponseModel.returnObjectSuccess(insert);
     }
 
