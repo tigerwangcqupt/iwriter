@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.articlearticleclassify.dao.persistence.ArticleArticleClassifyDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="article_id" property="articleId" jdbcType="BIGINT"/>
+		<result column="classify_id" property="classifyId" jdbcType="BIGINT"/>
+		<result column="sort" property="sort" jdbcType="INTEGER"/>
+		<result column="recommend" property="recommend" jdbcType="TINYINT"/>
+		<result column="path" property="path" jdbcType="VARCHAR"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="title" property="title" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,article_id,classify_id,sort,recommend,path,create_date,last_update_date,create_user_id,last_update_user_id
+    </sql>
+
+     <!-- 查询ArticleArticleClassify详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_article_articleclassify
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除ArticleArticleClassify-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_article_articleclassify
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增ArticleArticleClassify-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify">
+	    insert into yryz_article_articleclassify (kid,article_id,classify_id,sort,recommend,path,create_date,last_update_date,create_user_id,last_update_user_id)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{articleId,jdbcType=BIGINT}
+				,#{classifyId,jdbcType=BIGINT}
+				,#{sort,jdbcType=INTEGER}
+				,#{recommend,jdbcType=TINYINT}
+				,#{path,jdbcType=VARCHAR}
+			,NOW()
+			,NOW()
+				,#{createUserId,jdbcType=VARCHAR}
+				,#{lastUpdateUserId,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<!--按需新增ArticleArticleClassify-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify">
+	    insert into yryz_article_articleclassify 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="articleId != null">
+			article_id,
+	    </if>
+        <if test="classifyId != null">
+			classify_id,
+	    </if>
+        <if test="sort != null">
+			sort,
+	    </if>
+        <if test="recommend != null">
+			recommend,
+	    </if>
+        <if test="path != null and path != ''">
+			path,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			last_update_user_id,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="articleId != null">
+			#{articleId,jdbcType=BIGINT},
+	    </if>
+        <if test="classifyId != null">
+			#{classifyId,jdbcType=BIGINT},
+	    </if>
+        <if test="sort != null">
+			#{sort,jdbcType=INTEGER},
+	    </if>
+        <if test="recommend != null">
+			#{recommend,jdbcType=TINYINT},
+	    </if>
+        <if test="path != null and path != ''">
+			#{path,jdbcType=VARCHAR},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			#{lastUpdateUserId,jdbcType=VARCHAR},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改ArticleArticleClassify-->   
+    <update id="update" parameterType="com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify">
+        update yryz_article_articleclassify
+        <set>
+             <if test="articleId != null">
+    			article_id = #{articleId,jdbcType=BIGINT},
+    		</if>
+             <if test="classifyId != null">
+    			classify_id = #{classifyId,jdbcType=BIGINT},
+    		</if>
+             <if test="sort != null">
+    			sort = #{sort,jdbcType=INTEGER},
+    		</if>
+             <if test="recommend != null">
+    			recommend = #{recommend,jdbcType=TINYINT},
+    		</if>
+            <if test="path != null and path != ''">
+    			path = #{path,jdbcType=VARCHAR},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询ArticleArticleClassify列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.articlearticleclassify.dto.ArticleArticleClassifyDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_article_articleclassify where del_flag = 0
+
+    </select>
+
+	<!--  根据分类查询文章 -->
+	<select id="queryByClassifyId" resultType="com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify" >
+		SELECT
+			yaa.id,
+			yaa.kid,
+			yaa.article_id,
+			yaa.classify_id,
+			yaa.sort,
+			yaa.recommend,
+			yaa.path,
+			yaa.create_date,
+			yaa.last_update_date,
+			yaa.create_user_id,
+			yaa.last_update_user_id,
+			ya.title
+		FROM
+			yryz_article_articleclassify yaa
+		INNER JOIN yryz_article ya ON yaa.article_id = ya.id
+		 WHERE yaa.classify_id =#{classifyId} ORDER by yaa.create_date DESC, yaa.kid DESC
+	</select>
+    
+</mapper>
