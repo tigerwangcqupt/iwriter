@@ -36,7 +36,7 @@ public class SignController extends BaseController {
     public RpcResponse<SignInfo> getSign(String origin){
         Assert.notNull(origin, "原文不能为空");
         SignInfo signInfo = new SignInfo();
-        signInfo.setData(origin+appSercet);
+        signInfo.setData(Md5Utils.encode(origin+appSercet));
         return ResponseModel.returnObjectSuccess(signInfo);
     }
 }
