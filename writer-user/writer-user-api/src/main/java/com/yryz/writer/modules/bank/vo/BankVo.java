@@ -73,6 +73,11 @@ public class BankVo implements Serializable {
      */
     private  String userAccountOpenBank;
 
+    /**
+     * 银行卡外码
+     */
+    private Long bankcardFcode;
+
     public Long getId() {
         return id;
     }
@@ -159,5 +164,13 @@ public class BankVo implements Serializable {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public Long getBankcardFcode() {
+        return bankcardFcode;
+    }
+
+    public void setBankcardFcode(Long bankcardFcode) {
+        this.bankcardFcode = bankcardFcode;
     }
 }

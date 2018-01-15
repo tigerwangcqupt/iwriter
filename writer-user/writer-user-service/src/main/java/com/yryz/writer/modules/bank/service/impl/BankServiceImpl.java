@@ -1,7 +1,10 @@
 package com.yryz.writer.modules.bank.service.impl;
 
 import com.alibaba.dubbo.rpc.RpcContext;
+import com.yryz.qstone.entity.base.constants.AccountConstants;
+import com.yryz.qstone.entity.base.dto.BankCardDto;
 import com.yryz.qstone.entity.base.model.Owner;
+import com.yryz.qstone.modules.base.api.OpenAccountApi;
 import com.yryz.qstone.modules.base.api.OpenOwnerApi;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
@@ -52,9 +55,6 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
     private OpenBankCardApi openBankCardApi;
 
     @Autowired
-    private OpenOwnerApi openOwnerApi;
-
-    @Autowired
     private IdAPI idAPI;
 
     @Autowired
@@ -62,7 +62,6 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Autowired
     private CityApi cityApi;
-
 
     @Autowired
     private WriterService writerService;
@@ -130,33 +129,30 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
                     ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
         }
         try{
+            BankCardDto bankCardDto=new BankCardDto();
+            //银行卡号
+            bankCardDto.setBankCardNo(bank.getUserBankCart());
+                //个人银行卡
+            bankCardDto.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
+                //银行名称
+            bankCardDto.setBankName(bank.getUserAccountOpenBank());
+                //状态生效
+            bankCardDto.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
+                //身份证
+            bankCardDto.setCertNo(bank.getUserCart());
+                //资金主体编码
+            bankCardDto.setOwnerFcode(ownerFcode);
+            //账户类型
+            bankCardDto.setAccountTypeCode(AccountConstants.Type.USER_PROFIT);
+            RpcContext.getContext().setAttachment("clientCode", clientCode);
+            BankCard bankCard = openBankCardApi.createAndBind(bankCardDto);
+
+            //增加银行卡外码
             Long kid  = idAPI.getId(BankConstant.BANKTABLE);
             bank.setKid(kid);
-            bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
+            bank.setBankcardFcode(bankCard.getBankCardFcode());
             bankDao.insert(bank);
 
-
-            Owner owner = new Owner();
-            owner.setOwnerFcode(ownerFcode);
-            RpcContext.getContext().setAttachment("clientCode", clientCode);
-            owner = openOwnerApi.detail(owner);
-            if(null != owner){
-                BankCard bankCard=new BankCard();
-                //银行卡号
-                bankCard.setBankCardNo(bank.getUserBankCart());
-                //个人银行卡
-                bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
-                //银行名称
-                bankCard.setBankName(bank.getUserAccountOpenBank());
-                //状态生效
-                bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
-                //身份证
-                bankCard.setCertNo(bank.getUserCart());
-                //资金主体编码
-                bankCard.setOwnerCode(owner.getOwnerCode());
-                RpcContext.getContext().setAttachment("clientCode", clientCode);
-                openBankCardApi.add(bankCard);;
-            }
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),
@@ -177,28 +173,21 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         }
         try{
             bankDao.update(bank);
-
-            Owner owner = new Owner();
-            owner.setOwnerFcode(ownerFcode);
+            BankCard bankCard=new BankCard();
+            //银行卡号
+            bankCard.setBankCardNo(bank.getUserBankCart());
+            //个人银行卡
+            bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
+            //银行名称
+            bankCard.setBankName(bank.getUserAccountOpenBank());
+            //状态生效
+            bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
+            //身份证
+            bankCard.setCertNo(bank.getUserCart());
+            //资金主体外码
+            bankCard.setBankCardFcode(bank.getBankcardFcode());
             RpcContext.getContext().setAttachment("clientCode", clientCode);
-            owner = openOwnerApi.detail(owner);
-            if(null != owner){
-                BankCard bankCard=new BankCard();
-                //银行卡号
-                bankCard.setBankCardNo(bank.getUserBankCart());
-                //个人银行卡
-                bankCard.setBankCardType(BankConstant.BANKCARDTYPE.byteValue());
-                //银行名称
-                bankCard.setBankName(bank.getUserAccountOpenBank());
-                //状态生效
-                bankCard.setStatus(BankConstant.BANKCARDSTATUS.byteValue());
-                //身份证
-                bankCard.setCertNo(bank.getUserCart());
-                //资金主体外码
-                bankCard.setOwnerCode(owner.getOwnerCode());
-                RpcContext.getContext().setAttachment("clientCode", clientCode);
-                openBankCardApi.updateBankCard(bankCard);
-            }
+            openBankCardApi.updateByFcode(bankCard);
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),

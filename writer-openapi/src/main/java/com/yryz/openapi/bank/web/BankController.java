@@ -3,6 +3,7 @@ package com.yryz.openapi.bank.web;
 import com.yryz.openapi.core.auth.annotation.InterFaceAuth;
 import com.yryz.openapi.core.validator.annotation.Validate;
 import com.yryz.writer.common.Annotation.NotLogin;
+import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.bank.BankApi;
@@ -39,6 +40,7 @@ public class BankController extends BaseController {
     @ResponseBody
     public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId,@RequestHeader String sign,@RequestHeader String originText){
         bank.setCreateUserId(userId);
+        bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
         return bankApi.insertBank(bank);
     }
 

@@ -69,7 +69,12 @@ public class Bank extends GenericEntity{
 	 */
 	@NotBlank
     private  String userAccountOpenBank;
-    
+
+
+	/**
+	 * 银行卡外码
+	 */
+	private Long bankcardFcode;
 
 	public Integer getDelFlag() {
 		return this.delFlag;
@@ -134,5 +139,12 @@ public class Bank extends GenericEntity{
 	public void setUserAccountOpenBank(String userAccountOpenBank) {
 		this.userAccountOpenBank = userAccountOpenBank;
 	}
-		
+
+	public Long getBankcardFcode() {
+		return bankcardFcode;
+	}
+
+	public void setBankcardFcode(Long bankcardFcode) {
+		this.bankcardFcode = bankcardFcode;
+	}
 }
