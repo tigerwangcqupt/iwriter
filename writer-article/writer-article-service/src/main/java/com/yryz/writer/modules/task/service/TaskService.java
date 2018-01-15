@@ -4,6 +4,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.task.dto.TaskDto;
+import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.vo.TaskVo;
 import org.springframework.stereotype.Repository;
 
@@ -23,4 +24,8 @@ public interface TaskService extends BaseService {
    TaskVo detail(Long taskId);
 
     RpcResponse<Boolean> acceptTask(Long kid);
+
+    RpcResponse<Integer> add(Task task);
+
+    RpcResponse<Integer> edit(Task task);
 }

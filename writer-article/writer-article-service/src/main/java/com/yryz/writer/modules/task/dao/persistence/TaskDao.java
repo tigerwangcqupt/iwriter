@@ -29,5 +29,7 @@ public interface TaskDao extends BaseDao {
 
     int acceptTask(@Param("kid") Long kid);
 
-    Integer selectSubmitNum(@Param("kid") Long kid);
+    Integer selectSubmitWriterNum(@Param("kid") Long kid);
+
+    Integer selectSubmitDraftNum(@Param("kid") Long kid);
 }

@@ -7,6 +7,7 @@ import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.writer.common.web.ResponseModel;
+import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.task.dao.persistence.TaskDao;
@@ -28,6 +29,8 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
     private TaskDao taskDao;
     @Autowired
     private MessageApi messageApi;
+    @Autowired
+    private IdAPI idAPI;
 
     protected BaseDao getDao() {
         return taskDao;
@@ -42,49 +45,19 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         List<TaskVo> taskVoList = new ArrayList<TaskVo>();
         if (list != null && list.size() > 0) {
             for (Task task : list) {
-                TaskVo taskVo = new TaskVo();
-                taskVo.setKid(task.getKid());
-                taskVo.setTitle(task.getTitle());
-                taskVo.setDraftFee(task.getDraftFee());
-                taskVo.setAcceptTaskNum(task.getAcceptTaskNum());
-                taskVo.setStartDate(task.getStartDate());
-                //聚合应用数据
-                Long appId = task.getAppId();
-                TaskVo app = taskDao.selectAppById(appId);
-                taskVo.setAppliName(app.getAppliName());
-                taskVo.setIcon(app.getIcon());
+                TaskVo taskVo = toTaskVo(task);
                 taskVoList.add(taskVo);
             }
         }
-        return new PageModel<TaskVo>().getPageList(list,taskVoList);
+        return new PageModel<TaskVo>().getPageList(list, taskVoList);
     }
 
 
     public TaskVo detail(Long taskId) {
         Task task = taskDao.selectByKid(Task.class, taskId);
-        TaskVo taskVo = new TaskVo();
+        TaskVo taskVo = null;
         if (task != null) {
-            //Task to TaskVo
-            taskVo.setKid(task.getKid());
-            taskVo.setDraftFee(task.getDraftFee());
-            taskVo.setAppId(task.getAppId());
-            taskVo.setEndDate(task.getEndDate());
-            taskVo.setDraftType(task.getDraftType());
-            taskVo.setAcceptTaskNum(task.getAcceptTaskNum());
-            taskVo.setStartDate(task.getStartDate());
-            taskVo.setTitle(task.getTitle());
-            taskVo.setContentHtml(task.getContentHtml());
-            taskVo.setTaskCloseNum(task.getTaskCloseNum());
-            //聚合应用数据
-            Long appId = task.getAppId();
-            TaskVo app = taskDao.selectAppById(appId);
-            taskVo.setAppliName(app.getAppliName());
-            taskVo.setIcon(app.getIcon());
-            taskVo.setCompanyName(app.getCompanyName());
-            //根据taskKid查询稿件表,过滤重复写手,得出投稿人数
-            Integer submitNum = selectSubmitNum(taskId);
-            taskVo.setSubmitNum(submitNum);
-
+            taskVo = toTaskVo(task);
         }
         return taskVo;
     }
@@ -95,8 +68,54 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         return ResponseModel.returnObjectSuccess(true);
     }
 
-    public Integer selectSubmitNum(Long kid) {
-        return taskDao.selectSubmitNum(kid);
+    @Override
+    public RpcResponse<Integer> add(Task task) {
+        Long kid = idAPI.getId("yryz_task");
+        task.setKid(kid);
+        int insert = taskDao.insertByPrimaryKeySelective(task);
+        return ResponseModel.returnObjectSuccess(insert);
+    }
 
+    @Override
+    public RpcResponse<Integer> edit(Task task) {
+        int update = taskDao.update(task);
+        return ResponseModel.returnObjectSuccess(update);
+    }
+
+    public Integer selectSubmitWriterNum(Long kid) {
+        return taskDao.selectSubmitWriterNum(kid);
+
+    }
+
+    public Integer selectSubmitDraftNum(Long kid) {
+        return taskDao.selectSubmitDraftNum(kid);
+
+    }
+
+    private TaskVo toTaskVo(Task task) {
+        TaskVo taskVo = new TaskVo();
+        taskVo.setKid(task.getKid());
+        taskVo.setDraftFee(task.getDraftFee());
+        taskVo.setAppId(task.getAppId());
+        taskVo.setEndDate(task.getEndDate());
+        taskVo.setDraftType(task.getDraftType());
+        taskVo.setAcceptTaskNum(task.getAcceptTaskNum());
+        taskVo.setStartDate(task.getStartDate());
+        taskVo.setCreateDate(task.getCreateDate());
+        taskVo.setTitle(task.getTitle());
+        taskVo.setContentHtml(task.getContentHtml());
+        taskVo.setTaskCloseNum(task.getTaskCloseNum());
+        //聚合应用数据
+        Long appId = task.getAppId();
+        TaskVo app = taskDao.selectAppById(appId);
+        taskVo.setAppliName(app.getAppliName());
+        taskVo.setIcon(app.getIcon());
+        taskVo.setCompanyName(app.getCompanyName());
+        //根据taskKid查询稿件表,过滤重复写手,得出投稿人数
+        Integer WriterNum = selectSubmitWriterNum(task.getKid());
+        taskVo.setWriterNum(WriterNum);
+        Integer draftNum = selectSubmitDraftNum(task.getKid());
+        taskVo.setDraftNum(draftNum);
+        return taskVo;
     }
 }

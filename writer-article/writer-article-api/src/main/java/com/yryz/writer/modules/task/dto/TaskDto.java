@@ -15,6 +15,20 @@ public class TaskDto extends PageList {
     private Integer status;
     private Long writerId;
     private Integer order;
+    /**
+     * 生成排序字符串
+     */
+    private String orderStr;
+
+    /**
+     * orderFiled
+     */
+    private String orderFiled;
+
+    /**
+     * orderValue
+     */
+    private String orderValue;
 
     public String getTitle() {
         return title;
@@ -62,5 +76,29 @@ public class TaskDto extends PageList {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public String getOrderStr() {
+        return orderStr;
+    }
+
+    public void setOrderStr(String orderStr) {
+        this.orderStr = orderStr;
+    }
+
+    public String getOrderFiled() {
+        return orderFiled;
+    }
+
+    public void setOrderFiled(String orderFiled) {
+        this.orderFiled = orderFiled;
+    }
+
+    public String getOrderValue() {
+        return orderValue;
+    }
+
+    public void setOrderValue(String orderValue) {
+        this.orderValue = orderValue;
     }
 }

@@ -72,7 +72,9 @@ public class TaskVo implements Serializable {
     /**
      * 投稿写手数
      */
-    private Integer submitNum;
+    private Integer writerNum;
+
+    private Integer draftNum;
 
 
     /**
@@ -85,6 +87,19 @@ public class TaskVo implements Serializable {
      * 任务描述
      */
     private String contentHtml;
+
+    /**
+     * 创建时间
+     */
+    private Date createDate;
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     public Long getKid() {
         return kid;
@@ -158,12 +173,20 @@ public class TaskVo implements Serializable {
         this.taskCloseNum = taskCloseNum;
     }
 
-    public Integer getSubmitNum() {
-        return submitNum;
+    public Integer getWriterNum() {
+        return writerNum;
     }
 
-    public void setSubmitNum(Integer submitNum) {
-        this.submitNum = submitNum;
+    public void setWriterNum(Integer writerNum) {
+        this.writerNum = writerNum;
+    }
+
+    public Integer getDraftNum() {
+        return draftNum;
+    }
+
+    public void setDraftNum(Integer draftNum) {
+        this.draftNum = draftNum;
     }
 
     public Integer getDraftType() {
