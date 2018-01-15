@@ -2,7 +2,6 @@ package com.yryz.writer.modules.articlelabel.service.impl;
 
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.dao.BaseDao;
-import com.yryz.writer.common.exception.BaseException;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
@@ -128,7 +127,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
         try {
             ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class, articleLabelId);
             if (null == articleLabel) {
-                throw new BaseException("文章标签不存在");
+                throw new IllegalArgumentException("文章标签不存在");
             }
             //上架
             articleLabel.setShelveFlag(0);
@@ -145,7 +144,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
         try {
             ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class, articleLabelId);
             if (null == articleLabel) {
-                throw new BaseException("文章标签不存在");
+                throw new IllegalArgumentException("文章标签不存在");
             }
             //上架
             articleLabel.setShelveFlag(1);
@@ -162,7 +161,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
         try {
             ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class, kid);
             if (null == articleLabel) {
-                throw new BaseException("文章标签不存在");
+                throw new IllegalArgumentException("文章标签不存在");
             }
             int successNum = articleLabelDao.deleteArticleLabel(kid, lastUpdateUserId);
 
@@ -178,7 +177,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
         try {
             ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class, kid);
             if (null == articleLabel) {
-                throw new BaseException("文章标签不存在");
+                throw new IllegalArgumentException("文章标签不存在");
             }
             int successNum = articleLabelDao.recoverArticleLabel(kid, lastUpdateUserId);
 

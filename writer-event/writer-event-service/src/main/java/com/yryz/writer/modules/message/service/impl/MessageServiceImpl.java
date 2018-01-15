@@ -81,12 +81,8 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
                 IndexTipsVo indexTipsVo = new IndexTipsVo();
                 indexTipsVo.setColumnName(moduleEnum.getName());
                 indexTipsVo.setColumnUrl(moduleEnum.getUrl());
-                if (moduleEnum == ModuleEnum.PLATFORM){
-                    indexTipsVo.setTipsNum(getPlatformTaskMessageTips(writerId).toString());
-                }else{
-                    Long tipsNum = this.getMessageTipsNum(moduleEnum, writerId);
-                    indexTipsVo.setTipsNum(tipsNum != null ? tipsNum.toString() : "0");
-                }
+                Long tipsNum = this.getMessageTipsNum(moduleEnum, writerId);
+                indexTipsVo.setTipsNum(tipsNum != null ? tipsNum.toString() : "0");
 
                 indexTips.add(indexTipsVo);
             }
@@ -212,6 +208,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
         String writerField = MessageConstant.getHashField(moduleValue);
         //平台任务总数
         Long result = null;
+        //已查看任务数
         Long lookedNum = 0l;
         String lock = null;
         try {
@@ -271,6 +268,10 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
                 result = Long.valueOf(num);
             }else{
                 return 0L;
+            }
+            //平台任务 例外处理
+            if (moduleEnum == ModuleEnum.PLATFORM){
+                result = getPlatformTaskMessageTips(writerId);
             }
         } catch (Exception e) {
             logger.error("获取消息缓存气泡失败:" + moduleEnum.getName(), e);
