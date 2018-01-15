@@ -66,6 +66,8 @@ public enum ExceptionEnum {
 
     EXSITS_TXFLOW_EXCEPTION("6010", "已经存在该流水", "已经存在该流水"),
 
+    TX_NOTEQ_APPLY_EXCEPTION("6011", "当前提现金额不等于申请提现金额", "当前提现金额不等于申请提现金额"),
+
     //写手消息的异常码由8000开始
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),
 	
