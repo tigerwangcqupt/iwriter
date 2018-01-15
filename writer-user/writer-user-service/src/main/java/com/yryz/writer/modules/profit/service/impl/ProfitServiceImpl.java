@@ -256,6 +256,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 profit.setSettlementMsg(ProfitEnum.WITHDRAWALS_FEE.getMsg());
                 insert(profit);
                 //最后修改信息
+                //设置提现金额
                 writer.setLatelyWithdrawAmount(MoneyUtils.setBigDecimal(settlementAmount));
                 writerService.updateWriterProfit(writer);
             }
@@ -590,7 +591,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
             Long userFcode = Long.valueOf(writerModelVo.getOwnerFcode());
 
-            BigDecimal amount = profit.getSettlementAmount();
+            BigDecimal amount = MoneyUtils.setBigDecimal(profit.getSettlementAmount());
+
             TransactionFlowRecord record = new TransactionFlowRecord();
             //订单号
             String orderId = String.valueOf(idAPI.getSnowflakeId());
