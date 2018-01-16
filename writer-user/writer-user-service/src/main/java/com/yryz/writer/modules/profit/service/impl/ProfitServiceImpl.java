@@ -203,7 +203,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount.toString()))){
+            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(new Integer(settlementAmount.intValue()).toString()))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
@@ -220,7 +220,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //稿费的时候不去判断
             if(profit.getSettlementType() != ProfitEnum.ROYALTIES_FEE.getCode()){
                 //提现金额区间(500--10000)
-                if(!CommonUtils.checkValidAmount(settlementAmount)){
+               if(!CommonUtils.checkValidAmount(settlementAmount)){
                     logger.error("当前提现金额不正确");
                     throw new YyrzPcException(ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getCode(),ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getMsg(),
                             ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
@@ -258,6 +258,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //最后修改信息
                 //设置提现金额
                 writer.setLatelyWithdrawAmount(MoneyUtils.setBigDecimal(settlementAmount));
+                writer.setProfitSn(profitSn);
                 writerService.updateWriterProfit(writer);
             }
             //如果是稿费
@@ -301,7 +302,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount.toString()))){
+            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(new Integer(settlementAmount.intValue()).toString()))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
