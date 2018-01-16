@@ -268,7 +268,7 @@
             OR task_close_flag = 1)
         </if>
 
-        <if test="title != null and order != ''">
+        <if test="title != null and title != ''">
             AND title LIKE CONCAT('%',#{title},'%')
         </if>
         <if test="appId != null">

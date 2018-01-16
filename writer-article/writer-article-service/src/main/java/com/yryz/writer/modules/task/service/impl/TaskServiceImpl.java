@@ -17,12 +17,14 @@ import com.yryz.writer.modules.task.service.TaskService;
 import com.yryz.writer.modules.task.vo.TaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
+@Transactional
 public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
 
     @Autowired
