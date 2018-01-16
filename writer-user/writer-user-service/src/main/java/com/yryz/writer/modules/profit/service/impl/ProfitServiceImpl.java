@@ -208,12 +208,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
             }
-            //提现金额区间(500--10000)
-            if(!CommonUtils.checkValidAmount(settlementAmount)){
-                logger.error("当前提现金额不正确");
-                throw new YyrzPcException(ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getCode(),ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getMsg(),
-                        ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
-            }
             //提现日期
             Date settlementDate = new Date();
             //分布式锁控制用户频繁操作
@@ -225,6 +219,12 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
             //稿费的时候不去判断
             if(profit.getSettlementType() != ProfitEnum.ROYALTIES_FEE.getCode()){
+                //提现金额区间(500--10000)
+                if(!CommonUtils.checkValidAmount(settlementAmount)){
+                    logger.error("当前提现金额不正确");
+                    throw new YyrzPcException(ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getCode(),ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getMsg(),
+                            ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
+                }
                 //当剩余金额小于当前提现金额时
                 if(null != withdrawAmount && withdrawAmount.compareTo(MoneyUtils.setBigDecimal(settlementAmount))==-1){
                     logger.error("当前提现金额大于剩余可提现金额");
