@@ -98,9 +98,9 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
     public Boolean saveArticleComment(ArticleComment articleComment) {
         Assert.notNull(articleComment, "评论参数不能为空");
         Assert.notNull(articleComment.getWriterId(), "文章作者不能为空");
-        Long kid = idApi.getId("yryz_article_comment");
-        articleComment.setKid(kid);
         try {
+            Long kid = idApi.getId("yryz_article_comment");
+            articleComment.setKid(kid);
             //保存写手的被收藏数
             articleCommentDao.insert(articleComment);
             messageApi.saveMessageTips(ModuleEnum.COMMENT, articleComment.getWriterId() == null ? 0 : articleComment.getWriterId());
