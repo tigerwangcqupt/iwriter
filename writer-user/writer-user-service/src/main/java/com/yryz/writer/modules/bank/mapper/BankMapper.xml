@@ -170,9 +170,6 @@
              <if test="lastUpdateDate != null">
     			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
     		</if>
-            <if test="createUserId != null and createUserId != ''">
-    			create_user_id = #{createUserId,jdbcType=VARCHAR},
-    		</if>
             <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
     			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
     		</if>
