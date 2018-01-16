@@ -2,6 +2,7 @@ package com.yryz.openapi.bank.web;
 
 import com.yryz.openapi.core.auth.annotation.InterFaceAuth;
 import com.yryz.openapi.core.validator.annotation.Validate;
+import com.yryz.qstone.core.utils.BankUtils;
 import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.web.BaseController;
@@ -9,9 +10,11 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.bank.BankApi;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
+import com.yryz.writer.modules.bank.vo.BankNameVo;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -32,6 +35,7 @@ public class BankController extends BaseController {
     @ResponseBody
     @NotLogin
     public RpcResponse<BankVo> detail(@RequestHeader String userId){
+        Assert.notNull(userId, "用户id为空!");
         BankDto bankDto = new BankDto();
         bankDto.setCreateUserId(userId);
         return bankApi.selectByParameters(bankDto);
@@ -42,6 +46,7 @@ public class BankController extends BaseController {
     @RequestMapping(value="/add", method = RequestMethod.POST)
     @ResponseBody
     public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId,@RequestHeader String sign,@RequestHeader String originText){
+        Assert.notNull(userId, "用户id为空!");
         bank.setCreateUserId(userId);
         bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
         return bankApi.insertBank(bank);
@@ -51,8 +56,18 @@ public class BankController extends BaseController {
     @RequestMapping(value="/update", method = RequestMethod.POST)
     @ResponseBody
     public RpcResponse<Bank> updateBank(@RequestBody Bank bank, @RequestHeader String userId){
+        Assert.notNull(userId, "用户id为空!");
         bank.setCreateUserId(userId);
         return bankApi.updateBank(bank);
+    }
+
+    @NotLogin
+    @RequestMapping(value="/getBankName", method = RequestMethod.GET)
+    @ResponseBody
+    public RpcResponse<BankNameVo> getBankName(String bankCard,@RequestHeader String userId){
+        Assert.notNull(userId, "用户id为空!");
+        Assert.notNull(bankCard, "银行卡为空!");
+        return bankApi.selectBankNameByCard(bankCard);
     }
 
 }

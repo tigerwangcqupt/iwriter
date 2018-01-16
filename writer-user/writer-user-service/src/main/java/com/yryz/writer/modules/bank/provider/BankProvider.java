@@ -1,11 +1,15 @@
 package com.yryz.writer.modules.bank.provider;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.modules.bank.BankApi;
+import com.yryz.writer.modules.bank.constant.BankUtil;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.service.BankService;
+import com.yryz.writer.modules.bank.vo.BankNameVo;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.id.api.IdAPI;
@@ -97,6 +101,27 @@ public class BankProvider implements BankApi {
 			return ResponseModel.returnObjectSuccess(bankService.selectByParameters(bankDto));
 		} catch (Exception e) {
 			logger.error("获取Bank明细失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<BankNameVo> selectBankNameByCard(String bankCard) {
+		try {
+			//验证bankCard是否真实
+			boolean checkBankCard = BankUtil.matchLuhn(bankCard);
+			if(!checkBankCard){
+				logger.error("银行卡卡号不存在");
+				throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
+						ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
+			}
+			BankNameVo bankNameVo = new BankNameVo();
+			String bankName = BankUtil.getBankNameByCard(bankCard);
+			bankNameVo.setBankCard(bankCard);
+			bankNameVo.setBankName(bankName);
+			return ResponseModel.returnObjectSuccess(bankNameVo);
+		} catch (Exception e) {
+			logger.error("根据银行卡获取银行名称失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}

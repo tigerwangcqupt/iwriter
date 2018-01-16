@@ -17,6 +17,7 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.qstone.entity.base.model.BankCard;
 import com.yryz.qstone.modules.base.api.OpenBankCardApi;
 import com.yryz.writer.modules.bank.constant.BankConstant;
+import com.yryz.writer.modules.bank.constant.BankUtil;
 import com.yryz.writer.modules.bank.dao.persistence.BankDao;
 import com.yryz.writer.modules.bank.service.BankService;
 import com.yryz.writer.modules.city.CityApi;
@@ -121,6 +122,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Override
     public Bank insertBank(Bank bank) {
+        //验证bankCard是否真实
+        boolean checkBankCard = BankUtil.matchLuhn(bank.getUserBankCart());
+        if(!checkBankCard){
+            logger.error("银行卡卡号不存在");
+            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
+                    ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
+        }
         //资金主体外码
         Long ownerFcode = findOwnerByWriter(bank);
         if(null == ownerFcode){
@@ -164,6 +172,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Override
     public Bank updateBank(Bank bank) {
+        //验证bankCard是否真实
+        boolean checkBankCard = BankUtil.matchLuhn(bank.getUserBankCart());
+        if(!checkBankCard){
+            logger.error("银行卡卡号不存在");
+            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
+                    ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
+        }
         //资金主体外码
         Long ownerFcode = findOwnerByWriter(bank);
         if(null == ownerFcode){
