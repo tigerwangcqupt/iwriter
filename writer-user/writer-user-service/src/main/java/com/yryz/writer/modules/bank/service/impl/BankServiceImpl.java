@@ -18,6 +18,7 @@ import com.yryz.qstone.entity.base.model.BankCard;
 import com.yryz.qstone.modules.base.api.OpenBankCardApi;
 import com.yryz.writer.modules.bank.constant.BankConstant;
 import com.yryz.writer.modules.bank.constant.BankUtil;
+import com.yryz.writer.modules.bank.constant.IDCardValidate;
 import com.yryz.writer.modules.bank.dao.persistence.BankDao;
 import com.yryz.writer.modules.bank.service.BankService;
 import com.yryz.writer.modules.city.CityApi;
@@ -129,6 +130,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
                     ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
         }
+        //验证身份证是否真实
+        boolean checkUserCard = IDCardValidate.validate(bank.getUserCart());
+        if(!checkUserCard){
+            logger.error("身份证不正确");
+            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
+                    ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
+        }
         //资金主体外码
         Long ownerFcode = findOwnerByWriter(bank);
         if(null == ownerFcode){
@@ -178,6 +186,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             logger.error("银行卡卡号不存在");
             throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
                     ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
+        }
+        //验证身份证是否真实
+        boolean checkUserCard = IDCardValidate.validate(bank.getUserCart());
+        if(!checkUserCard){
+            logger.error("身份证不正确");
+            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
+                    ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
         }
         //资金主体外码
         Long ownerFcode = findOwnerByWriter(bank);
