@@ -57,7 +57,7 @@ public class BankController extends BaseController {
     @ResponseBody
     public RpcResponse<Bank> updateBank(@RequestBody Bank bank, @RequestHeader String userId){
         Assert.notNull(userId, "用户id为空!");
-        bank.setCreateUserId(userId);
+        bank.setLastUpdateUserId(userId);
         return bankApi.updateBank(bank);
     }
 
