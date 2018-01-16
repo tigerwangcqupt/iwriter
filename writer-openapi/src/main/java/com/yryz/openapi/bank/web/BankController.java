@@ -45,7 +45,7 @@ public class BankController extends BaseController {
     @NotLogin
     @RequestMapping(value="/add", method = RequestMethod.POST)
     @ResponseBody
-    public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId,@RequestHeader String sign,@RequestHeader String originText){
+    public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId){
         Assert.notNull(userId, "用户id为空!");
         bank.setCreateUserId(userId);
         bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);

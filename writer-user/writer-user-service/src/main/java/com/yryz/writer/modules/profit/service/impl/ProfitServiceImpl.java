@@ -591,6 +591,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
             Long userFcode = Long.valueOf(writerModelVo.getOwnerFcode());
 
+            //稿费夸大一万倍和资金同步
             BigDecimal amount = MoneyUtils.setBigDecimal(profit.getSettlementAmount());
 
             TransactionFlowRecord record = new TransactionFlowRecord();
