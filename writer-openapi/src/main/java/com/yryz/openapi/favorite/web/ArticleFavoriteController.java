@@ -50,6 +50,7 @@ public class ArticleFavoriteController extends BaseController {
       Assert.notNull(articleFavorite.getWriterId(), "文章作者不能为空");
       Assert.notNull(articleFavorite.getCreateUserNickname(), "收藏者昵称不为空");
       Assert.notNull(articleFavorite.getArticleTitle(), "文章标题不能为空");
+      articleFavorite.setCreateUserId(userId);
       return articleFavoriteApi.saveFavorite(articleFavorite);
    }
 
