@@ -97,6 +97,9 @@
         <if test="taskFlag != null">
 			task_flag,
 	    </if>
+        <if test="taskKid != null">
+			task_kid,
+	    </if>
         <if test="title != null and title != ''">
 			title,
 	    </if>
@@ -170,6 +173,9 @@
 	    </if>
         <if test="taskFlag != null">
 			#{taskFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="taskKid != null">
+			#{taskKid,jdbcType=TINYINT},
 	    </if>
         <if test="title != null and title != ''">
 			#{title,jdbcType=VARCHAR},
@@ -247,6 +253,9 @@
     		</if>
              <if test="taskFlag != null">
     			task_flag = #{taskFlag,jdbcType=TINYINT},
+    		</if>
+             <if test="taskKid != null">
+				 task_kid = #{taskKid,jdbcType=TINYINT},
     		</if>
             <if test="title != null and title != ''">
     			title = #{title,jdbcType=VARCHAR},
