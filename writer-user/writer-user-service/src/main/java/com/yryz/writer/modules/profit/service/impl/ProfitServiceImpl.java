@@ -248,6 +248,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //设置流水号
                 String profitSn = String.valueOf(idAPI.getSnowflakeId());
                 profit.setProfitSn(profitSn);
+                //提现type
+                profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
                 //手续费扩大一万倍
                 profit.setChargeFee(MoneyUtils.setBigDecimal(new BigDecimal(ProfitConstants.CHARGEFEE)));
                 //剩余提现金额扩大一万倍
@@ -259,6 +261,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //设置提现金额
                 writer.setLatelyWithdrawAmount(MoneyUtils.setBigDecimal(settlementAmount));
                 writer.setProfitSn(profitSn);
+                writer.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
                 writerService.updateWriterProfit(writer);
             }
             //如果是稿费
@@ -269,7 +272,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 profit.setSurplusAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
                 //稿费消息
                 profit.setSettlementMsg(ProfitEnum.ROYALTIES_FEE.getMsg());
+                //profit type
+                profit.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
                 insertByPrimaryKeySelective(profit);
+                writer.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
                 writer.setWithdrawAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
                 //最后修改信息
                 writerService.update(writer);
