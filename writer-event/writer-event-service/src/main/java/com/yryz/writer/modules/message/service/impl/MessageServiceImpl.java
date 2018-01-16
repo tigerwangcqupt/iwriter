@@ -324,6 +324,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     @Override
     public PageList<WriterNoticeVo> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
         Long result = null;
+        Assert.notNull(writerNoticeMessageDto.getReceiveWriterId(), "写手id不能为空");
         try {
             PageUtils.startPage(writerNoticeMessageDto.getCurrentPage(), writerNoticeMessageDto.getPageSize());
 //            return messageMongo.queryWriterNoticePage(writerNoticeMessageDto);
@@ -335,6 +336,8 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
                 writerNoticeVo.setCreateDate(writerNoticeMessageVo.getCreateTime());
                 noticeVos.add(writerNoticeVo);
             }
+            //查询通知的同时清掉消息缓存数
+            cleanMessageTips(ModuleEnum.NOTICE, writerNoticeMessageDto.getReceiveWriterId());
             return new PageModel<WriterNoticeVo>().getPageList(noticeVos);
         } catch (Exception e) {
             logger.error("获取通知消息失败", e);
