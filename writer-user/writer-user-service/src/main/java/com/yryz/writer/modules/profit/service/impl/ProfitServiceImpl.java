@@ -356,11 +356,11 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //提现成功,只更新写手表的累计提现金额
             if (profit.getSettlementType() == ProfitEnum.WITHDRAWALS_SUCCESS.getCode()) {
                 //当剩余金额小于当前提现金额时
-                if (null != withdrawAmount && withdrawAmount.compareTo(MoneyUtils.setBigDecimal(settlementAmount)) == -1) {
+/*                if (null != withdrawAmount && withdrawAmount.compareTo(MoneyUtils.setBigDecimal(settlementAmount)) == -1) {
                     logger.error("当前提现金额大于剩余可提现金额");
                     throw new YyrzPcException(ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getCode(), ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getMsg(),
                             ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getErrorMsg());
-                }
+                }*/
                 //更新流水,只改变状态
                 profitData.setSettlementType(profit.getSettlementType());
                 profitData.setSettlementMsg(ProfitEnum.WITHDRAWALS_SUCCESS.getMsg());
