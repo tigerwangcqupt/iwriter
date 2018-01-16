@@ -109,10 +109,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
             }
         } catch (Exception e) {
             logger.error("查询首页栏目操作失败", e);
-            //抛出异常回滚数据
-//            throw new QsourceException(ExceptionEnum.SysException.getCode(),
-//                    ExceptionEnum.SysException.getMsg(),
-//                    ExceptionEnum.SysException.getErrorMsg());
+            throw e;
         }
         logger.info("--------查询首页栏目Service完成--------");
         return indexColumnVo;
@@ -131,9 +128,6 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
         } catch (Exception e) {
             logger.error("查询首页消息栏目操作失败", e);
             throw e;
-//            throw new QsourceException(ExceptionEnum.SysException.getCode(),
-//                    ExceptionEnum.SysException.getMsg(),
-//                    ExceptionEnum.SysException.getErrorMsg());
         }
         return indexTips;
     }
