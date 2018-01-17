@@ -11,6 +11,11 @@ public class WriterAdminRefProfit implements Serializable {
     private Long kid;
 
     /**
+     * 写手身份证
+     */
+    private String identityCard;
+
+    /**
      * 昵称
      */
     private  String nickName;
@@ -133,5 +138,13 @@ public class WriterAdminRefProfit implements Serializable {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getIdentityCard() {
+        return identityCard;
+    }
+
+    public void setIdentityCard(String identityCard) {
+        this.identityCard = identityCard;
     }
 }

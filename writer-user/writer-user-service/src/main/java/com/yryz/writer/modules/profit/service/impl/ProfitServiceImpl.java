@@ -22,9 +22,11 @@ import com.yryz.qstone.entity.base.model.Account;
 import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.qstone.modules.base.api.OpenAccountApi;
 import com.yryz.qstone.modules.base.api.OpenOwnerApi;
+import com.yryz.writer.modules.bank.constant.BankUtil;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.service.BankService;
+import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
@@ -203,7 +205,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount.toString()))){
+            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(new Integer(settlementAmount.intValue()).toString()))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
@@ -211,7 +213,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //提现日期
             Date settlementDate = new Date();
             //分布式锁控制用户频繁操作
-            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getCreateUserId());
+            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getWriterId()+"");
             WriterDto writerDto = new WriterDto();
             writerDto.setKid(profit.getWriterId());
             WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
@@ -220,7 +222,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //稿费的时候不去判断
             if(profit.getSettlementType() != ProfitEnum.ROYALTIES_FEE.getCode()){
                 //提现金额区间(500--10000)
-                if(!CommonUtils.checkValidAmount(settlementAmount)){
+               if(!CommonUtils.checkValidAmount(settlementAmount)){
                     logger.error("当前提现金额不正确");
                     throw new YyrzPcException(ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getCode(),ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getMsg(),
                             ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
@@ -230,6 +232,21 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                     logger.error("当前提现金额大于剩余可提现金额");
                     throw new YyrzPcException(ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getCode(),ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getMsg(),
                             ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getErrorMsg());
+                }
+                //验证银行卡格式正不正确
+                if(!BankUtil.matchLuhn(profit.getBankCard())){
+                    logger.error("银行卡号不正确");
+                    throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
+                            ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
+                }
+                //验证有没有绑定银行卡
+                BankDto bankDto = new BankDto();
+                bankDto.setCreateUserId(profit.getWriterId()+"");
+                BankVo bankVo = bankService.selectByParameters(bankDto);
+                if(null == bankVo){
+                    logger.error("没有绑定银行卡，不能提现");
+                    throw new YyrzPcException(ExceptionEnum.NOT_BIND_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_BIND_BANKCARD_EXCEPTION.getMsg(),
+                            ExceptionEnum.NOT_BIND_BANKCARD_EXCEPTION.getErrorMsg());
                 }
             }
             //更新写手信息
@@ -248,6 +265,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //设置流水号
                 String profitSn = String.valueOf(idAPI.getSnowflakeId());
                 profit.setProfitSn(profitSn);
+                //提现type
+                profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
                 //手续费扩大一万倍
                 profit.setChargeFee(MoneyUtils.setBigDecimal(new BigDecimal(ProfitConstants.CHARGEFEE)));
                 //剩余提现金额扩大一万倍
@@ -258,6 +277,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //最后修改信息
                 //设置提现金额
                 writer.setLatelyWithdrawAmount(MoneyUtils.setBigDecimal(settlementAmount));
+                writer.setProfitSn(profitSn);
+                writer.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
                 writerService.updateWriterProfit(writer);
             }
             //如果是稿费
@@ -268,7 +289,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 profit.setSurplusAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
                 //稿费消息
                 profit.setSettlementMsg(ProfitEnum.ROYALTIES_FEE.getMsg());
+                //profit type
+                profit.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
                 insertByPrimaryKeySelective(profit);
+                //writer.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
                 writer.setWithdrawAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
                 //最后修改信息
                 writerService.update(writer);
@@ -301,7 +325,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount.toString()))){
+            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(new Integer(settlementAmount.intValue()).toString()))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
@@ -313,7 +337,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                         ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
             }
             //分布式锁控制用户频繁操作
-            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_UPDATE, profit.getCreateUserId());
+            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_UPDATE, profit.getWriterId()+"");
             ProfitDto profitDto = new ProfitDto();
             profitDto.setWriterId(profit.getWriterId());
             profitDto.setProfitSn(profit.getProfitSn());
@@ -349,11 +373,11 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //提现成功,只更新写手表的累计提现金额
             if (profit.getSettlementType() == ProfitEnum.WITHDRAWALS_SUCCESS.getCode()) {
                 //当剩余金额小于当前提现金额时
-                if (null != withdrawAmount && withdrawAmount.compareTo(MoneyUtils.setBigDecimal(settlementAmount)) == -1) {
+/*                if (null != withdrawAmount && withdrawAmount.compareTo(MoneyUtils.setBigDecimal(settlementAmount)) == -1) {
                     logger.error("当前提现金额大于剩余可提现金额");
                     throw new YyrzPcException(ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getCode(), ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getMsg(),
                             ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getErrorMsg());
-                }
+                }*/
                 //更新流水,只改变状态
                 profitData.setSettlementType(profit.getSettlementType());
                 profitData.setSettlementMsg(ProfitEnum.WITHDRAWALS_SUCCESS.getMsg());

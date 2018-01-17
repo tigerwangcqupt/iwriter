@@ -14,6 +14,11 @@ public class ProfitAdminVo implements Serializable {
 
     //流水id
     private Long flowId;
+
+    /**
+     * 写手身份证
+     */
+    private String identityCard;
     //提现日期
     private String settlementDate;
     //写手昵称
@@ -169,5 +174,13 @@ public class ProfitAdminVo implements Serializable {
 
     public void setSettlementType(String settlementType) {
         this.settlementType = settlementType;
+    }
+
+    public String getIdentityCard() {
+        return identityCard;
+    }
+
+    public void setIdentityCard(String identityCard) {
+        this.identityCard = identityCard;
     }
 }

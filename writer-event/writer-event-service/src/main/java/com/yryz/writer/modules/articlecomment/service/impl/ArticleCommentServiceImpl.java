@@ -43,12 +43,12 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
         return articleCommentDao;
     }
 
-    public PageList<ArticleCommentVo> selectList(ArticleCommentDto articleCommentDto){
+    public PageList<ArticleCommentVo> selectList(ArticleCommentDto articleCommentDto) {
         PageUtils.startPage(articleCommentDto.getCurrentPage(), articleCommentDto.getPageSize());
         List<ArticleComment> list = articleCommentDao.selectList(articleCommentDto);
-        List<ArticleCommentVo> articleCommentVoList = new ArrayList <ArticleCommentVo>();
-        if(list != null && list.size() > 0) {
-            for(ArticleComment articleComment : list){
+        List<ArticleCommentVo> articleCommentVoList = new ArrayList<ArticleCommentVo>();
+        if (list != null && list.size() > 0) {
+            for (ArticleComment articleComment : list) {
                 ArticleCommentVo articleCommentVo = new ArticleCommentVo();
                 //ArticleComment to ArticleCommentVo
                 articleCommentVoList.add(articleCommentVo);
@@ -58,15 +58,15 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
     }
 
     public ArticleCommentVo detail(Long articleCommentId) {
-        ArticleComment articleComment = articleCommentDao.selectByKid(ArticleComment.class,articleCommentId);
+        ArticleComment articleComment = articleCommentDao.selectByKid(ArticleComment.class, articleCommentId);
         ArticleCommentVo articleCommentVo = new ArticleCommentVo();
         if (articleComment != null) {
             articleCommentVo.setCommentId(articleComment.getKid());
             articleCommentVo.setArticleId(articleComment.getArticleId());
-            articleCommentVo.setArticleTitle(articleComment.getArticleTitle() == null ? "": articleComment.getArticleTitle());
-            articleCommentVo.setCommentUserNickname(articleComment.getCommentUserNickname() == null ? "": articleComment.getCommentUserNickname());
+            articleCommentVo.setArticleTitle(articleComment.getArticleTitle() == null ? "" : articleComment.getArticleTitle());
+            articleCommentVo.setCommentUserNickname(articleComment.getCommentUserNickname() == null ? "" : articleComment.getCommentUserNickname());
             articleCommentVo.setUserId(articleComment.getCommentUserId());
-            articleCommentVo.setContent(articleComment.getContent() == null ? "": articleComment.getContent());
+            articleCommentVo.setContent(articleComment.getContent() == null ? "" : articleComment.getContent());
             articleCommentVo.setCreateDate(articleComment.getCreateDate());
             articleCommentVo.setUserHeadImg(articleComment.getUserHeadImg());
         }
@@ -79,13 +79,14 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
         List<ArticleCommentVo> articleCommentVoList = new ArrayList<ArticleCommentVo>();
         if (list != null && list.size() > 0) {
             list.stream().forEach(articleComment -> {
-                if (articleComment != null){
+                if (articleComment != null) {
                     ArticleCommentVo articleCommentVo = new ArticleCommentVo();
                     //ArticleComment to ArticleCommentVo
-                    articleCommentVo.setCommentUserNickname(articleComment.getCommentUserNickname() == null ? "": articleComment.getCommentUserNickname());
-                    articleCommentVo.setContent(articleComment.getContent() == null ? "": articleComment.getContent());
-                    articleCommentVo.setArticleTitle(articleComment.getArticleTitle() == null ? "": articleComment.getArticleTitle());
+                    articleCommentVo.setCommentUserNickname(articleComment.getCommentUserNickname() == null ? "" : articleComment.getCommentUserNickname());
+                    articleCommentVo.setContent(articleComment.getContent() == null ? "" : articleComment.getContent());
+                    articleCommentVo.setArticleTitle(articleComment.getArticleTitle() == null ? "" : articleComment.getArticleTitle());
                     articleCommentVo.setCreateDate(articleComment.getCreateDate());
+                    articleCommentVo.setCommentId(articleComment.getKid());
                     articleCommentVoList.add(articleCommentVo);
                 }
             });
@@ -104,7 +105,7 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
             //保存写手的被收藏数
             articleCommentDao.insert(articleComment);
             messageApi.saveMessageTips(ModuleEnum.COMMENT, articleComment.getWriterId() == null ? 0 : articleComment.getWriterId());
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("保存ArticleComment明细失败", e);
             return false;
         }

@@ -12,8 +12,8 @@ public class BankUtil {
     public static void main(String[] args) {
         String cardNumber = "6210676802084484923";//卡号
         String name = getBankNameByCard(cardNumber);
-        System.out.println(name);
-        System.out.println(matchLuhn(cardNumber));
+        //System.out.println(name);
+        System.out.println(matchLuhn("123"));
     }
 
     /**

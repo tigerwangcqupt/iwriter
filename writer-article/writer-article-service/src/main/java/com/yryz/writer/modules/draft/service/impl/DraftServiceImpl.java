@@ -21,12 +21,14 @@ import com.yryz.writer.modules.task.vo.AppVo;
 import com.yryz.writer.modules.task.vo.TaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
+@Transactional
 public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 
     @Autowired
@@ -158,6 +160,8 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 draftVo.setAppliName(app.getAppliName());
                 draftVo.setIcon(app.getIcon());
             }
+        } else if (appId != null && appId == 0) {
+            draftVo.setAppliName(draft.getAppName());
         }
         String createUserId = draft.getCreateUserId();
         if (StringUtils.isNotBlank(createUserId)) {

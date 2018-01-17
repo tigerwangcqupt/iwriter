@@ -14,6 +14,7 @@ public class DraftDto extends PageList {
     private Integer draftStatus;
     private Integer status;
     private Long appId;
+    private String appliName;
     /**
      * 生成排序字符串
      */
@@ -67,6 +68,14 @@ public class DraftDto extends PageList {
 
     public void setAppId(Long appId) {
         this.appId = appId;
+    }
+
+    public String getAppliName() {
+        return appliName;
+    }
+
+    public void setAppliName(String appliName) {
+        this.appliName = appliName;
     }
 
     public String getOrderStr() {

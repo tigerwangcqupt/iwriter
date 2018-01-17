@@ -300,7 +300,13 @@
 				owner_code = #{ownerCode},
 			</if>
 			<if test="ownerFcode != null">
-				owner_fcode = #{ownerFcode}
+				owner_fcode = #{ownerFcode},
+			</if>
+			<if test="remark != null and remark!=''">
+				remark = #{remark}
+			</if>
+			<if test="settlementType != null">
+				settlement_type = #{settlementType},
 			</if>
         </set>
         where kid = #{kid,jdbcType=BIGINT}
@@ -324,12 +330,15 @@
 			<if test="latelyWithdrawAmount != null">
 				lately_withdraw_amount = #{latelyWithdrawAmount},
 			</if>
+			<if test="settlementType != null">
+				settlement_type = #{settlementType},
+			</if>
 			<if test="withdrawDate != null">
 				withdraw_date = #{withdrawDate},
 			</if>
 		</set>
 		where kid = #{kid,jdbcType=BIGINT}
-        and withdraw_amount - lately_withdraw_amount >0
+        and withdraw_amount - lately_withdraw_amount >=0
 	</update>
     
     <!-- 查询Writer列表 -->
@@ -363,8 +372,8 @@
 		w.nick_name,
 		w.user_name,
 		w.phone,
+		w.remark,
 		h.audit_date,
-		h.remark,
 		h.apply_date,
 		w.create_date AS register_date,
 		w.head_img,
@@ -444,9 +453,9 @@
 	</select>
     
     <update id="updateWriter" parameterType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
-		update yryz_writer_audit_history set remark= #{remark},
+		update yryz_writer set remark= #{remark},
 		last_update_date = now(),last_update_user_id=#{lastUpdateUserId} 
-		where writer_kid = #{kid} and audit_status=2
+		where kid = #{kid}
     </update>
 
 	<!-- 查询Writer关联资金 -->
@@ -465,7 +474,7 @@
 
 	<!-- 查询管理后台写手收益列表 -->
 	<select id="selectAdminProfitList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminRefProfit">
-		select kid,nick_name,user_name,phone,provice,city,profit_sn,
+		select kid,nick_name,user_name,phone,provice,city,profit_sn,identity_card,
 		withdraw_amount,sum_withdraw_amount,user_bank_cart
 		from yryz_writer where 1=1
 		<if test="nickName != null and nickName != '' ">

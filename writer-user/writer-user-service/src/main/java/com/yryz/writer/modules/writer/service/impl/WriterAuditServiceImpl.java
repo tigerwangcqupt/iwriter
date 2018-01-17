@@ -97,6 +97,7 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
 		WriterAudit writerAudit = new WriterAudit();
 		BeanUtils.copyProperties(writerAuditVo, writerAudit);
 		if (writerAudit != null) {
+			int auditStatus = writerAuditVo.getAuditStatus().intValue();
 			// 更新写手审核表
 			writerAudit.setAuditDate(new Date());
 			writerAudit.setLastUpdateDate(new Date());
@@ -107,35 +108,41 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
 			writer.setUserStatus(writerAudit.getAuditStatus());
 			writer.setLastUpdateDate(new Date());
 			writer.setLastUpdateUserId(writerAuditVo.getLastUpdateUserId());
+			if(auditStatus==2){
+				writer.setRemark(writerAudit.getRemark());
+			}
 			writerDao.update(writer);
 
-			// 审核通过，绑定资金主体
-			Writer writer1 = new Writer();
-			BeanUtils.copyProperties(writerAuditVo, writer1);
-			writer1.setKid(writerAuditVo.getWriterKid());
-			RpcResponse<Writer> profitResult = profitApi.bindCapital(writer1);
-			if (!profitResult.success()) {
-				logger.error("profitApi bindCapital：绑定资金主体失败");
-				throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),
-	                    ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg());
+			if(auditStatus==2){
+				// 审核通过，绑定资金主体
+				Writer writer1 = new Writer();
+				BeanUtils.copyProperties(writerAuditVo, writer1);
+				writer1.setKid(writerAuditVo.getWriterKid());
+				RpcResponse<Writer> profitResult = profitApi.bindCapital(writer1);
+				if (!profitResult.success()) {
+					logger.error("profitApi bindCapital：绑定资金主体失败");
+					throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),
+		                    ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg());
+				}
+				// 审核通过，发送通知消息
+				WriterNoticeMessageVo writerNoticeMessageVo = new WriterNoticeMessageVo();
+				writerNoticeMessageVo.setContent("恭喜您！您已成功通过悠然一指写手入驻资料申请的审核，您现在可以通过领取平台任务或自由投稿赚取稿费啦！");
+				writerNoticeMessageVo.setTriggerType(1);
+				writerNoticeMessageVo.setSendUserId(Long.valueOf(writerAuditVo.getLastUpdateUserId()));
+				NoticeReceiveWriter noticeReceiveWriter = new NoticeReceiveWriter();
+				noticeReceiveWriter.setKid(writerAuditVo.getWriterKid());
+				noticeReceiveWriter.setUserNickName(writerAuditVo.getUserName());
+				List<NoticeReceiveWriter> receiveWriter = new ArrayList<NoticeReceiveWriter>();
+				receiveWriter.add(noticeReceiveWriter);
+				writerNoticeMessageVo.setReceiveWriter(receiveWriter);
+				RpcResponse<Boolean> msgResult = messageApi.saveWriterNoticeMessage(writerNoticeMessageVo);
+				if (!msgResult.success()) {
+					logger.error("messageApi saveWriterNoticeMessage 消息接口调用失败");
+					throw new YyrzPcException(ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getCode(),ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getMsg(),
+		                    ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getErrorMsg());
+				}
 			}
-			// 审核通过，发送通知消息
-			WriterNoticeMessageVo writerNoticeMessageVo = new WriterNoticeMessageVo();
-			writerNoticeMessageVo.setContent("恭喜您！您已成功通过悠然一指写手入驻资料申请的审核，您现在可以通过领取平台任务或自由投稿赚取稿费啦！");
-			writerNoticeMessageVo.setTriggerType(1);
-			writerNoticeMessageVo.setSendUserId(Long.valueOf(writerAuditVo.getLastUpdateUserId()));
-			NoticeReceiveWriter noticeReceiveWriter = new NoticeReceiveWriter();
-			noticeReceiveWriter.setKid(writerAuditVo.getWriterKid());
-			noticeReceiveWriter.setUserNickName(writerAuditVo.getUserName());
-			List<NoticeReceiveWriter> receiveWriter = new ArrayList<NoticeReceiveWriter>();
-			receiveWriter.add(noticeReceiveWriter);
-			writerNoticeMessageVo.setReceiveWriter(receiveWriter);
-			RpcResponse<Boolean> msgResult = messageApi.saveWriterNoticeMessage(writerNoticeMessageVo);
-			if (!msgResult.success()) {
-				logger.error("messageApi saveWriterNoticeMessage 消息接口调用失败");
-				throw new YyrzPcException(ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getCode(),ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getMsg(),
-	                    ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getErrorMsg());
-			}
+			
 		}
 		return 1;
 	}
