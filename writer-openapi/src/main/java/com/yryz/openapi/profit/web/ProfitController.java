@@ -56,7 +56,7 @@ public class ProfitController extends BaseController{
       ProfitDto profitDto = new ProfitDto();
       profitDto.setWriterId(userId);
       profitDto.setFrontCall(ProfitConstants.CALLEDBYFRONT);
-      String orderStr = "order by settlement_date desc";
+      String orderStr = "order by settlement_date1 desc";
       profitDto.setOrderStr(orderStr);
       RpcResponse<PageList<ProfitDetailVo>> rpcResponse = profitApi.selectFlowList(profitDto);
       return rpcResponse;

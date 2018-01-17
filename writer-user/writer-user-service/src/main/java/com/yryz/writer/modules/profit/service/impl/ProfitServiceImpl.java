@@ -363,7 +363,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 writerNoticeMessageVo.setContent(profit.getSettlementMsg());
                 //3提现后台发送提现失败通知
                 writerNoticeMessageVo.setTriggerType(3);
-                writerNoticeMessageVo.setSendUserId(Long.valueOf(profit.getLastUpdateUserId()));
+                writerNoticeMessageVo.setSendUserId(Long.valueOf(profit.getCreateUserId()));
                 List<NoticeReceiveWriter> receiveWriters = new ArrayList<>();
                 NoticeReceiveWriter noticeReceiveWriter = new NoticeReceiveWriter();
                 noticeReceiveWriter.setKid(profit.getWriterId());
