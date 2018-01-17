@@ -338,7 +338,7 @@
 			</if>
 		</set>
 		where kid = #{kid,jdbcType=BIGINT}
-        and withdraw_amount - lately_withdraw_amount >0
+        and withdraw_amount - lately_withdraw_amount >=0
 	</update>
     
     <!-- 查询Writer列表 -->
