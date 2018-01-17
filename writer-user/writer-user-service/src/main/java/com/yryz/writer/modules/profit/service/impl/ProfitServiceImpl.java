@@ -275,7 +275,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //profit type
                 profit.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
                 insertByPrimaryKeySelective(profit);
-                writer.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
+                //writer.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
                 writer.setWithdrawAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
                 //最后修改信息
                 writerService.update(writer);
