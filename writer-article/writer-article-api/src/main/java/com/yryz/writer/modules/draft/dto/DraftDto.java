@@ -2,6 +2,8 @@ package com.yryz.writer.modules.draft.dto;
 
 import com.yryz.component.rpc.dto.PageList;
 
+import java.util.List;
+
 /**
  * @author luohao
  * @ClassName: DraftDto
@@ -10,11 +12,23 @@ import com.yryz.component.rpc.dto.PageList;
  */
 public class DraftDto extends PageList {
     private String title;
-    private String createUserId;
     private Integer draftStatus;
     private Integer status;
+    //根据应用查询的条件
     private Long appId;
     private String appliName;
+
+    //根据用户信息查询的条件
+    //写手id
+    private String createUserId;
+    //写手ids
+    private List<Long> createUserIds;
+    private String nickName;
+    private String userName;
+    private String phone;
+    private String remark;
+
+
     /**
      * 生成排序字符串
      */
@@ -44,6 +58,14 @@ public class DraftDto extends PageList {
 
     public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
+    }
+
+    public List<Long> getCreateUserIds() {
+        return createUserIds;
+    }
+
+    public void setCreateUserIds(List<Long> createUserIds) {
+        this.createUserIds = createUserIds;
     }
 
     public Integer getDraftStatus() {
@@ -100,5 +122,37 @@ public class DraftDto extends PageList {
 
     public void setOrderValue(String orderValue) {
         this.orderValue = orderValue;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

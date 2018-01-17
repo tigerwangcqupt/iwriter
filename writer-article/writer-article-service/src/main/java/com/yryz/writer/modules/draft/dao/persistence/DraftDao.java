@@ -4,6 +4,7 @@ import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.modules.draft.vo.DraftVo;
+import com.yryz.writer.modules.draft.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -38,4 +39,8 @@ public interface DraftDao extends BaseDao {
 
     DraftVo selectWriterByKid(@Param("kid") String kid);
 
+    //写手条件查询
+    List<Long> selectWriter(DraftDto draftDto);
+
+    List<UserVo> selectUserByUserName(String userName);
 }

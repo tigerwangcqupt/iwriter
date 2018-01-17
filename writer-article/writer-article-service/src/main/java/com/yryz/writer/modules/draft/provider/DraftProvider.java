@@ -10,6 +10,7 @@ import com.yryz.writer.modules.draft.vo.DraftVo;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.service.DraftService;
 
+import com.yryz.writer.modules.draft.vo.UserVo;
 import com.yryz.writer.modules.task.vo.AppVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,6 +101,11 @@ public class DraftProvider implements DraftApi {
 
     public void del(Long kid) {
         draftService.delete(kid);
+    }
+
+    @Override
+    public RpcResponse<List<UserVo>> selectUserByUserName(String userName) {
+        return ResponseModel.returnListSuccess(draftService.selectUserByUserName(userName));
     }
 
 }
