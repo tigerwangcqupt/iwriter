@@ -8,6 +8,7 @@ import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.modules.indexcolumn.service.ValidateIndexColumnService;
 import com.yryz.writer.modules.indexcolumn.vo.IndexItemVo;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
@@ -25,6 +26,7 @@ import com.yryz.writer.modules.indexcolumn.entity.IndexColumn;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.dao.persistence.IndexColumnDao;
 import com.yryz.writer.modules.indexcolumn.service.IndexColumnService;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,9 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
 
     @Autowired
     private MessageApi messageApi;
+
+    @Autowired
+    private ValidateIndexColumnService validateIndexColumnService;
 
     protected BaseDao getDao() {
         return indexColumnDao;
@@ -76,9 +81,10 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
     public IndexColumnVo selectAll(IndexColumnDto indexColumnDto){
         logger.info("--------进入查询首页栏目Service--------");
         IndexColumnVo indexColumnVo = new IndexColumnVo();
-        List<IndexItemVo> items = new ArrayList<IndexItemVo>();
-        indexColumnVo.setIndexItems(items);
         try {
+            validateIndexColumnService.validateSelect(indexColumnDto);
+            List<IndexItemVo> items = new ArrayList<IndexItemVo>();
+            indexColumnVo.setIndexItems(items);
             //查询消息总数
             MessageDto messageDto = new MessageDto();
             messageDto.setCustId(indexColumnDto.getCustId());
@@ -109,10 +115,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
             }
         } catch (Exception e) {
             logger.error("查询首页栏目操作失败", e);
-            //抛出异常回滚数据
-//            throw new QsourceException(ExceptionEnum.SysException.getCode(),
-//                    ExceptionEnum.SysException.getMsg(),
-//                    ExceptionEnum.SysException.getErrorMsg());
+            throw e;
         }
         logger.info("--------查询首页栏目Service完成--------");
         return indexColumnVo;
@@ -123,6 +126,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
 //        messageApi
         List<IndexTipsVo> indexTips = null;
         try {
+            validateIndexColumnService.validateSelect(indexColumnDto);
             //查询写手的消息栏目
             RpcResponse<List<IndexTipsVo>> response = messageApi.getIndexTips(indexColumnDto.getCustId());
             if (response.success()){
@@ -131,9 +135,6 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
         } catch (Exception e) {
             logger.error("查询首页消息栏目操作失败", e);
             throw e;
-//            throw new QsourceException(ExceptionEnum.SysException.getCode(),
-//                    ExceptionEnum.SysException.getMsg(),
-//                    ExceptionEnum.SysException.getErrorMsg());
         }
         return indexTips;
     }

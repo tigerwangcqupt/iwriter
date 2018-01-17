@@ -23,6 +23,8 @@ public class DraftVo implements Serializable {
      */
     private Integer taskFlag;
 
+    private Long taskKid;
+
     /**
      * 标题
      */
@@ -164,6 +166,14 @@ public class DraftVo implements Serializable {
 
     public void setTaskFlag(Integer taskFlag) {
         this.taskFlag = taskFlag;
+    }
+
+    public Long getTaskKid() {
+        return taskKid;
+    }
+
+    public void setTaskKid(Long taskKid) {
+        this.taskKid = taskKid;
     }
 
     public String getTitle() {

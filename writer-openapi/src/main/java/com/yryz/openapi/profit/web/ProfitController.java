@@ -86,6 +86,7 @@ public class ProfitController extends BaseController{
     * @param userId
     * @return
     */
+   @NotLogin
    @RequestMapping(value="/add", method = RequestMethod.POST)
    @ResponseBody
    public RpcResponse<Profit> addProfit(@RequestBody Profit profit, @RequestHeader Long userId){

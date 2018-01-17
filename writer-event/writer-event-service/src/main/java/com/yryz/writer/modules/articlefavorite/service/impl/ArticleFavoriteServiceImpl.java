@@ -87,7 +87,7 @@ public class ArticleFavoriteServiceImpl extends BaseServiceImpl implements Artic
             }
             messageApi.cleanMessageTips(ModuleEnum.FAVORITE, articleFavoriteDto.getCustId());
         }catch (Exception e) {
-            logger.error("保存ArticleFavorite明细失败", e);
+            logger.error("查询写手的ArticleFavorite分页失败", e);
             e.printStackTrace();
         }
 

@@ -102,9 +102,9 @@ public class ArticleShareServiceImpl extends BaseServiceImpl implements ArticleS
     @Transactional
     public Long saveArticleShare(ArticleShare articleShare) {
         Assert.notNull(articleShare.getWriterId(), "文章作者不能为空");
-        Long kid = idApi.getId("yryz_article_share");
-        articleShare.setKid(kid);
         try {
+            Long kid = idApi.getId("yryz_article_share");
+            articleShare.setKid(kid);
             //保存写手的被收藏数
             articleShareDao.insert(articleShare);
             messageApi.saveMessageTips(ModuleEnum.SHARE, articleShare.getWriterId() == null ? 0 : articleShare.getWriterId());

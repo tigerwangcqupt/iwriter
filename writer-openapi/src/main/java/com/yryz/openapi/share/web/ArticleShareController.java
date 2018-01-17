@@ -51,6 +51,7 @@ public class ArticleShareController extends BaseController {
       Assert.notNull(userId, "用户id不能为空");
       Assert.notNull(articleShare.getWriterId(), "写手id不能为空");
       Assert.notNull(articleShare.getArticleId(), "文章id不能为空");
+      articleShare.setCreateUserId(userId);
       return articleShareApi.saveArticleShare(articleShare);
    }
 

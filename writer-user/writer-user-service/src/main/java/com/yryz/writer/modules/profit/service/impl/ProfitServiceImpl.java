@@ -203,16 +203,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount.toString()))){
+            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(new Integer(settlementAmount.intValue()).toString()))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
-            }
-            //提现金额区间(500--10000)
-            if(!CommonUtils.checkValidAmount(settlementAmount)){
-                logger.error("当前提现金额不正确");
-                throw new YyrzPcException(ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getCode(),ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getMsg(),
-                        ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
             }
             //提现日期
             Date settlementDate = new Date();
@@ -225,6 +219,12 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
             //稿费的时候不去判断
             if(profit.getSettlementType() != ProfitEnum.ROYALTIES_FEE.getCode()){
+                //提现金额区间(500--10000)
+               if(!CommonUtils.checkValidAmount(settlementAmount)){
+                    logger.error("当前提现金额不正确");
+                    throw new YyrzPcException(ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getCode(),ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getMsg(),
+                            ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
+                }
                 //当剩余金额小于当前提现金额时
                 if(null != withdrawAmount && withdrawAmount.compareTo(MoneyUtils.setBigDecimal(settlementAmount))==-1){
                     logger.error("当前提现金额大于剩余可提现金额");
@@ -248,6 +248,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //设置流水号
                 String profitSn = String.valueOf(idAPI.getSnowflakeId());
                 profit.setProfitSn(profitSn);
+                //提现type
+                profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
                 //手续费扩大一万倍
                 profit.setChargeFee(MoneyUtils.setBigDecimal(new BigDecimal(ProfitConstants.CHARGEFEE)));
                 //剩余提现金额扩大一万倍
@@ -256,7 +258,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 profit.setSettlementMsg(ProfitEnum.WITHDRAWALS_FEE.getMsg());
                 insert(profit);
                 //最后修改信息
+                //设置提现金额
                 writer.setLatelyWithdrawAmount(MoneyUtils.setBigDecimal(settlementAmount));
+                writer.setProfitSn(profitSn);
+                writer.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
                 writerService.updateWriterProfit(writer);
             }
             //如果是稿费
@@ -264,10 +269,13 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 //手续费扩大一万倍
                 profit.setChargeFee(new BigDecimal(0));
                 //剩余提现金额扩大一万倍
-                profit.setSurplusAmount(MoneyUtils.setBigDecimal(withdrawAmount.add(settlementAmount)));
-                //提现消息
+                profit.setSurplusAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
+                //稿费消息
                 profit.setSettlementMsg(ProfitEnum.ROYALTIES_FEE.getMsg());
+                //profit type
+                profit.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
                 insertByPrimaryKeySelective(profit);
+                //writer.setSettlementType(ProfitEnum.ROYALTIES_FEE.getCode());
                 writer.setWithdrawAmount(withdrawAmount.add(MoneyUtils.setBigDecimal(settlementAmount)));
                 //最后修改信息
                 writerService.update(writer);
@@ -300,7 +308,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount.toString()))){
+            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(new Integer(settlementAmount.intValue()).toString()))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
@@ -348,11 +356,11 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //提现成功,只更新写手表的累计提现金额
             if (profit.getSettlementType() == ProfitEnum.WITHDRAWALS_SUCCESS.getCode()) {
                 //当剩余金额小于当前提现金额时
-                if (null != withdrawAmount && withdrawAmount.compareTo(settlementAmount) == -1) {
+/*                if (null != withdrawAmount && withdrawAmount.compareTo(MoneyUtils.setBigDecimal(settlementAmount)) == -1) {
                     logger.error("当前提现金额大于剩余可提现金额");
                     throw new YyrzPcException(ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getCode(), ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getMsg(),
                             ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getErrorMsg());
-                }
+                }*/
                 //更新流水,只改变状态
                 profitData.setSettlementType(profit.getSettlementType());
                 profitData.setSettlementMsg(ProfitEnum.WITHDRAWALS_SUCCESS.getMsg());
@@ -590,7 +598,9 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
             Long userFcode = Long.valueOf(writerModelVo.getOwnerFcode());
 
+            //稿费扩大一万倍和资金同步
             BigDecimal amount = profit.getSettlementAmount();
+
             TransactionFlowRecord record = new TransactionFlowRecord();
             //订单号
             String orderId = String.valueOf(idAPI.getSnowflakeId());

@@ -97,6 +97,9 @@
         <if test="taskFlag != null">
 			task_flag,
 	    </if>
+        <if test="taskKid != null">
+			task_kid,
+	    </if>
         <if test="title != null and title != ''">
 			title,
 	    </if>
@@ -170,6 +173,9 @@
 	    </if>
         <if test="taskFlag != null">
 			#{taskFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="taskKid != null">
+			#{taskKid,jdbcType=TINYINT},
 	    </if>
         <if test="title != null and title != ''">
 			#{title,jdbcType=VARCHAR},
@@ -248,6 +254,9 @@
              <if test="taskFlag != null">
     			task_flag = #{taskFlag,jdbcType=TINYINT},
     		</if>
+             <if test="taskKid != null">
+				 task_kid = #{taskKid,jdbcType=TINYINT},
+    		</if>
             <if test="title != null and title != ''">
     			title = #{title,jdbcType=VARCHAR},
     		</if>
@@ -319,30 +328,48 @@
     <select id="selectList" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
         select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status != 3 AND del_flag = 0
+		<if test="title != null and title != ''">
+			AND title LIKE CONCAT('%',#{title},'%')
+		</if>
 		UNION ALL
 		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0
+		<if test="title != null and title != ''">
+			AND title LIKE CONCAT('%',#{title},'%')
+		</if>
     </select>
 
 	<!-- 查询已发表 -->
     <select id="selectPublish" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
 		SELECT title,cover_img_url,draft_fee,content_flag draft_type,draft_type,task_flag,kid
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0 AND shelve_flag = 0
-    </select>
+		<if test="title != null and title != ''">
+			AND title LIKE CONCAT('%',#{title},'%')
+		</if>
+</select>
 
 	<!-- 查询未通过,文章和稿件 -->
     <select id="selectNotPass" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
 		select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status IN (1,2) AND del_flag = 0
+		<if test="title != null and title != ''">
+			AND title LIKE CONCAT('%',#{title},'%')
+		</if>
 		UNION ALL
 		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0 AND shelve_flag = 1
+		<if test="title != null and title != ''">
+			AND title LIKE CONCAT('%',#{title},'%')
+		</if>
     </select>
 
 	<!-- 查询草稿 -->
     <select id="selectDraught" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
 		select title,cover_img_url,draft_fee,reason,draft_type,suggest,draft_status,task_flag,kid
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status = 0 AND del_flag = 0
+		<if test="title != null and title != ''">
+			AND title LIKE CONCAT('%',#{title},'%')
+		</if>
     </select>
 
 	<!-- 管理后台查询待审核 -->
@@ -354,7 +381,7 @@
 			AND create_user_id = #{createUserId,jdbcType=VARCHAR}
 		</if>
 		<if test="appId != null">
-			AND app_id = #{appId,jdbcType=BIGINT},
+			AND app_id = #{appId,jdbcType=BIGINT}
 		</if>
 		<if test="orderStr != null and orderStr != ''">
 			${orderStr}
@@ -370,7 +397,7 @@
 			AND create_user_id = #{createUserId,jdbcType=VARCHAR}
 		</if>
 		<if test="appId != null">
-			AND app_id = #{appId,jdbcType=BIGINT},
+			AND app_id = #{appId,jdbcType=BIGINT}
 		</if>
 		<if test="orderStr != null and orderStr != ''">
 			${orderStr}

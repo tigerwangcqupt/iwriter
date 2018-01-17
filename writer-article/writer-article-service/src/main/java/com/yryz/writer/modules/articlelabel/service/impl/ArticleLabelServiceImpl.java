@@ -17,6 +17,7 @@ import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.dao.persistence.ArticleLabelDao;
 import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
+import org.springframework.util.Assert;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,6 +90,9 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
     @Override
     public Boolean insert(ArticleLabel articleLabel) {
         try {
+            Assert.hasText(articleLabel.getLabelName(), "标签名称不能为空");
+            Assert.hasText(articleLabel.getIcon(), "标签图标不能为空");
+            Assert.hasText(articleLabel.getLabelDescription(), "标签描述不能为空");
             Long kid = idApi.getId("yryz_articlelabel");
             //设置属性
             articleLabel.setKid(kid);
@@ -125,6 +129,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
     @Override
     public Boolean shelveOn(Long articleLabelId) {
         try {
+            Assert.notNull(articleLabelId, "标签id不能为空");
             ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class, articleLabelId);
             if (null == articleLabel) {
                 throw new IllegalArgumentException("文章标签不存在");
@@ -159,6 +164,8 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
     @Override
     public Boolean deleteArticleLabel(Long kid, String lastUpdateUserId) {
         try {
+            Assert.notNull(kid, "标签id不能为空");
+            Assert.notNull(lastUpdateUserId, "修改人id不能为空");
             ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class, kid);
             if (null == articleLabel) {
                 throw new IllegalArgumentException("文章标签不存在");
@@ -175,6 +182,8 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
     @Override
     public Boolean recoverArticleLabel(Long kid, String lastUpdateUserId) {
         try {
+            Assert.notNull(kid, "标签id不能为空");
+            Assert.notNull(lastUpdateUserId, "修改人id不能为空");
             ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class, kid);
             if (null == articleLabel) {
                 throw new IllegalArgumentException("文章标签不存在");
@@ -192,6 +201,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
     @Override
     public Boolean validateLabel(Long kid) {
         try {
+            Assert.notNull(kid, "标签id不能为空");
             int count = articleLabelDao.countArticleByLabelId(kid);
 
             return count > 0 ? false : true;

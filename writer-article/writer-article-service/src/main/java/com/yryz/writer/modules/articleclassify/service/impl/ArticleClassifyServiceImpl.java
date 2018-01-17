@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -96,6 +97,10 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     @Transactional
     public Boolean insert(ArticleClassify articleClassify) {
         try {
+            Assert.notNull(articleClassify.getParentId(), "父类id不能为空");
+            Assert.notNull(articleClassify.getLastUpdateUserId(), "修改人id不能为空");
+            Assert.hasText(articleClassify.getClassifyName(), "分类名称不能为空");
+            Assert.hasText(articleClassify.getClassifyDesc(), "分类描述不能为空");
             changeToNoFloor(articleClassify.getParentId(), articleClassify.getLastUpdateUserId());
             Long kid = idApi.getId("yryz_articleclassify");
             articleClassify.setKid(kid);
@@ -155,6 +160,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     @Transactional
     public Boolean shelveOn(Long articleClassifyId){
         try {
+            Assert.notNull(articleClassifyId, "分类id不能为空");
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, articleClassifyId);
             if (null == articleClassify) {
                 throw new IllegalArgumentException("文章分类不存在");
@@ -181,6 +187,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     @Transactional
     public Boolean shelveOff(Long articleClassifyId) {
         try {
+            Assert.notNull(articleClassifyId, "分类id不能为空");
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class,articleClassifyId);
             if (null == articleClassify) {
                 throw new IllegalArgumentException("文章分类不存在");
@@ -211,6 +218,8 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     @Transactional
     public Boolean deleteArticleClassify(Long kid, String lastUpdateUserId) {
         try {
+            Assert.notNull(kid, "分类id不能为空");
+            Assert.notNull(lastUpdateUserId, "修改人id不能为空");
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);
             if (null == articleClassify) {
                 throw new IllegalArgumentException("文章分类不存在");
@@ -246,6 +255,8 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     @Transactional
     public Boolean recoverArticleClassify(Long kid, String lastUpdateUserId) {
         try {
+            Assert.notNull(kid, "分类id不能为空");
+            Assert.notNull(lastUpdateUserId, "修改人id不能为空");
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);
             if (null == articleClassify) {
                 throw new IllegalArgumentException("文章分类不存在");
@@ -276,6 +287,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     @Override
     public Boolean checkArticleClassify(Long kid) {
         try {
+            Assert.notNull(kid, "分类id不能为空");
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);
             if (null == articleClassify) {
                 throw new IllegalArgumentException("文章分类不存在");

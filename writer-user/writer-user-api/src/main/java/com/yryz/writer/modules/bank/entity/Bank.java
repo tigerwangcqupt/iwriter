@@ -1,6 +1,7 @@
 package com.yryz.writer.modules.bank.entity;
 
 import com.yryz.writer.common.entity.GenericEntity;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 
@@ -26,6 +27,7 @@ public class Bank extends GenericEntity{
 	 * 提现用户名
 	 */
 	@NotBlank
+	@Length(max=30)
     private  String userName;
     
 
@@ -47,6 +49,7 @@ public class Bank extends GenericEntity{
 	 * 交易银行
 	 */
 	@NotBlank
+	@Length(max=30)
     private  String userTradeBankCart;
     
 
@@ -68,6 +71,7 @@ public class Bank extends GenericEntity{
 	 * 开户支行
 	 */
 	@NotBlank
+	@Length(max=30)
     private  String userAccountOpenBank;
 
 

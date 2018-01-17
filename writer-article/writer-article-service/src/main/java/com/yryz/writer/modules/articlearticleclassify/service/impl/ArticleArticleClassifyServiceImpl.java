@@ -1,6 +1,5 @@
 package com.yryz.writer.modules.articlearticleclassify.service.impl;
 
-import com.github.pagehelper.PageInfo;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.service.BaseServiceImpl;

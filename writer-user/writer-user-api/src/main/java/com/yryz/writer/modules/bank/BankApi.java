@@ -4,6 +4,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
+import com.yryz.writer.modules.bank.vo.BankNameVo;
 import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.writer.entity.Writer;
 
@@ -58,8 +59,18 @@ public interface BankApi {
 	RpcResponse<Bank> updateBank(Bank bank);
 
 
-
-
+	/**
+	 * 查询银行卡信息
+	 * @param bankDto
+	 * @return
+	 */
 	RpcResponse<BankVo> selectByParameters(BankDto bankDto);
+
+	/**
+	 * 根据银行卡号查询银行名称
+	 * @param bankCard
+	 * @return
+	 */
+	RpcResponse<BankNameVo> selectBankNameByCard(String bankCard);
 
 }

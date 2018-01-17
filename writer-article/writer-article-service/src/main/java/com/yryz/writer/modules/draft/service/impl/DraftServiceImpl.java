@@ -21,12 +21,14 @@ import com.yryz.writer.modules.task.vo.AppVo;
 import com.yryz.writer.modules.task.vo.TaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
+@Transactional
 public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 
     @Autowired
@@ -91,15 +93,6 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         if (draft != null) {
             //Draft to DraftVo
             draftVo = toDraftVo(draft);
-            Long taskKid = draft.getTaskKid();
-            if (taskKid != null && taskKid != 0) {
-                Task task = taskDao.selectByKid(Task.class, taskKid);
-                if (task != null) {
-                    draftVo.setTaskTitle(task.getTitle());
-                    draftVo.setTaskCreateDate(task.getCreateDate());
-                    draftVo.setTaskAcceptTaskNum(task.getAcceptTaskNum());
-                }
-            }
         }
         return draftVo;
     }
@@ -136,7 +129,6 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         draftVo.setContentHtml(draft.getContentHtml());
         draftVo.setCoverImgUrl(draft.getCoverImgUrl());
         draftVo.setDescription(draft.getDescription());
-        draftVo.setDraftFee(draft.getDraftFee());
         draftVo.setDraftStatus(draft.getDraftStatus());
         draftVo.setDraftType(draft.getDraftType());
         draftVo.setTaskFlag(draft.getTaskFlag());
@@ -147,6 +139,19 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         draftVo.setClassifyName(draft.getClassifyName());
         draftVo.setLabelName(draft.getLabelName());
         draftVo.setShelveFlag(draft.getShelveFlag());
+        Long taskKid = draft.getTaskKid();
+        if (draft.getTaskFlag() == 1) {
+            if (taskKid != null && taskKid != 0) {
+                Task task = taskDao.selectByKid(Task.class, taskKid);
+                if (task != null) {
+                    draftVo.setTaskKid(taskKid);
+                    draftVo.setTaskTitle(task.getTitle());
+                    draftVo.setTaskCreateDate(task.getCreateDate());
+                    draftVo.setTaskAcceptTaskNum(task.getAcceptTaskNum());
+                    draftVo.setDraftFee(task.getDraftFee());
+                }
+            }
+        }
         Long appId = draft.getAppId();
         if (appId != null && appId != 0) {
             TaskVo app = taskDao.selectAppById(appId);
@@ -155,6 +160,8 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 draftVo.setAppliName(app.getAppliName());
                 draftVo.setIcon(app.getIcon());
             }
+        } else if (appId != null && appId == 0) {
+            draftVo.setAppliName(draft.getAppName());
         }
         String createUserId = draft.getCreateUserId();
         if (StringUtils.isNotBlank(createUserId)) {

@@ -54,6 +54,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
 
     @Override
     public MessageNumVo getMessageNumVo(Long writerId) {
+        Assert.notNull(writerId, "写手id不能为空");
         MessageNumVo messageNumVo = null;
         try {
 //            //todo设置消息总数
@@ -69,11 +70,13 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             messageNumVo.setMessageNum(String.valueOf(messageNum));
         } catch (Exception e) {
             logger.error("查询写手首页消息总数失败", e);
+            throw e;
         }
         return messageNumVo;
     }
 
     public List<IndexTipsVo> getIndexTips(Long writerId){
+        Assert.notNull(writerId, "写手id不能为空");
         List<IndexTipsVo> indexTips = new ArrayList<IndexTipsVo>(indexModuleEnums.length);
         boolean success = true;
         try {
@@ -89,6 +92,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
 
         } catch (Exception e) {
             logger.error("保存消息缓存气泡失败", e);
+            throw e;
         }
         return indexTips;
     }
@@ -96,6 +100,8 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
 
     @Override
     public Boolean saveMessageTips(ModuleEnum moduleEnum, Long writerId) {
+        Assert.notNull(moduleEnum, "模块不能为空");
+        Assert.notNull(writerId, "写手id不能为空");
         String key = MessageConstant.getHashKey(writerId);
         String field = MessageConstant.getHashField(moduleEnum.getValue());
         boolean success = true;
@@ -121,6 +127,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             }
         } catch (Exception e) {
             logger.error("保存消息缓存气泡失败", e);
+            throw e;
         } finally {
             DistributedLockUtils.unlock(ID_LOCK_NAME, lock);
         }
@@ -141,6 +148,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             success = JedisUtils.mapSetnx(key, field, messageNum.toString());
         } catch (Exception e) {
             logger.error("保存消息缓存气泡失败", e);
+            throw e;
         } finally {
             DistributedLockUtils.unlock(ID_LOCK_NAME, lock);
         }
@@ -149,6 +157,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
 
     @Override
     public Boolean saveCommonMessageTips(ModuleEnum moduleEnum) {
+        Assert.notNull(moduleEnum, "模块不能为空");
         String field = MessageConstant.getHashField(moduleEnum.getValue());
         boolean success = true;
         try {
@@ -171,6 +180,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             }
         } catch (Exception e) {
             logger.error("保存消息缓存气泡失败", e);
+            throw e;
         } finally {
         }
         return success;
@@ -191,7 +201,8 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             }
         } catch (Exception e) {
             logger.error("获取消息缓存气泡失败:" + moduleEnum.getName(), e);
-            return 0L;
+            throw e;
+//            return 0L;
         }
         return result;
     }
@@ -229,7 +240,8 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             result = result - lookedNum;
         } catch (Exception e) {
             logger.error("获取平台任务消息缓存气泡失败:" + writerId, e);
-            return 0L;
+            throw e;
+//            return 0L;
         }
         return result;
     }
@@ -238,6 +250,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     @Override
     public Boolean cleanMessageTips(ModuleEnum moduleEnum, Long writerId) {
         Assert.notNull(moduleEnum, "模块不能为空");
+        Assert.notNull(writerId, "写手id不能为空");
         String key = MessageConstant.getHashKey(writerId);
         String field = MessageConstant.getHashField(moduleEnum.getValue());
         boolean success = true;
@@ -251,6 +264,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             }
         } catch (Exception e) {
             logger.error("清空消息缓存气泡失败:" + moduleEnum.getName(), e);
+            throw e;
         }
         return success;
     }
@@ -258,24 +272,29 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     @Override
     public Long getMessageTipsNum(ModuleEnum moduleEnum, Long writerId) {
         Assert.notNull(moduleEnum, "模块不能为空");
+        Assert.notNull(writerId, "写手id不能为空");
         String key = MessageConstant.getHashKey(writerId);
         String field = MessageConstant.getHashField(moduleEnum.getValue());
         Long result = null;
         try {
-            //如果存在业务的缓存气泡数
-            if (JedisUtils.mapExists(key, field)) {
-                String num = JedisUtils.mapHget(key, field);
-                result = Long.valueOf(num);
-            }else{
-                return 0L;
-            }
             //平台任务 例外处理
             if (moduleEnum == ModuleEnum.PLATFORM){
                 result = getPlatformTaskMessageTips(writerId);
+            }else{
+                //如果存在业务的缓存气泡数
+                if (JedisUtils.mapExists(key, field)) {
+                    String num = JedisUtils.mapHget(key, field);
+                    result = Long.valueOf(num);
+                }else{
+                    return 0L;
+                }
             }
+
+
         } catch (Exception e) {
             logger.error("获取消息缓存气泡失败:" + moduleEnum.getName(), e);
-            return 0L;
+            throw e;
+//            return 0L;
         }
         return result;
     }
@@ -296,7 +315,8 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             messageMongo.saveWriterNotice(writerNoticeMessageVo);
         } catch (Exception e) {
             logger.error("发送写手通知消息失败", e);
-            return false;
+            throw e;
+//            return false;
         }
         return true;
     }
@@ -304,6 +324,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     @Override
     public PageList<WriterNoticeVo> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto) {
         Long result = null;
+        Assert.notNull(writerNoticeMessageDto.getReceiveWriterId(), "写手id不能为空");
         try {
             PageUtils.startPage(writerNoticeMessageDto.getCurrentPage(), writerNoticeMessageDto.getPageSize());
 //            return messageMongo.queryWriterNoticePage(writerNoticeMessageDto);
@@ -315,11 +336,13 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
                 writerNoticeVo.setCreateDate(writerNoticeMessageVo.getCreateTime());
                 noticeVos.add(writerNoticeVo);
             }
+            //查询通知的同时清掉消息缓存数
+            cleanMessageTips(ModuleEnum.NOTICE, writerNoticeMessageDto.getReceiveWriterId());
             return new PageModel<WriterNoticeVo>().getPageList(noticeVos);
         } catch (Exception e) {
             logger.error("获取通知消息失败", e);
+            throw e;
         }
-        return null;
     }
 
 }
