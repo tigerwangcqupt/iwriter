@@ -33,7 +33,6 @@ public class BankController extends BaseController {
 
     @RequestMapping(value="/detail", method = RequestMethod.GET)
     @ResponseBody
-    @NotLogin
     public RpcResponse<BankVo> detail(@RequestHeader String userId){
         Assert.notNull(userId, "用户id为空!");
         BankDto bankDto = new BankDto();
@@ -42,20 +41,21 @@ public class BankController extends BaseController {
     }
 
     @Validate
-    @NotLogin
     @RequestMapping(value="/add", method = RequestMethod.POST)
     @ResponseBody
     public RpcResponse<Bank> saveBank(@RequestBody Bank bank, @RequestHeader String userId){
+        Assert.notNull(bank, "参数缺少或错误！");
         Assert.notNull(userId, "用户id为空!");
         bank.setCreateUserId(userId);
         bank.setModuleEnum(YyrzModuleEnumConstants.BANK_INFO);
         return bankApi.insertBank(bank);
     }
 
-    @NotLogin
+
     @RequestMapping(value="/update", method = RequestMethod.POST)
     @ResponseBody
     public RpcResponse<Bank> updateBank(@RequestBody Bank bank, @RequestHeader String userId){
+        Assert.notNull(bank, "参数缺少或错误！");
         Assert.notNull(userId, "用户id为空!");
         Assert.notNull(bank.getBankcardFcode(), "银行卡外码为空!");
         bank.setLastUpdateUserId(userId);
@@ -63,7 +63,7 @@ public class BankController extends BaseController {
         return bankApi.updateBank(bank);
     }
 
-    @NotLogin
+
     @RequestMapping(value="/getBankName", method = RequestMethod.GET)
     @ResponseBody
     public RpcResponse<BankNameVo> getBankName(String bankCard,@RequestHeader String userId){

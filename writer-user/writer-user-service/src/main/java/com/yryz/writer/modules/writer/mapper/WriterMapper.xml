@@ -305,6 +305,9 @@
 			<if test="remark != null and remark!=''">
 				remark = #{remark}
 			</if>
+			<if test="settlementType != null">
+				settlement_type = #{settlementType},
+			</if>
         </set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
@@ -326,6 +329,9 @@
 			</if>
 			<if test="latelyWithdrawAmount != null">
 				lately_withdraw_amount = #{latelyWithdrawAmount},
+			</if>
+			<if test="settlementType != null">
+				settlement_type = #{settlementType},
 			</if>
 			<if test="withdrawDate != null">
 				withdraw_date = #{withdrawDate},
@@ -468,7 +474,7 @@
 
 	<!-- 查询管理后台写手收益列表 -->
 	<select id="selectAdminProfitList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminRefProfit">
-		select kid,nick_name,user_name,phone,provice,city,profit_sn,
+		select kid,nick_name,user_name,phone,provice,city,profit_sn,identity_card,
 		withdraw_amount,sum_withdraw_amount,user_bank_cart
 		from yryz_writer where 1=1
 		<if test="nickName != null and nickName != '' ">

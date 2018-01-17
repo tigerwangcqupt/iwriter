@@ -123,7 +123,7 @@ public class Writer extends GenericEntity{
      
     private String remark;
      
-    private Integer SettlementType;
+    private Integer settlementType;
      
 
 	public String getProfitSn() {
@@ -303,11 +303,11 @@ public class Writer extends GenericEntity{
 	}
 
 	public Integer getSettlementType() {
-		return SettlementType;
+		return settlementType;
 	}
 
 	public void setSettlementType(Integer settlementType) {
-		SettlementType = settlementType;
+		this.settlementType = settlementType;
 	}
 
 	public String getOwnerCode() {

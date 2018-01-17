@@ -37,7 +37,6 @@ public class ProfitController extends BaseController{
     * @param userId
     * @return
     */
-   @NotLogin
    @ResponseBody
    @RequestMapping(value="/getcash/statics", method = RequestMethod.GET)
    public RpcResponse<ProfitStaticsVo> statics(@RequestHeader Long userId) {
@@ -50,7 +49,6 @@ public class ProfitController extends BaseController{
     * @param userId
     * @return
     */
-   @NotLogin
    @ResponseBody
    @RequestMapping(value="/getcash/staticsList", method = RequestMethod.GET)
    public RpcResponse<PageList<ProfitDetailVo>> staticsList(@RequestHeader Long userId) {
@@ -73,11 +71,6 @@ public class ProfitController extends BaseController{
    }
 
 
-   @ResponseBody
-   @RequestMapping(value="/list", method = RequestMethod.GET)
-   public RpcResponse<PageList<ProfitVo>> list(ProfitDto profitDto) {
-        return profitApi.list(profitDto);
-   }
 
 
    /**
@@ -86,10 +79,10 @@ public class ProfitController extends BaseController{
     * @param userId
     * @return
     */
-   @NotLogin
    @RequestMapping(value="/add", method = RequestMethod.POST)
    @ResponseBody
    public RpcResponse<Profit> addProfit(@RequestBody Profit profit, @RequestHeader Long userId){
+      Assert.notNull(profit, "参数缺少或错误！");
       Assert.notNull(userId, "用户id为空!");
       profit.setWriterId(userId);
       profit.setCreateUserId(userId+"");

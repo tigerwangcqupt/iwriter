@@ -22,9 +22,11 @@ import com.yryz.qstone.entity.base.model.Account;
 import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.qstone.modules.base.api.OpenAccountApi;
 import com.yryz.qstone.modules.base.api.OpenOwnerApi;
+import com.yryz.writer.modules.bank.constant.BankUtil;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.entity.Bank;
 import com.yryz.writer.modules.bank.service.BankService;
+import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
@@ -211,7 +213,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //提现日期
             Date settlementDate = new Date();
             //分布式锁控制用户频繁操作
-            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getCreateUserId());
+            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getWriterId()+"");
             WriterDto writerDto = new WriterDto();
             writerDto.setKid(profit.getWriterId());
             WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
@@ -230,6 +232,21 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                     logger.error("当前提现金额大于剩余可提现金额");
                     throw new YyrzPcException(ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getCode(),ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getMsg(),
                             ExceptionEnum.TX_MORETHANSURPLUS_EXCEPTION.getErrorMsg());
+                }
+                //验证银行卡格式正不正确
+                if(!BankUtil.matchLuhn(profit.getBankCard())){
+                    logger.error("银行卡号不正确");
+                    throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
+                            ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
+                }
+                //验证有没有绑定银行卡
+                BankDto bankDto = new BankDto();
+                bankDto.setCreateUserId(profit.getWriterId()+"");
+                BankVo bankVo = bankService.selectByParameters(bankDto);
+                if(null == bankVo){
+                    logger.error("没有绑定银行卡，不能提现");
+                    throw new YyrzPcException(ExceptionEnum.NOT_BIND_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_BIND_BANKCARD_EXCEPTION.getMsg(),
+                            ExceptionEnum.NOT_BIND_BANKCARD_EXCEPTION.getErrorMsg());
                 }
             }
             //更新写手信息
@@ -320,7 +337,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                         ExceptionEnum.TX_AMMOUNT_NOTVALID_EXCEPTION.getErrorMsg());
             }
             //分布式锁控制用户频繁操作
-            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_UPDATE, profit.getCreateUserId());
+            lockKey = DistributedLockUtils.lock(LOCK_PROFIT_UPDATE, profit.getWriterId()+"");
             ProfitDto profitDto = new ProfitDto();
             profitDto.setWriterId(profit.getWriterId());
             profitDto.setProfitSn(profit.getProfitSn());
