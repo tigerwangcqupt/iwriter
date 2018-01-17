@@ -1,6 +1,7 @@
 package com.yryz.writer.modules.task.dao.persistence;
 
 import com.yryz.component.rpc.RpcResponse;
+import com.yryz.writer.modules.draft.vo.UserVo;
 import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.dto.TaskDto;
 import com.yryz.writer.common.dao.BaseDao;
@@ -32,4 +33,5 @@ public interface TaskDao extends BaseDao {
     Integer selectSubmitWriterNum(@Param("kid") Long kid);
 
     Integer selectSubmitDraftNum(@Param("kid") Long kid);
+
 }
