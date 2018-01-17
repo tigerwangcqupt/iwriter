@@ -63,14 +63,6 @@ public class ProfitController extends BaseController{
    }
 
 
-   @ResponseBody
-   @RequestMapping(value="/getcash/detail", method = RequestMethod.GET)
-   public RpcResponse<ProfitVo> detail(@RequestHeader Long userId) {
-       Assert.notNull(userId, "用户id为空!");
-       return profitApi.detailProfit(userId);
-   }
-
-
 
 
    /**
@@ -85,7 +77,6 @@ public class ProfitController extends BaseController{
       Assert.notNull(profit, "参数缺少或错误！");
       Assert.notNull(userId, "用户id为空!");
       profit.setWriterId(userId);
-      profit.setCreateUserId(userId+"");
       profit.setModuleEnum(YyrzModuleEnumConstants.PROFIT_INFO);
       profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
       return profitApi.insertProfit(profit);

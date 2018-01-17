@@ -32,8 +32,6 @@ public interface ProfitService extends BaseService {
 
    ProfitVo detail(Long profitId);
 
-   ProfitVo detailProfit(Long userId);
-
    Profit insertProfit(Profit profit);
 
    Profit updateProfit(Profit profit);
