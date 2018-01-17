@@ -300,7 +300,10 @@
 				owner_code = #{ownerCode},
 			</if>
 			<if test="ownerFcode != null">
-				owner_fcode = #{ownerFcode}
+				owner_fcode = #{ownerFcode},
+			</if>
+			<if test="remark != null and remark!=''">
+				remark = #{remark}
 			</if>
         </set>
         where kid = #{kid,jdbcType=BIGINT}
@@ -363,8 +366,8 @@
 		w.nick_name,
 		w.user_name,
 		w.phone,
+		w.remark,
 		h.audit_date,
-		h.remark,
 		h.apply_date,
 		w.create_date AS register_date,
 		w.head_img,
@@ -444,9 +447,9 @@
 	</select>
     
     <update id="updateWriter" parameterType="com.yryz.writer.modules.writer.vo.WriterAdminVo">
-		update yryz_writer_audit_history set remark= #{remark},
+		update yryz_writer set remark= #{remark},
 		last_update_date = now(),last_update_user_id=#{lastUpdateUserId} 
-		where writer_kid = #{kid} and audit_status=2
+		where kid = #{kid}
     </update>
 
 	<!-- 查询Writer关联资金 -->
