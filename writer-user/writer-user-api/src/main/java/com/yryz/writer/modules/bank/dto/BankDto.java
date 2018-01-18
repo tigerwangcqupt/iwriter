@@ -17,13 +17,13 @@ public class BankDto extends PageList {
     private String createUserId;
 
     //创建者id集合
-    private List<String> writerIdList;
+    private List<Long> writerIdList;
 
-    public List<String> getWriterIdList() {
+    public List<Long> getWriterIdList() {
         return writerIdList;
     }
 
-    public void setWriterIdList(List<String> writerIdList) {
+    public void setWriterIdList(List<Long> writerIdList) {
         this.writerIdList = writerIdList;
     }
 

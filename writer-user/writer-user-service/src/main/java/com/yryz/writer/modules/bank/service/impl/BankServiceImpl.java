@@ -27,6 +27,7 @@ import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.province.ProvinceApi;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
+import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
 import org.apache.commons.lang3.StringUtils;
@@ -169,6 +170,10 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             bank.setBankcardFcode(bankCard.getBankCardFcode());
             bankDao.insert(bank);
 
+            Writer writer = new Writer();
+            writer.setKid(Long.valueOf(bank.getCreateUserId()));
+            writer.setUserBankCart(bank.getUserBankCart());
+            writerService.update(writer);
         }catch(Exception e){
             logger.error("调用资金系统绑定银行卡出现异常:", e);
             throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),
@@ -201,6 +206,11 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
                     ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
         }
+
+        Writer writer = new Writer();
+        writer.setKid(Long.valueOf(bank.getCreateUserId()));
+        writer.setUserBankCart(bank.getUserBankCart());
+        writerService.update(writer);
         try{
             bankDao.update(bank);
             BankCard bankCard=new BankCard();

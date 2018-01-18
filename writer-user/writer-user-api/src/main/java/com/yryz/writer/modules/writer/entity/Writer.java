@@ -124,6 +124,11 @@ public class Writer extends GenericEntity{
     private String remark;
      
     private Integer settlementType;
+
+	/**
+	 * 银行卡号
+	 */
+	private String userBankCart;
      
 
 	public String getProfitSn() {
@@ -317,8 +322,12 @@ public class Writer extends GenericEntity{
 	public void setOwnerCode(String ownerCode) {
 		this.ownerCode = ownerCode;
 	}
-	
-	
 
+	public String getUserBankCart() {
+		return userBankCart;
+	}
 
+	public void setUserBankCart(String userBankCart) {
+		this.userBankCart = userBankCart;
+	}
 }

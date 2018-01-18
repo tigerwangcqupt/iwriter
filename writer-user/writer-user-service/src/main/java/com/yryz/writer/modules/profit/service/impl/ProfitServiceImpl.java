@@ -468,29 +468,29 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public List<ProfitAdminVo> fillProfitData(List<ProfitDetailVo> list){
         List<ProfitAdminVo> profitAdminVoList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(list)){
-            //提现流水号集合
-            List<String> profitSnList = new ArrayList<>();
+            //写手id集合
+            List<Long> writerIdList = new ArrayList<>();
             //把流水号拿到用户表的数据
             for(ProfitDetailVo profitDetailVo : list){
                 ProfitAdminVo profitAdminVo = new ProfitAdminVo();
                 BeanUtils.copyProperties(profitDetailVo,profitAdminVo);
-                profitSnList.add(profitDetailVo.getProfitSn());
+                writerIdList.add(profitDetailVo.getWriterId());
                 profitAdminVoList.add(profitAdminVo);
             }
             //写手id集合
-            List<String> writerIdList = new ArrayList<>();
+           // List<String> writerIdList = new ArrayList<>();
             WriterDto writerDto = new WriterDto();
-            writerDto.setProfitSnList(profitSnList);
+            //writerDto.setProfitSnList(profitSnList);
+            writerDto.setWriterIdList(writerIdList);
             //根据收益流水集合查询用户信息
             List<WriterAdminRefProfit> writerRefProfitList = writerService.selectAllAdminProfitList(writerDto);
             if(CollectionUtils.isNotEmpty(writerRefProfitList)){
                 for(WriterAdminRefProfit writerAdminRefProfit : writerRefProfitList){
                     for(ProfitAdminVo profitAdminVo : profitAdminVoList){
-                        if(writerAdminRefProfit.getProfitSn().equals(profitAdminVo.getProfitSn())){
+                        if(writerAdminRefProfit.getKid().longValue() == profitAdminVo.getWriterId().longValue()){
                             //把用户相关数据拷贝到返回实体
                             BeanUtils.copyProperties(writerAdminRefProfit,profitAdminVo);
                             profitAdminVo.setWriterId(writerAdminRefProfit.getKid());
-                            writerIdList.add(writerAdminRefProfit.getKid()+"");
                         }
                     }
                 }
