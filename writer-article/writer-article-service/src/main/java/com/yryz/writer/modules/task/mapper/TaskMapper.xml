@@ -326,4 +326,9 @@
 		SELECT COUNT(*) FROM yryz_draft WHERE task_kid = #{kid} AND draft_status != 0
 	</select>
 
+    <!-- 查询任务数 -->
+    <select id="taskCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM yryz_task
+	</select>
+
 </mapper>
