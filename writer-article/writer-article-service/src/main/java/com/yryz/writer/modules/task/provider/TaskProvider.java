@@ -81,5 +81,10 @@ public class TaskProvider implements TaskApi {
         return taskService.edit(task);
     }
 
+    @Override
+    public RpcResponse<Integer> taskCount() {
+        return taskService.taskCount();
+    }
+
 
 }

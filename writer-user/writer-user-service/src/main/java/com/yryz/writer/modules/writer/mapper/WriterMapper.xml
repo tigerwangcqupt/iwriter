@@ -308,6 +308,9 @@
 			<if test="settlementType != null">
 				settlement_type = #{settlementType},
 			</if>
+			<if test="userBankCart != null">
+				user_bank_cart = #{userBankCart},
+			</if>
         </set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
@@ -476,7 +479,7 @@
 	<select id="selectAdminProfitList" parameterType="com.yryz.writer.modules.writer.dto.WriterDto" resultType="com.yryz.writer.modules.writer.vo.WriterAdminRefProfit">
 		select kid,nick_name,user_name,phone,provice,city,profit_sn,identity_card,
 		withdraw_amount,sum_withdraw_amount,user_bank_cart
-		from yryz_writer where 1=1
+		from yryz_writer where 1=1 and  LENGTH(trim(user_name)) > 0
 		<if test="nickName != null and nickName != '' ">
 			AND nick_name like CONCAT('%',trim(#{nickName}),'%')
 		</if>
@@ -493,6 +496,12 @@
 			AND profit_sn  in
 			<foreach collection="profitSnList" item="profitSn" open="(" separator="," close=")">
 				#{profitSn}
+			</foreach>
+		</if>
+		<if test="writerIdList != null and writerIdList.size()>0 ">
+			AND kid  in
+			<foreach collection="writerIdList" item="writerId" open="(" separator="," close=")">
+				#{writerId}
 			</foreach>
 		</if>
 		<if test="orderStr != null and orderStr != ''">

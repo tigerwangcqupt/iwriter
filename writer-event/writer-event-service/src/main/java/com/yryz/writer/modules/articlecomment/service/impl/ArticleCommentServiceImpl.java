@@ -91,6 +91,8 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
                 }
             });
         }
+        //查询时清缓存
+        messageApi.cleanMessageTips(ModuleEnum.FAVORITE, articleCommentDto.getCustId());
         return new PageModel<ArticleCommentVo>().getPageList(list, articleCommentVoList);
     }
 

@@ -43,4 +43,6 @@ public interface TaskApi {
     RpcResponse<Integer> insert(Task task);
 
     RpcResponse<Integer> update(Task task);
+
+    RpcResponse<Integer> taskCount();
 }

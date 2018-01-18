@@ -55,6 +55,11 @@ public class WriterDto extends PageList {
      */
     private List<String> profitSnList;
 
+    /**
+     * 写手集合
+     */
+    private List<Long> writerIdList;
+
     private String remark;
 
 
@@ -145,5 +150,13 @@ public class WriterDto extends PageList {
 
     public void setProfitSnList(List<String> profitSnList) {
         this.profitSnList = profitSnList;
+    }
+
+    public List<Long> getWriterIdList() {
+        return writerIdList;
+    }
+
+    public void setWriterIdList(List<Long> writerIdList) {
+        this.writerIdList = writerIdList;
     }
 }

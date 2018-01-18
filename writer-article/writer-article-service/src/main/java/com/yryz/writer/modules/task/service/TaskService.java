@@ -28,4 +28,6 @@ public interface TaskService extends BaseService {
     RpcResponse<Integer> add(Task task);
 
     RpcResponse<Integer> edit(Task task);
+
+    RpcResponse<Integer> taskCount();
 }
