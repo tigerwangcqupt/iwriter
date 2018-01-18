@@ -6,10 +6,7 @@ import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.profit.entity.Profit;
-import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
-import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
-import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
-import com.yryz.writer.modules.profit.vo.ProfitVo;
+import com.yryz.writer.modules.profit.vo.*;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.service.ProfitService;
 
@@ -144,6 +141,16 @@ public class ProfitProvider implements ProfitApi {
 			return ResponseModel.returnObjectSuccess(profitService.staticsProfitVo(userId));
 		} catch (Exception e) {
 			logger.error("查询写手统计信息失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<ProfitAccountVo> getAccountInfo() {
+		try {
+			return ResponseModel.returnObjectSuccess(profitService.getAccountInfo());
+		} catch (Exception e) {
+			logger.error("查询PC现金账户失败", e);
 			return ResponseModel.returnException(e);
 		}
 	}

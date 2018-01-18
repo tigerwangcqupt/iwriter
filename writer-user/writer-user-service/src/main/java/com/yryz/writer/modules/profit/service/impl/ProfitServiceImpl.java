@@ -36,9 +36,7 @@ import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
 import com.yryz.writer.modules.profit.constant.ProfitConstants;
 import com.yryz.writer.modules.profit.constant.ProfitEnum;
 import com.yryz.writer.modules.profit.util.CommonUtils;
-import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
-import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
-import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
+import com.yryz.writer.modules.profit.vo.*;
 import com.yryz.writer.modules.province.ProvinceApi;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.dto.WriterDto;
@@ -55,7 +53,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.yryz.writer.modules.profit.vo.ProfitVo;
 import com.yryz.writer.modules.profit.entity.Profit;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.dao.persistence.ProfitDao;
@@ -72,7 +69,7 @@ import java.util.List;
 public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 {
     private static final Logger logger = LoggerFactory.getLogger(ProfitServiceImpl.class);
-    private static final String LOCK_PROFIT_ADD = "PROFIT_ADD";
+    private static final String LOCK_PROFIT_ADD = "LOCK_PROFIT_ADD";
     private static final String LOCK_PROFIT_UPDATE = "LOCK_PROFIT_UPDATE";
     @Autowired
     private ProfitDao profitDao;
@@ -101,6 +98,9 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 
     @Autowired
     private CityApi cityApi;
+
+    @Autowired
+    private OpenOwnerApi openOwnerApi;
 
     @Value("${clientCode}")
     private String clientCode;
@@ -345,7 +345,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 writer.setSettlementType(ProfitEnum.WITHDRAWALS_SUCCESS.getCode());
                 writer.setKid(profit.getWriterId());
                 writer.setWithdrawDate(settlementDate);
-                writer.setSumWithdrawAmount(MoneyUtils.setBigDecimal(writerModelVo.getSumWithdrawAmount().add(profit.getSettlementAmount())));
+                writer.setSumWithdrawAmount(writerModelVo.getSumWithdrawAmount().add(MoneyUtils.setBigDecimal(profit.getSettlementAmount())));
                 writerService.update(writer);
 
                 //修改记录
@@ -468,17 +468,20 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public List<ProfitAdminVo> fillProfitData(List<ProfitDetailVo> list){
         List<ProfitAdminVo> profitAdminVoList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(list)){
-            //写手id集合
+            //流水集合
+            List<String> profitSnList = new ArrayList<>();
+
             List<Long> writerIdList = new ArrayList<>();
             //把流水号拿到用户表的数据
             for(ProfitDetailVo profitDetailVo : list){
                 ProfitAdminVo profitAdminVo = new ProfitAdminVo();
                 BeanUtils.copyProperties(profitDetailVo,profitAdminVo);
                 writerIdList.add(profitDetailVo.getWriterId());
+                //profitSnList.add(profitDetailVo.getProfitSn());
                 profitAdminVoList.add(profitAdminVo);
             }
             //写手id集合
-           // List<String> writerIdList = new ArrayList<>();
+           //List<Long> writerIdList = new ArrayList<>();
             WriterDto writerDto = new WriterDto();
             //writerDto.setProfitSnList(profitSnList);
             writerDto.setWriterIdList(writerIdList);
@@ -488,9 +491,11 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 for(WriterAdminRefProfit writerAdminRefProfit : writerRefProfitList){
                     for(ProfitAdminVo profitAdminVo : profitAdminVoList){
                         if(writerAdminRefProfit.getKid().longValue() == profitAdminVo.getWriterId().longValue()){
+                            String profitSn = profitAdminVo.getProfitSn();
                             //把用户相关数据拷贝到返回实体
                             BeanUtils.copyProperties(writerAdminRefProfit,profitAdminVo);
                             profitAdminVo.setWriterId(writerAdminRefProfit.getKid());
+                            profitAdminVo.setProfitSn(profitSn);
                         }
                     }
                 }
@@ -558,6 +563,23 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             profitStaticsVo.setWithdrawalsFlag(ProfitConstants.WITHDRAWALSFLAG);
         }
         return profitStaticsVo;
+    }
+
+    @Override
+    public ProfitAccountVo getAccountInfo() {
+        ProfitAccountVo profitAccountVo = new ProfitAccountVo();
+        RpcContext.getContext().setAttachment("clientCode", clientCode);
+        Owner owner = openOwnerApi.selectByFcode(ownerFCode);
+        Account account = new Account();
+        account.setOwnerCode(owner.getOwnerCode());
+        RpcContext.getContext().setAttachment("clientCode", clientCode);
+        account = openAccountApi.detailMore(account);
+        if(null != account && null != account.getAmount()){
+            profitAccountVo.setAmmount(account.getAmount());
+        }else{
+            profitAccountVo.setAmmount(new BigDecimal(0));
+        }
+        return profitAccountVo;
     }
 
     /**

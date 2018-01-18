@@ -5,10 +5,7 @@ import com.yryz.qstone.entity.base.model.Owner;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.profit.dto.ProfitDto;
 import com.yryz.writer.modules.profit.entity.Profit;
-import com.yryz.writer.modules.profit.vo.ProfitAdminVo;
-import com.yryz.writer.modules.profit.vo.ProfitDetailVo;
-import com.yryz.writer.modules.profit.vo.ProfitStaticsVo;
-import com.yryz.writer.modules.profit.vo.ProfitVo;
+import com.yryz.writer.modules.profit.vo.*;
 import com.yryz.writer.modules.writer.entity.Writer;
 import org.springframework.stereotype.Repository;
 
@@ -70,5 +67,10 @@ public interface ProfitService extends BaseService {
     *  @return
     * */
    ProfitStaticsVo staticsProfitVo(Long userId);
+
+   /**
+    *得到平台现金账户的余额
+    */
+   ProfitAccountVo getAccountInfo();
 
 }
