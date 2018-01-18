@@ -46,6 +46,12 @@ public class WriterController extends BaseController {
 		if (StringUtils.isNotEmpty(userId)) {
 			writer.setKid(Long.valueOf(userId));
 			writer.setLastUpdateUserId(userId);
+			if (StringUtils.isEmpty(writer.getNickName()) && StringUtils.isEmpty(writer.getHeadImg())) {
+				throw new YyrzPcException(
+		                   ExceptionEnum.ValidateException.getCode(),
+		                   ExceptionEnum.ValidateException.getMsg(),
+		                   ExceptionEnum.ValidateException.getErrorMsg());
+			}
 			if (StringUtils.isNotEmpty(writer.getNickName())) {
 				RpcResponse<List<Writer>> result = writerApi.checkNickName(writer);
 				if (result.success()) {
@@ -69,6 +75,14 @@ public class WriterController extends BaseController {
 		   writer.setKid(Long.valueOf(userId));
 		   writer.setLastUpdateUserId(userId);
 	   }
+	   if (StringUtils.isEmpty(writer.getUserName()) || StringUtils.isEmpty(writer.getIdentityCard())
+				|| StringUtils.isEmpty(writer.getIdentityCardPhoto()) || StringUtils.isEmpty(writer.getProvice())
+				|| StringUtils.isEmpty(writer.getCity()) || StringUtils.isEmpty(writer.getTel())||StringUtils.isEmpty(writer.getEmail())) {
+		   throw new YyrzPcException(
+                   ExceptionEnum.ValidateException.getCode(),
+                   ExceptionEnum.ValidateException.getMsg(),
+                   ExceptionEnum.ValidateException.getErrorMsg());
+		}
        return writerApi.submitAudit(writer);
    }
 
