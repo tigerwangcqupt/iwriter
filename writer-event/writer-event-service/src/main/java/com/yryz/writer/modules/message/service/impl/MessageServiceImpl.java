@@ -120,7 +120,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             } else {
                 //写手的收藏数设置1
                 //是否设置成功
-                success = JedisUtils.mapSet(key, field, "1");
+                success = JedisUtils.mapSetnx(key, field, "1");
                 if (!success) {
                     //如果缓存没有设置成功 做什么
                 }
@@ -145,7 +145,12 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             //写手相关的消息业务 进行锁（避免同时新增时冲突）
             lock = DistributedLockUtils.lock(ID_LOCK_NAME, moduleEnum.getValue() + writerId.toString());
             //如果存在业务的缓存气泡数
-            success = JedisUtils.mapSet(key, field, messageNum.toString());
+            if (JedisUtils.mapExists(key, field)) {
+                success = JedisUtils.mapSet(key, field, messageNum.toString());
+            }else{
+                success = JedisUtils.mapSetnx(key, field, messageNum.toString());
+            }
+
 //            success = JedisUtils.mapSetnx(key, field, messageNum.toString());
         } catch (Exception e) {
             logger.error("保存消息缓存气泡失败", e);
@@ -174,7 +179,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             } else {
                 //写手的收藏数设置1
                 //是否设置成功
-                success = JedisUtils.mapSet(COMMON_KEY, field, "1");
+                success = JedisUtils.mapSetnx(COMMON_KEY, field, "1");
                 if (!success) {
                     //如果缓存没有设置成功 做什么
                 }
