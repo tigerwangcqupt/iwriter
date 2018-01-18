@@ -61,20 +61,7 @@ public class ProfitProvider implements ProfitApi {
 		}
 	}
 
-	/**
-	 * 获取profit信息
-	 * @param  userId
-	 * @return
-	 */
-	@Override
-	public RpcResponse<ProfitVo> detailProfit(Long userId) {
-		try {
-			return ResponseModel.returnObjectSuccess(profitService.detailProfit(userId));
-		} catch (Exception e) {
-			logger.error("获取Profit明细失败", e);
-			return ResponseModel.returnException(e);
-		}
-	}
+
 
 	@Override
 	public RpcResponse<Profit> insertProfit(Profit profit) {

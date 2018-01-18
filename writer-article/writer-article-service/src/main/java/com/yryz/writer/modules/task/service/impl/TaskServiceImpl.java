@@ -42,7 +42,7 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         PageUtils.startPage(taskDto.getCurrentPage(), taskDto.getPageSize());
         //平台任务的已查阅数
         if (taskDto.getAppOrAdmin() != null && taskDto.getAppOrAdmin() == 0) {
-            RpcResponse<Long> platformTaskMessageTips = messageApi.getPlatformTaskMessageTips(taskDto.getWriterId());
+            RpcResponse<Long> platformTaskMessageTips = messageApi.getCommonMessageTips(ModuleEnum.PLATFORM);
             messageApi.setMessageTips(ModuleEnum.PLATFORM, taskDto.getWriterId(), platformTaskMessageTips.getData());
         }
 

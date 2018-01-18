@@ -145,7 +145,13 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             //写手相关的消息业务 进行锁（避免同时新增时冲突）
             lock = DistributedLockUtils.lock(ID_LOCK_NAME, moduleEnum.getValue() + writerId.toString());
             //如果存在业务的缓存气泡数
-            success = JedisUtils.mapSetnx(key, field, messageNum.toString());
+            if (JedisUtils.mapExists(key, field)) {
+                success = JedisUtils.mapSet(key, field, messageNum.toString());
+            }else{
+                success = JedisUtils.mapSetnx(key, field, messageNum.toString());
+            }
+
+//            success = JedisUtils.mapSetnx(key, field, messageNum.toString());
         } catch (Exception e) {
             logger.error("保存消息缓存气泡失败", e);
             throw e;

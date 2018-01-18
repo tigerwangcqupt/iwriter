@@ -326,13 +326,13 @@
     
     <!-- 查询全部 -->
     <select id="selectList" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
-        select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid
+        select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid,task_kid
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status != 3 AND del_flag = 0
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
 		UNION ALL
-		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid
+		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid,NULL task_kid
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
@@ -350,13 +350,13 @@
 
 	<!-- 查询未通过,文章和稿件 -->
     <select id="selectNotPass" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
-		select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid
+		select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid,task_kid
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status IN (1,2) AND del_flag = 0
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
 		UNION ALL
-		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid
+		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid,NULL task_kid
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0 AND shelve_flag = 1
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
@@ -365,7 +365,7 @@
 
 	<!-- 查询草稿 -->
     <select id="selectDraught" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
-		select title,cover_img_url,draft_fee,reason,draft_type,suggest,draft_status,task_flag,kid
+		select title,cover_img_url,draft_fee,reason,draft_type,suggest,draft_status,task_flag,kid,task_kid
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status = 0 AND del_flag = 0
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
@@ -377,8 +377,11 @@
 		select
 		<include refid="Base_Column_List"/>
         from yryz_draft WHERE draft_status = 1
-		<if test="createUserId != null">
-			AND create_user_id = #{createUserId,jdbcType=VARCHAR}
+		<if test="createUserIds != null">
+			AND create_user_id IN
+			<foreach  item="item" collection="createUserIds" index="index"  open="(" separator="," close=")">
+				#{item}
+			</foreach>
 		</if>
 		<if test="appId != null">
 			AND app_id = #{appId,jdbcType=BIGINT}
@@ -393,8 +396,11 @@
 		select
 		<include refid="Base_Column_List"/>
 		from yryz_draft WHERE draft_status = 2
-		<if test="createUserId != null">
-			AND create_user_id = #{createUserId,jdbcType=VARCHAR}
+		<if test="createUserIds != null">
+			AND create_user_id IN
+			<foreach  item="item" collection="createUserIds" index="index"  open="(" separator="," close=")">
+				#{item}
+			</foreach>
 		</if>
 		<if test="appId != null">
 			AND app_id = #{appId,jdbcType=BIGINT}
@@ -406,14 +412,37 @@
 
     <select id="selectWriterByKid" parameterType="java.lang.String" resultType="com.yryz.writer.modules.draft.vo.DraftVo">
 		SELECT
-			a.nick_name writer_nick_name,a.phone writer_phone,a.user_name writer_name,b.remark writer_remark
+			a.nick_name writer_nick_name,a.phone writer_phone,a.user_name writer_name,a.remark writer_remark
 		FROM
-			yryz_writer a,
-			yryz_writer_audit_history b
+			yryz_writer a
 		WHERE
 			a.kid = #{kid}
-		AND a.kid = b.writer_kid
-		AND b.audit_status = 2
     </select>
+
+    <select id="selectWriter" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="java.lang.Long">
+		SELECT a.kid FROM yryz_writer a
+		WHERE a.user_status = 2
+		<if test="nickName != null and nickName != ''">
+			AND nick_name LIKE CONCAT('%',#{nickName},'%')
+		</if>
+		<if test="userName != null and userName != ''">
+			AND user_name LIKE CONCAT('%',#{userName},'%')
+		</if>
+		<if test="remark != null and remark != ''">
+			AND remark LIKE CONCAT('%',#{remark},'%')
+		</if>
+		<if test="phone != null and phone != ''">
+			AND phone = #{phone}
+		</if>
+    </select>
+
+	<select id="selectUserByUserName" parameterType="java.lang.String" resultType="com.yryz.writer.modules.draft.vo.UserVo">
+		SELECT
+		a.kid,a.user_name
+		FROM
+		yryz_writer a
+		WHERE
+		a.user_name LIKE CONCAT('%',#{userName},'%')
+	</select>
 
 </mapper>

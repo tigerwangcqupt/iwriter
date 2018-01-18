@@ -141,4 +141,14 @@ public class MessageProvider implements MessageApi {
             return ResponseModel.returnException(e);
         }
     }
+
+    @Override
+    public RpcResponse<Long> getCommonMessageTips(ModuleEnum moduleEnum) {
+        try {
+            return ResponseModel.returnObjectSuccess(messageService.getCommonMessageTips(moduleEnum));
+        } catch (Exception e) {
+            logger.error("保存平台任务缓存数失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
 }

@@ -14,6 +14,7 @@ import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.service.DraftService;
 import com.yryz.writer.modules.draft.vo.DraftVo;
+import com.yryz.writer.modules.draft.vo.UserVo;
 import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.task.dao.persistence.TaskDao;
 import com.yryz.writer.modules.task.entity.Task;
@@ -47,10 +48,20 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
     public PageList<DraftVo> selectList(DraftDto draftDto) {
         PageUtils.startPage(draftDto.getCurrentPage(), draftDto.getPageSize());
 
+        List<Long> createUserIds = new ArrayList<>();
+        String createUserId = draftDto.getCreateUserId();
+        if (StringUtils.isNotBlank(createUserId)) {
+            createUserIds.add(Long.valueOf(createUserId));
+            draftDto.setCreateUserIds(createUserIds);
+        } else if (StringUtils.isNotBlank(draftDto.getNickName()) || StringUtils.isNotBlank(draftDto.getUserName()) || StringUtils.isNotBlank(draftDto.getRemark()) || StringUtils.isNotBlank(draftDto.getPhone())) {
+            createUserIds = draftDao.selectWriter(draftDto);
+            draftDto.setCreateUserIds(createUserIds);
+        }
+
         //获取状态,已发表需查询文章表,其余查询稿件表
         //列表参数:0 全部,1 已发表,2 未通过,3 草稿,4 管理后台待审核,5 管理后台未通过
         Integer status = draftDto.getStatus();
-        List<Draft> list;
+        List<Draft> list = new ArrayList<>();
         switch (status) {
             case 0:
                 list = draftDao.selectList(draftDto);
@@ -119,6 +130,11 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 
     public List<AppVo> selectAppByAppliName(String appliName) {
         return taskDao.selectAppByAppliName(appliName);
+    }
+
+    @Override
+    public List<UserVo> selectUserByUserName(String userName) {
+        return draftDao.selectUserByUserName(userName);
     }
 
     private DraftVo toDraftVo(Draft draft) {

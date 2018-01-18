@@ -56,18 +56,10 @@ public class ProfitController extends BaseController{
       ProfitDto profitDto = new ProfitDto();
       profitDto.setWriterId(userId);
       profitDto.setFrontCall(ProfitConstants.CALLEDBYFRONT);
-      String orderStr = "order by settlement_date desc";
+      String orderStr = "order by settlement_date1 desc";
       profitDto.setOrderStr(orderStr);
       RpcResponse<PageList<ProfitDetailVo>> rpcResponse = profitApi.selectFlowList(profitDto);
       return rpcResponse;
-   }
-
-
-   @ResponseBody
-   @RequestMapping(value="/getcash/detail", method = RequestMethod.GET)
-   public RpcResponse<ProfitVo> detail(@RequestHeader Long userId) {
-       Assert.notNull(userId, "用户id为空!");
-       return profitApi.detailProfit(userId);
    }
 
 
@@ -85,7 +77,6 @@ public class ProfitController extends BaseController{
       Assert.notNull(profit, "参数缺少或错误！");
       Assert.notNull(userId, "用户id为空!");
       profit.setWriterId(userId);
-      profit.setCreateUserId(userId+"");
       profit.setModuleEnum(YyrzModuleEnumConstants.PROFIT_INFO);
       profit.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
       return profitApi.insertProfit(profit);

@@ -89,4 +89,11 @@ public interface MessageApi {
      * @return
      */
     public RpcResponse<PageList<WriterNoticeVo>> queryWriterNoticeMessage(WriterNoticeMessageDto writerNoticeMessageDto);
+
+    /**
+     * 查询公共模块缓存数
+     * @param moduleEnum
+     * @return
+     */
+    public RpcResponse<Long> getCommonMessageTips(ModuleEnum moduleEnum);
 }

@@ -24,7 +24,6 @@ public class ProfitDetailVo implements Serializable {
     /**
      * 结算日期
      */
-    @JsonFormat(pattern="yyyy-MM-dd")
     private String settlementDate;
 
     /**
@@ -64,7 +63,6 @@ public class ProfitDetailVo implements Serializable {
         this.settlementAmount = settlementAmount;
     }
 
-    @JsonFormat(pattern="yyyy-MM-dd")
     public String getSettlementDate() {
         return settlementDate;
     }

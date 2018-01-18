@@ -39,13 +39,6 @@ public interface ProfitApi {
     RpcResponse<ProfitVo> detail(Long id);
 
 	/**
-	 *  根据用户id获取Profit明细
-	 *  @param  userId
-	 *  @return
-	 * */
-	RpcResponse<ProfitVo> detailProfit(Long userId);
-
-	/**
 	 * 添加提现流水
 	 *
 	 * @param profit

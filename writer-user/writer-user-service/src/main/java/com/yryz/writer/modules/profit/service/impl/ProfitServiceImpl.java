@@ -147,50 +147,6 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         return profitVo;
     }
 
-    @Override
-    public ProfitVo detailProfit(Long userId) {
-        ProfitVo profitVo = new ProfitVo();
-        List<ProfitDetailVo> detailList = new ArrayList<>();
-        ProfitDto profitDto = new ProfitDto();
-        profitDto.setCreateUserId(userId);
-        List<Profit> list = profitDao.selectList(profitDto);
-        if(CollectionUtils.isNotEmpty(list)){
-            //剩余可提现金额
-            BigDecimal availableAmount =  list.get(0).getSurplusAmount();
-            //累计提现金额
-            BigDecimal accumulativeAmount = new BigDecimal(0);
-            //最近提现金额
-            BigDecimal currentAmount = new BigDecimal(0);
-            int i=0;
-            for(Profit profit : list){
-                ProfitDetailVo profitDetailVo = new ProfitDetailVo();
-                //提现
-                if(profit.getSettlementType() == ProfitEnum.WITHDRAWALS_FEE.getCode()){
-                    //最近提现金额
-                    if(i==0){
-                        currentAmount = currentAmount.add(profit.getSettlementAmount());
-                        //最近提现日期
-                        profitVo.setSettlementDate(DateUtil.getNYRString(profit.getSettlementDate()));
-                    }
-                    accumulativeAmount = accumulativeAmount.add(profit.getSettlementAmount());
-                    i++;
-                }
-                BeanUtils.copyProperties(profit,profitDetailVo);
-                profitDetailVo.setSettlementDate(DateUtil.getNYRString(profit.getSettlementDate()));
-                profitDetailVo.setSettlementType(ProfitEnum.profitEnumMap.get(profit.getSettlementType()).getMsg());
-                detailList.add(profitDetailVo);
-            }
-            //剩余可提现金额
-            profitVo.setAvailableAmount(availableAmount);
-            //累计提现金额
-            profitVo.setAccumulativeAmount(accumulativeAmount);
-            //最近提现金额
-            profitVo.setCurrentAmount(currentAmount);
-            //detailList
-            profitVo.setList(detailList);
-        }
-        return profitVo;
-    }
 
 
     /**
@@ -205,7 +161,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(new Integer(settlementAmount.intValue()).toString()))){
+            if((null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
@@ -219,7 +175,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
             //剩余可提现金额
             BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
-            //稿费的时候不去判断
+            //稿费的时候不去判断(提现的时候需要判断)
             if(profit.getSettlementType() != ProfitEnum.ROYALTIES_FEE.getCode()){
                 //提现金额区间(500--10000)
                if(!CommonUtils.checkValidAmount(settlementAmount)){
@@ -258,6 +214,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             Long kid  = idAPI.getId(ProfitConstants.PROFITTABLE);
             profit.setKid(kid);
             profit.setSettlementDate(settlementDate);
+            profit.setCreateUserId(profit.getWriterId()+"");
             //当前提现金额扩大一万倍
             profit.setSettlementAmount(MoneyUtils.setBigDecimal(profit.getSettlementAmount()));
             //如果是提现
@@ -325,7 +282,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             //当前提现金额
             BigDecimal settlementAmount = profit.getSettlementAmount();
             //提现金额不是正整数
-            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(new Integer(settlementAmount.intValue()).toString()))){
+            if( (null == settlementAmount) || (!CommonUtils.checkIntNumber(settlementAmount))){
                 logger.error("提现金额不是正整数");
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
@@ -393,7 +350,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 
                 //修改记录
                 profitBase.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
-                profitBase.setLastUpdateUserId(profit.getLastUpdateUserId());
+                profitBase.setLastUpdateUserId(profit.getCreateUserId());
                 profitBase.setKid(oldKid);
                 profitDao.update(profitBase);
                 //提现流水
@@ -406,7 +363,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 writerNoticeMessageVo.setContent(profit.getSettlementMsg());
                 //3提现后台发送提现失败通知
                 writerNoticeMessageVo.setTriggerType(3);
-                writerNoticeMessageVo.setSendUserId(Long.valueOf(profit.getLastUpdateUserId()));
+                writerNoticeMessageVo.setSendUserId(Long.valueOf(profit.getCreateUserId()));
                 List<NoticeReceiveWriter> receiveWriters = new ArrayList<>();
                 NoticeReceiveWriter noticeReceiveWriter = new NoticeReceiveWriter();
                 noticeReceiveWriter.setKid(profit.getWriterId());
@@ -424,7 +381,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
 
                 //修改记录
                 profitBase.setSettlementType(ProfitEnum.WITHDRAWALS_FEE.getCode());
-                profitBase.setLastUpdateUserId(profit.getLastUpdateUserId());
+                profitBase.setLastUpdateUserId(profit.getCreateUserId());
                 profitBase.setKid(oldKid);
                 profitDao.update(profitBase);
 
