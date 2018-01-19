@@ -289,11 +289,8 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         try {
             Assert.notNull(kid, "分类id不能为空");
             ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class, kid);
-            if (null == articleClassify) {
-                throw new IllegalArgumentException("文章分类不存在");
-            }
             //该分类是末级分类
-            if (ArticleClassifyConstant.LAST_STAGE_YES == articleClassify.getLastStageFlag()) {
+            if (null != articleClassify && ArticleClassifyConstant.LAST_STAGE_YES == articleClassify.getLastStageFlag()) {
                 //该末级分类上关联着文章
                 int count = articleClassifyDao.countArticleByClassifyId(kid);
                 return count > 0 ? false : true;
