@@ -45,6 +45,8 @@ public enum ExceptionEnum {
     IMAGE_CODE_ERROR("5025", "图形验证码错误！", "图形验证码错误！"),
     OLD_PHONE_VERICODE_ERROR("5026", "旧手机验证码不正确！", "旧手机验证码不正确！"),
     BIND_PHONE_UNSUCCESSFUL("5027", "绑定失败！该手机号已被其它账户绑定！", "绑定失败！该手机号已被其它账户绑定！"),
+    UN_SET_PASSWORD_("5028", "您未设置密码，请使用短信登录！"),
+
 
     ADD_OWNER_EXCEPTION("6001", "增加资金主体异常", "增加资金主体异常"),
 

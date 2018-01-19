@@ -409,6 +409,13 @@ public class UserAppController extends BaseController {
                     ExceptionEnum.USER_UNREGISTERED.getMsg(),
                     ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
         } else {
+            if(null == user.getPwd() || user.getPwd().length() == 0){
+                throw new YyrzPcException(
+                        ExceptionEnum.UN_SET_PASSWORD_.getCode(),
+                        ExceptionEnum.UN_SET_PASSWORD_.getMsg(),
+                        ExceptionEnum.UN_SET_PASSWORD_.getErrorMsg());
+            }
+
             if (password.equals(user.getPwd())) {
                 RpcResponse<String> tokenRpcResponse = writerApi.addUserToken(String.valueOf(user.getKid()));
                 String token = isSuccess(tokenRpcResponse);
