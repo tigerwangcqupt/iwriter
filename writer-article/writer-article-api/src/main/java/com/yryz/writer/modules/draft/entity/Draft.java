@@ -124,6 +124,11 @@ public class Draft extends GenericEntity {
      */
     private Integer shelveFlag;
 
+    /**
+     * 数据类型(0稿件, 1文章)
+     */
+    private Integer dataType;
+
 
     public Integer getDraftType() {
         return this.draftType;
@@ -277,4 +282,11 @@ public class Draft extends GenericEntity {
         this.shelveFlag = shelveFlag;
     }
 
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
+    }
 }

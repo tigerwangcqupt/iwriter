@@ -142,6 +142,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         //Draft to DraftVo
         draftVo.setKid(draft.getKid());
         draftVo.setTitle(draft.getTitle());
+        draftVo.setDataType(draft.getDataType());
         draftVo.setContentHtml(draft.getContentHtml());
         draftVo.setCoverImgUrl(draft.getCoverImgUrl());
         draftVo.setDescription(draft.getDescription());
@@ -155,6 +156,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         draftVo.setClassifyName(draft.getClassifyName());
         draftVo.setLabelName(draft.getLabelName());
         draftVo.setShelveFlag(draft.getShelveFlag());
+        draftVo.setDraftFee(draft.getDraftFee());
         Long taskKid = draft.getTaskKid();
         if (draft.getTaskFlag() == 1) {
             if (taskKid != null && taskKid != 0) {
