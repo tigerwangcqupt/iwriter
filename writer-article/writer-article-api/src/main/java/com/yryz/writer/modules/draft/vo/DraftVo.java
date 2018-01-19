@@ -136,6 +136,8 @@ public class DraftVo implements Serializable {
 
     private Integer shelveFlag;
 
+    private Integer dataType;
+
     public Integer getShelveFlag() {
         return shelveFlag;
     }
@@ -366,5 +368,13 @@ public class DraftVo implements Serializable {
 
     public void setWriterId(Long writerId) {
         this.writerId = writerId;
+    }
+
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
     }
 }
