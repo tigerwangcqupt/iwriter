@@ -2,6 +2,7 @@ package com.yryz.writer.modules.city;
 
 import java.util.List;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.city.vo.CityVo;
 
 
@@ -22,7 +23,8 @@ public interface CityApi {
 	 * @param provinceCode
 	 * @return
 	 */
-	List<CityVo> selectCitysByPid(String provinceCode);
+	public RpcResponse<List<CityVo>> selectCitysByPid(String provinceCode);
 
-	public CityVo selectCity(String cityCode);
+	public RpcResponse<CityVo> selectCity(String cityCode);
+	
 }

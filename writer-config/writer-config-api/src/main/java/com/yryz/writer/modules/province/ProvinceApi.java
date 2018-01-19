@@ -2,6 +2,7 @@ package com.yryz.writer.modules.province;
 
 import java.util.List;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.service.api.api.exception.ServiceException;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
 
@@ -21,8 +22,8 @@ public interface ProvinceApi {
 	 * 
 	 * @return
 	 */
-	public List<ProvinceVo> queryAllProvinces() throws ServiceException;
+	public RpcResponse<List<ProvinceVo>> queryAllProvinces() throws ServiceException;
 	
-	public ProvinceVo selectProvinces(String provinceCode) throws ServiceException;
+	public RpcResponse<ProvinceVo> selectProvinces(String provinceCode) throws ServiceException;
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.city.CityApi;
@@ -31,7 +32,7 @@ public class AreaController extends BaseController {
 	@RequestMapping(value="listProvinces",method = RequestMethod.GET)
 	@ResponseBody
 	@NotLogin
-    public List<ProvinceVo> listProvinces() {
+    public RpcResponse<List<ProvinceVo>> listProvinces() {
 		return provinceApi.queryAllProvinces();
     }
 	
@@ -39,7 +40,7 @@ public class AreaController extends BaseController {
 	@RequestMapping(value="listCitys",method = RequestMethod.GET)
 	@ResponseBody
 	@NotLogin
-    public List<CityVo> listCitys(String provinceCode) {
+    public RpcResponse<List<CityVo>> listCitys(String provinceCode) {
 		return cityApi.selectCitysByPid(provinceCode);
     }
 	

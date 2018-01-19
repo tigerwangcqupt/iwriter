@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.service.api.api.exception.ServiceException;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.writer.modules.province.ProvinceApi;
 import com.yryz.writer.modules.province.service.ProvinceService;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
@@ -31,14 +33,14 @@ public class ProvinceProvider implements ProvinceApi {
 	private ProvinceService provinceService;
 
 
-	public List<ProvinceVo> queryAllProvinces() throws ServiceException {
-		return provinceService.queryAllProvinces();
+	public RpcResponse<List<ProvinceVo>> queryAllProvinces() throws ServiceException {
+		return ResponseModel.returnListSuccess(provinceService.queryAllProvinces());
 	}
 
 
 	@Override
-	public ProvinceVo selectProvinces(String provinceCode) throws ServiceException {
-		return provinceService.selectProvince(provinceCode);
+	public RpcResponse<ProvinceVo> selectProvinces(String provinceCode) throws ServiceException {
+		return ResponseModel.returnObjectSuccess(provinceService.selectProvince(provinceCode));
 	}
 
 

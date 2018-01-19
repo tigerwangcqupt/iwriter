@@ -62,11 +62,11 @@ public class WriterAuditProvider implements WriterAuditApi {
 		try {
 			WriterAuditVo writerAuditVo = writerAuditService.detail(kid);
 			if(writerAuditVo!=null){
-				ProvinceVo provinceVo = provinceApi.selectProvinces(writerAuditVo.getProvice());
+				ProvinceVo provinceVo = provinceApi.selectProvinces(writerAuditVo.getProvice()).getData();
 				if(provinceVo!=null){
 					writerAuditVo.setProviceName(provinceVo.getProvinceName());
 				}
-				CityVo cityVo = cityApi.selectCity(writerAuditVo.getCity());
+				CityVo cityVo = cityApi.selectCity(writerAuditVo.getCity()).getData();
 				if(cityVo!=null){
 					writerAuditVo.setCityName(cityVo.getCityName());
 				}

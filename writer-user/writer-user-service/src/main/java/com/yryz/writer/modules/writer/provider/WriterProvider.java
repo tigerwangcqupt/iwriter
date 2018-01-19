@@ -69,11 +69,11 @@ public class WriterProvider implements WriterApi {
 		try {
 			WriterVo writerVo = writerService.detail(kid);
 			if(writerVo!=null){
-				ProvinceVo provinceVo = provinceApi.selectProvinces(writerVo.getProvice());
+				ProvinceVo provinceVo = provinceApi.selectProvinces(writerVo.getProvice()).getData();
 				if(provinceVo!=null){
 					writerVo.setProviceName(provinceVo.getProvinceName());
 				}
-				CityVo cityVo = cityApi.selectCity(writerVo.getCity());
+				CityVo cityVo = cityApi.selectCity(writerVo.getCity()).getData();
 				if(cityVo!=null){
 					writerVo.setCityName(cityVo.getCityName());
 				}
@@ -94,11 +94,11 @@ public class WriterProvider implements WriterApi {
 		try {
 			WriterAdminVo writerAdminVo = writerService.selectWriterDetail(kid);
 			if(writerAdminVo!=null){
-				ProvinceVo provinceVo = provinceApi.selectProvinces(writerAdminVo.getProvice());
+				ProvinceVo provinceVo = provinceApi.selectProvinces(writerAdminVo.getProvice()).getData();
 				if(provinceVo!=null){
 					writerAdminVo.setProviceName(provinceVo.getProvinceName());
 				}
-				CityVo cityVo = cityApi.selectCity(writerAdminVo.getCity());
+				CityVo cityVo = cityApi.selectCity(writerAdminVo.getCity()).getData();
 				if(cityVo!=null){
 					writerAdminVo.setCityName(cityVo.getCityName());
 				}

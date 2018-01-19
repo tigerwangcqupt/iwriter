@@ -511,8 +511,8 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                             String location = "";
                             String userName = profitAdminVo.getUserName();
                             BeanUtils.copyProperties(bank,profitAdminVo);
-                            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice());
-                            CityVo cityVo = cityApi.selectCity(bank.getCity());
+                            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice()).getData();
+                            CityVo cityVo = cityApi.selectCity(bank.getCity()).getData();
                             if(null != provinceVo && StringUtils.isNotEmpty(provinceVo.getProvinceName())){
                                 location = provinceVo.getProvinceName();
                             }

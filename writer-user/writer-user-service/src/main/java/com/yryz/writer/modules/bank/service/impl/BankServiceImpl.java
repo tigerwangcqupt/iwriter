@@ -96,8 +96,8 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         BankVo bankVo = new BankVo();
         if (bank != null) {
             BeanUtils.copyProperties(bank,bankVo);
-            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice());
-            CityVo cityVo = cityApi.selectCity(bank.getCity());
+            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice()).getData();
+            CityVo cityVo = cityApi.selectCity(bank.getCity()).getData();
             bankVo.setProviceName(provinceVo.getProvinceName());
             bankVo.setCityName(cityVo.getCityName());
             return bankVo;
@@ -243,8 +243,8 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
         Bank bank =  bankDao.selectByParameters(bankDto);
         if (bank != null) {
             BeanUtils.copyProperties(bank,bankVo);
-            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice());
-            CityVo cityVo = cityApi.selectCity(bank.getCity());
+            ProvinceVo provinceVo = provinceApi.selectProvinces(bank.getProvice()).getData();
+            CityVo cityVo = cityApi.selectCity(bank.getCity()).getData();
             bankVo.setProviceName(provinceVo.getProvinceName());
             bankVo.setCityName(cityVo.getCityName());
             return bankVo;
