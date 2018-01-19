@@ -49,11 +49,12 @@ public class ProfitController extends BaseController{
     * @param userId
     * @return
     */
+   @NotLogin
    @ResponseBody
    @RequestMapping(value="/getcash/staticsList", method = RequestMethod.GET)
-   public RpcResponse<PageList<ProfitDetailVo>> staticsList(@RequestHeader Long userId) {
+   public RpcResponse<PageList<ProfitDetailVo>> staticsList(ProfitDto profitDto,@RequestHeader Long userId) {
       Assert.notNull(userId, "用户id为空!");
-      ProfitDto profitDto = new ProfitDto();
+      Assert.notNull(profitDto, "参数缺少或错误！");
       profitDto.setWriterId(userId);
       profitDto.setFrontCall(ProfitConstants.CALLEDBYFRONT);
       String orderStr = "order by settlement_date1 desc";
