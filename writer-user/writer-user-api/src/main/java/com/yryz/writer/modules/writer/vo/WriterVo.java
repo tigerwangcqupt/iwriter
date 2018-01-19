@@ -12,7 +12,18 @@ import java.util.Date;
   *
  */
 public class WriterVo implements Serializable{
-	
+
+
+	/**
+	 * 用户ID
+	 */
+	private String userId;
+
+	/**
+	 * 用户token
+	 */
+	private String token;
+
 	/**
 	 * 账号
 	 */	 
@@ -250,7 +261,20 @@ public class WriterVo implements Serializable{
 	public void setPwdFlag(Integer pwdFlag) {
 		this.pwdFlag = pwdFlag;
 	}
-	
-	
-		
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 }

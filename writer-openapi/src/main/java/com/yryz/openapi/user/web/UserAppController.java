@@ -18,6 +18,7 @@ import com.yryz.writer.modules.platform.dto.CustRegisterDto;
 import com.yryz.writer.modules.platform.vo.AuthInfoVo;
 import com.yryz.writer.modules.writer.WriterApi;
 import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.vo.WriterVo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,7 +114,7 @@ public class UserAppController extends BaseController {
     @RequestMapping(value = "register", method = {RequestMethod.POST})
     @ResponseBody
     @NotLogin
-    public RpcResponse<AuthInfoVo> register(@RequestBody CustRegisterDto custRegister) {
+    public RpcResponse<WriterVo> register(@RequestBody CustRegisterDto custRegister) {
         //检验邀请码
         Assert.notNull(custRegister, "参数缺少或错误！");
 
@@ -161,14 +162,15 @@ public class UserAppController extends BaseController {
             }, 10, TimeUnit.SECONDS);*/
 
             //输出参数
-            AuthInfoVo authInfoVo = new AuthInfoVo();
-            authInfoVo.setCustPhone(custRegister.getCustPhone());
-            authInfoVo.setUserId(kid);
+            WriterVo authInfoVo = new WriterVo();
+            authInfoVo.setPhone(custRegister.getCustPhone());
+            authInfoVo.setUserId(String.valueOf(kid));
+
 
             RpcResponse<String> tokenRpcResponse = writerApi.addUserToken(String.valueOf(kid));
             String token = isSuccess(tokenRpcResponse);
             authInfoVo.setToken(token);
-            return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
+            return new DubboResponse<WriterVo>(true, "200", "success", "", authInfoVo);
         }
 
         //您输入的验证码不正确
@@ -260,8 +262,8 @@ public class UserAppController extends BaseController {
     @RequestMapping(value = "login/verifyCode", method = {RequestMethod.POST})
     @ResponseBody
     @NotLogin
-    public RpcResponse<AuthInfoVo> loginVerifyCode(@RequestBody CustRegisterDto custRegisterDto) {
-        AuthInfoVo authInfoVo = new AuthInfoVo();
+    public RpcResponse<WriterVo> loginVerifyCode(@RequestBody CustRegisterDto custRegisterDto) {
+        WriterVo authInfoVo = new WriterVo();
         Assert.notNull(custRegisterDto, "缺少参数或参数错误！");
 
         Assert.notNull(custRegisterDto.getCustPhone(), "手机号不能为空！");
@@ -305,12 +307,13 @@ public class UserAppController extends BaseController {
 
             RpcResponse<String> tokenRpcResponse = writerApi.addUserToken(String.valueOf(user.getKid()));
             String token = isSuccess(tokenRpcResponse);
-            authInfoVo.setCustPhone(custRegisterDto.getCustPhone());
+            authInfoVo.setPhone(custRegisterDto.getCustPhone());
             authInfoVo.setToken(token);
-            authInfoVo.setUserId(user.getKid());
-            authInfoVo.setCustImg(user.getHeadImg());
-            authInfoVo.setCustNname(user.getNickName());
-            return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
+            authInfoVo.setUserId(String.valueOf(user.getKid()));
+            authInfoVo.setHeadImg(user.getHeadImg());
+            authInfoVo.setNickName(user.getNickName());
+
+            return new DubboResponse<WriterVo>(true, "200", "success", "", authInfoVo);
         }
         throw new YyrzPcException(
                 ExceptionEnum.PIN_ERROR.getCode(),
@@ -367,9 +370,9 @@ public class UserAppController extends BaseController {
     @RequestMapping(value = "login/phone", method = {RequestMethod.POST})
     @ResponseBody
     @NotLogin
-    public RpcResponse<AuthInfoVo> login(@RequestBody Map<String, Object> map) {
+    public RpcResponse<WriterVo> login(@RequestBody Map<String, Object> map) {
         LOGGER.info("=======login user1: {}", JSON.toJSONString(map));
-        AuthInfoVo authInfoVo = new AuthInfoVo();
+        WriterVo authInfoVo = new WriterVo();
         Assert.notNull(map, "用户信息为空！");
 
         Assert.notNull(map.get("phone"), "手机号不能为空！");
@@ -418,11 +421,11 @@ public class UserAppController extends BaseController {
             }
         }
 
-        authInfoVo.setUserId(user.getKid());
-        authInfoVo.setCustPhone(phone);
-        authInfoVo.setCustImg(user.getHeadImg());
-        authInfoVo.setCustNname(user.getNickName());
-        return new DubboResponse<AuthInfoVo>(true, "200", "success", "", authInfoVo);
+        authInfoVo.setPhone(phone);
+        authInfoVo.setUserId(String.valueOf(user.getKid()));
+        authInfoVo.setHeadImg(user.getHeadImg());
+        authInfoVo.setNickName(user.getNickName());
+        return new DubboResponse<WriterVo>(true, "200", "success", "", authInfoVo);
     }
 
 
