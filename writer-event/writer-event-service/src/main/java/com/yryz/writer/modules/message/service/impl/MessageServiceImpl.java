@@ -211,19 +211,23 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             //当前有效平台任务列表
             RpcResponse<List<Long>> idsResponse = taskApi.taskIdList();
             if (idsResponse.success()){
+                ids = new ArrayList<>();
                 ids.addAll(idsResponse.getData());
             }
-            String[] userLookedIds = {};
+            List<Long> userLookedIds = new ArrayList<>();
             if (JedisUtils.mapExists(writerKey, writerField)) {
                 String idStr = JedisUtils.mapHget(writerKey, writerField);
                 if(StringUtils.contains(idStr, ",")){
-                    userLookedIds = idStr.split(",");
+                    String[] idArr =  idStr.split(",");
+                    for (String id : idArr){
+                        userLookedIds.add(Long.valueOf(id));
+                    }
                 }else{
-                    userLookedIds = new String[]{idStr};
+                    userLookedIds.add(Long.valueOf(idStr));
                 }
             }
             //平台任务数= 有效平台任务id - 已查看任务id 的个数
-            ids.removeAll(Arrays.asList(userLookedIds));
+            ids.removeAll(userLookedIds);
 
         } catch (Exception e) {
             logger.error("获取平台任务消息缓存气泡失败:" + writerId, e);
@@ -331,6 +335,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             throw e;
         }
     }
+
 
 
 }
