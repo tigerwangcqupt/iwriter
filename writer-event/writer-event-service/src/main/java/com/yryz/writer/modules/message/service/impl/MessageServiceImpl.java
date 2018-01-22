@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.message.service.impl;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.distributed.lock.DistributedLockUtils;
@@ -20,9 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * File Name: MessageServiceImpl
@@ -36,7 +35,7 @@ import java.util.List;
 public class MessageServiceImpl extends BaseServiceImpl implements MessageService {
     private static final String ID_LOCK_NAME = "Message";
 
-    private static final String COMMON_KEY = "common_message_count";
+    private static final String COMMON_KEY = "common_message_ids";
     /** 首页消息通知栏目列表  */
     private static final ModuleEnum[] indexModuleEnums = {ModuleEnum.NOTICE,
             ModuleEnum.COMMENT, ModuleEnum.SHARE, ModuleEnum.FAVORITE};
@@ -140,20 +139,30 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     }
 
     @Override
-    public Boolean setMessageTips(ModuleEnum moduleEnum, Long writerId, Long messageNum) {
-        Assert.notNull(messageNum, "消息数不能为空");
+    public Boolean setPlatformTaskLooked(Long writerId) {
+        Assert.notNull(writerId, "写手id不能为空");
         String key = MessageConstant.getHashKey(writerId);
-        String field = MessageConstant.getHashField(moduleEnum.getValue());
+        String field = MessageConstant.getHashField(ModuleEnum.PLATFORM.getValue());
         boolean success = true;
         String lock = null;
         try {
+            //读出有效平台任务id集合 组成id,id格式
+            List<Long> ids = Collections.emptyList();
+            RpcResponse<List<Long>> idsResponse = taskApi.taskIdList();
+            if (idsResponse.success()){
+                ids = idsResponse.getData();
+            }
+            StringBuilder idStr = new StringBuilder();
+            ids.stream().forEach(number -> {
+                idStr.append(number).append(",");
+            });
             //写手相关的消息业务 进行锁（避免同时新增时冲突）
-            lock = DistributedLockUtils.lock(ID_LOCK_NAME, moduleEnum.getValue() + writerId.toString());
+            lock = DistributedLockUtils.lock(ID_LOCK_NAME, ModuleEnum.PLATFORM.getValue() + writerId.toString());
             //如果存在业务的缓存气泡数
             if (JedisUtils.mapExists(key, field)) {
-                success = JedisUtils.mapSet(key, field, messageNum.toString());
+                success = JedisUtils.mapSet(key, field, idStr.substring(0, idStr.length() - 1).toString());
             }else{
-                success = JedisUtils.mapSetnx(key, field, messageNum.toString());
+                success = JedisUtils.mapSetnx(key, field, idStr.substring(0, idStr.length() - 1).toString());
             }
 
 //            success = JedisUtils.mapSetnx(key, field, messageNum.toString());
@@ -198,68 +207,96 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     }
 
     @Override
-    public Long getCommonMessageTips(ModuleEnum moduleEnum) {
+    public List<Long> getCommonMessageTips(ModuleEnum moduleEnum) {
         Assert.notNull(moduleEnum, "模块不能为空");
         String field = MessageConstant.getHashField(moduleEnum.getValue());
         Long result = 0l;
         try {
-            //如果存在业务的缓存气泡数
-            if (JedisUtils.mapExists(COMMON_KEY, field)) {
-                String num = JedisUtils.mapHget(COMMON_KEY, field);
-                result = Long.valueOf(num);
-            }else{
-                //如果是平台任务  缓存为空 从数据库中取总数
-                if (StringUtils.equals(ModuleEnum.PLATFORM.getId(), moduleEnum.getId())){
-                    result = taskApi.taskCount().success() ? Long.valueOf(taskApi.taskCount().getData()) : 0l;
-                    JedisUtils.mapSetnx(COMMON_KEY, field, result.toString());
+            //如果是平台任务  缓存为空 从数据库中取总数
+            if (StringUtils.equals(ModuleEnum.PLATFORM.getId(), moduleEnum.getId())){
+//                result = taskApi.taskCount().success() ? Long.valueOf(taskApi.taskCount().getData()) : 0l;
+                List<Long> ids = Collections.emptyList();
+                RpcResponse<List<Long>> idsResponse = taskApi.taskIdList();
+                if (idsResponse.success()){
+                    ids = idsResponse.getData();
                 }
-                return result;
+
+//                JedisUtils.mapSetnx(COMMON_KEY, field, result.toString());
+//                //  查出id集合，表示当前有效的平台任务id集合有哪些
+//                List<Long> ids = new ArrayList<>();
+
+
+                return ids;
             }
+
+//            //如果存在业务的缓存气泡数
+//            if (JedisUtils.mapExists(COMMON_KEY, field)) {
+//                String num = JedisUtils.mapHget(COMMON_KEY, field);
+//                result = Long.valueOf(num);
+//            }
         } catch (Exception e) {
             logger.error("获取消息缓存气泡失败:" + moduleEnum.getName(), e);
             throw e;
 //            return 0L;
         }
-        return result;
+        return null;
     }
 
     @Override
     public Long getPlatformTaskMessageTips(Long writerId) {
         Assert.notNull(writerId, "写手id不能为空");
         String moduleValue = ModuleEnum.PLATFORM.getValue();
-        //平台任务总数缓存
-        String field = MessageConstant.getHashField(moduleValue);
+//        //平台任务总数缓存
+//        String field = MessageConstant.getHashField(moduleValue);
 
         //写手已查看平台任务缓存数
         String writerKey = MessageConstant.getHashKey(writerId);
         String writerField = MessageConstant.getHashField(moduleValue);
-        //平台任务总数
-        Long result = null;
-        //已查看任务数
-        Long lookedNum = 0l;
-        String lock = null;
+//        //平台任务总数
+//        Long result = null;
+//        //已查看任务数
+//        Long lookedNum = 0l;
+//        String lock = null;
+        List<Long> ids = Collections.emptyList();
         try {
-            //如果存在业务的缓存气泡数
-            if (JedisUtils.mapExists(COMMON_KEY, field)) {
-                String num = JedisUtils.mapHget(COMMON_KEY, field);
-                result = Long.valueOf(num);
-            }else{
-                result = 0l;
+//            //如果存在业务的缓存气泡数
+//            if (JedisUtils.mapExists(COMMON_KEY, field)) {
+//                String num = JedisUtils.mapHget(COMMON_KEY, field);
+//                result = Long.valueOf(num);
+//            }else{
+//                result = 0l;
+//            }
+//
+//            //如果存在写手的平台任务已查看数的缓存气泡数
+//            if (JedisUtils.mapExists(writerKey, writerField)) {
+//                String num = JedisUtils.mapHget(writerKey, writerField);
+//                lookedNum = Long.valueOf(num);
+//            }
+//            //写手当前的平台任务缓存数 = 平台任务的总缓存数 - 当前已查看数
+//            result = result - lookedNum;
+            //当前有效平台任务列表
+            RpcResponse<List<Long>> idsResponse = taskApi.taskIdList();
+            if (idsResponse.success()){
+                ids.addAll(idsResponse.getData());
             }
-
-            //如果存在写手的平台任务已查看数的缓存气泡数
+            String[] userLookedIds = null;
             if (JedisUtils.mapExists(writerKey, writerField)) {
-                String num = JedisUtils.mapHget(writerKey, writerField);
-                lookedNum = Long.valueOf(num);
+                String idStr = JedisUtils.mapHget(writerKey, writerField);
+                if(StringUtils.contains(idStr, ",")){
+                    userLookedIds = idStr.split(",");
+                }else{
+                    userLookedIds = new String[]{idStr};
+                }
             }
-            //写手当前的平台任务缓存数 = 平台任务的总缓存数 - 当前已查看数
-            result = result - lookedNum;
+            //平台任务数= 有效平台任务id - 已查看任务id 的个数
+            ids.removeAll(Arrays.asList(userLookedIds));
+
         } catch (Exception e) {
             logger.error("获取平台任务消息缓存气泡失败:" + writerId, e);
             throw e;
 //            return 0L;
         }
-        return result;
+        return Long.valueOf(ids.size());
     }
 
 
@@ -360,5 +397,6 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             throw e;
         }
     }
+
 
 }

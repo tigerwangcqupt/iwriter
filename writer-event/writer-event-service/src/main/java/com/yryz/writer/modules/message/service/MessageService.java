@@ -32,11 +32,10 @@ public interface MessageService {
     public Boolean saveMessageTips(ModuleEnum moduleEnum, Long writerId);
 
     /**
-     * 设置写手的消息缓存数
-     * @param writerId
+     * 设置写手的平台任务已读数
      * @return
      */
-    public Boolean setMessageTips(ModuleEnum moduleEnum, Long writerId, Long messageNum);
+    public Boolean setPlatformTaskLooked(Long writerId);
 
     /**
      * 增加消息缓存数 （全局）
@@ -45,11 +44,11 @@ public interface MessageService {
     public Boolean saveCommonMessageTips(ModuleEnum moduleEnum);
 
     /**
-     * 读取消息缓存数（全局）
+     * 读取有效平台任务集合
      * @param moduleEnum
      * @return
      */
-    public Long getCommonMessageTips(ModuleEnum moduleEnum);
+    public List<Long> getCommonMessageTips(ModuleEnum moduleEnum);
 
     /**
      * 获取写手的平台任务数

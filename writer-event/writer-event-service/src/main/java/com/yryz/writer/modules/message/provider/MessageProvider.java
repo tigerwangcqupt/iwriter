@@ -73,21 +73,11 @@ public class MessageProvider implements MessageApi {
     }
 
     @Override
-    public RpcResponse<Boolean> setMessageTips(ModuleEnum moduleEnum, Long writerId, Long messageNum) {
+    public RpcResponse<Boolean> setPlatformTaskLooked(Long writerId) {
         try {
-            return ResponseModel.returnObjectSuccess(messageService.setMessageTips(moduleEnum, writerId, messageNum));
+            return ResponseModel.returnObjectSuccess(messageService.setPlatformTaskLooked(writerId));
         } catch (Exception e) {
             logger.error("清空某个消息栏目缓存数失败", e);
-            return ResponseModel.returnException(e);
-        }
-    }
-
-    @Override
-    public RpcResponse<Boolean> savePlatformTaskMessageTips() {
-        try {
-            return ResponseModel.returnObjectSuccess(messageService.saveCommonMessageTips(ModuleEnum.PLATFORM));
-        } catch (Exception e) {
-            logger.error("保存平台任务缓存数失败", e);
             return ResponseModel.returnException(e);
         }
     }
@@ -145,7 +135,8 @@ public class MessageProvider implements MessageApi {
     @Override
     public RpcResponse<Long> getCommonMessageTips(ModuleEnum moduleEnum) {
         try {
-            return ResponseModel.returnObjectSuccess(messageService.getCommonMessageTips(moduleEnum));
+//            return ResponseModel.returnObjectSuccess(messageService.getCommonMessageTips(moduleEnum));
+            return null;
         } catch (Exception e) {
             logger.error("保存平台任务缓存数失败", e);
             return ResponseModel.returnException(e);

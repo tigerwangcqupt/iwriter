@@ -50,17 +50,10 @@ public interface MessageApi {
     public RpcResponse<Boolean> saveMessageTips(ModuleEnum moduleEnum, Long writerId);
 
     /**
-     * 设置写手的消息缓存数
-     * @param writerId
+     * 设置写手的平台任务已读数
      * @return
      */
-    public RpcResponse<Boolean> setMessageTips(ModuleEnum moduleEnum, Long writerId, Long messageNum);
-
-    /**
-     * 增加平台任务缓存数
-     * @return
-     */
-    public RpcResponse<Boolean> savePlatformTaskMessageTips();
+    public RpcResponse<Boolean> setPlatformTaskLooked(Long writerId);
 
     /**
      * 获取写手的平台任务数
