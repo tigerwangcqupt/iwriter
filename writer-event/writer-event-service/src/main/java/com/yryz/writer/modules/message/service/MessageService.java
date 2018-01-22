@@ -38,19 +38,6 @@ public interface MessageService {
     public Boolean setPlatformTaskLooked(Long writerId);
 
     /**
-     * 增加消息缓存数 （全局）
-     * @return
-     */
-    public Boolean saveCommonMessageTips(ModuleEnum moduleEnum);
-
-    /**
-     * 读取有效平台任务集合
-     * @param moduleEnum
-     * @return
-     */
-    public List<Long> getCommonMessageTips(ModuleEnum moduleEnum);
-
-    /**
      * 获取写手的平台任务数
      * @return
      */

@@ -115,14 +115,14 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             lock = DistributedLockUtils.lock(ID_LOCK_NAME, moduleEnum.getValue() + writerId.toString());
             //如果存在业务的缓存气泡数
             if (JedisUtils.mapExists(key, field)) {
-                //写手的收藏数增加1
+                //写手的缓存数增加1
                 Long status = JedisUtils.mapIncrby(key, field, 1);
                 //如果缓存没有设置成功 做什么
                 if (status == null) {
                     success = false;
                 }
             } else {
-                //写手的收藏数设置1
+                //写手的缓存数设置1
                 //是否设置成功
                 success = JedisUtils.mapSetnx(key, field, "1");
                 if (!success) {
@@ -161,7 +161,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             //如果存在业务的缓存气泡数
             if (JedisUtils.mapExists(key, field)) {
                 success = JedisUtils.mapSet(key, field, idStr.substring(0, idStr.length() - 1).toString());
-            }else{
+            }else{      //设置 目标写手的已读 任务id 集合
                 success = JedisUtils.mapSetnx(key, field, idStr.substring(0, idStr.length() - 1).toString());
             }
 
@@ -175,72 +175,6 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
         return success;
     }
 
-    @Override
-    public Boolean saveCommonMessageTips(ModuleEnum moduleEnum) {
-        Assert.notNull(moduleEnum, "模块不能为空");
-        String field = MessageConstant.getHashField(moduleEnum.getValue());
-        boolean success = true;
-        try {
-            //写手相关的消息业务 进行锁（避免同时新增时冲突）
-            //如果存在业务的缓存气泡数
-            if (JedisUtils.mapExists(COMMON_KEY, field)) {
-                //写手的收藏数增加1
-                Long status = JedisUtils.mapIncrby(COMMON_KEY, field, 1);
-                //如果缓存没有设置成功 做什么
-                if (status == null) {
-                    success = false;
-                }
-            } else {
-                //写手的收藏数设置1
-                //是否设置成功
-                success = JedisUtils.mapSetnx(COMMON_KEY, field, "1");
-                if (!success) {
-                    //如果缓存没有设置成功 做什么
-                }
-            }
-        } catch (Exception e) {
-            logger.error("保存消息缓存气泡失败", e);
-            throw e;
-        } finally {
-        }
-        return success;
-    }
-
-    @Override
-    public List<Long> getCommonMessageTips(ModuleEnum moduleEnum) {
-        Assert.notNull(moduleEnum, "模块不能为空");
-        String field = MessageConstant.getHashField(moduleEnum.getValue());
-        Long result = 0l;
-        try {
-            //如果是平台任务  缓存为空 从数据库中取总数
-            if (StringUtils.equals(ModuleEnum.PLATFORM.getId(), moduleEnum.getId())){
-//                result = taskApi.taskCount().success() ? Long.valueOf(taskApi.taskCount().getData()) : 0l;
-                List<Long> ids = Collections.emptyList();
-                RpcResponse<List<Long>> idsResponse = taskApi.taskIdList();
-                if (idsResponse.success()){
-                    ids = idsResponse.getData();
-                }
-
-//                JedisUtils.mapSetnx(COMMON_KEY, field, result.toString());
-//                //  查出id集合，表示当前有效的平台任务id集合有哪些
-//                List<Long> ids = new ArrayList<>();
-
-
-                return ids;
-            }
-
-//            //如果存在业务的缓存气泡数
-//            if (JedisUtils.mapExists(COMMON_KEY, field)) {
-//                String num = JedisUtils.mapHget(COMMON_KEY, field);
-//                result = Long.valueOf(num);
-//            }
-        } catch (Exception e) {
-            logger.error("获取消息缓存气泡失败:" + moduleEnum.getName(), e);
-            throw e;
-//            return 0L;
-        }
-        return null;
-    }
 
     @Override
     public Long getPlatformTaskMessageTips(Long writerId) {
@@ -279,7 +213,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             if (idsResponse.success()){
                 ids.addAll(idsResponse.getData());
             }
-            String[] userLookedIds = null;
+            String[] userLookedIds = {};
             if (JedisUtils.mapExists(writerKey, writerField)) {
                 String idStr = JedisUtils.mapHget(writerKey, writerField);
                 if(StringUtils.contains(idStr, ",")){
