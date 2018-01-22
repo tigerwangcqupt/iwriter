@@ -12,6 +12,8 @@ import com.yryz.writer.modules.message.constant.MessageConstant;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.service.MessageService;
 import com.yryz.writer.modules.message.vo.*;
+import com.yryz.writer.modules.task.TaskApi;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,9 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             ModuleEnum.COMMENT, ModuleEnum.SHARE, ModuleEnum.FAVORITE};
 
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+
+    @Autowired
+    private TaskApi taskApi;
 
     @Override
     protected BaseDao getDao() {
@@ -196,14 +201,19 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
     public Long getCommonMessageTips(ModuleEnum moduleEnum) {
         Assert.notNull(moduleEnum, "模块不能为空");
         String field = MessageConstant.getHashField(moduleEnum.getValue());
-        Long result = null;
+        Long result = 0l;
         try {
             //如果存在业务的缓存气泡数
             if (JedisUtils.mapExists(COMMON_KEY, field)) {
                 String num = JedisUtils.mapHget(COMMON_KEY, field);
                 result = Long.valueOf(num);
             }else{
-                return 0L;
+                //如果是平台任务  缓存为空 从数据库中取总数
+                if (StringUtils.equals(ModuleEnum.PLATFORM.getId(), moduleEnum.getId())){
+                    result = taskApi.taskCount().success() ? Long.valueOf(taskApi.taskCount().getData()) : 0l;
+                    JedisUtils.mapSetnx(COMMON_KEY, field, result.toString());
+                }
+                return result;
             }
         } catch (Exception e) {
             logger.error("获取消息缓存气泡失败:" + moduleEnum.getName(), e);

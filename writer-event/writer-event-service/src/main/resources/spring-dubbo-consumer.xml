@@ -12,4 +12,9 @@
                      interface="com.yryz.writer.modules.id.api.IdAPI" registry="yryz-new"
                      check="false" timeout="10000" retries="0"/>
 
+    <!-- task -->
+    <dubbo:reference id="taskApi"
+                     interface="com.yryz.writer.modules.task.TaskApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
+
 </beans>
