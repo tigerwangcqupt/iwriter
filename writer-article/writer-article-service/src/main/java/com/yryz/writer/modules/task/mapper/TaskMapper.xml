@@ -219,7 +219,7 @@
                 draft_type = #{draftType,jdbcType=TINYINT},
             </if>
             <if test="contentSource != null and contentSource != ''">
-                content_source = #{contentHtml,jdbcType=VARCHAR},
+                content_source = #{contentSource,jdbcType=VARCHAR},
             </if>
             <if test="contentHtml != null and contentHtml != ''">
                 content_html = #{contentHtml,jdbcType=VARCHAR},
