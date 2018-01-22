@@ -6,6 +6,8 @@ import com.yryz.writer.modules.task.vo.TaskVo;
 import com.yryz.writer.modules.task.dto.TaskDto;
 import com.yryz.writer.modules.task.entity.Task;
 
+import java.util.List;
+
 /**
  * @author luohao
  * @ClassName: TaskApi
@@ -44,5 +46,5 @@ public interface TaskApi {
 
     RpcResponse<Integer> update(Task task);
 
-    RpcResponse<Integer> taskCount();
+    RpcResponse<List<Long>> taskIdList();
 }

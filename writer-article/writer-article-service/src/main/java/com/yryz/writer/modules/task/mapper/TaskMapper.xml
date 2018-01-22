@@ -327,8 +327,11 @@
 	</select>
 
     <!-- 查询任务数 -->
-    <select id="taskCount" resultType="java.lang.Integer">
-		SELECT COUNT(*) FROM yryz_task
+    <select id="taskIdList" resultType="java.lang.Long">
+        select kid from yryz_task a where del_flag = 0
+            AND (start_date &lt;= NOW() AND end_date &gt;= NOW()
+            AND (SELECT COUNT(DISTINCT create_user_id) FROM yryz_draft WHERE task_kid = a.kid AND draft_status != 0) &lt; task_close_num
+            AND task_close_flag = 0)
 	</select>
 
 </mapper>

@@ -8,6 +8,8 @@ import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.vo.TaskVo;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 
   * @ClassName: TaskService
@@ -29,5 +31,5 @@ public interface TaskService extends BaseService {
 
     RpcResponse<Integer> edit(Task task);
 
-    RpcResponse<Integer> taskCount();
+    RpcResponse<List<Long>> taskIdList();
 }

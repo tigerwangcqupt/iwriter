@@ -89,8 +89,8 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
     }
 
     @Override
-    public RpcResponse<Integer> taskCount() {
-        return ResponseModel.returnObjectSuccess(taskDao.taskCount());
+    public RpcResponse<List<Long>> taskIdList() {
+        return ResponseModel.returnObjectSuccess(taskDao.taskIdList());
     }
 
     public Integer selectSubmitWriterNum(Long kid) {

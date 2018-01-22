@@ -34,5 +34,5 @@ public interface TaskDao extends BaseDao {
 
     Integer selectSubmitDraftNum(@Param("kid") Long kid);
 
-    Integer taskCount();
+    List<Long> taskIdList();
 }

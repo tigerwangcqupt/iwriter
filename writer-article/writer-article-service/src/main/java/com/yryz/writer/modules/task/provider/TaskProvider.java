@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TaskProvider implements TaskApi {
 
@@ -82,8 +84,8 @@ public class TaskProvider implements TaskApi {
     }
 
     @Override
-    public RpcResponse<Integer> taskCount() {
-        return taskService.taskCount();
+    public RpcResponse<List<Long>> taskIdList() {
+        return taskService.taskIdList();
     }
 
 
