@@ -15,16 +15,6 @@ public class WriterVo implements Serializable{
 
 
 	/**
-	 * 用户ID
-	 */
-	private String userId;
-
-	/**
-	 * 用户token
-	 */
-	private String token;
-
-	/**
 	 * 账号
 	 */	 
     private  String account;
@@ -262,19 +252,5 @@ public class WriterVo implements Serializable{
 		this.pwdFlag = pwdFlag;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
+	
 }
