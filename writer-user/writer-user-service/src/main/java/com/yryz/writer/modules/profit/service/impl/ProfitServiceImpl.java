@@ -569,11 +569,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
     public ProfitAccountVo getAccountInfo() {
         ProfitAccountVo profitAccountVo = new ProfitAccountVo();
         RpcContext.getContext().setAttachment("clientCode", clientCode);
-        Owner owner = openOwnerApi.selectByFcode(ownerFCode);
-        Account account = new Account();
-        account.setOwnerCode(owner.getOwnerCode());
-        RpcContext.getContext().setAttachment("clientCode", clientCode);
-        account = openAccountApi.detailMore(account);
+        Account account = openAccountApi.selectAccount(ownerFCode,AccountConstants.Type.PLATFORM_CASH.intValue());
         if(null != account && null != account.getAmount()){
             profitAccountVo.setAmmount(account.getAmount());
         }else{
