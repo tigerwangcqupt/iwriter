@@ -211,10 +211,12 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 //上架文章聚合统计数据
                 Long kid = draft.getKid();
                 DraftVo data = draftDao.selectArticleData(kid);
-                draftVo.setVisitQty(data.getVisitQty());
-                draftVo.setCommentQty(data.getCommentQty());
-                draftVo.setShareQty(data.getShareQty());
-                draftVo.setCollectQty(data.getCollectQty());
+                if (data != null) {
+                    draftVo.setVisitQty(data.getVisitQty());
+                    draftVo.setCommentQty(data.getCommentQty());
+                    draftVo.setShareQty(data.getShareQty());
+                    draftVo.setCollectQty(data.getCollectQty());
+                }
             } else if (shelveFlag != null && shelveFlag == 1) {
                 draftVo.setDraftStatus(2);
             }
