@@ -1,7 +1,10 @@
 package com.yryz.writer.modules.writer.provider;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.ResponseModel;
+import com.yryz.writer.modules.bank.constant.IDCardValidate;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
@@ -168,6 +171,13 @@ public class WriterProvider implements WriterApi {
 	@Override
 	@Transactional
 	public RpcResponse<WriterVo> submitAudit(Writer writer) {
+		//验证身份证是否真实
+        boolean checkUserCard = IDCardValidate.validate(writer.getIdentityCard());
+        if(!checkUserCard){
+            logger.error("身份证不正确");
+            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
+                    ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
+        }
 		 try {
 			 //更新写手信息
 			 writer.setUserStatus(1);
