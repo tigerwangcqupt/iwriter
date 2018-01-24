@@ -169,37 +169,9 @@ public class WriterProvider implements WriterApi {
 	}
 
 	@Override
-	@Transactional
 	public RpcResponse<WriterVo> submitAudit(Writer writer) {
-		//验证身份证是否真实
-        boolean checkUserCard = IDCardValidate.validate(writer.getIdentityCard());
-        if(!checkUserCard){
-            logger.error("身份证不正确");
-            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
-                    ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
-        }
 		 try {
-			 //更新写手信息
-			 writer.setUserStatus(1);
-			 writerService.update(writer);
-			 //新增审核信息
-			 WriterAudit writerAudit = new WriterAudit();
-			 Long kid  = idAPI.getId("yryz_writer_audit_history");
-			 writerAudit.setKid(kid);
-			 writerAudit.setWriterKid(writer.getKid());
-			 writerAudit.setUserName(writer.getUserName());
-			 writerAudit.setIdentityCard(writer.getIdentityCard());
-			 writerAudit.setIdentityCardPhoto(writer.getIdentityCardPhoto());
-			 writerAudit.setProvice(writer.getProvice());
-			 writerAudit.setCity(writer.getCity());
-			 writerAudit.setTel(writer.getTel());
-			 writerAudit.setEmail(writer.getEmail());
-			 writerAudit.setAuditStatus(1);
-			 writerAudit.setCreateUserId(writer.getKid().toString());
-			 writerAudit.setLastUpdateUserId(writer.getKid().toString());
-			 writerAuditService.insertByPrimaryKeySelective(writerAudit);
-			 WriterVo writerVo = writerService.detail(writer.getKid());
-			 return ResponseModel.returnObjectSuccess(writerVo);
+			 return ResponseModel.returnObjectSuccess(writerService.submitAudit(writer));
         } catch (Exception e) {
         	 logger.error("更新Writer信息失败", e);
        		 return ResponseModel.returnException(e);
