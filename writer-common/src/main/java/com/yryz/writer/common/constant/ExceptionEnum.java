@@ -76,6 +76,9 @@ public enum ExceptionEnum {
 
     NOT_BIND_BANKCARD_EXCEPTION("6014", "没有绑定银行卡，不能提现", "没有绑定银行卡，不能提现"),
 
+    HAS_EXISTS_BANKCARD_EXCEPTION("6015", "用户已经绑定过银行卡", "用户已经绑定过银行卡"),
+
+    HAS_NOT_EXISTS_BANKCARD_EXCEPTION("6016", "用户没有绑定过银行卡", "用户没有绑定过银行卡"),
     //写手消息的异常码由8000开始
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),
     AUDITPASS_SENDMSG_EXCEPTION("7001", "写手审核通过消息发送失败", "写手审核通过消息发送失败"),

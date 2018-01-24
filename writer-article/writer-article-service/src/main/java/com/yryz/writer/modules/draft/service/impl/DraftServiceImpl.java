@@ -157,6 +157,8 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         draftVo.setLabelName(draft.getLabelName());
         draftVo.setShelveFlag(draft.getShelveFlag());
         draftVo.setDraftFee(draft.getDraftFee());
+
+        //聚合任务信息
         Long taskKid = draft.getTaskKid();
         if (draft.getTaskFlag() == 1) {
             if (taskKid != null && taskKid != 0) {
@@ -170,6 +172,8 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 }
             }
         }
+
+        //聚合应用信息
         Long appId = draft.getAppId();
         if (appId != null && appId != 0) {
             TaskVo app = taskDao.selectAppById(appId);
@@ -181,6 +185,8 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         } else if (appId != null && appId == 0) {
             draftVo.setAppliName(draft.getAppName());
         }
+
+        //聚合写手信息
         String createUserId = draft.getCreateUserId();
         if (StringUtils.isNotBlank(createUserId)) {
             draftVo.setWriterId(Long.valueOf(createUserId));
@@ -190,6 +196,29 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 draftVo.setWriterNickName(writer.getWriterNickName());
                 draftVo.setWriterPhone(writer.getWriterPhone());
                 draftVo.setWriterRemark(writer.getWriterRemark());
+            }
+        }
+
+        //判断数据来源
+        //0为稿件表,1为文章表
+        Integer dataType = draft.getDataType();
+        if (dataType != null && dataType == 1) {
+            //获取文章上下架状态,稿件没有上下架
+            Integer shelveFlag = draft.getShelveFlag();
+            //上架文章,为已发表
+            if (shelveFlag != null && shelveFlag == 0) {
+                draftVo.setDraftStatus(3);
+                //上架文章聚合统计数据
+                Long kid = draft.getKid();
+                DraftVo data = draftDao.selectArticleData(kid);
+                if (data != null) {
+                    draftVo.setVisitQty(data.getVisitQty());
+                    draftVo.setCommentQty(data.getCommentQty());
+                    draftVo.setShareQty(data.getShareQty());
+                    draftVo.setCollectQty(data.getCollectQty());
+                }
+            } else if (shelveFlag != null && shelveFlag == 1) {
+                draftVo.setDraftStatus(2);
             }
         }
         return draftVo;

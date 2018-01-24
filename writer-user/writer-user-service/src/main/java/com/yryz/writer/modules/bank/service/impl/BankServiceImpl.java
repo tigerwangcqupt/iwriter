@@ -8,6 +8,7 @@ import com.yryz.qstone.modules.base.api.OpenAccountApi;
 import com.yryz.qstone.modules.base.api.OpenOwnerApi;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
+import com.yryz.writer.common.distributed.lock.DistributedLockUtils;
 import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.dao.BaseDao;
@@ -30,6 +31,7 @@ import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +73,9 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Value("${clientCode}")
     private String clientCode;
+
+    private static final String LOCK_BANK_ADD = "LOCK_BANK_ADD";
+    private static final String LOCK_BANK_UPDATE = "LOCK_BANK_UPDATE";
 
     protected BaseDao getDao() {
         return bankDao;
@@ -124,28 +129,43 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Override
     public Bank insertBank(Bank bank) {
-        //验证bankCard是否真实
-        boolean checkBankCard = BankUtil.matchLuhn(bank.getUserBankCart());
-        if(!checkBankCard){
-            logger.error("银行卡卡号不存在");
-            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
-                    ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
-        }
-        //验证身份证是否真实
-        boolean checkUserCard = IDCardValidate.validate(bank.getUserCart());
-        if(!checkUserCard){
-            logger.error("身份证不正确");
-            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
-                    ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
-        }
-        //资金主体外码
-        Long ownerFcode = findOwnerByWriter(bank);
-        if(null == ownerFcode){
-            logger.error("查询资金主体外码失败");
-            throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
-                    ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
-        }
+        String lockKey = null;
         try{
+            //分布式锁控制用户频繁操作
+            lockKey = DistributedLockUtils.lock(LOCK_BANK_ADD, bank.getCreateUserId());
+            //判断用户是否绑定过银行卡
+            BankDto bankDto = new BankDto();
+            List<Long> writerIdList = new ArrayList<>();
+            writerIdList.add(Long.valueOf(bank.getCreateUserId()));
+            bankDto.setWriterIdList(writerIdList);
+            List<Bank> existList = bankDao.selectList(bankDto);
+            if(CollectionUtils.isNotEmpty(existList)){
+                logger.info(bank.getCreateUserId()+" 已经存在银行卡");
+                throw new YyrzPcException(ExceptionEnum.HAS_EXISTS_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.HAS_EXISTS_BANKCARD_EXCEPTION.getMsg(),
+                        ExceptionEnum.HAS_EXISTS_BANKCARD_EXCEPTION.getErrorMsg());
+            }
+            //验证bankCard是否真实
+            boolean checkBankCard = BankUtil.matchLuhn(bank.getUserBankCart());
+            if(!checkBankCard){
+                logger.error("银行卡卡号不存在");
+                throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
+                        ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
+            }
+            //验证身份证是否真实
+            boolean checkUserCard = IDCardValidate.validate(bank.getUserCart());
+            if(!checkUserCard){
+                logger.error("身份证不正确");
+                throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
+                        ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
+            }
+            //资金主体外码
+            Long ownerFcode = findOwnerByWriter(bank);
+            if(null == ownerFcode){
+                logger.error("查询资金主体外码失败");
+                throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
+                        ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
+            }
+
             BankCardDto bankCardDto=new BankCardDto();
             //银行卡号
             bankCardDto.setBankCardNo(bank.getUserBankCart());
@@ -174,44 +194,50 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             writer.setKid(Long.valueOf(bank.getCreateUserId()));
             writer.setUserBankCart(bank.getUserBankCart());
             writerService.update(writer);
-        }catch(Exception e){
-            logger.error("调用资金系统绑定银行卡出现异常:", e);
-            throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),
-                    ExceptionEnum.BIND_BANK_EXCEPTION.getErrorMsg()
-            );
+        }catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw e;
+        }finally {
+            if (null != lockKey) {
+                DistributedLockUtils.unlock(LOCK_BANK_ADD, lockKey);
+            }
         }
         return bank;
     }
 
     @Override
     public Bank updateBank(Bank bank) {
-        //验证bankCard是否真实
-        boolean checkBankCard = BankUtil.matchLuhn(bank.getUserBankCart());
-        if(!checkBankCard){
-            logger.error("银行卡卡号不存在");
-            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
-                    ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
-        }
-        //验证身份证是否真实
-        boolean checkUserCard = IDCardValidate.validate(bank.getUserCart());
-        if(!checkUserCard){
-            logger.error("身份证不正确");
-            throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
-                    ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
-        }
-        //资金主体外码
-        Long ownerFcode = findOwnerByWriter(bank);
-        if(null == ownerFcode){
-            logger.error("查询资金主体外码失败");
-            throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
-                    ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
-        }
-
-        Writer writer = new Writer();
-        writer.setKid(Long.valueOf(bank.getCreateUserId()));
-        writer.setUserBankCart(bank.getUserBankCart());
-        writerService.update(writer);
+        String lockKey = null;
         try{
+            //分布式锁控制用户频繁操作
+            lockKey = DistributedLockUtils.lock(LOCK_BANK_UPDATE, bank.getCreateUserId());
+            //验证bankCard是否真实
+            boolean checkBankCard = BankUtil.matchLuhn(bank.getUserBankCart());
+            if(!checkBankCard){
+                logger.error("银行卡卡号不存在");
+                throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getMsg(),
+                        ExceptionEnum.NOT_FOUNTD_BANKCARD_EXCEPTION.getErrorMsg());
+            }
+            //验证身份证是否真实
+            boolean checkUserCard = IDCardValidate.validate(bank.getUserCart());
+            if(!checkUserCard){
+                logger.error("身份证不正确");
+                throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
+                        ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
+            }
+            //资金主体外码
+            Long ownerFcode = findOwnerByWriter(bank);
+            if(null == ownerFcode){
+                logger.error("查询资金主体外码失败");
+                throw new YyrzPcException(ExceptionEnum.FINDMODELFAIL_EXCEPTION.getCode(),ExceptionEnum.FINDMODELFAIL_EXCEPTION.getMsg(),
+                        ExceptionEnum.FINDMODELFAIL_EXCEPTION.getErrorMsg());
+            }
+
+            Writer writer = new Writer();
+            writer.setKid(Long.valueOf(bank.getCreateUserId()));
+            writer.setUserBankCart(bank.getUserBankCart());
+            writerService.update(writer);
+
             bankDao.update(bank);
             BankCard bankCard=new BankCard();
             //银行卡号
@@ -228,11 +254,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             bankCard.setBankCardFcode(bank.getBankcardFcode());
             RpcContext.getContext().setAttachment("clientCode", clientCode);
             openBankCardApi.updateByFcode(bankCard);
-        }catch(Exception e){
-            logger.error("调用资金系统绑定银行卡出现异常:", e);
-            throw new YyrzPcException(ExceptionEnum.BIND_BANK_EXCEPTION.getCode(),ExceptionEnum.BIND_BANK_EXCEPTION.getMsg(),
-                    ExceptionEnum.BIND_BANK_EXCEPTION.getErrorMsg()
-            );
+        }catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw e;
+        }finally {
+            if (null != lockKey) {
+                DistributedLockUtils.unlock(LOCK_BANK_UPDATE, lockKey);
+            }
         }
         return bank;
     }

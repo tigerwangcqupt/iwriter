@@ -138,6 +138,18 @@ public class DraftVo implements Serializable {
 
     private Integer dataType;
 
+    //浏览数
+    private String visitQty = "0";
+
+    //评论数
+    private String commentQty = "0";
+
+    //收藏数
+    private String collectQty = "0";
+
+    //分享数
+    private String shareQty = "0";
+
     public Integer getShelveFlag() {
         return shelveFlag;
     }
@@ -376,5 +388,37 @@ public class DraftVo implements Serializable {
 
     public void setDataType(Integer dataType) {
         this.dataType = dataType;
+    }
+
+    public String getVisitQty() {
+        return visitQty;
+    }
+
+    public void setVisitQty(String visitQty) {
+        this.visitQty = visitQty;
+    }
+
+    public String getCommentQty() {
+        return commentQty;
+    }
+
+    public void setCommentQty(String commentQty) {
+        this.commentQty = commentQty;
+    }
+
+    public String getCollectQty() {
+        return collectQty;
+    }
+
+    public void setCollectQty(String collectQty) {
+        this.collectQty = collectQty;
+    }
+
+    public String getShareQty() {
+        return shareQty;
+    }
+
+    public void setShareQty(String shareQty) {
+        this.shareQty = shareQty;
     }
 }
