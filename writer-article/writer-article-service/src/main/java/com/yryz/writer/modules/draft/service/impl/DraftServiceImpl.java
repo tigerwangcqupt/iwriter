@@ -232,6 +232,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 draftVo.setWriterNickName(writer.getWriterNickName());
                 draftVo.setWriterPhone(writer.getWriterPhone());
                 draftVo.setWriterRemark(writer.getWriterRemark());
+                draftVo.setWriterHeadImg(writer.getWriterHeadImg());
             }
         }
 

@@ -115,6 +115,10 @@ public class DraftVo implements Serializable {
      * 写手备注
      */
     private String writerRemark;
+    /**
+     * 写手头像
+     */
+    private String writerHeadImg;
 
     private String createDate;
     /**
@@ -312,6 +316,14 @@ public class DraftVo implements Serializable {
 
     public void setWriterRemark(String writerRemark) {
         this.writerRemark = writerRemark;
+    }
+
+    public String getWriterHeadImg() {
+        return writerHeadImg;
+    }
+
+    public void setWriterHeadImg(String writerHeadImg) {
+        this.writerHeadImg = writerHeadImg;
     }
 
     public String getCreateDate() {
