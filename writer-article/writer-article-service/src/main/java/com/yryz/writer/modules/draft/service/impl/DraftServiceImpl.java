@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -111,6 +113,27 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 
     @Override
     public Long add(Draft draft) {
+
+        //判断任务是否被结束
+        Integer taskFlag = draft.getTaskFlag();
+        if (taskFlag != null && taskFlag == 1) {
+            Long taskKid = draft.getTaskKid();
+            Task task = taskDao.selectByKid(Task.class, taskKid);
+            Integer integer = taskDao.selectSubmitWriterNum(taskKid);
+            if (integer != null && integer >= task.getTaskCloseNum()) {
+                throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
+            }
+            if (task.getTaskCloseFlag() != null && task.getTaskCloseFlag() == 1) {
+                throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
+            }
+            if (task.getEndDate() != null) {
+                Date date = new Date();
+                Date endDate = task.getEndDate();
+                if (date.after(endDate)) {
+                    throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
+                }
+            }
+        }
         try {
             Long kid = draft.getKid();
             if (kid == null) {
