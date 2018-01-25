@@ -138,6 +138,17 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         return draftDao.selectUserByUserName(userName);
     }
 
+    @Override
+    public DraftVo detailInfo(Long kid) {
+        Draft draft = draftDao.selectArticle(kid);
+        DraftVo draftVo = new DraftVo();
+        if (draft != null) {
+            //Draft to DraftVo
+            draftVo = toDraftVo(draft);
+        }
+        return draftVo;
+    }
+
     private DraftVo toDraftVo(Draft draft) {
         DraftVo draftVo = new DraftVo();
         //Draft to DraftVo
@@ -145,6 +156,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         draftVo.setTitle(draft.getTitle());
         draftVo.setDataType(draft.getDataType());
         draftVo.setContentHtml(draft.getContentHtml());
+        draftVo.setContentSource(draft.getContentSource());
         draftVo.setCoverImgUrl(draft.getCoverImgUrl());
         draftVo.setDescription(draft.getDescription());
         draftVo.setDraftStatus(draft.getDraftStatus());
@@ -161,7 +173,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 
         //聚合任务信息
         Long taskKid = draft.getTaskKid();
-        if (draft.getTaskFlag() == 1) {
+        if (draft.getTaskFlag() != null && draft.getTaskFlag() == 1) {
             if (taskKid != null && taskKid != 0) {
                 Task task = taskDao.selectByKid(Task.class, taskKid);
                 if (task != null) {

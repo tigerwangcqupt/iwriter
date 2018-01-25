@@ -463,4 +463,13 @@
 			article_id = #{kid}
 	</select>
 
+	<select id="selectArticle" parameterType="java.lang.Long" resultType="com.yryz.writer.modules.draft.entity.Draft">
+		SELECT
+			 a.id kid,a.title,a.content_source,a.content_html,a.cover_img_url,a.content_flag draftType,video_url,video_description description,a.writer_kid create_user_id
+		FROM
+			yryz_article a
+		WHERE
+			id = #{id}
+	</select>
+
 </mapper>

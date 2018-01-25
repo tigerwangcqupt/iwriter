@@ -102,12 +102,16 @@ public class DraftProvider implements DraftApi {
     public RpcResponse<Integer> del(Long kid) {
         int delete = draftService.delete(kid);
         return ResponseModel.returnObjectSuccess(delete);
-
     }
 
     @Override
     public RpcResponse<List<UserVo>> selectUserByUserName(String userName) {
         return ResponseModel.returnListSuccess(draftService.selectUserByUserName(userName));
+    }
+
+    public RpcResponse<DraftVo> detailInfo(Long kid) {
+        DraftVo draftVo = draftService.detailInfo(kid);
+        return ResponseModel.returnObjectSuccess(draftVo);
     }
 
 }

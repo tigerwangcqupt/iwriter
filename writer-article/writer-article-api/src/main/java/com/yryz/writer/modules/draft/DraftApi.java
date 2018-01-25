@@ -59,4 +59,5 @@ public interface DraftApi {
     RpcResponse<List<UserVo>> selectUserByUserName(String userName);
 
 
+    RpcResponse<DraftVo> detailInfo(Long kid);
 }

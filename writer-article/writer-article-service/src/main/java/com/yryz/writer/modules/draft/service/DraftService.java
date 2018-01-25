@@ -30,4 +30,6 @@ public interface DraftService extends BaseService {
     List<AppVo> selectAppByAppliName(String appliName);
 
     List<UserVo> selectUserByUserName(String userName);
+
+    DraftVo detailInfo(Long kid);
 }
