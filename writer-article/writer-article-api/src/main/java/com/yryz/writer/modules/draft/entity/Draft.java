@@ -129,6 +129,11 @@ public class Draft extends GenericEntity {
      */
     private Integer dataType;
 
+    /**
+     * 推荐状态
+     */
+    private Integer recommend;
+
 
     public Integer getDraftType() {
         return this.draftType;
@@ -288,5 +293,13 @@ public class Draft extends GenericEntity {
 
     public void setDataType(Integer dataType) {
         this.dataType = dataType;
+    }
+
+    public Integer getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(Integer recommend) {
+        this.recommend = recommend;
     }
 }

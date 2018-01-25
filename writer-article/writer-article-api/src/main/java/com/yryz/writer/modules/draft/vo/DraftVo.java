@@ -150,6 +150,10 @@ public class DraftVo implements Serializable {
     //分享数
     private String shareQty = "0";
 
+    private Integer recommend = 0;
+
+    private Integer subjectFlag = 0;
+
     public Integer getShelveFlag() {
         return shelveFlag;
     }
@@ -420,5 +424,21 @@ public class DraftVo implements Serializable {
 
     public void setShareQty(String shareQty) {
         this.shareQty = shareQty;
+    }
+
+    public Integer getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(Integer recommend) {
+        this.recommend = recommend;
+    }
+
+    public Integer getSubjectFlag() {
+        return subjectFlag;
+    }
+
+    public void setSubjectFlag(Integer subjectFlag) {
+        this.subjectFlag = subjectFlag;
     }
 }
