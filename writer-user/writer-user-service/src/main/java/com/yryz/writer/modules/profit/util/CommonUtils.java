@@ -15,17 +15,18 @@ public class CommonUtils {
 
     /**
      * 判断是否是正整数
+     *
      * @param str
      * @return
      */
-    public boolean isNumeric(String str){
+    public boolean isNumeric(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
-        if( !isNum.matches() ){
+        if (!isNum.matches()) {
             return false;
         }
         Integer leap = Integer.parseInt(str);
-        if(leap<=0){
+        if (leap <= 0) {
             return false;
         }
         return true;
@@ -33,6 +34,7 @@ public class CommonUtils {
 
     /**
      * 判断是否是正整数
+     *
      * @param str
      * @return
      */
@@ -40,7 +42,7 @@ public class CommonUtils {
         String rex = "^\\+?[1-9][0-9]*$";
         Pattern p = Pattern.compile(rex);
         Matcher m = p.matcher(str);
-        if(m.find()){
+        if (m.find()) {
             return true;
         }
         return false;
@@ -48,37 +50,41 @@ public class CommonUtils {
 
     /**
      * 判断是否是正整数
+     *
      * @param data
      * @return
      */
     public static boolean checkIntNumber(BigDecimal data) {
-        if(null == data){
+        if (null == data) {
             return false;
         }
-        try{
-            String dataVal = data.toString();
-            Integer.parseInt(dataVal);
-            return true;
-        }catch (Exception e){
-            logger.error("金额转换成字符串失败",e);
+        try {
+            if (new BigDecimal(data.intValue()).compareTo(data) == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            logger.error("金额转换成字符串失败", e);
         }
         return false;
     }
 
     /**
      * 判断提现金额是否正确
+     *
      * @param amount
      * @return
      */
     public static boolean checkValidAmount(BigDecimal amount) {
         int value = amount.intValue();
-        if(value<= ProfitConstants.MAX_AMOUNT && value >= ProfitConstants.MIN_AMOUNT){
+        if (value <= ProfitConstants.MAX_AMOUNT && value >= ProfitConstants.MIN_AMOUNT) {
             return true;
         }
         return false;
     }
 
     public static void main(String[] args) {
-        System.out.println(checkIntNumber(new BigDecimal(500)));
+        System.out.println(checkIntNumber(new BigDecimal(10000.02)));
     }
 }
