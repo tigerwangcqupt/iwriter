@@ -54,7 +54,7 @@ public interface DraftApi {
 
     RpcResponse<List<AppVo>> selectAppByAppliName(String appliName);
 
-    void del(Long kid);
+    RpcResponse<Integer> del(Long kid);
 
     RpcResponse<List<UserVo>> selectUserByUserName(String userName);
 

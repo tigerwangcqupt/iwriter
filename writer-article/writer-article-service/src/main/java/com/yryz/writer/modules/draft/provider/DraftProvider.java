@@ -99,8 +99,10 @@ public class DraftProvider implements DraftApi {
         return ResponseModel.returnListSuccess(draftService.selectAppByAppliName(appliName));
     }
 
-    public void del(Long kid) {
-        draftService.delete(kid);
+    public RpcResponse<Integer> del(Long kid) {
+        int delete = draftService.delete(kid);
+        return ResponseModel.returnObjectSuccess(delete);
+
     }
 
     @Override
