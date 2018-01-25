@@ -20,6 +20,7 @@ public class WriterAuditController {
    @Autowired
    private WriterAuditApi writerAuditApi;
 
+   @ResponseBody
    @RequestMapping(value="/single", method = RequestMethod.GET)
    public RpcResponse<WriterAuditVo> detail(Long kid) {
        return writerAuditApi.detail(kid);

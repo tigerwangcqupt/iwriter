@@ -5,9 +5,11 @@ import com.yryz.service.api.basic.api.SmsAPI;
 import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.redis.utils.JedisUtils;
 import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.web.PageModel;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
@@ -20,10 +22,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
+import com.yryz.writer.modules.bank.constant.IDCardValidate;
+import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.writer.dao.persistence.WriterAuditDao;
 import com.yryz.writer.modules.writer.dao.persistence.WriterDao;
 import com.yryz.writer.modules.writer.dto.WriterDto;
@@ -37,6 +42,7 @@ import java.util.UUID;
 
 
 @Service
+@Transactional
 public class WriterServiceImpl extends BaseServiceImpl implements WriterService {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(WriterServiceImpl.class);
@@ -49,6 +55,9 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
 
     @Autowired
     private WriterAuditDao writerAuditDao;
+    
+    @Autowired
+	private IdAPI idAPI;
 
     public final static int LOCK_EXPIRE_DEFAULT = 60;
 
@@ -123,6 +132,39 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
     public Integer updateWriter(WriterAdminVo writerAdminVo) {
     	return writerDao.updateWriter(writerAdminVo);
     }
+    
+    @Override
+	public WriterVo submitAudit(Writer writer) {
+		// 验证身份证是否真实
+		boolean checkUserCard = IDCardValidate.validate(writer.getIdentityCard());
+		if (!checkUserCard) {
+			logger.error("身份证不正确");
+			throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),
+					ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
+					ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
+		}
+		// 更新写手信息
+		writer.setUserStatus(1);
+		writerDao.update(writer);
+		// 新增审核信息
+		WriterAudit writerAudit = new WriterAudit();
+		Long kid = idAPI.getId("yryz_writer_audit_history");
+		writerAudit.setKid(kid);
+		writerAudit.setWriterKid(writer.getKid());
+		writerAudit.setUserName(writer.getUserName());
+		writerAudit.setIdentityCard(writer.getIdentityCard());
+		writerAudit.setIdentityCardPhoto(writer.getIdentityCardPhoto());
+		writerAudit.setProvice(writer.getProvice());
+		writerAudit.setCity(writer.getCity());
+		writerAudit.setTel(writer.getTel());
+		writerAudit.setEmail(writer.getEmail());
+		writerAudit.setAuditStatus(1);
+		writerAudit.setCreateUserId(writer.getKid().toString());
+		writerAudit.setLastUpdateUserId(writer.getKid().toString());
+		writerAuditDao.insertByPrimaryKeySelective(writerAudit);
+		WriterVo writerVo = detail(writer.getKid());
+		return writerVo;
+	}
 
     @Override
     public PageList<WriterAdminVo> selectListAdmin(WriterDto writerDto) {

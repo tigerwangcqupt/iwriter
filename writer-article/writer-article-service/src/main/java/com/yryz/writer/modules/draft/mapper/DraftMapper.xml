@@ -326,13 +326,13 @@
     
     <!-- 查询全部 -->
     <select id="selectList" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
-        select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid,task_kid,0 dataType,create_date
+        select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid,task_kid,0 dataType,create_date,NULL recommend
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status != 3 AND del_flag = 0
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
 		UNION ALL
-		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid,NULL task_kid,1 dataType,create_date
+		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid,NULL task_kid,1 dataType,create_date,recommend
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
@@ -341,7 +341,7 @@
 
 	<!-- 查询已发表 -->
     <select id="selectPublish" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
-		SELECT title,cover_img_url,draft_fee,content_flag draft_type,task_flag,shelve_flag,id kid,1 dataType,create_date
+		SELECT title,cover_img_url,draft_fee,content_flag draft_type,task_flag,shelve_flag,id kid,1 dataType,create_date,recommend
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0 AND shelve_flag = 0
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
@@ -350,13 +350,13 @@
 
 	<!-- 查询未通过,文章和稿件 -->
     <select id="selectNotPass" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
-		select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid,task_kid,0 dataType,create_date
+		select title,cover_img_url,draft_fee,reason,draft_type,suggest,NULL shelve_flag,draft_status,task_flag,kid,task_kid,0 dataType,create_date,NULL recommend
         from yryz_draft WHERE create_user_id = #{createUserId,jdbcType=VARCHAR}  AND draft_status IN (1,2) AND del_flag = 0
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
 		UNION ALL
-		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid,NULL task_kid,1 dataType,create_date
+		SELECT title,cover_img_url,draft_fee,NULL reason,content_flag draft_type,NULL suggest,shelve_flag,NULL draft_status,task_flag,id kid,NULL task_kid,1 dataType,create_date,recommend
 		FROM  yryz_article WHERE writer_kid = #{createUserId,jdbcType=VARCHAR} AND del_flag = 0 AND shelve_flag = 1
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
@@ -450,6 +450,15 @@
 			a.visit_qty,a.comment_qty,a.collect_qty,a.share_qty
 		FROM
 			yryz_article_statictis a
+		WHERE
+			article_id = #{kid}
+	</select>
+
+	<select id="selectArticleSubject" parameterType="java.lang.Long" resultType="java.lang.Integer">
+		SELECT
+			a.recommend
+		FROM
+			yryz_subject_article a
 		WHERE
 			article_id = #{kid}
 	</select>

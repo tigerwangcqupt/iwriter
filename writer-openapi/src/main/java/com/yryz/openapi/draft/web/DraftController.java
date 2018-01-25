@@ -53,8 +53,9 @@ public class DraftController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/del", method = RequestMethod.GET)
-    public void del(@RequestParam("kid") Long kid) {
-        draftApi.del(kid);
+    public RpcResponse<Integer> del(@RequestParam("kid") Long kid) {
+        RpcResponse<Integer> del = draftApi.del(kid);
+        return del;
     }
 
 }

@@ -20,6 +20,7 @@ import com.yryz.writer.modules.task.dao.persistence.TaskDao;
 import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.vo.AppVo;
 import com.yryz.writer.modules.task.vo.TaskVo;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -208,13 +209,33 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             //上架文章,为已发表
             if (shelveFlag != null && shelveFlag == 0) {
                 draftVo.setDraftStatus(3);
-                //上架文章聚合统计数据
                 Long kid = draft.getKid();
+                //上架文章跟专题是否关联并且是否推荐
+                List<Integer> integers = draftDao.selectArticleSubject(kid);
+                if (CollectionUtils.isNotEmpty(integers)) {
+                    draftVo.setSubjectFlag(1);
+                    for (Integer i : integers) {
+                        if (i == 1) {
+                            draftVo.setRecommend(1);
+                        }
+                    }
+                }
+                //获取文章表的推荐状态
+                Integer recommend = draft.getRecommend();
+                if (recommend != null) {
+                    if (recommend == 1 || draftVo.getRecommend() == 1) {
+                        draftVo.setRecommend(1);
+                    }
+                }
+
+                //上架文章聚合统计数据
                 DraftVo data = draftDao.selectArticleData(kid);
-                draftVo.setVisitQty(data.getVisitQty());
-                draftVo.setCommentQty(data.getCommentQty());
-                draftVo.setShareQty(data.getShareQty());
-                draftVo.setCollectQty(data.getCollectQty());
+                if (data != null) {
+                    draftVo.setVisitQty(data.getVisitQty());
+                    draftVo.setCommentQty(data.getCommentQty());
+                    draftVo.setShareQty(data.getShareQty());
+                    draftVo.setCollectQty(data.getCollectQty());
+                }
             } else if (shelveFlag != null && shelveFlag == 1) {
                 draftVo.setDraftStatus(2);
             }

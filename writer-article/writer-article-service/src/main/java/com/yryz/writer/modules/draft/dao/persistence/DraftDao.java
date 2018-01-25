@@ -44,5 +44,7 @@ public interface DraftDao extends BaseDao {
 
     List<UserVo> selectUserByUserName(String userName);
 
-    DraftVo selectArticleData(@Param("kid")Long kid);
+    DraftVo selectArticleData(@Param("kid") Long kid);
+
+    List<Integer> selectArticleSubject(@Param("kid") Long kid);
 }

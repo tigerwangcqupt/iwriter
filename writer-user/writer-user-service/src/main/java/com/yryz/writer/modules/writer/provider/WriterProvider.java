@@ -1,7 +1,10 @@
 package com.yryz.writer.modules.writer.provider;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.ResponseModel;
+import com.yryz.writer.modules.bank.constant.IDCardValidate;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
@@ -166,30 +169,9 @@ public class WriterProvider implements WriterApi {
 	}
 
 	@Override
-	@Transactional
 	public RpcResponse<WriterVo> submitAudit(Writer writer) {
 		 try {
-			 //更新写手信息
-			 writer.setUserStatus(1);
-			 writerService.update(writer);
-			 //新增审核信息
-			 WriterAudit writerAudit = new WriterAudit();
-			 Long kid  = idAPI.getId("yryz_writer_audit_history");
-			 writerAudit.setKid(kid);
-			 writerAudit.setWriterKid(writer.getKid());
-			 writerAudit.setUserName(writer.getUserName());
-			 writerAudit.setIdentityCard(writer.getIdentityCard());
-			 writerAudit.setIdentityCardPhoto(writer.getIdentityCardPhoto());
-			 writerAudit.setProvice(writer.getProvice());
-			 writerAudit.setCity(writer.getCity());
-			 writerAudit.setTel(writer.getTel());
-			 writerAudit.setEmail(writer.getEmail());
-			 writerAudit.setAuditStatus(1);
-			 writerAudit.setCreateUserId(writer.getKid().toString());
-			 writerAudit.setLastUpdateUserId(writer.getKid().toString());
-			 writerAuditService.insertByPrimaryKeySelective(writerAudit);
-			 WriterVo writerVo = writerService.detail(writer.getKid());
-			 return ResponseModel.returnObjectSuccess(writerVo);
+			 return ResponseModel.returnObjectSuccess(writerService.submitAudit(writer));
         } catch (Exception e) {
         	 logger.error("更新Writer信息失败", e);
        		 return ResponseModel.returnException(e);
