@@ -52,17 +52,16 @@ public class CommonUtils {
      * @return
      */
     public static boolean checkIntNumber(BigDecimal data) {
+
+
+
         if(null == data){
             return false;
         }
         try{
-            String str = new Integer(data.intValue()).toString();
-            String rex = "^\\+?[1-9][0-9]*$";
-            Pattern p = Pattern.compile(rex);
-            Matcher m = p.matcher(str);
-            if(m.find()){
-                return true;
-            }
+            String dataVal = data.toString();
+            Integer.parseInt(dataVal);
+            return true;
         }catch (Exception e){
             logger.error("金额转换成字符串失败",e);
         }
@@ -83,6 +82,6 @@ public class CommonUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(checkValidAmount(new BigDecimal(2000.00)));
+        System.out.println(checkIntNumber(new BigDecimal(500)));
     }
 }
