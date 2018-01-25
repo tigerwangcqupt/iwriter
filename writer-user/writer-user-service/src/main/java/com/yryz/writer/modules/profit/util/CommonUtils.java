@@ -52,9 +52,6 @@ public class CommonUtils {
      * @return
      */
     public static boolean checkIntNumber(BigDecimal data) {
-
-
-
         if(null == data){
             return false;
         }
