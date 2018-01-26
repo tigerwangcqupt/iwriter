@@ -1,9 +1,6 @@
 package com.yryz.openapi.bank.web;
 
-import com.yryz.openapi.core.auth.annotation.InterFaceAuth;
 import com.yryz.openapi.core.validator.annotation.Validate;
-import com.yryz.qstone.core.utils.BankUtils;
-import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.component.rpc.RpcResponse;
