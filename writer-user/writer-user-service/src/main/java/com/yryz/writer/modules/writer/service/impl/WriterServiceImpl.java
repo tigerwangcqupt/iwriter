@@ -229,8 +229,11 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         String tokenValue = UUID.randomUUID().toString().replaceAll("-", "");
         if(this.addToken(custId,tokenValue)){
             return tokenValue;
+        }else{
+            String key = getMessagekey(custId);
+            JedisUtils.set(key, tokenValue,0 );
+            return tokenValue;
         }
-        return null;
     }
 
     @Override
