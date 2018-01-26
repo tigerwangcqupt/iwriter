@@ -23,8 +23,14 @@ public class DraftController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
-    public RpcResponse<DraftVo> detail(@RequestParam("kid") Long kid) {
+    public RpcResponse<DraftVo> detailInfo(@RequestParam("kid") Long kid) {
         return draftApi.detailInfo(kid);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/single", method = RequestMethod.GET)
+    public RpcResponse<DraftVo> detail(@RequestParam("kid") Long kid) {
+        return draftApi.detail(kid);
     }
 
     @ResponseBody
