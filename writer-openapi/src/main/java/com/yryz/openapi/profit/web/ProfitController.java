@@ -3,6 +3,7 @@ package com.yryz.openapi.profit.web;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
+import com.yryz.openapi.core.auth.annotation.InterFaceAuth;
 import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.constant.YyrzModuleEnumConstants;
 import com.yryz.writer.common.utils.MoneyUtils;
@@ -74,7 +75,9 @@ public class ProfitController extends BaseController{
     */
    @RequestMapping(value="/add", method = RequestMethod.POST)
    @ResponseBody
-   public RpcResponse<Profit> addProfit(@RequestBody Profit profit, @RequestHeader Long userId){
+   @InterFaceAuth
+   public RpcResponse<Profit> addProfit(@RequestBody Profit profit, @RequestHeader Long userId, @RequestHeader String originText, @RequestHeader String sign){
+
       Assert.notNull(profit, "参数缺少或错误！");
       Assert.notNull(userId, "用户id为空!");
       profit.setWriterId(userId);

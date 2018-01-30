@@ -75,6 +75,6 @@
     <import resource="spring-validate.xml"/>
 
     <!-- 统一鉴权处理 -->
-    <!--<import resource="spring-auth.xml"/>-->
+    <import resource="spring-auth.xml"/>
 
 </beans>

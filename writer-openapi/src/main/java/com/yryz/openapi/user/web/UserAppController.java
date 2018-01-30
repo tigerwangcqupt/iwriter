@@ -3,6 +3,7 @@ package com.yryz.openapi.user.web;
 import com.alibaba.fastjson.JSON;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.internal.DubboResponse;
+import com.yryz.openapi.core.auth.annotation.InterFaceAuth;
 import com.yryz.service.api.api.exception.ServiceException;
 import com.yryz.service.api.basic.constants.SmsContants;
 import com.yryz.service.api.basic.entity.SmsReqVo;
@@ -76,7 +77,8 @@ public class UserAppController extends BaseController {
     @RequestMapping(value = "register/code", method = {RequestMethod.POST})
     @ResponseBody
     @NotLogin
-    public RpcResponse<SmsVerifyCode> getCode(@RequestBody SmsReqVo smsReq) {
+    @InterFaceAuth
+    public RpcResponse<SmsVerifyCode> getCode(@RequestBody SmsReqVo smsReq, @RequestHeader String originText, @RequestHeader String sign) {
         Assert.notNull(smsReq.getPhone(), "手机号不能为空！");
         Assert.notNull(smsReq.getCode(), "功能码不能为空！");
 
