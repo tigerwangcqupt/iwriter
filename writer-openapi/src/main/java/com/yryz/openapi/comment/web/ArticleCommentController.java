@@ -60,4 +60,25 @@ public class ArticleCommentController extends BaseController {
       return articleCommentApi.saveArticleComment(articleComment);
    }
 
+   @ResponseBody
+   @RequestMapping(value="/save", method = RequestMethod.POST)
+   public RpcResponse<Boolean> save(@RequestBody ArticleComment articleComment) {
+      String userId = request.getHeader("userId");
+      Assert.notNull(userId, "用户id不能为空");
+      Assert.notNull(articleComment.getWriterId(), "写手不能为空");
+      Assert.notNull(articleComment.getCommentUserId(), "评论用户不能为空");
+      Assert.hasText(articleComment.getCommentUserNickname(), "收藏者昵称不为空");
+      Assert.notNull(articleComment.getArticleId(), "文章不能为空");
+      Assert.notNull(articleComment.getArticleTitle(), "文章标题不能为空");
+      Assert.hasText(articleComment.getContent(), "评论内容不能为空");
+      if (articleComment.getContent().length() > 200){
+         throw new IllegalArgumentException("评论长度不能超过200");
+      }
+      articleComment.setCommentType(0);
+      articleComment.setTargetId(0l);
+      articleComment.setCommentWriterId(articleComment.getWriterId());
+      articleComment.setCreateUserId(articleComment.getWriterId().toString());
+      return articleCommentApi.saveArticleComment(articleComment);
+   }
+
 }

@@ -30,6 +30,9 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
 
     private static final Logger logger = LoggerFactory.getLogger(ArticleCommentServiceImpl.class);
 
+    /**  回评类型  */
+    private static final int RETURN_COMMENT_TYPE = 1;
+
     @Autowired
     private ArticleCommentDao articleCommentDao;
 
@@ -106,7 +109,10 @@ public class ArticleCommentServiceImpl extends BaseServiceImpl implements Articl
             articleComment.setKid(kid);
             //保存写手的被收藏数
             articleCommentDao.insert(articleComment);
-            messageApi.saveMessageTips(ModuleEnum.COMMENT, articleComment.getWriterId() == null ? 0 : articleComment.getWriterId());
+            //回评不保存缓存数
+            if (articleComment.getCommentType() != RETURN_COMMENT_TYPE){
+                messageApi.saveMessageTips(ModuleEnum.COMMENT, articleComment.getWriterId() == null ? 0 : articleComment.getWriterId());
+            }
         } catch (Exception e) {
             logger.error("保存ArticleComment明细失败", e);
             return false;
