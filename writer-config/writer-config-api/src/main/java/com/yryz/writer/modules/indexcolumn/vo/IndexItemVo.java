@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 /**
  * @ClassName: IndexColumnVo
- * @Description: IndexColumnVo
+ * @Description: 栏目实体
  * @author huyangyang
  * @date 2018-01-02 10:04:46
  *

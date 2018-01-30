@@ -19,8 +19,18 @@ import com.yryz.component.rpc.dto.PageList;
 @Repository
 public interface ArticleLabelService extends BaseService {
 
+   /**
+    * 文章标签分页查询
+    * @param articleLabelDto
+    * @return
+    */
    PageList<ArticleLabelVo> selectList(ArticleLabelDto articleLabelDto);
 
+   /**
+    * 文章标签详情
+    * @param articleLabelId
+    * @return
+    */
    ArticleLabelVo detail(Long articleLabelId);
 
    /**

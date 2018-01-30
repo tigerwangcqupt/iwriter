@@ -11,6 +11,9 @@ import java.util.List;
  */
 public class IndexColumnVo implements Serializable {
 
+    /**
+     * 栏目列表
+     */
     private List<IndexItemVo> indexItems;
 
     /**

@@ -280,8 +280,6 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
                     return 0L;
                 }
             }
-
-
         } catch (Exception e) {
             logger.error("获取消息缓存气泡失败:" + moduleEnum.getName(), e);
             throw e;
