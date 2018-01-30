@@ -74,7 +74,7 @@ public class ResourceAuthHandler {
                     ExceptionEnum.NullOriginException.getErrorMsg());
         }
         //签名为空
-        if(StringUtils.isEmpty(originText)){
+        if(StringUtils.isEmpty(sign)){
             LOGGER.error("签名为空");
             throw new YyrzPcException(ExceptionEnum.NullSignException.getCode(),ExceptionEnum.NullSignException.getMsg(),
                     ExceptionEnum.NullSignException.getErrorMsg());
