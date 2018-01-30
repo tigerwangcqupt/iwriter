@@ -3,6 +3,7 @@ package com.yryz.openapi.user.web;
 import com.alibaba.fastjson.JSON;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.internal.DubboResponse;
+import com.yryz.service.api.api.exception.ServiceException;
 import com.yryz.service.api.basic.constants.SmsContants;
 import com.yryz.service.api.basic.entity.SmsReqVo;
 import com.yryz.service.api.basic.entity.SmsVerifyCode;
@@ -35,6 +36,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("services/app/v1/user")
@@ -79,6 +82,9 @@ public class UserAppController extends BaseController {
 
         Assert.hasText(smsReq.getPhone(), "手机号不能为空！");
         Assert.hasText(smsReq.getCode(), "功能码不能为空！");
+
+        //验证手机号格式
+        checkPhone(smsReq.getPhone());
 
         RpcResponse<Writer> rpcResponse = writerApi.selectByPhone(smsReq.getPhone());
         Writer user = isSuccess(rpcResponse);
@@ -465,6 +471,14 @@ public class UserAppController extends BaseController {
 
         if (user != null) {
             if (password.equals(user.getPwd())) {
+                //新密码和旧密码相同，则提示
+                if(password.equals(newPassword)){
+                    throw new YyrzPcException(
+                            ExceptionEnum.ACCOUNT_PASSWORD_EQUAL_NEW_PASSWORD.getCode(),
+                            ExceptionEnum.ACCOUNT_PASSWORD_EQUAL_NEW_PASSWORD.getMsg(),
+                            ExceptionEnum.ACCOUNT_PASSWORD_EQUAL_NEW_PASSWORD.getErrorMsg());
+                }
+
                 //修改用户信息
                 Writer writer = new Writer();
                 writer.setKid(user.getKid());
@@ -693,5 +707,27 @@ public class UserAppController extends BaseController {
                     ExceptionEnum.PHONE_REGISTERED.getErrorMsg());
         }
     }
+
+
+    /**
+     * 判断手机号是否合法
+     * @param user
+     */
+    private void checkPhone(String phone) {
+        //三大运营商手机号匹配正则表达式
+        String PHONE_REGEX = "^(13[0-9]|15[012356789]|16[6]|17[0135678]|18[0-9]|14[56789]|19[89])[0-9]{8}$";
+
+        Pattern pattern = Pattern.compile(PHONE_REGEX);
+        Matcher matcher = pattern.matcher(phone);
+        if(!matcher.matches()){
+            throw new YyrzPcException(
+                    ExceptionEnum.CELL_PHONE_NUMBER_ILLEGAL.getCode(),
+                    ExceptionEnum.CELL_PHONE_NUMBER_ILLEGAL.getMsg(),
+                    ExceptionEnum.CELL_PHONE_NUMBER_ILLEGAL.getErrorMsg());
+        }
+
+    }
+
+
 
 }
