@@ -115,38 +115,37 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
     public Long add(Draft draft) {
 
         try {
-            Long kid = draft.getKid();
-            if (kid == null) {
-
-                //判断任务是否被结束
-                Integer taskFlag = draft.getTaskFlag();
-                if (taskFlag != null && taskFlag == 1) {
-                    Long taskKid = draft.getTaskKid();
-                    Task task = taskDao.selectByKid(Task.class, taskKid);
-                    Integer integer = taskDao.selectSubmitWriterNum(taskKid);
-                    if (integer != null && integer >= task.getTaskCloseNum()) {
+            //判断任务是否被结束
+            Integer draftStatus = draft.getDraftStatus();
+            Integer taskFlag = draft.getTaskFlag();
+            //是任务稿件且是要提交审核(draftStatus=1)时,校验任务状态.
+            if (taskFlag != null && taskFlag == 1 && draftStatus != null && draftStatus == 1) {
+                Long taskKid = draft.getTaskKid();
+                Task task = taskDao.selectByKid(Task.class, taskKid);
+                Integer integer = taskDao.selectSubmitWriterNum(taskKid);
+                if (integer != null && integer >= task.getTaskCloseNum()) {
+                    throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
+                }
+                if (task.getTaskCloseFlag() != null && task.getTaskCloseFlag() == 1) {
+                    throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
+                }
+                if (task.getEndDate() != null) {
+                    Date date = new Date();
+                    Date endDate = task.getEndDate();
+                    if (date.after(endDate)) {
                         throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
-                    }
-                    if (task.getTaskCloseFlag() != null && task.getTaskCloseFlag() == 1) {
-                        throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
-                    }
-                    if (task.getEndDate() != null) {
-                        Date date = new Date();
-                        Date endDate = task.getEndDate();
-                        if (date.after(endDate)) {
-                            throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
-                        }
                     }
                 }
-
+            }
+            Long kid = draft.getKid();
+            if (kid == null) {
                 kid = idAPI.getId("yryz_draft");
                 draft.setKid(kid);
-                Long appId = draft.getAppId();
                 draftDao.insertByPrimaryKeySelective(draft);
-
             } else {
                 draftDao.update(draft);
             }
+
             return kid;
         } catch (Exception E) {
             throw E;
