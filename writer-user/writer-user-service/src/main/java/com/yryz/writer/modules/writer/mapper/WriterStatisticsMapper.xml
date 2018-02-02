@@ -161,9 +161,6 @@
     <update id="update" parameterType="com.yryz.writer.modules.writer.entity.WriterStatistics">
         update yryz_writer_statistics
         <set>
-             <if test="writerKid != null">
-    			writer_kid = #{writerKid,jdbcType=BIGINT},
-    		</if>
              <if test="articleQty != null">
     			article_qty = #{articleQty,jdbcType=BIGINT},
     		</if>
@@ -201,7 +198,7 @@
     			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
     		</if>
         </set>
-        where kid = #{kid,jdbcType=BIGINT}
+        where writer_kid = #{writerKid,jdbcType=BIGINT}
     </update>
     
     <!-- 查询WriterStatistics列表 -->
