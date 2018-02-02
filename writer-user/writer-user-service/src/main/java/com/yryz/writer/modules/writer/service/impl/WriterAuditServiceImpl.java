@@ -150,7 +150,12 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
 				//写手审核通过初始化统计信息
 				WriterStatistics writerStatistics = new WriterStatistics();
 				writerStatistics.setWriterKid(writerAuditVo.getWriterKid());
-				writerStatisticsApi.insert(writerStatistics);
+				RpcResponse<WriterStatistics> rst = writerStatisticsApi.insert(writerStatistics);
+				if(!rst.success()){
+					logger.error("写手审核通过初始化统计信息接口调用失败");
+					throw new YyrzPcException(ExceptionEnum.Exception.getCode(),ExceptionEnum.Exception.getMsg(),
+		                    ExceptionEnum.Exception.getErrorMsg());
+				}
 				
 			}
 			
