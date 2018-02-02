@@ -94,6 +94,11 @@ public class TaskVo implements Serializable {
      */
     private Date createDate;
 
+    /**
+     * 给前端返回的任务状态
+     */
+    private Integer taskStatus = 0;
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -228,5 +233,13 @@ public class TaskVo implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public Integer getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(Integer taskStatus) {
+        this.taskStatus = taskStatus;
     }
 }

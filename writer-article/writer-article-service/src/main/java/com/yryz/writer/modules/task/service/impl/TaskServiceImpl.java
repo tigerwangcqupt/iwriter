@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -124,6 +125,22 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         taskVo.setWriterNum(WriterNum);
         Integer draftNum = selectSubmitDraftNum(task.getKid());
         taskVo.setDraftNum(draftNum);
+
+        //判断任务是否过期,任务过期将taskStatus置为1
+        if (WriterNum != null && WriterNum >= task.getTaskCloseNum()) {
+            taskVo.setTaskStatus(1);
+        }
+        if (task.getTaskCloseFlag() != null && task.getTaskCloseFlag() == 1) {
+            taskVo.setTaskStatus(1);
+        }
+        if (task.getEndDate() != null) {
+            Date date = new Date();
+            Date endDate = task.getEndDate();
+            if (date.after(endDate)) {
+                taskVo.setTaskStatus(1);
+            }
+        }
+
         return taskVo;
     }
 }

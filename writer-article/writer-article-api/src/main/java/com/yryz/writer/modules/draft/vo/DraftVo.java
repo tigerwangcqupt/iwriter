@@ -138,6 +138,11 @@ public class DraftVo implements Serializable {
 
     private Integer taskAcceptTaskNum;
 
+    /**
+     * 给前端返回的任务状态
+     */
+    private Integer taskStatus = 0;
+
     private Integer shelveFlag;
 
     private Integer dataType;
@@ -452,5 +457,13 @@ public class DraftVo implements Serializable {
 
     public void setSubjectFlag(Integer subjectFlag) {
         this.subjectFlag = subjectFlag;
+    }
+
+    public Integer getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(Integer taskStatus) {
+        this.taskStatus = taskStatus;
     }
 }

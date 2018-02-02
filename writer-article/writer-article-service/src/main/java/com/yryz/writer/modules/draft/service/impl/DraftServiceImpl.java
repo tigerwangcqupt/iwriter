@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.draft.service.impl;
 
+import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.exception.YyrzPcException;
@@ -8,7 +9,6 @@ import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.DateUtil;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
-import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.draft.dao.persistence.DraftDao;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.entity.Draft;
@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -205,6 +204,23 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                     draftVo.setTaskCreateDate(task.getCreateDate());
                     draftVo.setTaskAcceptTaskNum(task.getAcceptTaskNum());
                     draftVo.setDraftFee(task.getDraftFee());
+
+                    //判断任务是否过期,任务过期将taskStatus置为1
+                    Integer WriterNum = taskDao.selectSubmitWriterNum(taskKid);
+                    if (WriterNum != null && WriterNum >= task.getTaskCloseNum()) {
+                        draftVo.setTaskStatus(1);
+                    }
+                    if (task.getTaskCloseFlag() != null && task.getTaskCloseFlag() == 1) {
+                        draftVo.setTaskStatus(1);
+                    }
+                    if (task.getEndDate() != null) {
+                        Date date = new Date();
+                        Date endDate = task.getEndDate();
+                        if (date.after(endDate)) {
+                            draftVo.setTaskStatus(1);
+                        }
+                    }
+
                 }
             }
         }
