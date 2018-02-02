@@ -20,11 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.yryz.writer.modules.writer.vo.WriterAuditVo;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
+import com.yryz.writer.modules.writer.entity.WriterStatistics;
 import com.yryz.writer.modules.writer.dto.WriterAuditDto;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.vo.NoticeReceiveWriter;
 import com.yryz.writer.modules.message.vo.WriterNoticeMessageVo;
 import com.yryz.writer.modules.profit.ProfitApi;
+import com.yryz.writer.modules.writer.WriterStatisticsApi;
 import com.yryz.writer.modules.writer.dao.persistence.WriterAuditDao;
 import com.yryz.writer.modules.writer.dao.persistence.WriterDao;
 import com.yryz.writer.modules.writer.service.WriterAuditService;
@@ -49,6 +51,9 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
     
     @Autowired
     private MessageApi messageApi;
+    
+    @Autowired
+    private WriterStatisticsApi writerStatisticsApi;
 
     protected BaseDao getDao() {
         return writerAuditDao;
@@ -141,6 +146,12 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
 					throw new YyrzPcException(ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getCode(),ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getMsg(),
 		                    ExceptionEnum.AUDITPASS_SENDMSG_EXCEPTION.getErrorMsg());
 				}
+				
+				//写手审核通过初始化统计信息
+				WriterStatistics writerStatistics = new WriterStatistics();
+				writerStatistics.setWriterKid(writerAuditVo.getWriterKid());
+				writerStatisticsApi.insert(writerStatistics);
+				
 			}
 			
 		}

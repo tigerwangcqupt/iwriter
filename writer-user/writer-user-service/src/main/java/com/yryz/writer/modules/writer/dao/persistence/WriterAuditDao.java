@@ -25,5 +25,6 @@ public interface WriterAuditDao extends BaseDao {
     WriterAudit selectAuditDetail(@Param("writerKid")Long writerKid);
     
     int insertByPrimaryKeySelective(WriterAudit writerAudit);
+    
 
 }

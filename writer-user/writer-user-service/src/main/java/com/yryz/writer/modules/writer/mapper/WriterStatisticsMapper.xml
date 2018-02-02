@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.writer.dao.persistence.WriterStatisticsDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.writer.entity.WriterStatistics">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="writer_kid" property="writerKid" jdbcType="BIGINT"/>
+		<result column="article_qty" property="articleQty" jdbcType="BIGINT"/>
+		<result column="video_qty" property="videoQty" jdbcType="BIGINT"/>
+		<result column="fans_qty" property="fansQty" jdbcType="BIGINT"/>
+		<result column="visit_qty" property="visitQty" jdbcType="BIGINT"/>
+		<result column="comment_qty" property="commentQty" jdbcType="BIGINT"/>
+		<result column="collect_qty" property="collectQty" jdbcType="BIGINT"/>
+		<result column="share_qty" property="shareQty" jdbcType="BIGINT"/>
+		<result column="praise_qty" property="praiseQty" jdbcType="BIGINT"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,writer_kid,article_qty,video_qty,fans_qty,visit_qty,comment_qty,collect_qty,share_qty,praise_qty,create_date,create_user_id,last_update_date,last_update_user_id
+    </sql>
+
+     <!-- 查询WriterStatistics详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_writer_statistics
+        where del_flag = 0
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除WriterStatistics-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_writer_statistics
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增WriterStatistics-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.writer.entity.WriterStatistics">
+	    insert into yryz_writer_statistics (kid,writer_kid,article_qty,video_qty,fans_qty,visit_qty,comment_qty,collect_qty,share_qty,praise_qty,create_date,create_user_id,last_update_date,last_update_user_id)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+				,#{writerKid,jdbcType=BIGINT}
+				,#{articleQty,jdbcType=BIGINT}
+				,#{videoQty,jdbcType=BIGINT}
+				,#{fansQty,jdbcType=BIGINT}
+				,#{visitQty,jdbcType=BIGINT}
+				,#{commentQty,jdbcType=BIGINT}
+				,#{collectQty,jdbcType=BIGINT}
+				,#{shareQty,jdbcType=BIGINT}
+				,#{praiseQty,jdbcType=BIGINT}
+			,NOW()
+				,#{createUserId,jdbcType=VARCHAR}
+			,NOW()
+				,#{lastUpdateUserId,jdbcType=VARCHAR}
+	    )
+	</insert>
+	
+	<!--按需新增WriterStatistics-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.writer.entity.WriterStatistics">
+	    insert into yryz_writer_statistics 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="writerKid != null">
+			writer_kid,
+	    </if>
+        <if test="articleQty != null">
+			article_qty,
+	    </if>
+        <if test="videoQty != null">
+			video_qty,
+	    </if>
+        <if test="fansQty != null">
+			fans_qty,
+	    </if>
+        <if test="visitQty != null">
+			visit_qty,
+	    </if>
+        <if test="commentQty != null">
+			comment_qty,
+	    </if>
+        <if test="collectQty != null">
+			collect_qty,
+	    </if>
+        <if test="shareQty != null">
+			share_qty,
+	    </if>
+        <if test="praiseQty != null">
+			praise_qty,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			create_user_id,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			last_update_user_id,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="writerKid != null">
+			#{writerKid,jdbcType=BIGINT},
+	    </if>
+        <if test="articleQty != null">
+			#{articleQty,jdbcType=BIGINT},
+	    </if>
+        <if test="videoQty != null">
+			#{videoQty,jdbcType=BIGINT},
+	    </if>
+        <if test="fansQty != null">
+			#{fansQty,jdbcType=BIGINT},
+	    </if>
+        <if test="visitQty != null">
+			#{visitQty,jdbcType=BIGINT},
+	    </if>
+        <if test="commentQty != null">
+			#{commentQty,jdbcType=BIGINT},
+	    </if>
+        <if test="collectQty != null">
+			#{collectQty,jdbcType=BIGINT},
+	    </if>
+        <if test="shareQty != null">
+			#{shareQty,jdbcType=BIGINT},
+	    </if>
+        <if test="praiseQty != null">
+			#{praiseQty,jdbcType=BIGINT},
+	    </if>
+        <if test="createDate != null">
+			#{createDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="createUserId != null and createUserId != ''">
+			#{createUserId,jdbcType=VARCHAR},
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+			#{lastUpdateUserId,jdbcType=VARCHAR},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改WriterStatistics-->   
+    <update id="update" parameterType="com.yryz.writer.modules.writer.entity.WriterStatistics">
+        update yryz_writer_statistics
+        <set>
+             <if test="writerKid != null">
+    			writer_kid = #{writerKid,jdbcType=BIGINT},
+    		</if>
+             <if test="articleQty != null">
+    			article_qty = #{articleQty,jdbcType=BIGINT},
+    		</if>
+             <if test="videoQty != null">
+    			video_qty = #{videoQty,jdbcType=BIGINT},
+    		</if>
+             <if test="fansQty != null">
+    			fans_qty = #{fansQty,jdbcType=BIGINT},
+    		</if>
+             <if test="visitQty != null">
+    			visit_qty = #{visitQty,jdbcType=BIGINT},
+    		</if>
+             <if test="commentQty != null">
+    			comment_qty = #{commentQty,jdbcType=BIGINT},
+    		</if>
+             <if test="collectQty != null">
+    			collect_qty = #{collectQty,jdbcType=BIGINT},
+    		</if>
+             <if test="shareQty != null">
+    			share_qty = #{shareQty,jdbcType=BIGINT},
+    		</if>
+             <if test="praiseQty != null">
+    			praise_qty = #{praiseQty,jdbcType=BIGINT},
+    		</if>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+            <if test="createUserId != null and createUserId != ''">
+    			create_user_id = #{createUserId,jdbcType=VARCHAR},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+            <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询WriterStatistics列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.writer.dto.WriterStatisticsDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_writer_statistics where del_flag = 0
+
+    </select>
+    
+</mapper>
