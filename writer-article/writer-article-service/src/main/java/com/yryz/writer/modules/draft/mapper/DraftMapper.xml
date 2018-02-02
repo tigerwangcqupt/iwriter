@@ -337,6 +337,7 @@
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
+		ORDER BY create_date DESC
     </select>
 
 	<!-- 查询已发表 -->
@@ -346,6 +347,7 @@
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
+		ORDER BY create_date DESC
 	</select>
 
 	<!-- 查询未通过,文章和稿件 -->
@@ -361,6 +363,7 @@
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
+		ORDER BY create_date DESC
     </select>
 
 	<!-- 查询草稿 -->
@@ -370,6 +373,7 @@
 		<if test="title != null and title != ''">
 			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
+		ORDER BY create_date DESC
     </select>
 
 	<!-- 管理后台查询待审核 -->
