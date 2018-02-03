@@ -40,6 +40,10 @@ public class ArticleClassifyDto extends PageList {
 
 
     /**
+     * 默认需要分页
+     */
+    private boolean pageFlag = true;
+    /**
      * 是否删除:0正常1已删除
      */
     private  Integer delFlag;
@@ -111,5 +115,13 @@ public class ArticleClassifyDto extends PageList {
 
     public Integer getDelFlag() {
         return delFlag;
+    }
+
+    public boolean isPageFlag() {
+        return pageFlag;
+    }
+
+    public void setPageFlag(boolean pageFlag) {
+        this.pageFlag = pageFlag;
     }
 }

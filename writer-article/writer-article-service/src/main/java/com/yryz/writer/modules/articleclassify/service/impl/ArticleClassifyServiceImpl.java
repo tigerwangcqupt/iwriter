@@ -47,7 +47,9 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     }
 
     public PageList<ArticleClassifyVo> selectList(ArticleClassifyDto articleClassifyDto){
-        PageUtils.startPage(articleClassifyDto.getCurrentPage(), articleClassifyDto.getPageSize());
+        if(articleClassifyDto.isPageFlag()){
+            PageUtils.startPage(articleClassifyDto.getCurrentPage(), articleClassifyDto.getPageSize());
+        }
         List<ArticleClassify> list = articleClassifyDao.selectList(articleClassifyDto);
         List<ArticleClassifyVo> articleClassifyVoList = new ArrayList <ArticleClassifyVo>();
         if(list != null && list.size() > 0) {
