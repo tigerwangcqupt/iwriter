@@ -25,13 +25,12 @@
 	<sql id="Base_Column_List">id,kid,writer_kid,article_qty,video_qty,fans_qty,visit_qty,comment_qty,collect_qty,share_qty,praise_qty,create_date,create_user_id,last_update_date,last_update_user_id
     </sql>
 
-     <!-- 查询WriterStatistics详情 -->
+    <!-- 查询WriterStatistics详情 -->
     <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from yryz_writer_statistics
-        where del_flag = 0
-		and kid = #{kid,jdbcType=BIGINT}
+        where writer_kid = #{kid,jdbcType=BIGINT}
     </select>
     
     <!-- 删除WriterStatistics-->
