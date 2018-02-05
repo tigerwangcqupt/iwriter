@@ -2,7 +2,9 @@ package com.yryz.writer.modules.task.service.impl;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
@@ -68,8 +70,27 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
 
     @Override
     public RpcResponse<Boolean> acceptTask(Long kid) {
-        int i = taskDao.acceptTask(kid);
-        return ResponseModel.returnObjectSuccess(true);
+        try {
+            Task task = taskDao.selectByKid(Task.class, kid);
+            Integer integer = taskDao.selectSubmitWriterNum(kid);
+            if (integer != null && integer >= task.getTaskCloseNum()) {
+                throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
+            }
+            if (task.getTaskCloseFlag() != null && task.getTaskCloseFlag() == 1) {
+                throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
+            }
+            if (task.getEndDate() != null) {
+                Date date = new Date();
+                Date endDate = task.getEndDate();
+                if (date.after(endDate)) {
+                    throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "任务已经结束", "任务已经结束");
+                }
+            }
+            int i = taskDao.acceptTask(kid);
+            return ResponseModel.returnObjectSuccess(true);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
