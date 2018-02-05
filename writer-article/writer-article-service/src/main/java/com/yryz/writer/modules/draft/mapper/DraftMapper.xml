@@ -257,34 +257,34 @@
              <if test="taskKid != null">
 				 task_kid = #{taskKid,jdbcType=TINYINT},
     		</if>
-            <if test="title != null and title != ''">
+            <if test="title != null">
     			title = #{title,jdbcType=VARCHAR},
     		</if>
-            <if test="contentHtml != null and contentHtml != ''">
+            <if test="contentHtml != null">
     			content_html = #{contentHtml,jdbcType=VARCHAR},
     		</if>
             <if test="contentSource != null and contentSource != ''">
 				content_source = #{contentSource,jdbcType=VARCHAR},
     		</if>
-            <if test="videoUrl != null and videoUrl != ''">
+            <if test="videoUrl != null">
     			video_url = #{videoUrl,jdbcType=VARCHAR},
     		</if>
             <if test="coverImgUrl != null and coverImgUrl != ''">
     			cover_img_url = #{coverImgUrl,jdbcType=VARCHAR},
     		</if>
-            <if test="description != null and description != ''">
+            <if test="description != null">
     			description = #{description,jdbcType=VARCHAR},
     		</if>
              <if test="appId != null">
     			app_id = #{appId,jdbcType=BIGINT},
     		</if>
-            <if test="appName != null and appName != ''">
+            <if test="appName != null">
     			app_name = #{appName,jdbcType=VARCHAR},
     		</if>
-            <if test="classifyName != null and classifyName != ''">
+            <if test="classifyName != null">
     			classify_name = #{classifyName,jdbcType=VARCHAR},
     		</if>
-            <if test="labelName != null and labelName != ''">
+            <if test="labelName != null">
     			label_name = #{labelName,jdbcType=VARCHAR},
     		</if>
              <if test="draftStatus != null">

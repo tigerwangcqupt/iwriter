@@ -72,7 +72,12 @@ public class TaskProvider implements TaskApi {
 
     @Override
     public RpcResponse<Boolean> acceptTask(Long kid) {
-        return taskService.acceptTask(kid);
+        try {
+            return taskService.acceptTask(kid);
+        } catch (Exception e) {
+            logger.error("任务已经结束", e);
+            return ResponseModel.returnException(e);
+        }
     }
 
     public RpcResponse<Integer> insert(Task task) {
