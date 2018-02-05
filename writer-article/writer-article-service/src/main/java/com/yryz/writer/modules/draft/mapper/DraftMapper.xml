@@ -452,11 +452,11 @@
 
 	<select id="selectArticleData" parameterType="java.lang.Long" resultType="com.yryz.writer.modules.draft.vo.DraftVo">
 		SELECT
-			a.visit_qty,a.comment_qty,a.collect_qty,a.share_qty
+			a.comment_qty,a.collect_qty,a.share_qty,t.view_count as visitQty
 		FROM
-			yryz_article_statictis a
+			yryz_article_statictis a , yryz_article t
 		WHERE
-			article_id = #{kid}
+             a.article_id = t.id and article_id = #{kid}
 	</select>
 
 	<select id="selectArticleSubject" parameterType="java.lang.Long" resultType="java.lang.Integer">
