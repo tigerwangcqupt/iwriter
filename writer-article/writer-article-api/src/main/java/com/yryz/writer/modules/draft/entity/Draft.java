@@ -134,6 +134,11 @@ public class Draft extends GenericEntity {
      */
     private Integer recommend;
 
+    /**
+     * 待上架状态
+     */
+    private Integer waitShelve;
+
 
     public Integer getDraftType() {
         return this.draftType;
@@ -301,5 +306,13 @@ public class Draft extends GenericEntity {
 
     public void setRecommend(Integer recommend) {
         this.recommend = recommend;
+    }
+
+    public Integer getWaitShelve() {
+        return waitShelve;
+    }
+
+    public void setWaitShelve(Integer waitShelve) {
+        this.waitShelve = waitShelve;
     }
 }

@@ -83,6 +83,9 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             case 5:
                 list = draftDao.selectNotPassForAdmin(draftDto);
                 break;
+            case 6:
+                list = draftDao.selectWaitShelve(draftDto);
+                break;
             default:
                 list = draftDao.selectList(draftDto);
                 break;
@@ -289,7 +292,8 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                     draftVo.setCollectQty(data.getCollectQty());
                 }
             } else if (shelveFlag != null && shelveFlag == 1) {
-                draftVo.setDraftStatus(2);
+                draftVo.setWaitShelve(draft.getWaitShelve());
+                draftVo.setDraftStatus(4);
             }
         }
         return draftVo;

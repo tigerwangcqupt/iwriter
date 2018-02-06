@@ -31,6 +31,9 @@ public interface DraftDao extends BaseDao {
     //草稿
     List<Draft> selectDraught(DraftDto draftDto);
 
+    //待上架
+    List<Draft> selectWaitShelve(DraftDto draftDto);
+
     //管理后台查询待审核
     List<Draft> selectPendingForAdmin(DraftDto draftDto);
 
@@ -49,4 +52,5 @@ public interface DraftDao extends BaseDao {
     List<Integer> selectArticleSubject(@Param("kid") Long kid);
 
     Draft selectArticle(@Param("id")Long kid);
+
 }

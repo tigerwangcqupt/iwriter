@@ -163,6 +163,9 @@ public class DraftVo implements Serializable {
 
     private Integer subjectFlag = 0;
 
+    //文章待上架状态
+    private Integer waitShelve;
+
     public Integer getShelveFlag() {
         return shelveFlag;
     }
@@ -465,5 +468,13 @@ public class DraftVo implements Serializable {
 
     public void setTaskStatus(Integer taskStatus) {
         this.taskStatus = taskStatus;
+    }
+
+    public Integer getWaitShelve() {
+        return waitShelve;
+    }
+
+    public void setWaitShelve(Integer waitShelve) {
+        this.waitShelve = waitShelve;
     }
 }
