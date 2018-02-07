@@ -126,9 +126,29 @@ public class DateUtil {
 		}
 	}
 
+	/**
+	 * 判断start和end相差多少秒
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static int  getDiffSeconds(String start,Date end){
+		SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try{
+			long from = simpleFormat.parse(start).getTime();
+			long to = end.getTime();
+			int minutes = (int) ((to - from)/(1000));
+			return minutes;
+		}catch (Exception e){
+			throw YyrzPcException.busiError( "日期转换异常！");
+		}
+	}
+
 	public static void main(String[] args) throws ParseException {
 		String a = getTimeByMinute(-30);
 		System.out.println(a);
+		System.out.println(getDiffSeconds("2018-02-07 14:58:09",new Date()));
+
 	}
 
 

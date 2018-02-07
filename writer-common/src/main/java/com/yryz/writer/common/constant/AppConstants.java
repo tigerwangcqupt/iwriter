@@ -71,4 +71,9 @@ public interface AppConstants {
      * 接口调用频率(1分钟)
      */
     public static final Integer diffMinutes = 1;
+
+    /**
+     * 接口调用频率(15秒)
+     */
+    public static final Integer diffSeconds = 15;
 }

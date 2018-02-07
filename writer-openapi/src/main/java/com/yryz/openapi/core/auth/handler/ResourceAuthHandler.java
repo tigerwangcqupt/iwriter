@@ -56,8 +56,10 @@ public class ResourceAuthHandler {
                 originText = paramValues[i].toString();
                 String timeStamp = originText.substring(originText.lastIndexOf("=")+1);
                 String timeStampDateStr = DateUtil.stampToDate(timeStamp);
-                int diffMinutes = DateUtil.getDiffMinutes(timeStampDateStr,date);
-                if(diffMinutes>AppConstants.diffMinutes){
+                //int diffMinutes = DateUtil.getDiffMinutes(timeStampDateStr,date);
+                //比对时间15s有效
+                int diffSeconds = DateUtil.getDiffSeconds(timeStampDateStr,date);
+                if(diffSeconds>AppConstants.diffSeconds){
                     LOGGER.error("调用接口频率过高！");
                     throw new YyrzPcException(ExceptionEnum.CallFrequentlyException.getCode(),ExceptionEnum.CallFrequentlyException.getMsg(),
                             ExceptionEnum.CallFrequentlyException.getErrorMsg());
