@@ -10,9 +10,9 @@
 
     <bean id="authValidateAspect" class="com.yryz.openapi.core.auth.handler.ResourceAuthHandler"/>
 
-    <aop:config proxy-target-class="true">
+    <aop:config>
         <aop:aspect order="9" ref="authValidateAspect">
-            <aop:pointcut id="resourceValidatePointCut" expression="execution(* com.yryz.openapi..*Controller.*(..)) and (@annotation(com.yryz.openapi.core.auth.annotation.InterFaceAuth))"/>
+            <aop:pointcut id="resourceValidatePointCut" expression="execution(* com.yryz.openapi..*Controller.*(..)))"/>
             <aop:before method="validateSign" pointcut-ref="resourceValidatePointCut"/>
         </aop:aspect>
     </aop:config>

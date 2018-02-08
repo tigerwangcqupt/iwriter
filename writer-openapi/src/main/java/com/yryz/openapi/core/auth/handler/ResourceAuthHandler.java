@@ -2,6 +2,7 @@ package com.yryz.openapi.core.auth.handler;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.yryz.openapi.core.auth.annotation.InterFaceAuth;
 import com.yryz.openapi.core.interceptor.SecurityInterceptor;
 import com.yryz.openapi.core.validator.annotation.Validate;
 import com.yryz.writer.common.constant.AppConstants;
@@ -42,6 +43,10 @@ public class ResourceAuthHandler {
         Signature signature = jp.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
+        InterFaceAuth interFaceAuth = method.getDeclaredAnnotation(InterFaceAuth.class);
+        if (null == interFaceAuth) {
+            return;
+        }
         //得到参数值集合(开始)
         Date date  = new Date();
         Object[] paramValues = jp.getArgs();
