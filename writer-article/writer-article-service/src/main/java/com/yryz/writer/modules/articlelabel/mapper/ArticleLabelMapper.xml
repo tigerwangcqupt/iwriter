@@ -218,4 +218,24 @@
 		SELECT COUNT(1) FROM yryz_article_articlelabel WHERE label_id = #{kid}
 	</select>
 
+	<select id="getHotArticleLabel" resultType="com.yryz.writer.modules.articlelabel.entity.ArticleLabel">
+		SELECT <include refid="Base_Column_List"/>
+		FROM yryz_articlelabel
+		WHERE shelve_flag = 0 AND del_flag = 0 AND recommend_flag =1
+		ORDER BY sort ASC,last_update_date DESC
+	</select>
+
+	<select id="getArticleByArticleLabelId" resultType="com.yryz.writer.modules.article.Article">
+		SELECT DISTINCT yaa.article_id,ya.*
+		FROM yryz_article_articlelabel yaa
+		LEFT JOIN yryz_article ya ON ya.id = yaa.article_id
+		WHERE ya.shelve_flag = 0 AND ya.del_flag = 0
+		AND now() BETWEEN ya.start_time AND ya.end_time
+		AND (ya.system_type = 0 OR ya.system_type = #{systemType})
+		AND yaa.label_id = #{lableId}
+		group by yaa.article_id
+		ORDER BY yaa.last_update_date DESC
+		LIMIT #{firstRecord}, #{pageSize};
+	</select>
+
 </mapper>

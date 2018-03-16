@@ -1,6 +1,7 @@
 package com.yryz.writer.modules.articleclassify.dao.persistence;
 
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify;
 import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
 import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
 import org.apache.ibatis.annotations.Param;
@@ -67,4 +68,8 @@ public interface ArticleClassifyDao extends BaseDao {
      * @return
      */
     int countArticleByClassifyId(@Param("articleClassifyId")Long articleClassifyId);
+
+    List<Long> queryArticleClassifyIds(Long classifyId);
+
+    List<ArticleClassify> getArticleClassifysById(@Param("articleClassifyId")Long classifyId);
 }

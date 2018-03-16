@@ -1,12 +1,15 @@
 package com.yryz.writer.modules.articlelabel.service;
 
 import com.yryz.writer.common.service.BaseService;
+import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
+
+import java.util.List;
 
 /**
  * 
@@ -79,4 +82,18 @@ public interface ArticleLabelService extends BaseService {
     * @return
     */
    Boolean validateLabel(Long kid);
+
+   /**
+    * 查询热门标签
+    *
+    * @return
+    */
+   List<ArticleLabelVo> getHotArticleLabel();
+
+   /**
+    * 根据标签查询文章
+    *
+    * @return
+    */
+   List<Article> getArticleByArticleLabelId(Long lableId,Integer systemType,Integer pageNo,Integer pageSize);
 }

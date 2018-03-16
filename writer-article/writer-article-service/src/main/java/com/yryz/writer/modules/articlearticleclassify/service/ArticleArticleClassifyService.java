@@ -1,9 +1,11 @@
 package com.yryz.writer.modules.articlearticleclassify.service;
 
 import com.yryz.writer.common.service.BaseService;
+import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articlearticleclassify.dto.ArticleArticleClassifyDto;
 import com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify;
 import com.yryz.writer.modules.articlearticleclassify.vo.ArticleArticleClassifyVo;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
@@ -31,4 +33,14 @@ public interface ArticleArticleClassifyService extends BaseService {
     * @return
     */
    PageList<ArticleArticleClassifyVo> queryByClassifyId(ArticleArticleClassifyDto articleArticleClassifyDto);
+
+   /**
+    *
+    * @param classifyId
+    * @param systemType
+    * @param pageNo
+    * @param pageSize
+    * @return
+    */
+   List<Article> getArticleByStageClassifyId(Long classifyId, Integer systemType, Integer pageNo, Integer pageSize);
 }

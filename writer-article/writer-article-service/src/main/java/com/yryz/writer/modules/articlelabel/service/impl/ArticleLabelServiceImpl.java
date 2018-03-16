@@ -5,10 +5,12 @@ import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
+import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articleclassify.constant.ArticleClassifyConstant;
 import com.yryz.writer.modules.id.api.IdAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.dao.persistence.ArticleLabelDao;
 import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,21 +73,12 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
 
     public ArticleLabelVo detail(Long articleLabelId) {
         ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class,articleLabelId);
-        ArticleLabelVo articleLabelVo = new ArticleLabelVo();
-        if (articleLabelVo != null) {
-            //ArticleLabel to ArticleLabelVo
-            //ArticleClassify to ArticleClassifyVo
-            articleLabelVo.setLabelName(articleLabel.getLabelName());
-            articleLabelVo.setCreateUserId(articleLabel.getCreateUserId());
-            articleLabelVo.setDelFlag(articleLabel.getDelFlag());
-            articleLabelVo.setShelveFlag(articleLabel.getShelveFlag());
-            articleLabelVo.setKid(articleLabel.getKid());
-            Date createDate = articleLabel.getCreateDate();
-            articleLabelVo.setCreateDate(createDate == null ? "" : DATETIME_PATTERN.format(createDate));
-            articleLabelVo.setIcon(articleLabel.getIcon());
-            articleLabelVo.setLabelDescription(articleLabel.getLabelDescription());
+        if (articleLabel != null) {
+            ArticleLabelVo articleLabelVo = new ArticleLabelVo();
+            BeanUtils.copyProperties(articleLabel,articleLabelVo);
+            return articleLabelVo;
         }
-        return articleLabelVo;
+        return null;
     }
 
     @Override
@@ -209,5 +203,29 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             logger.error("校验文章标签操作失败", e);
             throw e;
         }
+    }
+
+    @Override
+    public List<ArticleLabelVo> getHotArticleLabel() {
+        List<ArticleLabel> list = articleLabelDao.getHotArticleLabel();
+        if(!CollectionUtils.isEmpty(list)){
+            List<ArticleLabelVo> listVo = new ArrayList<ArticleLabelVo>();
+            list.forEach(c->{
+                ArticleLabelVo vo = new ArticleLabelVo();
+                BeanUtils.copyProperties(c,vo);
+                listVo.add(vo);
+            });
+            return listVo;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Article> getArticleByArticleLabelId(Long lableId, Integer systemType, Integer pageNo, Integer pageSize) {
+        Assert.notNull(lableId, "分类id不能为空");
+        Assert.notNull(systemType, "设备id不能为空");
+        pageNo = pageNo<1?0:pageNo;
+        pageSize = pageSize<1?10:pageSize;
+        return articleLabelDao.getArticleByArticleLabelId(lableId,systemType,(pageNo-1)*pageSize,pageSize);
     }
 }

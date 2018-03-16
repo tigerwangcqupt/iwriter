@@ -3,6 +3,7 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.common.web.ResponseModel;
+import com.yryz.writer.modules.articleclassify.AppArticleClassifyApi;
 import com.yryz.writer.modules.articleclassify.ArticleClassifyApi;
 import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
 import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
@@ -14,8 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class ArticleClassifyProvider implements ArticleClassifyApi {
+public class ArticleClassifyProvider implements ArticleClassifyApi ,AppArticleClassifyApi {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleClassifyProvider.class);
 
@@ -135,4 +138,22 @@ public class ArticleClassifyProvider implements ArticleClassifyApi {
 		}
 	}
 
+	@Override
+	public RpcResponse<List<ArticleClassifyVo>> getArticleClassifys(Long articleClassifyId) {
+		try {
+			return ResponseModel.returnListSuccess(articleClassifyService.getArticleClassifys(articleClassifyId));
+		} catch (Exception e) {
+			logger.error("获取ArticleClassifyVo列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<List<Long>> getArticleClassifyIds(Long articleClassifyId) {
+		try {
+			return ResponseModel.returnListSuccess(articleClassifyService.getArticleClassifyIds(articleClassifyId));
+		} catch (Exception e) {
+			return ResponseModel.returnException(e);
+		}
+	}
 }

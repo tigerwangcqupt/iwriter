@@ -3,6 +3,8 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
 import com.yryz.writer.common.web.ResponseModel;
+import com.yryz.writer.modules.article.Article;
+import com.yryz.writer.modules.articlelabel.AppAritcleLableApi;
 import com.yryz.writer.modules.articlelabel.ArticleLabelApi;
 import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
@@ -14,8 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class ArticleLabelProvider implements ArticleLabelApi {
+public class ArticleLabelProvider implements ArticleLabelApi,AppAritcleLableApi {
 
 	private static final Logger logger = LoggerFactory.getLogger(ArticleLabelProvider.class);
 
@@ -50,7 +54,7 @@ public class ArticleLabelProvider implements ArticleLabelApi {
 		}
 	}
 
-    /**
+	/**
     * 获取ArticleLabel列表
     * @param articleLabelDto
     * @return
@@ -134,5 +138,32 @@ public class ArticleLabelProvider implements ArticleLabelApi {
 			return ResponseModel.returnException(e);
 		}
 	}
+	/**
+	 *  查询热门标签
+	 *
+	 *  @return
+	 * */
+	@Override
+	public RpcResponse<List<ArticleLabelVo>> getHotArticleLabel() {
+		try {
+			return ResponseModel.returnObjectSuccess(articleLabelService.getHotArticleLabel());
+		} catch (Exception e) {
+			return ResponseModel.returnException(e);
+		}
+	}
 
+	/**
+	 *  根据标签查询文章
+	 *  @param  labelId
+	 *  @return
+	 * */
+	@Override
+	public RpcResponse<List<Article>> getArticleByArticleLabelId(Long labelId,Integer systemType,Integer pageNo,Integer pageSize) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleLabelService.getArticleByArticleLabelId(labelId,systemType,pageNo,pageSize));
+		} catch (Exception e) {
+			logger.error("getArticleByArticleLabelId error", e);
+			return ResponseModel.returnException(e);
+		}
+	}
 }

@@ -189,5 +189,20 @@
 		INNER JOIN yryz_article ya ON yaa.article_id = ya.id
 		 WHERE yaa.classify_id =#{classifyId} ORDER by yaa.create_date DESC, yaa.kid DESC
 	</select>
-    
+
+	<select id="getArticleByClassifyId" resultType="com.yryz.writer.modules.article.Article">
+		SELECT DISTINCT yaa.article_id, ya.*
+		FROM yryz_article_articleclassify yaa
+		LEFT JOIN yryz_articleclassify yac ON yaa.classify_id = yac.kid
+    	LEFT JOIN yryz_article ya ON yaa.article_id = ya.id
+		WHERE yac.kid = #{classifyId} OR yac.parent_id = #{classifyId}
+		AND yac.shelve_flag = 0 AND yac.del_flag = 0
+		AND ya.shelve_flag = 0 AND ya.del_flag = 0
+		AND NOW() BETWEEN ya.start_time AND ya.end_time
+		AND (ya.system_type = 0 OR ya.system_type = #{systemType})
+		group by yaa.article_id
+		ORDER BY yaa.last_update_date DESC
+		LIMIT #{firstRecord}, #{pageSize};
+	</select>
+
 </mapper>

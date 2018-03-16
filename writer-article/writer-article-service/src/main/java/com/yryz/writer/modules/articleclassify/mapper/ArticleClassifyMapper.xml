@@ -216,5 +216,21 @@
 	<select id="countArticleByClassifyId" parameterType="Long"  resultType="int" >
 		SELECT COUNT(1) FROM yryz_article_articleclassify WHERE classify_id=#{articleClassifyId}
 	</select>
-    
+
+	<select id="queryArticleClassifyIds" resultType="java.lang.Long">
+		SELECT
+		kid
+		FROM
+		yryz_articleclassify
+		WHERE
+		shelve_flag = 0 AND del_flag = 0 AND kid = #{classifyId} OR parent_id = #{classifyId}
+	</select>
+
+	<select id="getArticleClassifysById" resultType="com.yryz.writer.modules.articleclassify.entity.ArticleClassify">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM yryz_articleclassify
+		WHERE shelve_flag = 0 AND del_flag = 0 AND parent_id = #{articleClassifyId}
+		ORDER BY recommend_flag DESC,sort ASC,last_update_date DESC
+	</select>
 </mapper>

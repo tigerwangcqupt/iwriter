@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.yryz.component.rpc.dto.PageList;
 
+import java.util.List;
+
 /**
  * 
   * @ClassName: ArticleClassifyService
@@ -71,4 +73,18 @@ public interface ArticleClassifyService extends BaseService {
     * @return
     */
    Boolean checkArticleClassify(Long kid);
+
+   /**
+    * 级联查询分类id
+    * @param id
+    * @return
+    */
+   List<Long> getArticleClassifyIds(Long id);
+
+   /**
+    * 分类列表（classifyId==0 查询一级菜单）
+    * @param
+    * @return
+    */
+   List<ArticleClassifyVo> getArticleClassifys(Long classifyId);
 }

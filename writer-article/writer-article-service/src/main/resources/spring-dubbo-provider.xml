@@ -16,4 +16,9 @@
 
     <dubbo:service interface="com.yryz.writer.modules.articlearticleclassify.ArticleArticleClassifyApi" ref="articleArticleClassifyProvider" />
 
+    <dubbo:service interface="com.yryz.writer.modules.articlearticleclassify.AppArticleArticleClassifyApi" ref="articleArticleClassifyProvider" />
+
+    <dubbo:service interface="com.yryz.writer.modules.articlelabel.AppAritcleLableApi" ref="articleLabelProvider" />
+
+    <dubbo:service interface="com.yryz.writer.modules.articleclassify.AppArticleClassifyApi" ref="articleClassifyProvider" />
 </beans>

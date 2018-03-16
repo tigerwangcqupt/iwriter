@@ -14,31 +14,62 @@ public class ArticleClassifyVo implements Serializable {
      * 父级id
      */
     private  Long parentId;
-
-    /**  分类名称  */
+    /**
+     * 父级名称
+     */
+    private String parentClassifyName;
+    /**
+     * 图标
+     */
+    private  String icon;
+    /**
+     * 分类名称
+     * */
     private String classifyName;
-
-    /**  创建者昵称  */
-    private String createUser;
-
-    /**  创建时间  */
-    private String createDate;
-
+    /**
+     * 分类描述
+     */
+    private  String classifyDesc;
+    /**
+     * 是否推荐 0未推荐 1推荐
+     */
+    private  Integer recommendFlag;
+    /**
+     * 排序
+     */
+    private  Integer sort;
+    /**
+     * 末级分类:0是,1否
+     */
+    private  Integer lastStageFlag;
     /**
      * 是否上架: 0上架1下架
      */
     private  Integer shelveFlag;
-
-
     /**
      * 是否删除:0正常1已删除
      */
     private  Integer delFlag;
-
     /**
      * 创建者昵称
      */
     private String createUserNickName;
+    /**
+     * 创建者id
+     */
+    private String createUserId;
+    /**
+     * 创建者昵称
+     * */
+    private String createUser;
+    /**
+     * 创建者昵称
+     * */
+    private String createUserName;
+    /**
+     * 创建时间
+     * */
+    private String createDate;
 
     //唯一ID
     private Long kid;
@@ -46,30 +77,8 @@ public class ArticleClassifyVo implements Serializable {
     //内容数（文章总数）
     private Long articleAmount;
 
-    /**
-     * 图标
-     */
-    private  String icon;
 
-    /**
-     * 父级名称
-     */
-    private String parentClassifyName;
 
-    /**
-     * 分类描述
-     */
-    private  String classifyDesc;
-
-    /**
-     * 创建者id
-     */
-    private String createUserId;
-
-    /**
-     * 创建者姓名
-     */
-    private String createUserName;
 
     public String getClassifyName() {
         return classifyName;
@@ -183,5 +192,29 @@ public class ArticleClassifyVo implements Serializable {
     public String getCreateUserName() {
 
         return createUserName;
+    }
+
+    public Integer getRecommendFlag() {
+        return recommendFlag;
+    }
+
+    public void setRecommendFlag(Integer recommendFlag) {
+        this.recommendFlag = recommendFlag;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public Integer getLastStageFlag() {
+        return lastStageFlag;
+    }
+
+    public void setLastStageFlag(Integer lastStageFlag) {
+        this.lastStageFlag = lastStageFlag;
     }
 }

@@ -1,6 +1,7 @@
 package com.yryz.writer.modules.articlelabel.dao.persistence;
 
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import org.apache.ibatis.annotations.Param;
@@ -43,4 +44,21 @@ public interface ArticleLabelDao extends BaseDao {
      * @return
      */
     int countArticleByLabelId(@Param("kid") Long kid);
+
+    /**
+     * 获取热门标签
+     *
+     * @return
+     */
+    List<ArticleLabel> getHotArticleLabel();
+
+    /**
+     * 根据标签查询文章
+     * @param lableId
+     * @param systemType
+     * @param firstRecord
+     * @param pageSize
+     * @return
+     */
+    List<Article> getArticleByArticleLabelId(@Param("lableId") Long lableId,@Param("systemType") Integer systemType,@Param("firstRecord") Integer firstRecord,@Param("pageSize") Integer pageSize);
 }

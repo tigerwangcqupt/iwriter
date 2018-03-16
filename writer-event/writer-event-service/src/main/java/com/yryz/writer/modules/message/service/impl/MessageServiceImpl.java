@@ -117,8 +117,8 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             if (JedisUtils.mapExists(key, field)) {
                 //写手的缓存数增加1
                 Long status = JedisUtils.mapIncrby(key, field, 1);
-                //如果缓存没有设置成功 做什么
                 if (status == null) {
+                    //如果缓存没有设置成功 做什么
                     success = false;
                 }
             } else {

@@ -1,8 +1,10 @@
 package com.yryz.writer.modules.articlearticleclassify.dao.persistence;
 
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify;
 import com.yryz.writer.modules.articlearticleclassify.dto.ArticleArticleClassifyDto;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +28,14 @@ public interface ArticleArticleClassifyDao extends BaseDao {
      * @return
      */
     List<ArticleArticleClassify> queryByClassifyId(Long classifyId);
+
+    /**
+     * 根据分类id 查询文章
+     *
+     * @param classifyId
+     * @param firstRecord
+     * @param pageSize
+     * @return
+     */
+    List<Article> getArticleByClassifyId(@Param("classifyId") Long classifyId,@Param("systemType") Integer systemType,@Param("firstRecord") Integer firstRecord,@Param("pageSize") Integer pageSize);
 }

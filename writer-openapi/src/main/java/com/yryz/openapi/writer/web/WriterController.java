@@ -91,7 +91,4 @@ public class WriterController extends BaseController {
    public RpcResponse<PageList<WriterVo>> list(WriterDto writerDto) {
         return writerApi.list(writerDto);
    }
-   
-  
-
 }

@@ -1,10 +1,14 @@
 package com.yryz.writer.modules.articleclassify.service.impl;
 
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
+import com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify;
+import com.yryz.writer.modules.articlearticleclassify.service.ArticleArticleClassifyService;
 import com.yryz.writer.modules.articleclassify.constant.ArticleClassifyConstant;
 import com.yryz.writer.modules.articleclassify.dao.persistence.ArticleClassifyDao;
 import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
@@ -12,6 +16,7 @@ import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
 import com.yryz.writer.modules.articleclassify.service.ArticleClassifyService;
 import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 import com.yryz.writer.modules.id.api.IdAPI;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -38,6 +43,9 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
 
     @Autowired
     private ArticleClassifyDao articleClassifyDao;
+
+    @Autowired
+    private ArticleArticleClassifyService articleArticleClassifyService;
 
     @Autowired
     private IdAPI idApi;
@@ -302,5 +310,28 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
             throw e;
         }
         return true;
+    }
+
+    @Override
+    public List<Long> getArticleClassifyIds(Long id) {
+        if(null == id) {
+            throw new YyrzPcException(ExceptionEnum.ValidateException.getCode(), "参数错误", "地不能为空");
+        }
+        return articleClassifyDao.queryArticleClassifyIds(id);
+    }
+
+    @Override
+    public List<ArticleClassifyVo> getArticleClassifys(Long classifyId) {
+        List<ArticleClassify> list = articleClassifyDao.getArticleClassifysById(classifyId);
+        if(CollectionUtils.isNotEmpty(list)){
+            List<ArticleClassifyVo> listVo = new ArrayList<ArticleClassifyVo>();
+            list.forEach(c->{
+                ArticleClassifyVo vo = new ArticleClassifyVo();
+                BeanUtils.copyProperties(c,vo);
+                listVo.add(vo);
+            });
+            return listVo;
+        }
+        return null;
     }
 }
