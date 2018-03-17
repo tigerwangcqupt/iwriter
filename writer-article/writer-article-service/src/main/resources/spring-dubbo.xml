@@ -18,7 +18,7 @@
     <dubbo:provider timeout="${dubbo.service.timeout}" loadbalance="${dubbo.service.loadbalance}"/>
     
     <!-- 监控中心配置 -->
-    <!--<dubbo:monitor protocol="${dubbo.monitor.protocol}"/>-->
+    <dubbo:monitor protocol="${dubbo.monitor.protocol}"/>
     
     <!-- 定义yryz注册中心 -->
     <dubbo:registry id="yryz-new" address="${dubbo.registry.address}" file="${dubbo.registry.file}"/>
