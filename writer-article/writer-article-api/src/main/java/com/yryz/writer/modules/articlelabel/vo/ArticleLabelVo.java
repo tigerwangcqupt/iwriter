@@ -62,6 +62,9 @@ public class ArticleLabelVo implements Serializable {
     /**  创建时间  */
     private String createDate;
 
+    /**  推荐标识  */
+    private  Integer recommendFlag;
+
     public Long getKid() {
         return kid;
     }
@@ -140,5 +143,13 @@ public class ArticleLabelVo implements Serializable {
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    public Integer getRecommendFlag() {
+        return recommendFlag;
+    }
+
+    public void setRecommendFlag(Integer recommendFlag) {
+        this.recommendFlag = recommendFlag;
     }
 }

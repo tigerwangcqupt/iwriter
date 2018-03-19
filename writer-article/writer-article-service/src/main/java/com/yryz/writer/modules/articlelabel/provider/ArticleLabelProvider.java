@@ -163,6 +163,16 @@ public class ArticleLabelProvider implements ArticleLabelApi,AppAritcleLableApi 
 		}
 	}
 
+	@Override
+	public RpcResponse<PageList<ArticleLabelVo>> recommendlist(ArticleLabelDto articleLabelDto) {
+		try {
+			return ResponseModel.returnListSuccess(articleLabelService.recommendlist(articleLabelDto));
+		} catch (Exception e) {
+			logger.error("recommendlist error", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 	/**
 	 *  查询热门标签
 	 *

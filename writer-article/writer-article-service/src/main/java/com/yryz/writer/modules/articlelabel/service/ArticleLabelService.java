@@ -113,4 +113,11 @@ public interface ArticleLabelService extends BaseService {
     * @return
     */
    List<Article> getArticleByArticleLabelId(Long lableId,Integer systemType,Integer pageNo,Integer pageSize);
+
+   /**
+    * 文章标签推荐列表
+    *
+    * @return
+    */
+   PageList<ArticleLabelVo> recommendlist(ArticleLabelDto articleLabelDto);
 }

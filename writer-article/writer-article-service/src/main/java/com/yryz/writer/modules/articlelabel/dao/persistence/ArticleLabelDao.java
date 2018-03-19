@@ -68,4 +68,11 @@ public interface ArticleLabelDao extends BaseDao {
      * @return
      */
     Integer selectMaxSort();
+
+    /**
+     * 文章标签推荐列表
+     *
+     * @return
+     */
+    List<ArticleLabel> recommendlist(ArticleLabelDto articleLabelDto);
 }

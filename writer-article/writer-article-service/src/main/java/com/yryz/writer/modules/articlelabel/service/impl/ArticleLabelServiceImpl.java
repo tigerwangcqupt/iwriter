@@ -7,6 +7,7 @@ import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articleclassify.constant.ArticleClassifyConstant;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 import com.yryz.writer.modules.id.api.IdAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -239,9 +240,9 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             }
             if(flag==0){
                 sort = 9999;
-                articleLabel.setRecommendFlag(0);
             }
-            articleLabel.setId(id);
+            articleLabel.setRecommendFlag(flag);
+            articleLabel.setKid(id);
             articleLabel.setSort(sort);
             articleLabelDao.update(articleLabel);
             return true;
@@ -273,5 +274,26 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
         pageNo = pageNo<1?0:pageNo;
         pageSize = pageSize<1?10:pageSize;
         return articleLabelDao.getArticleByArticleLabelId(lableId,systemType,(pageNo-1)*pageSize,pageSize);
+    }
+
+    @Override
+    public PageList<ArticleLabelVo> recommendlist(ArticleLabelDto articleLabelDto) {
+        PageUtils.startPage(articleLabelDto.getCurrentPage(), articleLabelDto.getPageSize());
+        List<ArticleLabel> list = articleLabelDao.recommendlist(articleLabelDto);
+        List<ArticleLabelVo> articleLabelVoList = null;
+        if(!CollectionUtils.isEmpty(list)){
+            articleLabelVoList = new ArrayList <ArticleLabelVo>();
+            for(ArticleLabel ab:list){
+                ArticleLabelVo articleLabelVo = new ArticleLabelVo();
+                articleLabelVo.setKid(ab.getKid());
+                articleLabelVo.setLabelName(ab.getLabelName());
+                articleLabelVo.setSort(ab.getSort());
+                articleLabelVo.setRecommendFlag(ab.getRecommendFlag());
+                articleLabelVo.setDelFlag(ab.getDelFlag());
+                articleLabelVo.setShelveFlag(ab.getShelveFlag());
+                articleLabelVoList.add(articleLabelVo);
+            }
+        }
+        return new PageModel<ArticleLabelVo>().getPageList(list, articleLabelVoList);
     }
 }

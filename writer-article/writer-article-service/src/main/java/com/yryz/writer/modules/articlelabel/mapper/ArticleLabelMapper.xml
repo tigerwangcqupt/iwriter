@@ -9,6 +9,7 @@
 		<result column="label_name" property="labelName" jdbcType="VARCHAR"/>
 		<result column="label_description" property="labelDescription" jdbcType="VARCHAR"/>
 		<result column="icon" property="icon" jdbcType="VARCHAR"/>
+		<result column="recommend_flag" property="recommendFlag" jdbcType="TINYINT"/>
 		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
 		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
 		<result column="sort" property="sort" jdbcType="INTEGER"/>
@@ -19,7 +20,7 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,label_name,label_description,icon,shelve_flag,del_flag,sort,create_date,last_update_date,create_user_id,last_update_user_id
+	<sql id="Base_Column_List">id,kid,label_name,label_description,icon,recommend_flag,shelve_flag,del_flag,sort,create_date,last_update_date,create_user_id,last_update_user_id
     </sql>
 
      <!-- 查询ArticleLabel详情 -->
@@ -146,6 +147,9 @@
             <if test="icon != null and icon != ''">
     			icon = #{icon,jdbcType=VARCHAR},
     		</if>
+			<if test="recommendFlag != null">
+				recommend_flag = #{recommendFlag,jdbcType=TINYINT},
+			</if>
              <if test="shelveFlag != null">
     			shelve_flag = #{shelveFlag,jdbcType=TINYINT},
     		</if>
@@ -243,4 +247,21 @@
 		where T.recommend_flag = 1
 	</select>
 
+	<select id="recommendlist" parameterType="com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from yryz_articlelabel
+		<where>
+			<if test="shelveFlag !=null">
+				AND shelve_flag = #{shelveFlag,jdbcType=TINYINT}
+			</if>
+			<if test="delFlag != null">
+				AND del_flag = #{delFlag,jdbcType=TINYINT}
+			</if>
+			<if test="labelName != null and labelName != ''">
+				AND label_name like CONCAT('%',trim(#{labelName}),'%')
+			</if>
+		</where>
+		ORDER BY recommend_flag DESC,sort ASC,last_update_date DESC
+	</select>
 </mapper>

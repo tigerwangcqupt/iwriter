@@ -2,6 +2,8 @@ package com.yryz.writer.modules.articlelabel;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
@@ -101,4 +103,11 @@ public interface ArticleLabelApi {
 	 * @return
 	 */
 	RpcResponse<Boolean> setRecommend(Long id,Integer flag);
+
+	/**
+	 * 推荐列表
+	 * @param articleLabelDto
+	 * @return
+	 */
+	RpcResponse<PageList<ArticleLabelVo>> recommendlist(ArticleLabelDto articleLabelDto);
 }
