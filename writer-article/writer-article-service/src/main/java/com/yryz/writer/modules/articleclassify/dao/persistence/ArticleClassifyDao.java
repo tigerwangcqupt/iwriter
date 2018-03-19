@@ -72,4 +72,18 @@ public interface ArticleClassifyDao extends BaseDao {
     List<Long> queryArticleClassifyIds(Long classifyId);
 
     List<ArticleClassify> getArticleClassifysById(@Param("articleClassifyId")Long classifyId);
+
+    /**
+     * 查询分类推荐的最大排序值
+     *
+     * @return
+     */
+    Integer selectMaxSort();
+
+    /**
+     * 推荐列表
+     *
+     * @return
+     */
+    List<ArticleClassify> recommendlist(ArticleClassifyDto articleClassifyDto);
 }

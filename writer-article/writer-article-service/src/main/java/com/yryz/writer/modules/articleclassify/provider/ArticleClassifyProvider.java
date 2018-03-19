@@ -139,6 +139,36 @@ public class ArticleClassifyProvider implements ArticleClassifyApi ,AppArticleCl
 	}
 
 	@Override
+	public RpcResponse<Boolean> setSort(Long id, Long tid) {
+		try {
+			return ResponseModel.returnListSuccess(articleClassifyService.setSort(id,tid));
+		} catch (Exception e) {
+			logger.error("获取ArticleClassifyVo列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Boolean> setRecommend(Long id, Integer flag) {
+		try {
+			return ResponseModel.returnListSuccess(articleClassifyService.setRecommend(id,flag));
+		} catch (Exception e) {
+			logger.error("获取ArticleClassifyVo列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<PageList<ArticleClassifyVo>> recommendlist(ArticleClassifyDto articleClassifyDto) {
+		try {
+			return ResponseModel.returnListSuccess(articleClassifyService.recommendlist(articleClassifyDto));
+		} catch (Exception e) {
+			logger.error("recommendlist error", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
 	public RpcResponse<List<ArticleClassifyVo>> getArticleClassifys(Long articleClassifyId) {
 		try {
 			return ResponseModel.returnListSuccess(articleClassifyService.getArticleClassifys(articleClassifyId));

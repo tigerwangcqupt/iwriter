@@ -139,6 +139,31 @@ public class ArticleLabelProvider implements ArticleLabelApi,AppAritcleLableApi 
 		}
 	}
 	/**
+	 *  交换权重
+	 *
+	 *  @return
+	 * */
+	@Override
+	public RpcResponse<Boolean> setSort(Long id, Long tid, Byte flag) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleLabelService.setSort(id,tid,flag));
+		} catch (Exception e) {
+			logger.error("校验ArticleLabel失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Boolean> setRecommend(Long id,Integer flag) {
+		try {
+			return ResponseModel.returnObjectSuccess(articleLabelService.setRecommend(id,flag));
+		} catch (Exception e) {
+			logger.error("设置推进失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	/**
 	 *  查询热门标签
 	 *
 	 *  @return

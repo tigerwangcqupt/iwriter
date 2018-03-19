@@ -19,6 +19,7 @@ import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.dao.persistence.ArticleLabelDao;
 import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -201,6 +202,51 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             return count > 0 ? false : true;
         }catch (Exception e){
             logger.error("校验文章标签操作失败", e);
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional
+    public Boolean setSort(Long id, Long tid, Byte flag) {
+        try {
+            // 获取被选择的数据
+            ArticleLabel articleLabelId = articleLabelDao.selectByKid(ArticleLabel.class,id);
+            // 获取被选择的数据的上/下一条数据
+            ArticleLabel articleLabelTid = articleLabelDao.selectByKid(ArticleLabel.class,tid);
+            Integer sort = articleLabelId.getSort();
+            Integer tSort = articleLabelTid.getSort();
+            // 交换sort
+            articleLabelId.setSort(tSort);
+            articleLabelTid.setSort(sort);
+            articleLabelDao.update(articleLabelId);
+            articleLabelDao.update(articleLabelTid);
+            return true;
+        } catch (Exception e) {
+            logger.error("交换权重失败", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public Boolean setRecommend(Long id,Integer flag) {
+        try {
+            ArticleLabel articleLabel = new ArticleLabel();
+            Integer sort = null;
+            if(flag==1){
+                sort = articleLabelDao.selectMaxSort();
+                sort = sort==null?1:sort+1;
+            }
+            if(flag==0){
+                sort = 9999;
+                articleLabel.setRecommendFlag(0);
+            }
+            articleLabel.setId(id);
+            articleLabel.setSort(sort);
+            articleLabelDao.update(articleLabel);
+            return true;
+        } catch (Exception e) {
+            logger.error("设置推荐失败", e);
             throw e;
         }
     }

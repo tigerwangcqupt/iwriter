@@ -61,4 +61,11 @@ public interface ArticleLabelDao extends BaseDao {
      * @return
      */
     List<Article> getArticleByArticleLabelId(@Param("lableId") Long lableId,@Param("systemType") Integer systemType,@Param("firstRecord") Integer firstRecord,@Param("pageSize") Integer pageSize);
+
+    /**
+     * 根据当前最大排序数
+     *
+     * @return
+     */
+    Integer selectMaxSort();
 }

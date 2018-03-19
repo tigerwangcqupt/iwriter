@@ -15,6 +15,7 @@ import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
 import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
 import com.yryz.writer.modules.articleclassify.service.ArticleClassifyService;
 import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
+import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.id.api.IdAPI;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -71,6 +72,8 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 articleClassifyVo.setParentId(articleClassify.getParentId());
                 articleClassifyVo.setShelveFlag(articleClassify.getShelveFlag());
                 articleClassifyVo.setKid(articleClassify.getKid());
+                articleClassifyVo.setRecommendFlag(articleClassify.getRecommendFlag());
+                articleClassifyVo.setSort(articleClassify.getSort());
                 //查询分类下的文章个数
                 long articleCount = articleClassifyDao.countArticleByClassifyId(articleClassify.getKid());
                 articleClassifyVo.setArticleAmount(articleCount);
@@ -333,5 +336,73 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
             return listVo;
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public Boolean setSort(Long id, Long tid) {
+        try {
+            // 获取被选择的数据
+            ArticleClassify articleClassifyId = articleClassifyDao.selectByKid(ArticleClassify.class,id);
+            // 获取被选择的数据的上/下一条数据
+            ArticleClassify articleClassifyTId = articleClassifyDao.selectByKid(ArticleClassify.class,tid);
+            Integer sort = articleClassifyId.getSort();
+            Integer tSort = articleClassifyTId.getSort();
+            // 交换sort
+            articleClassifyId.setSort(tSort);
+            articleClassifyTId.setSort(sort);
+            articleClassifyDao.update(articleClassifyId);
+            articleClassifyDao.update(articleClassifyTId);
+            return true;
+        } catch (Exception e) {
+            logger.error("交换权重失败", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public Boolean setRecommend(Long id,Integer flag) {
+        try {
+            ArticleClassify articleClassify = new ArticleClassify();
+            Integer sort = null;
+            if(flag==1){
+                sort = articleClassifyDao.selectMaxSort();
+                sort = sort==null?1:sort+1;
+            }
+            if(flag==0){
+                sort = 9999;
+            }
+            articleClassify.setRecommendFlag(flag);
+            articleClassify.setKid(id);
+            articleClassify.setSort(sort);
+            articleClassifyDao.update(articleClassify);
+            return true;
+        } catch (Exception e) {
+            logger.error("设置推荐失败", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public PageList<ArticleClassifyVo> recommendlist(ArticleClassifyDto articleClassifyDto) {
+        if(articleClassifyDto.isPageFlag()){
+            PageUtils.startPage(articleClassifyDto.getCurrentPage(), articleClassifyDto.getPageSize());
+        }
+        List<ArticleClassify> list = articleClassifyDao.recommendlist(articleClassifyDto);
+        List<ArticleClassifyVo> articleClassifyVoList = null;
+        if(CollectionUtils.isNotEmpty(list)){
+            articleClassifyVoList = new ArrayList <ArticleClassifyVo>();
+            for(ArticleClassify ac:list){
+                ArticleClassifyVo articleClassifyVo = new ArticleClassifyVo();
+                articleClassifyVo.setKid(ac.getKid());
+                articleClassifyVo.setClassifyName(ac.getClassifyName());
+                articleClassifyVo.setSort(ac.getSort());
+                articleClassifyVo.setRecommendFlag(ac.getRecommendFlag());
+                articleClassifyVo.setDelFlag(ac.getDelFlag());
+                articleClassifyVo.setShelveFlag(ac.getShelveFlag());
+                articleClassifyVoList.add(articleClassifyVo);
+            }
+        }
+        return new PageModel<ArticleClassifyVo>().getPageList(list, articleClassifyVoList);
     }
 }

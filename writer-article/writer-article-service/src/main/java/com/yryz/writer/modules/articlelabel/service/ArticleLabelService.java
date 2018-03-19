@@ -84,6 +84,23 @@ public interface ArticleLabelService extends BaseService {
    Boolean validateLabel(Long kid);
 
    /**
+    * 交换权重
+    * @param id
+    * @param tid
+    * @param flag
+    * @return
+    */
+   Boolean setSort(Long id, Long tid, Byte flag);
+
+   /**
+    * 设置推荐/取消推荐
+    * @param id
+    *
+    * @return
+    */
+   Boolean setRecommend(Long id,Integer flag);
+
+   /**
     * 查询热门标签
     *
     * @return

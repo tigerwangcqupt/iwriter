@@ -87,4 +87,29 @@ public interface ArticleClassifyService extends BaseService {
     * @return
     */
    List<ArticleClassifyVo> getArticleClassifys(Long classifyId);
+
+   /**
+    * 交换权重
+    * @param id
+    * @param tid
+    *
+    * @return
+    */
+   Boolean setSort(Long id, Long tid);
+
+   /**
+    * 设置推荐/取消推荐
+    * @param id
+    *
+    * @return
+    */
+   Boolean setRecommend(Long id,Integer flag);
+
+   /**
+    * 推荐列表
+    * @param articleClassifyDto
+    *
+    * @return
+    */
+   PageList<ArticleClassifyVo> recommendlist(ArticleClassifyDto articleClassifyDto);
 }

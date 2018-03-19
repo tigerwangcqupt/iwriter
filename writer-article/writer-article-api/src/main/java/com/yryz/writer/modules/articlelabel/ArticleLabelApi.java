@@ -85,4 +85,20 @@ public interface ArticleLabelApi {
 	 * @return
 	 */
 	RpcResponse<Boolean> validateLabel(Long kid);
+
+	/**
+	 * 交换权重
+	 * @param id
+	 * @param tid
+	 * @param flag
+	 * @return
+	 */
+	RpcResponse<Boolean> setSort(Long id, Long tid, Byte flag);
+
+	/**
+	 * 设置推荐/取消推荐
+	 * @param id
+	 * @return
+	 */
+	RpcResponse<Boolean> setRecommend(Long id,Integer flag);
 }

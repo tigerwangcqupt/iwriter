@@ -87,4 +87,27 @@ public interface ArticleClassifyApi {
 	 * @return
 	 */
 	RpcResponse<Boolean> checkArticleClassify(Long kid);
+
+	/**
+	 * 交换权重
+	 * @param id
+	 * @param tid
+	 *
+	 * @return
+	 */
+	RpcResponse<Boolean> setSort(Long id, Long tid);
+
+	/**
+	 * 设置推荐/取消推荐
+	 * @param id
+	 * @return
+	 */
+	RpcResponse<Boolean> setRecommend(Long id,Integer flag);
+
+	/**
+	 * 推荐列表
+	 * @param articleClassifyDto
+	 * @return
+	 */
+	RpcResponse<PageList<ArticleClassifyVo>> recommendlist(ArticleClassifyDto articleClassifyDto);
 }

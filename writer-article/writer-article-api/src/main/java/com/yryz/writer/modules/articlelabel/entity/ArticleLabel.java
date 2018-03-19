@@ -48,7 +48,11 @@ public class ArticleLabel extends GenericEntity {
 	 * 排序
 	 */	 
     private  Integer sort;
-    
+
+	/**
+	 * 推荐标识
+	 */
+	private Integer recommendFlag;
 
 	public String getLabelName() {
 		return this.labelName;
@@ -97,5 +101,12 @@ public class ArticleLabel extends GenericEntity {
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
-		
+
+	public Integer getRecommendFlag() {
+		return recommendFlag;
+	}
+
+	public void setRecommendFlag(Integer recommendFlag) {
+		this.recommendFlag = recommendFlag;
+	}
 }

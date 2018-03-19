@@ -233,4 +233,28 @@
 		WHERE shelve_flag = 0 AND del_flag = 0 AND parent_id = #{articleClassifyId}
 		ORDER BY recommend_flag DESC,sort ASC,last_update_date DESC
 	</select>
+
+	<select id="selectMaxSort" resultType="java.lang.Integer">
+		select MAX(sort) from yryz_articleclassify T
+		where T.recommend_flag = 1
+	</select>
+
+
+	<select id="recommendlist" parameterType="com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from yryz_articleclassify
+		<where>
+			<if test="shelveFlag !=null">
+				AND shelve_flag = #{shelveFlag,jdbcType=TINYINT}
+			</if>
+			<if test="delFlag != null">
+				AND del_flag = #{delFlag,jdbcType=TINYINT}
+			</if>
+			<if test="classifyName != null and classifyName != ''">
+				AND classify_name like CONCAT('%',trim(#{classifyName}),'%')
+			</if>
+		</where>
+		ORDER BY recommend_flag DESC,sort ASC,last_update_date DESC
+	</select>
 </mapper>
