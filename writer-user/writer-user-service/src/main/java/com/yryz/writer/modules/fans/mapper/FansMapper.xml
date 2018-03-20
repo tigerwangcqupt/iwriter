@@ -5,7 +5,6 @@
     <!--BaseResultMap-->
     <resultMap id="BaseResultMap" type="com.yryz.writer.modules.fans.entity.Fans">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="kid" property="kid" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="BIGINT"/>
         <result column="writer_id" property="writerId" jdbcType="BIGINT"/>
         <result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
@@ -163,13 +162,13 @@
     <!-- 查询Fans列表 -->
     <select id="selectList" parameterType="com.yryz.writer.modules.fans.dto.FansDto" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from yryz_fans where del_flag = 0
+        *
+        from yryz_follow where module_code = 1004
         <if test="createDate != null">
             AND create_date &gt;= #{createDate}
         </if>
         <if test="writerId != null">
-            AND writer_id = #{writerId,jdbcType=BIGINT}
+            AND info_id = #{writerId,jdbcType=BIGINT}
         </if>
         ORDER BY create_date DESC
     </select>
@@ -182,17 +181,17 @@
 
     <!-- 粉丝数 -->
     <select id="selectCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM yryz_fans where del_flag = 0
-        AND writer_id = #{writerId}
+        SELECT COUNT(*) FROM yryz_follow where module_code = 1004
+        AND info_id = #{writerId}
     </select>
 
     <!-- 新增粉丝数 -->
     <select id="selectNewFansCount" parameterType="java.lang.Long" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM yryz_fans where del_flag = 0
+        SELECT COUNT(*) FROM yryz_follow where module_code = 1004
         <if test="createDate != null">
             AND create_date &gt;= #{createDate}
         </if>
-        AND writer_id = #{writerId}
+        AND info_id = #{writerId}
     </select>
 
 </mapper>
