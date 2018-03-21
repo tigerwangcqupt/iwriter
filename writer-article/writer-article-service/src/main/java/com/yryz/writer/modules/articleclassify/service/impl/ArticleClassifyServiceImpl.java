@@ -122,6 +122,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
             articleClassify.setLastStageFlag(ArticleClassifyConstant.LAST_STAGE_YES);
             articleClassify.setShelveFlag(Integer.valueOf(ArticleClassifyConstant.SHELVE_YES));
             articleClassify.setDelFlag(Integer.valueOf(ArticleClassifyConstant.DELETE_NO));
+            updateParentStageFlag(articleClassify.getParentId(),articleClassify.getLastUpdateUserId());
             //保存分类
             int successNum = articleClassifyDao.insert(articleClassify);
             if (successNum < 1){
@@ -157,8 +158,10 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         }
     }
 
+    @Transactional
     public Boolean update(ArticleClassify articleClassify) {
         try {
+            updateParentStageFlag(articleClassify.getParentId(),articleClassify.getLastUpdateUserId());
             int successNum = articleClassifyDao.update(articleClassify);
             if (successNum < 1){
                 return false;
@@ -168,6 +171,21 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
             throw e;
         }
         return true;
+    }
+
+    private void updateParentStageFlag(Long parentId,String lastUpdateUserId){
+        Assert.notNull(parentId, "分类id不能为空");
+        Assert.hasText(lastUpdateUserId,"更新人id不能为空");
+        if(parentId>0){//当前分类为子集分类
+            ArticleClassify parent = articleClassifyDao.selectByKid(ArticleClassify.class, parentId);
+            if(parent != null && ArticleClassifyConstant.LAST_STAGE_YES == parent.getLastStageFlag()){
+                ArticleClassify updateClassify = new ArticleClassify();
+                updateClassify.setKid(parent.getKid());
+                updateClassify.setLastStageFlag(ArticleClassifyConstant.LAST_STAGE_NO);
+                updateClassify.setLastUpdateUserId(lastUpdateUserId);
+                articleClassifyDao.update(updateClassify);
+            }
+        }
     }
 
     @Transactional

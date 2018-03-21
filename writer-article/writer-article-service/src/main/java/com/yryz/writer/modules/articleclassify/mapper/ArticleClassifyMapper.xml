@@ -192,13 +192,16 @@
         from yryz_articleclassify
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="shelveFlag != null">
-				shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+				shelve_flag = #{shelveFlag,jdbcType=TINYINT}
 			</if>
 			<if test="delFlag != null">
-				AND del_flag = #{delFlag,jdbcType=TINYINT},
+				AND del_flag = #{delFlag,jdbcType=TINYINT}
 			</if>
 			<if test="classifyName != null and classifyName != '' " >
 				AND classify_name like CONCAT('%',trim(#{classifyName}),'%')
+			</if>
+			<if test="parentId != null and parentId != ''" >
+				AND parent_id = #{parentId,jdbcType=BIGINT}
 			</if>
 		</trim>
 		<if test="orderStr != null and orderStr != '' " >

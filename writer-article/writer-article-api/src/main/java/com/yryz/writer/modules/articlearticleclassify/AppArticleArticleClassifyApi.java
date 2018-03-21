@@ -12,5 +12,6 @@ import java.util.List;
  * @Modified By:
  */
 public interface AppArticleArticleClassifyApi {
+    /*作废*/
     RpcResponse<List<Article>> getArticleByStageClassifyId(Long Id, Integer systemType, Integer pageNo, Integer pageSize);
 }
