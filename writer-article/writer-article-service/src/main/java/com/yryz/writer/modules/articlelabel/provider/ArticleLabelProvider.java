@@ -144,9 +144,9 @@ public class ArticleLabelProvider implements ArticleLabelApi,AppAritcleLableApi 
 	 *  @return
 	 * */
 	@Override
-	public RpcResponse<Boolean> setSort(Long id, Long tid, Byte flag) {
+	public RpcResponse<Boolean> setSort(Long id, Long tid) {
 		try {
-			return ResponseModel.returnObjectSuccess(articleLabelService.setSort(id,tid,flag));
+			return ResponseModel.returnObjectSuccess(articleLabelService.setSort(id,tid));
 		} catch (Exception e) {
 			logger.error("校验ArticleLabel失败", e);
 			return ResponseModel.returnException(e);
@@ -169,6 +169,16 @@ public class ArticleLabelProvider implements ArticleLabelApi,AppAritcleLableApi 
 			return ResponseModel.returnListSuccess(articleLabelService.recommendlist(articleLabelDto));
 		} catch (Exception e) {
 			logger.error("recommendlist error", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Long> getUpOrDownRecommend(Long lableId, Integer flag) {
+		try {
+			return ResponseModel.returnListSuccess(articleLabelService.getUpOrDownRecommend(lableId,flag));
+		} catch (Exception e) {
+			logger.error("articleLabel error by getUpOrDownRecommend", e);
 			return ResponseModel.returnException(e);
 		}
 	}

@@ -86,4 +86,10 @@ public interface ArticleClassifyDao extends BaseDao {
      * @return
      */
     List<ArticleClassify> recommendlist(ArticleClassifyDto articleClassifyDto);
+
+    /**
+     * 根据sort查询大于或者小于的推荐分类
+     * @return
+     */
+    List<ArticleClassify> selectSortsByRecommend(@Param("sort") Integer sort,@Param("flag") Integer flag);
 }

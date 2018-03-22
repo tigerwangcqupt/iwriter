@@ -87,10 +87,9 @@ public interface ArticleLabelService extends BaseService {
     * 交换权重
     * @param id
     * @param tid
-    * @param flag
     * @return
     */
-   Boolean setSort(Long id, Long tid, Byte flag);
+   Boolean setSort(Long id, Long tid);
 
    /**
     * 设置推荐/取消推荐
@@ -120,4 +119,11 @@ public interface ArticleLabelService extends BaseService {
     * @return
     */
    PageList<ArticleLabelVo> recommendlist(ArticleLabelDto articleLabelDto);
+
+   /**
+    * 文章标签推荐列表
+    *
+    * @return
+    */
+   Long getUpOrDownRecommend(Long lableId,Integer flag);
 }

@@ -110,4 +110,11 @@ public interface ArticleClassifyApi {
 	 * @return
 	 */
 	RpcResponse<PageList<ArticleClassifyVo>> recommendlist(ArticleClassifyDto articleClassifyDto);
+
+	/**
+	 * 校验推荐
+	 * @param classifyId
+	 * @return
+	 */
+	RpcResponse<Long> getUpOrDownRecommend(Long classifyId,Integer flag);
 }

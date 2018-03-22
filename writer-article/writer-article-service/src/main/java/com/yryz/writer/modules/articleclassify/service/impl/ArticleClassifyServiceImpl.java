@@ -423,4 +423,28 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         }
         return new PageModel<ArticleClassifyVo>().getPageList(list, articleClassifyVoList);
     }
+
+    @Override
+    public Long getUpOrDownRecommend(Long classifyId,Integer flag) {
+        Assert.notNull(classifyId,"分类id不能为空");
+        ArticleClassify articleClassify = articleClassifyDao.selectByKid(ArticleClassify.class,classifyId);
+        if(null==articleClassify){
+            throw new YyrzPcException(ExceptionEnum.ValidateException.getCode(), "分类不存在", "分类不存在");
+        }
+        if(articleClassify.getRecommendFlag().equals(0)) {
+            throw new YyrzPcException(ExceptionEnum.ValidateException.getCode(), "该分类没有被推荐", "该分类没有被推荐");
+        }
+        List<ArticleClassify> result = articleClassifyDao.selectSortsByRecommend(articleClassify.getSort(),flag);
+        if(CollectionUtils.isNotEmpty(result)){
+            ArticleClassify ac = null;
+            if(flag.equals(0)){
+                ac = result.get(result.size()-1); //向上取值
+            }
+            if(flag.equals(1)){  //向下取值
+                ac = result.get(0);
+            }
+            return ac.getKid();
+        }
+        return null;
+    }
 }

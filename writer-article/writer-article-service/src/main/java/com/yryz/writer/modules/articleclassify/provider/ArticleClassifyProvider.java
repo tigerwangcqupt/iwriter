@@ -169,6 +169,16 @@ public class ArticleClassifyProvider implements ArticleClassifyApi ,AppArticleCl
 	}
 
 	@Override
+	public RpcResponse<Long> getUpOrDownRecommend(Long classifyId,Integer flag) {
+		try {
+			return ResponseModel.returnListSuccess(articleClassifyService.getUpOrDownRecommend(classifyId,flag));
+		} catch (Exception e) {
+			logger.error("articleClassify error by getUpOrDownRecommend", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
 	public RpcResponse<List<ArticleClassifyVo>> getArticleClassifys(Long articleClassifyId) {
 		try {
 			return ResponseModel.returnListSuccess(articleClassifyService.getArticleClassifys(articleClassifyId));

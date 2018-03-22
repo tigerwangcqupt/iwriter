@@ -1,25 +1,25 @@
 package com.yryz.writer.modules.articlelabel.service.impl;
 
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articleclassify.constant.ArticleClassifyConstant;
-import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
+import com.yryz.writer.modules.articlelabel.dao.persistence.ArticleLabelDao;
+import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
+import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
+import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
+import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
 import com.yryz.writer.modules.id.api.IdAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
-import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
-import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
-import com.yryz.writer.modules.articlelabel.dao.persistence.ArticleLabelDao;
-import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -209,7 +209,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
 
     @Override
     @Transactional
-    public Boolean setSort(Long id, Long tid, Byte flag) {
+    public Boolean setSort(Long id, Long tid) {
         try {
             // 获取被选择的数据
             ArticleLabel articleLabelId = articleLabelDao.selectByKid(ArticleLabel.class,id);
@@ -295,5 +295,29 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             }
         }
         return new PageModel<ArticleLabelVo>().getPageList(list, articleLabelVoList);
+    }
+
+    @Override
+    public Long getUpOrDownRecommend(Long lableId, Integer flag) {
+        Assert.notNull(lableId,"标签id不能为空");
+        ArticleLabel articleLabel = articleLabelDao.selectByKid(ArticleLabel.class,lableId);
+        if(null==articleLabel){
+            throw new YyrzPcException(ExceptionEnum.ValidateException.getCode(), "标签不存在", "标签不存在");
+        }
+        if(articleLabel.getRecommendFlag().equals(0)) {
+            throw new YyrzPcException(ExceptionEnum.ValidateException.getCode(), "该标签没有被推荐", "该标签没有被推荐");
+        }
+        List<ArticleLabel> result = articleLabelDao.selectSortsByRecommend(articleLabel.getSort(),flag);
+        if(org.apache.commons.collections.CollectionUtils.isNotEmpty(result)){
+            ArticleLabel al = null;
+            if(flag.equals(0)){
+                al = result.get(result.size()-1); //向上取值
+            }
+            if(flag.equals(1)){  //向下取值
+                al = result.get(0);
+            }
+            return al.getKid();
+        }
+        return null;
     }
 }

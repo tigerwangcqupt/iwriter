@@ -112,4 +112,11 @@ public interface ArticleClassifyService extends BaseService {
     * @return
     */
    PageList<ArticleClassifyVo> recommendlist(ArticleClassifyDto articleClassifyDto);
+
+   /**
+    *
+    * @param classifyId
+    * @return
+    */
+   Long getUpOrDownRecommend(Long classifyId,Integer flag);
 }

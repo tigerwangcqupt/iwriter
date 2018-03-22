@@ -2,8 +2,8 @@ package com.yryz.writer.modules.articlelabel.dao.persistence;
 
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.modules.article.Article;
-import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
+import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -75,4 +75,10 @@ public interface ArticleLabelDao extends BaseDao {
      * @return
      */
     List<ArticleLabel> recommendlist(ArticleLabelDto articleLabelDto);
+
+    /**
+     * 根据sort查询大于或者小于的推荐分类
+     * @return
+     */
+    List<ArticleLabel> selectSortsByRecommend(@Param("sort") Integer sort, @Param("flag") Integer flag);
 }

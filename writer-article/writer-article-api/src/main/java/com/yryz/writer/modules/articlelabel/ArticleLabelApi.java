@@ -92,10 +92,9 @@ public interface ArticleLabelApi {
 	 * 交换权重
 	 * @param id
 	 * @param tid
-	 * @param flag
 	 * @return
 	 */
-	RpcResponse<Boolean> setSort(Long id, Long tid, Byte flag);
+	RpcResponse<Boolean> setSort(Long id, Long tid);
 
 	/**
 	 * 设置推荐/取消推荐
@@ -110,4 +109,12 @@ public interface ArticleLabelApi {
 	 * @return
 	 */
 	RpcResponse<PageList<ArticleLabelVo>> recommendlist(ArticleLabelDto articleLabelDto);
+
+	/**
+	 * 校验推荐
+	 * @param lableId
+	 * @param flag
+	 * @return
+	 */
+	RpcResponse<Long> getUpOrDownRecommend(Long lableId,Integer flag);
 }

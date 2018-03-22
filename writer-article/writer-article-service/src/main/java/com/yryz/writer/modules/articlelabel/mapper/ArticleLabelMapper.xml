@@ -264,4 +264,21 @@
 		</where>
 		ORDER BY recommend_flag DESC,sort ASC,last_update_date DESC
 	</select>
+
+	<select id="selectSortsByRecommend" resultMap="BaseResultMap">
+		SELECT <include refid="Base_Column_List"/>
+		FROM yryz_articlelabel ya
+		WHERE ya.del_flag = 0
+		AND ya.shelve_flag = 0
+		AND ya.recommend_flag = 1
+		<choose>
+			<when test="flag == 0">
+				AND ya.sort <![CDATA[<]]> #{sort}
+			</when>
+			<when test="flag == 1">
+				AND ya.sort <![CDATA[>]]> #{sort}
+			</when>
+		</choose>
+		ORDER BY ya.sort ASC
+	</select>
 </mapper>
