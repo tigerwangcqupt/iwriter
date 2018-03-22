@@ -418,6 +418,11 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
                 articleClassifyVo.setRecommendFlag(ac.getRecommendFlag());
                 articleClassifyVo.setDelFlag(ac.getDelFlag());
                 articleClassifyVo.setShelveFlag(ac.getShelveFlag());
+                articleClassifyVo.setCreateUserId(ac.getCreateUserId());
+                articleClassifyVo.setCreateDate(DATETIME_PATTERN.format(ac.getCreateDate()));
+                //查询分类下的文章个数
+                long articleCount = articleClassifyDao.countArticleByClassifyId(ac.getKid());
+                articleClassifyVo.setArticleAmount(articleCount);
                 articleClassifyVoList.add(articleClassifyVo);
             }
         }

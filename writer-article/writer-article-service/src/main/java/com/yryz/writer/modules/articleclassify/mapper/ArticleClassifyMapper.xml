@@ -257,8 +257,20 @@
 			<if test="classifyName != null and classifyName != ''">
 				AND classify_name like CONCAT('%',trim(#{classifyName}),'%')
 			</if>
+			<if test="parentId != null and parentId != ''">
+				AND parent_id = #{parentId,jdbcType=BIGINT}
+			</if>
 		</where>
-		ORDER BY recommend_flag DESC,sort ASC,last_update_date DESC
+		ORDER BY recommend_flag DESC,
+		<choose>
+			<when test="orderValue == 'DESC'">
+				sort DESC,
+			</when>
+			<when test="orderValue == 'ASC'">
+				sort ASC,
+			</when>
+		</choose>
+		last_update_date DESC
 	</select>
 
 
