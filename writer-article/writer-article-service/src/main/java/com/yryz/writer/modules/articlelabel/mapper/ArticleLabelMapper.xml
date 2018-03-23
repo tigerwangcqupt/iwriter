@@ -230,7 +230,7 @@
 	</select>
 
 	<select id="getArticleByArticleLabelId" resultType="com.yryz.writer.modules.article.Article">
-		SELECT DISTINCT yaa.article_id,ya.*
+		SELECT DISTINCT ya.*
 		FROM yryz_article_articlelabel yaa
 		LEFT JOIN yryz_article ya ON ya.id = yaa.article_id
 		WHERE ya.shelve_flag = 0 AND ya.del_flag = 0
