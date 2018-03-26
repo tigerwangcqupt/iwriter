@@ -2,11 +2,9 @@ package com.yryz.writer.modules.articlelabel;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
-import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
-import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
+import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
 
 /**
  * 
@@ -117,4 +115,6 @@ public interface ArticleLabelApi {
 	 * @return
 	 */
 	RpcResponse<Long> getUpOrDownRecommend(Long lableId,Integer flag);
+
+    RpcResponse<Object> labelNameCheck(ArticleLabel articleLabel);
 }

@@ -1,15 +1,15 @@
 package com.yryz.writer.modules.articlelabel.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
-import org.springframework.stereotype.Repository;
-
-import com.yryz.component.rpc.dto.PageList;
-
-import java.util.List;
 
 /**
  * 
@@ -126,4 +126,6 @@ public interface ArticleLabelService extends BaseService {
     * @return
     */
    Long getUpOrDownRecommend(Long lableId,Integer flag);
+   
+   void labelNameCheck(ArticleLabel articleLabel);
 }

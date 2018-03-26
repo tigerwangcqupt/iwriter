@@ -1,6 +1,21 @@
 package com.yryz.writer.modules.articlelabel.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.constant.CommonConstants;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.common.exception.YyrzPcException;
@@ -15,19 +30,6 @@ import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
 import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
 import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
 import com.yryz.writer.modules.id.api.IdAPI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 @Service
@@ -89,6 +91,8 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             Assert.hasText(articleLabel.getLabelName(), "标签名称不能为空");
             Assert.hasText(articleLabel.getIcon(), "标签图标不能为空");
             Assert.hasText(articleLabel.getLabelDescription(), "标签描述不能为空");
+            this.labelNameCheck(articleLabel);
+            
             Long kid = idApi.getId("yryz_articlelabel");
             //设置属性
             articleLabel.setKid(kid);
@@ -111,6 +115,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
     @Override
     public Boolean update(ArticleLabel articleLabel) {
         try {
+            this.labelNameCheck(articleLabel);
             int successNum = articleLabelDao.update(articleLabel);
             if (successNum < 1){
                 return false;
@@ -330,5 +335,33 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             return al.getKid();
         }
         return null;
+    }
+
+    @Override
+    public void labelNameCheck(ArticleLabel articleLabel) {
+        // 名称去重校验
+        Assert.hasText(articleLabel.getLabelName(), "LabelName is null !");
+        ArticleLabel condition = new ArticleLabel();
+        condition.setLabelName(articleLabel.getLabelName());
+        condition.setDelFlag((int) CommonConstants.DELETE_NO);
+        // condition.setShelveFlag(CommonConstants.SHELVE_YES);
+        List<ArticleLabel> checkList = articleLabelDao.selectByCondition(condition);
+
+        // 新增
+        if (null == articleLabel.getKid()) {
+            Assert.isTrue(CollectionUtils.isEmpty(checkList), "标签名称不能重复！");
+        }
+        // 编辑
+        else {
+            boolean checkFlag = true;
+            if (org.apache.commons.collections.CollectionUtils.size(checkList) > 1) {
+                checkFlag = false;
+            } else if (org.apache.commons.collections.CollectionUtils.isNotEmpty(checkList)
+                    && !checkList.get(0).getKid().equals(articleLabel.getKid())) {
+                checkFlag = false;
+            }
+            Assert.isTrue(checkFlag, "标签名称不能重复！");
+        }
+
     }
 }
