@@ -84,7 +84,9 @@ public enum ExceptionEnum {
     MODULEENUM_NOTFOUND("7000", "Oops, the moduleenum is notfound!", "不存在的模块名！"),
     AUDITPASS_SENDMSG_EXCEPTION("7001", "写手审核通过消息发送失败", "写手审核通过消息发送失败"),
 	
-	NICKNAME_REPEAT_EXCEPTION("8001", "昵称重复", "昵称重复");
+	NICKNAME_REPEAT_EXCEPTION("8001", "昵称重复", "昵称重复"),
+
+    ARTICLE_LABEL_RECOMMEND_LIMIT_EXCEPTION("9001","文章标签推荐数已达10个，无法推荐","文章标签推荐数已达10个，无法推荐");
 
     private String code;
 

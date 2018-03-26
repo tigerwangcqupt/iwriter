@@ -281,4 +281,10 @@
 		</choose>
 		ORDER BY ya.sort ASC
 	</select>
+
+	<select id="getRecommendCount" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM yryz_articlelabel
+		WHERE recommend_flag = 1
+	</select>
 </mapper>
