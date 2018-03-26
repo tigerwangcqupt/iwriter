@@ -290,4 +290,61 @@
 		</choose>
 		ORDER BY ya.sort ASC
 	</select>
+	
+	<select id="selectByCondition" resultType="com.yryz.writer.modules.articleclassify.entity.ArticleClassify" parameterType="com.yryz.writer.modules.articleclassify.entity.ArticleClassify">
+        SELECT <include refid="Base_Column_List"/>
+        FROM yryz_articleclassify
+        <include refid="sql_condition_select" />
+    </select>
+
+	<sql id="sql_condition_select">
+		<where>
+			1=1
+          <if test="id != null">
+	        And id = #{id,jdbcType=BIGINT}
+	      </if>
+	      <if test="kid != null">
+	        And kid = #{kid,jdbcType=BIGINT}
+	      </if>
+	      <if test="parentId != null">
+	        And parent_id = #{parentId,jdbcType=BIGINT}
+	      </if>
+	      <if test="icon != null">
+	        And icon = #{icon,jdbcType=VARCHAR}
+	      </if>
+	      <if test="classifyName != null">
+	        And classify_name = #{classifyName,jdbcType=VARCHAR}
+	      </if>
+	      <if test="classifyDesc != null">
+	        And classify_desc = #{classifyDesc,jdbcType=VARCHAR}
+	      </if>
+	      <if test="recommendFlag != null">
+	        And recommend_flag = #{recommendFlag,jdbcType=TINYINT}
+	      </if>
+	      <if test="sort != null">
+	        And sort = #{sort,jdbcType=INTEGER}
+	      </if>
+	      <if test="lastStageFlag != null">
+	        And last_stage_flag = #{lastStageFlag,jdbcType=TINYINT}
+	      </if>
+	      <if test="shelveFlag != null">
+	        And shelve_flag = #{shelveFlag,jdbcType=TINYINT}
+	      </if>
+	      <if test="delFlag != null">
+	        And del_flag = #{delFlag,jdbcType=TINYINT}
+	      </if>
+	      <if test="createDate != null">
+	        And create_date = #{createDate,jdbcType=TIMESTAMP}
+	      </if>
+	      <if test="lastUpdateDate != null">
+	        And last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP}
+	      </if>
+	      <if test="createUserId != null">
+	        And create_user_id = #{createUserId,jdbcType=VARCHAR}
+	      </if>
+	      <if test="lastUpdateUserId != null">
+	        And last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR}
+	      </if>
+		</where>
+	</sql>
 </mapper>

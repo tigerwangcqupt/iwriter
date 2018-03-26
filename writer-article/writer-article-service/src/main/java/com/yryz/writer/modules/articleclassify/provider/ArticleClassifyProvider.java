@@ -1,21 +1,20 @@
 package com.yryz.writer.modules.articleclassify.provider;
-import com.yryz.component.rpc.RpcResponse;
-import com.yryz.component.rpc.dto.PageList;
+import java.util.List;
 
-import com.yryz.writer.common.web.ResponseModel;
-import com.yryz.writer.modules.articleclassify.AppArticleClassifyApi;
-import com.yryz.writer.modules.articleclassify.ArticleClassifyApi;
-import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
-
-import com.yryz.writer.modules.articleclassify.service.ArticleClassifyService;
-import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.yryz.component.rpc.RpcResponse;
+import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.web.ResponseModel;
+import com.yryz.writer.modules.articleclassify.AppArticleClassifyApi;
+import com.yryz.writer.modules.articleclassify.ArticleClassifyApi;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
+import com.yryz.writer.modules.articleclassify.service.ArticleClassifyService;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
 
 @Service
 public class ArticleClassifyProvider implements ArticleClassifyApi ,AppArticleClassifyApi {
@@ -195,5 +194,15 @@ public class ArticleClassifyProvider implements ArticleClassifyApi ,AppArticleCl
 		} catch (Exception e) {
 			return ResponseModel.returnException(e);
 		}
-	}
+    }
+
+    @Override
+    public RpcResponse<Object> classifyNameCheck(ArticleClassify articleClassify) {
+        try {
+            articleClassifyService.classifyNameCheck(articleClassify);
+            return ResponseModel.returnObjectSuccess(null);
+        } catch (Exception e) {
+            return ResponseModel.returnException(e);
+        }
+    }
 }

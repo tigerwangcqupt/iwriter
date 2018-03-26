@@ -1,22 +1,21 @@
 package com.yryz.writer.modules.articlelabel.provider;
-import com.yryz.component.rpc.RpcResponse;
-import com.yryz.component.rpc.dto.PageList;
-
-import com.yryz.writer.common.web.ResponseModel;
-import com.yryz.writer.modules.article.Article;
-import com.yryz.writer.modules.articlelabel.AppAritcleLableApi;
-import com.yryz.writer.modules.articlelabel.ArticleLabelApi;
-import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
-import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
-import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
-import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.yryz.component.rpc.RpcResponse;
+import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.web.ResponseModel;
+import com.yryz.writer.modules.article.Article;
+import com.yryz.writer.modules.articlelabel.AppAritcleLableApi;
+import com.yryz.writer.modules.articlelabel.ArticleLabelApi;
+import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
+import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
+import com.yryz.writer.modules.articlelabel.service.ArticleLabelService;
+import com.yryz.writer.modules.articlelabel.vo.ArticleLabelVo;
 
 @Service
 public class ArticleLabelProvider implements ArticleLabelApi,AppAritcleLableApi {
@@ -211,4 +210,14 @@ public class ArticleLabelProvider implements ArticleLabelApi,AppAritcleLableApi 
 			return ResponseModel.returnException(e);
 		}
 	}
+	
+    @Override
+    public RpcResponse<Object> labelNameCheck(ArticleLabel articleLabel) {
+        try {
+            articleLabelService.labelNameCheck(articleLabel);
+            return ResponseModel.returnObjectSuccess(null);
+        } catch (Exception e) {
+            return ResponseModel.returnException(e);
+        }
+    }
 }

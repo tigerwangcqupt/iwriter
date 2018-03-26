@@ -1,13 +1,14 @@
 package com.yryz.writer.modules.articlelabel.dao.persistence;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 import com.yryz.writer.common.dao.BaseDao;
 import com.yryz.writer.modules.article.Article;
 import com.yryz.writer.modules.articlelabel.dto.ArticleLabelDto;
 import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * 
@@ -81,4 +82,6 @@ public interface ArticleLabelDao extends BaseDao {
      * @return
      */
     List<ArticleLabel> selectSortsByRecommend(@Param("sort") Integer sort, @Param("flag") Integer flag);
+    
+    List<ArticleLabel> selectByCondition(ArticleLabel condition);
 }

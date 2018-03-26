@@ -1,22 +1,10 @@
 package com.yryz.writer.modules.articleclassify.service.impl;
 
-import com.yryz.component.rpc.dto.PageList;
-import com.yryz.writer.common.constant.ExceptionEnum;
-import com.yryz.writer.common.dao.BaseDao;
-import com.yryz.writer.common.exception.YyrzPcException;
-import com.yryz.writer.common.service.BaseServiceImpl;
-import com.yryz.writer.common.utils.PageUtils;
-import com.yryz.writer.common.web.PageModel;
-import com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify;
-import com.yryz.writer.modules.articlearticleclassify.service.ArticleArticleClassifyService;
-import com.yryz.writer.modules.articleclassify.constant.ArticleClassifyConstant;
-import com.yryz.writer.modules.articleclassify.dao.persistence.ArticleClassifyDao;
-import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
-import com.yryz.writer.modules.articleclassify.service.ArticleClassifyService;
-import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
-import com.yryz.writer.modules.articlelabel.entity.ArticleLabel;
-import com.yryz.writer.modules.id.api.IdAPI;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +14,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.constant.CommonConstants;
+import com.yryz.writer.common.constant.ExceptionEnum;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.common.exception.YyrzPcException;
+import com.yryz.writer.common.service.BaseServiceImpl;
+import com.yryz.writer.common.utils.PageUtils;
+import com.yryz.writer.common.web.PageModel;
+import com.yryz.writer.modules.articlearticleclassify.service.ArticleArticleClassifyService;
+import com.yryz.writer.modules.articleclassify.constant.ArticleClassifyConstant;
+import com.yryz.writer.modules.articleclassify.dao.persistence.ArticleClassifyDao;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
+import com.yryz.writer.modules.articleclassify.service.ArticleClassifyService;
+import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
+import com.yryz.writer.modules.id.api.IdAPI;
 
 /**
  * 文章分类接口实现类
@@ -115,6 +115,8 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
             Assert.hasText(articleClassify.getClassifyName(), "分类名称不能为空");
             Assert.hasText(articleClassify.getClassifyDesc(), "分类描述不能为空");
             changeToNoFloor(articleClassify.getParentId(), articleClassify.getLastUpdateUserId());
+            this.classifyNameCheck(articleClassify);
+            
             Long kid = idApi.getId("yryz_articleclassify");
             articleClassify.setKid(kid);
             articleClassify.setRecommendFlag(Integer.valueOf(ArticleClassifyConstant.RECOMMEND_NO));
@@ -161,6 +163,8 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     @Transactional
     public Boolean update(ArticleClassify articleClassify) {
         try {
+            this.classifyNameCheck(articleClassify);
+            
             updateParentStageFlag(articleClassify.getParentId(),articleClassify.getLastUpdateUserId());
             int successNum = articleClassifyDao.update(articleClassify);
             if (successNum < 1){
@@ -451,5 +455,32 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
             return ac.getKid();
         }
         return null;
+    }
+
+    @Override
+    public void classifyNameCheck(ArticleClassify articleClassify) {
+        // 名称去重校验
+        Assert.hasText(articleClassify.getClassifyName(), "classifyName is null !");
+        ArticleClassify condition = new ArticleClassify();
+        condition.setClassifyName(articleClassify.getClassifyName());
+        condition.setDelFlag(CommonConstants.DELETE_NO);
+        // condition.setShelveFlag(CommonConstants.SHELVE_YES);
+        List<ArticleClassify> checkList = articleClassifyDao.selectByCondition(condition);
+
+        // 新增
+        if (null == articleClassify.getKid()) {
+            Assert.isTrue(CollectionUtils.isEmpty(checkList), "分类名称不能重复！");
+        }
+        // 编辑
+        else {
+            boolean checkFlag = true;
+            if (CollectionUtils.size(checkList) > 1) {
+                checkFlag = false;
+            } else if (CollectionUtils.isNotEmpty(checkList)
+                    && !checkList.get(0).getKid().equals(articleClassify.getKid())) {
+                checkFlag = false;
+            }
+            Assert.isTrue(checkFlag, "分类名称不能重复！");
+        }
     }
 }

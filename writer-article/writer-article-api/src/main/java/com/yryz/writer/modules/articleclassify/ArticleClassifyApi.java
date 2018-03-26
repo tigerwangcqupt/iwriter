@@ -117,4 +117,12 @@ public interface ArticleClassifyApi {
 	 * @return
 	 */
 	RpcResponse<Long> getUpOrDownRecommend(Long classifyId,Integer flag);
+	
+	/**  
+	* @Description: 分类名称重复性校验
+	* @author wangheng
+	* @param @param articleClassify
+	* @throws  
+	*/
+	RpcResponse<Object> classifyNameCheck(ArticleClassify articleClassify);
 }

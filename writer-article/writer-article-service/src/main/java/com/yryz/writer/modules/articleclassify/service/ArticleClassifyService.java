@@ -1,14 +1,14 @@
 package com.yryz.writer.modules.articleclassify.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
 import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
 import com.yryz.writer.modules.articleclassify.vo.ArticleClassifyVo;
-import org.springframework.stereotype.Repository;
-
-import com.yryz.component.rpc.dto.PageList;
-
-import java.util.List;
 
 /**
  * 
@@ -119,4 +119,6 @@ public interface ArticleClassifyService extends BaseService {
     * @return
     */
    Long getUpOrDownRecommend(Long classifyId,Integer flag);
+   
+   void classifyNameCheck(ArticleClassify articleClassify);
 }

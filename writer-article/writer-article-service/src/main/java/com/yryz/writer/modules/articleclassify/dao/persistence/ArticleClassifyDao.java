@@ -1,13 +1,13 @@
 package com.yryz.writer.modules.articleclassify.dao.persistence;
 
-import com.yryz.writer.common.dao.BaseDao;
-import com.yryz.writer.modules.articlearticleclassify.entity.ArticleArticleClassify;
-import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
-import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.yryz.writer.common.dao.BaseDao;
+import com.yryz.writer.modules.articleclassify.dto.ArticleClassifyDto;
+import com.yryz.writer.modules.articleclassify.entity.ArticleClassify;
 
 /**
  * 
@@ -92,4 +92,6 @@ public interface ArticleClassifyDao extends BaseDao {
      * @return
      */
     List<ArticleClassify> selectSortsByRecommend(@Param("sort") Integer sort,@Param("flag") Integer flag);
+    
+    List<ArticleClassify> selectByCondition(ArticleClassify condition);
 }
