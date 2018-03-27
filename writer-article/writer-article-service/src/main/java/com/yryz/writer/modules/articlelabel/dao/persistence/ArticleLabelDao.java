@@ -82,6 +82,12 @@ public interface ArticleLabelDao extends BaseDao {
      * @return
      */
     List<ArticleLabel> selectSortsByRecommend(@Param("sort") Integer sort, @Param("flag") Integer flag);
-    
+
     List<ArticleLabel> selectByCondition(ArticleLabel condition);
+
+    /**
+     * 获取推荐数
+     * @return
+     */
+    Integer getRecommendCount();
 }

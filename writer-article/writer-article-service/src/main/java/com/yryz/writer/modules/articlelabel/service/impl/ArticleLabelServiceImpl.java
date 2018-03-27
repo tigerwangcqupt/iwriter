@@ -152,7 +152,10 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             if (null == articleLabel) {
                 throw new IllegalArgumentException("文章标签不存在");
             }
-            //上架
+            //设置未推荐，设置sort为9999
+            articleLabel.setRecommendFlag(0);
+            articleLabel.setSort(9999);
+            //下架
             articleLabel.setShelveFlag(1);
             int successNum = articleLabelDao.update(articleLabel);
             return successNum > 0 ? true : false;
@@ -162,6 +165,7 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
         }
     }
 
+    @Transactional
     @Override
     public Boolean deleteArticleLabel(Long kid, String lastUpdateUserId) {
         try {
@@ -171,8 +175,13 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             if (null == articleLabel) {
                 throw new IllegalArgumentException("文章标签不存在");
             }
+            //设置未推荐，设置sort为9999
+            articleLabel.setRecommendFlag(0);
+            articleLabel.setSort(9999);
+            //下架
+            articleLabel.setShelveFlag(1);
+            articleLabelDao.update(articleLabel);
             int successNum = articleLabelDao.deleteArticleLabel(kid, lastUpdateUserId);
-
             return successNum > 0 ? true : false;
         }catch (Exception e){
             logger.error("删除文章标签操作失败", e);
@@ -236,10 +245,16 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
 
     @Override
     public Boolean setRecommend(Long id,Integer flag) {
-        try {
-            ArticleLabel articleLabel = new ArticleLabel();
+             ArticleLabel articleLabel = new ArticleLabel();
             Integer sort = null;
             if(flag==1){
+                //查询是否能推荐
+                Integer count = articleLabelDao.getRecommendCount();
+                if(count>=10){
+                    throw new YyrzPcException(ExceptionEnum.ARTICLE_LABEL_RECOMMEND_LIMIT_EXCEPTION.getCode(),
+                            ExceptionEnum.ARTICLE_LABEL_RECOMMEND_LIMIT_EXCEPTION.getMsg(),
+                            ExceptionEnum.ARTICLE_LABEL_RECOMMEND_LIMIT_EXCEPTION.getErrorMsg());
+                }
                 sort = articleLabelDao.selectMaxSort();
                 sort = sort==null?1:sort+1;
             }
@@ -251,10 +266,6 @@ public class ArticleLabelServiceImpl extends BaseServiceImpl implements ArticleL
             articleLabel.setSort(sort);
             articleLabelDao.update(articleLabel);
             return true;
-        } catch (Exception e) {
-            logger.error("设置推荐失败", e);
-            throw e;
-        }
     }
 
     @Override
