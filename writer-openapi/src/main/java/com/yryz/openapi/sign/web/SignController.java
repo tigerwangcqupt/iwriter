@@ -37,6 +37,7 @@ public class SignController extends BaseController {
     @ResponseBody
     public RpcResponse<SignInfo> getSign(@RequestBody Map<String, Object> map){
 
+        System.out.println("develop_iteration");
         //originText：a=1&b=2&timeStamp=123456
         String originText = (String) map.get("originText");
 
