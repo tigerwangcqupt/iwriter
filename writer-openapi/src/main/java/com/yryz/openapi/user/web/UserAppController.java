@@ -158,6 +158,7 @@ public class UserAppController extends BaseController {
             user.setAccount(custRegister.getCustPhone());
             user.setPhone(custRegister.getCustPhone());
             user.setAccount(custRegister.getCustPhone());
+            user.setUserStatus(2);//默认注册成功，为审核通过用户
 
             RpcResponse<Long> rpcResponseRegister = writerApi.register(user);
             Long kid = isSuccess(rpcResponseRegister);
