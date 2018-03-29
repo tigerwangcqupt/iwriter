@@ -122,6 +122,15 @@ public class WriterProvider implements WriterApi {
 				if(cityVo!=null){
 					writerAdminVo.setCityName(cityVo.getCityName());
 				}
+
+				//设置手持照片
+				BankDto bankDto = new BankDto();
+				bankDto.setCreateUserId(String.valueOf(kid));
+				BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
+				if(bankVo != null){
+					writerAdminVo.setHandheldPhoto(bankVo.getHandheldPhoto());
+					writerAdminVo.setUserName(bankVo.getUserName());
+				}
 			}
 			return ResponseModel.returnObjectSuccess(writerAdminVo);
 		} catch (Exception e) {

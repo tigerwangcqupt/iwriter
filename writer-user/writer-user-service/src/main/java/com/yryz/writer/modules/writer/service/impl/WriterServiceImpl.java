@@ -12,6 +12,9 @@ import com.yryz.writer.common.web.PageModel;
 import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.component.rpc.dto.PageList;
 
+import com.yryz.writer.modules.bank.BankApi;
+import com.yryz.writer.modules.bank.dto.BankDto;
+import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
@@ -59,6 +62,9 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
     @Autowired
 	private IdAPI idAPI;
 
+    @Autowired
+    private BankApi bankApi;
+
     public final static int LOCK_EXPIRE_DEFAULT = 60;
 
 
@@ -93,6 +99,21 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
     public PageList<WriterAdminVo> selectWriterList(WriterDto writerDto){
         PageUtils.startPage(writerDto.getCurrentPage(), writerDto.getPageSize());
         List<WriterAdminVo> list = writerDao.selectWriterList(writerDto);
+        if(list != null && list.size() > 0) {
+            for(WriterAdminVo writerAdminVo : list){
+
+                //设置手持照片
+                BankDto bankDto = new BankDto();
+                bankDto.setCreateUserId(String.valueOf(writerAdminVo.getKid()));
+                BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
+                if(bankVo != null){
+                    writerAdminVo.setHandheldPhoto(bankVo.getHandheldPhoto());
+                    writerAdminVo.setUserName(bankVo.getUserName());
+                }
+            }
+        }
+
+
         return new PageModel<WriterAdminVo>().getPageList(list);
     }
     
