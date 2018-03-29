@@ -79,7 +79,7 @@ public class BankVo implements Serializable {
     private Long bankcardFcode;
 
     /**
-     * 开发支行
+     * 身份证手持照片
      */
     private  String handheldPhoto;
 
