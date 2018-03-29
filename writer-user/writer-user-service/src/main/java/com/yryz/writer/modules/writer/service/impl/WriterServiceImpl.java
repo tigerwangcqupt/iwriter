@@ -107,8 +107,6 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
                 BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
                 if(bankVo != null){
                     writerAdminVo.setUserName(bankVo.getUserName());
-                }else{
-                    writerAdminVo.setUserName("");
                 }
             }
         }
@@ -358,8 +356,6 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
                 BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
                 if(bankVo != null){
                     writerAdminVo.setUserName(bankVo.getUserName());
-                }else{
-                    writerAdminVo.setUserName("");
                 }
             }
         }

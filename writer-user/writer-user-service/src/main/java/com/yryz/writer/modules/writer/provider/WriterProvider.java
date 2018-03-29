@@ -95,9 +95,6 @@ public class WriterProvider implements WriterApi {
 				if(bankVo != null){
 					writerVo.setHandheldPhoto(bankVo.getHandheldPhoto());
 					writerVo.setUserName(bankVo.getUserName());
-				}else{
-					writerVo.setHandheldPhoto("");
-					writerVo.setUserName("");
 				}
 
 			}
