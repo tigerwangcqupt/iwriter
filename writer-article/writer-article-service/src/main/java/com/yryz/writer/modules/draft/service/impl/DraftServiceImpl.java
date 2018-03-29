@@ -72,7 +72,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 list = draftDao.selectPublish(draftDto);
                 break;
             case 2:
-                list = draftDao.selectNotPass(draftDto);
+                list = draftDao.selectNotPass(draftDto);//未通过
                 break;
             case 3:
                 list = draftDao.selectDraught(draftDto);
@@ -86,6 +86,10 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             case 6:
                 list = draftDao.selectWaitShelve(draftDto);
                 break;
+            case 7:
+                list = draftDao.selectAudit(draftDto);//审核中
+                break;
+
             default:
                 list = draftDao.selectList(draftDto);
                 break;

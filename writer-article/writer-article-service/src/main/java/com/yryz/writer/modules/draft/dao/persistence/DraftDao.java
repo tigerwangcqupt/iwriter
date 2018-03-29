@@ -28,6 +28,10 @@ public interface DraftDao extends BaseDao {
     //未通过
     List<Draft> selectNotPass(DraftDto draftDto);
 
+    //审核中
+    List<Draft> selectAudit(DraftDto draftDto);
+
+
     //草稿
     List<Draft> selectDraught(DraftDto draftDto);
 
