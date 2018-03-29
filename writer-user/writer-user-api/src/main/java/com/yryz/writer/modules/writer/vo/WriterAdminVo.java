@@ -58,6 +58,11 @@ public class WriterAdminVo implements Serializable {
     private  String identityCardPhoto;
 
     /**
+     * 身份证手持照片
+     */
+    private  String handheldPhoto;
+
+    /**
      * 省
      */
     private  String provice;
@@ -432,7 +437,12 @@ public class WriterAdminVo implements Serializable {
 	public void setLastUpdateUserId(String lastUpdateUserId) {
 		this.lastUpdateUserId = lastUpdateUserId;
 	}
-    
-	
-    
+
+    public String getHandheldPhoto() {
+        return handheldPhoto;
+    }
+
+    public void setHandheldPhoto(String handheldPhoto) {
+        this.handheldPhoto = handheldPhoto;
+    }
 }
