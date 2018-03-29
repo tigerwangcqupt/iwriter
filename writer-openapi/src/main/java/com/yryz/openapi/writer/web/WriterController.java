@@ -39,7 +39,7 @@ public class WriterController extends BaseController {
    public RpcResponse<WriterVo> detail(@RequestHeader String userId) {
 	   return writerApi.detail(Long.valueOf(userId));
    }
-   
+
     @ResponseBody
     @RequestMapping(value="/updateWriter")
 	public RpcResponse<WriterVo> updateWriter(@RequestBody Writer writer, @RequestHeader String userId) {
@@ -67,8 +67,8 @@ public class WriterController extends BaseController {
 		return writerApi.updateWriter(writer);
 	}
 
-   
-   @ResponseBody
+	//2018-03-29已废弃
+  /* @ResponseBody
    @RequestMapping(value="/submitAudit")
    public RpcResponse<WriterVo> submitAudit(@RequestBody Writer writer,@RequestHeader String userId) {
 	   if(StringUtils.isNotEmpty(userId)){
@@ -84,7 +84,7 @@ public class WriterController extends BaseController {
                    ExceptionEnum.ValidateException.getErrorMsg());
 		}
        return writerApi.submitAudit(writer);
-   }
+   }*/
 
    @ResponseBody
    @RequestMapping(value="/list")

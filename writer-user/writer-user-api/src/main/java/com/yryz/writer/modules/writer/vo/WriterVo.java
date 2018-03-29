@@ -53,7 +53,12 @@ public class WriterVo implements Serializable{
 	 * 身份证照片
 	 */	 
     private  String identityCardPhoto;
-    
+
+	/**
+	 * 身份证手持照片
+	 */
+	private  String handheldPhoto;
+
 	/**
 	 * 省
 	 */	 
@@ -252,5 +257,11 @@ public class WriterVo implements Serializable{
 		this.pwdFlag = pwdFlag;
 	}
 
-	
+	public String getHandheldPhoto() {
+		return handheldPhoto;
+	}
+
+	public void setHandheldPhoto(String handheldPhoto) {
+		this.handheldPhoto = handheldPhoto;
+	}
 }
