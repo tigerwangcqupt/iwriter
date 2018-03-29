@@ -61,7 +61,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         }
 
         //获取状态,已发表需查询文章表,其余查询稿件表
-        //列表参数:0 全部,1 已发表,2 未通过,3 草稿,4 管理后台待审核,5 管理后台未通过
+        //列表参数:0 全部,1 已发表,2 未通过,3 草稿,4 管理后台待审核,5 管理后台未通过 6，待上架 7，审核中
         Integer status = draftDto.getStatus();
         List<Draft> list = new ArrayList<>();
         switch (status) {
