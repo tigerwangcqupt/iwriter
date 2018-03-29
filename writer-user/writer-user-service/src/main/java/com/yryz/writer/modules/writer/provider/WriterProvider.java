@@ -4,7 +4,10 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.web.ResponseModel;
+import com.yryz.writer.modules.bank.BankApi;
 import com.yryz.writer.modules.bank.constant.IDCardValidate;
+import com.yryz.writer.modules.bank.dto.BankDto;
+import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
@@ -48,6 +51,10 @@ public class WriterProvider implements WriterApi {
 	
 	@Autowired
 	private CityApi cityApi;
+
+	@Autowired
+	private BankApi bankApi;
+
 	
 	/**
 	*  获取Writer明细
@@ -80,6 +87,16 @@ public class WriterProvider implements WriterApi {
 				if(cityVo!=null){
 					writerVo.setCityName(cityVo.getCityName());
 				}
+
+				//设置手持照片
+				BankDto bankDto = new BankDto();
+				bankDto.setCreateUserId(String.valueOf(kid));
+				BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
+				if(bankVo != null){
+					writerVo.setHandheldPhoto(bankVo.getHandheldPhoto());
+					writerVo.setUserName(bankVo.getUserName());
+				}
+
 			}
 			return ResponseModel.returnObjectSuccess(writerVo);
 		} catch (Exception e) {
