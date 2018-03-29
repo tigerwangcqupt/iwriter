@@ -80,6 +80,12 @@ public class Bank extends GenericEntity{
 	 */
 	private Long bankcardFcode;
 
+	/**
+	 * 身份证手持照片
+	 */
+	@NotBlank
+	private  String handheldPhoto;
+
 	public Integer getDelFlag() {
 		return this.delFlag;
 	}
@@ -150,5 +156,13 @@ public class Bank extends GenericEntity{
 
 	public void setBankcardFcode(Long bankcardFcode) {
 		this.bankcardFcode = bankcardFcode;
+	}
+
+	public String getHandheldPhoto() {
+		return handheldPhoto;
+	}
+
+	public void setHandheldPhoto(String handheldPhoto) {
+		this.handheldPhoto = handheldPhoto;
 	}
 }

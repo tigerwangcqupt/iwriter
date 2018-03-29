@@ -20,10 +20,11 @@
 		<result column="city" property="city" jdbcType="VARCHAR"/>
 		<result column="user_account_open_bank" property="userAccountOpenBank" jdbcType="VARCHAR"/>
 		<result column="bankcard_fcode" property="bankcardFcode" jdbcType="BIGINT"/>
+		<result column="handheld_photo" property="handheldPhoto" jdbcType="VARCHAR"/>
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,module_enum,create_date,last_update_date,create_user_id,last_update_user_id,del_flag,user_name,user_cart,user_bank_cart,user_trade_bank_cart,provice,city,user_account_open_bank,bankcard_fcode
+	<sql id="Base_Column_List">id,kid,module_enum,create_date,last_update_date,create_user_id,last_update_user_id,del_flag,user_name,user_cart,user_bank_cart,user_trade_bank_cart,provice,city,user_account_open_bank,bankcard_fcode,handheld_photo
     </sql>
 
      <!-- 查询Bank详情 -->
@@ -45,7 +46,7 @@
   
   	<!-- 新增Bank-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.bank.entity.Bank">
-	    insert into yryz_bank (kid,module_enum,create_date,last_update_date,create_user_id,user_name,user_cart,user_bank_cart,user_trade_bank_cart,provice,city,user_account_open_bank,bankcard_fcode)
+	    insert into yryz_bank (kid,module_enum,create_date,last_update_date,create_user_id,user_name,user_cart,user_bank_cart,user_trade_bank_cart,provice,city,user_account_open_bank,bankcard_fcode,handheld_photo)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{moduleEnum,jdbcType=VARCHAR}
@@ -60,6 +61,7 @@
 				,#{city,jdbcType=VARCHAR}
 				,#{userAccountOpenBank,jdbcType=VARCHAR}
 				,#{bankcardFcode}
+				,#{handheldPhoto,jdbcType=VARCHAR}
 	    )
 	</insert>
 	
@@ -109,6 +111,9 @@
         <if test="userAccountOpenBank != null and userAccountOpenBank != ''">
 			user_account_open_bank,
 	    </if>
+		<if test="handheldPhoto != null and handheldPhoto != ''">
+			handheld_photo,
+		</if>
 	    </trim>
 	    <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="kid != null">
@@ -153,6 +158,9 @@
         <if test="userAccountOpenBank != null and userAccountOpenBank != ''">
 			#{userAccountOpenBank,jdbcType=VARCHAR},
 	    </if>
+		<if test="handheldPhoto != null and handheldPhoto != ''">
+			#{handheldPhoto,jdbcType=VARCHAR},
+		</if>
 	    </trim>
 	</insert>
 	
@@ -199,6 +207,9 @@
     		</if>
 			<if test="bankcardFcode != null and bankcardFcode != ''">
 				bankcard_fcode = #{bankcardFcode},
+			</if>
+			<if test="handheldPhoto != null and handheldPhoto != ''">
+				handheld_photo = #{handheldPhoto,jdbcType=VARCHAR},
 			</if>
         </set>
         where kid = #{kid,jdbcType=BIGINT}

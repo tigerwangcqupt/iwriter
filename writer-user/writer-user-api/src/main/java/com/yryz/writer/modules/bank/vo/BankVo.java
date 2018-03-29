@@ -78,6 +78,11 @@ public class BankVo implements Serializable {
      */
     private Long bankcardFcode;
 
+    /**
+     * 开发支行
+     */
+    private  String handheldPhoto;
+
     public Long getId() {
         return id;
     }
@@ -172,5 +177,13 @@ public class BankVo implements Serializable {
 
     public void setBankcardFcode(Long bankcardFcode) {
         this.bankcardFcode = bankcardFcode;
+    }
+
+    public String getHandheldPhoto() {
+        return handheldPhoto;
+    }
+
+    public void setHandheldPhoto(String handheldPhoto) {
+        this.handheldPhoto = handheldPhoto;
     }
 }
