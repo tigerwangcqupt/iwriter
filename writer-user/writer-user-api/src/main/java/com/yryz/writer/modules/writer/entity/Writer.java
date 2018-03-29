@@ -130,6 +130,19 @@ public class Writer extends GenericEntity{
 	 */
 	private String userBankCart;
 
+	/**
+	 * 是否实名认证
+	 */
+	private Integer certificationFlag;
+
+	public Integer getCertificationFlag() {
+		return certificationFlag;
+	}
+
+	public void setCertificationFlag(Integer certificationFlag) {
+		this.certificationFlag = certificationFlag;
+	}
+
 	public String getProfitSn() {
 		return profitSn;
 	}

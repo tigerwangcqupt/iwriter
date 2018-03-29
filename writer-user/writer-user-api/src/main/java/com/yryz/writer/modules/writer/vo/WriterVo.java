@@ -88,7 +88,12 @@ public class WriterVo implements Serializable{
 	 * 状态(0:未提交审核，1：待审核，2：审核通过，3：审核不通过)
 	 */	 
     private  Integer userStatus;
-    
+
+	/**
+	 * 是否实名认证
+	 */
+	private Integer certificationFlag;
+
 	/**
 	 * 设备id号
 	 */	 
@@ -103,7 +108,16 @@ public class WriterVo implements Serializable{
     
     //是否已设置过密码
     private  Integer pwdFlag;
-    
+
+
+	public Integer getCertificationFlag() {
+		return certificationFlag;
+	}
+
+	public void setCertificationFlag(Integer certificationFlag) {
+		this.certificationFlag = certificationFlag;
+	}
+
 
 	public String getAccount() {
 		return this.account;

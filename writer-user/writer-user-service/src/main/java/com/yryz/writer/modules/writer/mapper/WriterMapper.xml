@@ -19,6 +19,8 @@
 		<result column="tel" property="tel" jdbcType="VARCHAR"/>
 		<result column="email" property="email" jdbcType="VARCHAR"/>
 		<result column="user_status" property="userStatus" jdbcType="TINYINT"/>
+		<result column="certification_flag" property="certificationFlag" jdbcType="TINYINT"/>
+
 		<result column="device_id" property="deviceId" jdbcType="VARCHAR"/>
 		<result column="jpush_registration_id" property="jpushRegistrationId" jdbcType="VARCHAR"/>
 		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
@@ -28,7 +30,7 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
+	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,certification_flag,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
     </sql>
 
     <!-- 查询Writer详情 -->
@@ -46,7 +48,7 @@
   
   	<!-- 新增Writer-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.writer.entity.Writer">
-	    insert into yryz_writer (kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id)
+	    insert into yryz_writer (kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,certification_flag,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{account,jdbcType=VARCHAR}
@@ -62,6 +64,7 @@
 				,#{tel,jdbcType=VARCHAR}
 				,#{email,jdbcType=VARCHAR}
 				,#{userStatus,jdbcType=TINYINT}
+				,#{certificationFlag,jdbcType=TINYINT}
 				,#{deviceId,jdbcType=VARCHAR}
 				,#{jpushRegistrationId,jdbcType=VARCHAR}
 			,NOW()
@@ -117,6 +120,9 @@
         <if test="userStatus != null">
 			user_status,
 	    </if>
+		<if test="certificationFlag != null">
+			certification_flag,
+		</if>
         <if test="deviceId != null and deviceId != ''">
 			device_id,
 	    </if>
@@ -179,6 +185,9 @@
         <if test="userStatus != null">
 			#{userStatus,jdbcType=TINYINT},
 	    </if>
+			<if test="certificationFlag != null">
+				#{certificationFlag,jdbcType=TINYINT},
+			</if>
         <if test="deviceId != null and deviceId != ''">
 			#{deviceId,jdbcType=VARCHAR},
 	    </if>
@@ -260,6 +269,10 @@
              <if test="userStatus != null">
     			user_status = #{userStatus,jdbcType=TINYINT},
     		</if>
+			<if test="certificationFlag != null">
+				user_status = #{certificationFlag,jdbcType=TINYINT},
+			</if>
+
             <if test="deviceId != null and deviceId != ''">
     			device_id = #{deviceId,jdbcType=VARCHAR},
     		</if>

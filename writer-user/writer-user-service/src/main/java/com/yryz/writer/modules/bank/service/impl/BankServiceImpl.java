@@ -193,6 +193,9 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             Writer writer = new Writer();
             writer.setKid(Long.valueOf(bank.getCreateUserId()));
             writer.setUserBankCart(bank.getUserBankCart());
+            if(null != bank.getHandheldPhoto() && bank.getHandheldPhoto().trim().length() > 0){
+                writer.setCertificationFlag(1);//已实名认证
+            }
             writerService.update(writer);
         }catch (Exception e) {
             logger.error(e.getMessage(), e);

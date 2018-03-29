@@ -44,6 +44,7 @@ import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
+import com.yryz.writer.modules.writer.vo.WriterVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -562,6 +563,15 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         }else{
             profitStaticsVo.setWithdrawalsFlag(ProfitConstants.WITHDRAWALSFLAG);
         }
+
+        //是否实名认证
+        WriterVo writerVo = writerService.detail(userId);
+        if(writerVo != null){
+            profitStaticsVo.setCertificationFlag(writerVo.getCertificationFlag());
+        }
+
+
+
         return profitStaticsVo;
     }
 

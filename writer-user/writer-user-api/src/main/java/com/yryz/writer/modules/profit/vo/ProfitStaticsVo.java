@@ -28,6 +28,19 @@ public class ProfitStaticsVo implements Serializable {
      */
     private Integer settlementType;
 
+    /**
+     * 是否实名认证(0，未实名 1，已实名认证)
+     */
+    private Integer certificationFlag;
+
+    public Integer getCertificationFlag() {
+        return certificationFlag;
+    }
+
+    public void setCertificationFlag(Integer certificationFlag) {
+        this.certificationFlag = certificationFlag;
+    }
+
     public String getUserName() {
         return userName;
     }
