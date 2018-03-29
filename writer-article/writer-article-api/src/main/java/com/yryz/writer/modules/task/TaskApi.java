@@ -40,6 +40,14 @@ public interface TaskApi {
      */
     RpcResponse<PageList<TaskVo>> list(TaskDto taskDto);
 
+    /**
+     * 获取Task列表
+     *
+     * @param taskDto
+     * @return
+     */
+    RpcResponse<List<TaskVo>> selectAllList(TaskDto taskDto);
+
     RpcResponse<Boolean> acceptTask(Long kid);
 
     RpcResponse<Integer> insert(Task task);

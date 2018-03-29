@@ -71,6 +71,16 @@ public class TaskProvider implements TaskApi {
     }
 
     @Override
+    public RpcResponse<List<TaskVo>> selectAllList(TaskDto taskDto) {
+        try {
+            return ResponseModel.returnListSuccess(taskService.selectAllList(taskDto));
+        } catch (Exception e) {
+            logger.error("获取Task列表失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
+
+    @Override
     public RpcResponse<Boolean> acceptTask(Long kid) {
         try {
             return taskService.acceptTask(kid);

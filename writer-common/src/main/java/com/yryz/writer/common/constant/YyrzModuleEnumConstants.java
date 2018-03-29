@@ -20,4 +20,7 @@ public class YyrzModuleEnumConstants {
     //提现
     public static final String PROFIT_INFO = "10014";
 
+    //首页url配置
+    public static final String INDEXURL_INFO = "10015";
+
 }

@@ -10,6 +10,7 @@ import com.yryz.component.rpc.dto.PageList;
  */
 public class TaskDto extends PageList {
     private String title;
+    private Long kid;
     private Long appId;
     private String appliName;
     private Long taskId;
@@ -18,6 +19,11 @@ public class TaskDto extends PageList {
     private Integer order;
     //区分app和admin   0:app   1:admin
     private Integer appOrAdmin;
+
+    /**
+     * 发布状态(0上架，1下架)
+     */
+    private Integer shelveFlag;
     /**
      * 生成排序字符串
      */
@@ -119,5 +125,21 @@ public class TaskDto extends PageList {
 
     public void setAppOrAdmin(Integer appOrAdmin) {
         this.appOrAdmin = appOrAdmin;
+    }
+
+    public Long getKid() {
+        return kid;
+    }
+
+    public void setKid(Long kid) {
+        this.kid = kid;
+    }
+
+    public Integer getShelveFlag() {
+        return shelveFlag;
+    }
+
+    public void setShelveFlag(Integer shelveFlag) {
+        this.shelveFlag = shelveFlag;
     }
 }

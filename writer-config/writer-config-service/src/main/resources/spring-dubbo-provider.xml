@@ -19,5 +19,6 @@
     <!--发号配置服务，系统配置服务，业务服务不得引用-->
     <dubbo:service interface="com.yryz.writer.modules.id.api.CodeAPI" ref="codeAPI"/>
 
+    <dubbo:service interface="com.yryz.writer.modules.indexurl.IndexUrlConfigApi" ref="indexUrlConfigProvider"/>
 
 </beans>

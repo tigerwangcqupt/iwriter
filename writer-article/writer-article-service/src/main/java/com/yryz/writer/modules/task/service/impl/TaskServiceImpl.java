@@ -58,6 +58,23 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
         return new PageModel<TaskVo>().getPageList(list, taskVoList);
     }
 
+    @Override
+    public List<TaskVo> selectAllList(TaskDto taskDto) {
+        //平台任务的已查阅数
+        if (taskDto.getAppOrAdmin() != null && taskDto.getAppOrAdmin() == 0) {
+            messageApi.setPlatformTaskLooked(taskDto.getWriterId());
+        }
+        List<Task> list = taskDao.selectList(taskDto);
+        List<TaskVo> taskVoList = new ArrayList<TaskVo>();
+        if (list != null && list.size() > 0) {
+            for (Task task : list) {
+                TaskVo taskVo = toTaskVo(task);
+                taskVoList.add(taskVo);
+            }
+        }
+        return taskVoList;
+    }
+
 
     public TaskVo detail(Long taskId) {
         Task task = taskDao.selectByKid(Task.class, taskId);

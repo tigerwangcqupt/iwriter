@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.indexcolumn.service.impl;
 
+import com.yryz.writer.common.constant.CommonConstants;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.utils.PageUtils;
@@ -10,12 +11,16 @@ import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.indexcolumn.service.ValidateIndexColumnService;
 import com.yryz.writer.modules.indexcolumn.vo.IndexItemVo;
+import com.yryz.writer.modules.indexurl.dto.IndexUrlConfigDto;
+import com.yryz.writer.modules.indexurl.service.IndexUrlConfigService;
+import com.yryz.writer.modules.indexurl.vo.IndexUrlConfigVo;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.constant.ModuleEnumConstants;
 import com.yryz.writer.modules.message.dto.MessageDto;
 import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import com.yryz.writer.modules.message.vo.MessageNumVo;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +50,9 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
 
     @Autowired
     private ValidateIndexColumnService validateIndexColumnService;
+
+    @Autowired
+    private IndexUrlConfigService indexUrlConfigService;
 
     protected BaseDao getDao() {
         return indexColumnDao;
@@ -93,6 +101,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
 //            IndexColumnDto indexColumnDto = new IndexColumnDto();
             List<IndexColumn> list = indexColumnDao.selectList(indexColumnDto);
             if(list != null && list.size() > 0) {
+                int  i = 0;
                 for(IndexColumn indexColumn : list){
                     if (indexColumn == null) continue;
                     IndexItemVo indexItemVo = new IndexItemVo();
@@ -111,8 +120,25 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
                     //IndexColumn to IndexColumnVo
                     //需要设置气泡数
                     items.add(indexItemVo);
+
+                    //最后一个设置
+                    if(i == list.size()-1){
+                        IndexUrlConfigDto indexUrlConfigDto = new IndexUrlConfigDto();
+                        indexUrlConfigDto.setShelveFlag(CommonConstants.SHELVE_YES);
+                        PageList<IndexUrlConfigVo> pageList = indexUrlConfigService.selectAdminList(indexUrlConfigDto);
+                        if(null != pageList && CollectionUtils.sizeIsEmpty(pageList.getEntities())){
+                            List<IndexUrlConfigVo> dataList = pageList.getEntities();
+                            if(CollectionUtils.isNotEmpty(dataList)){
+                                indexColumn.setUrl(dataList.get(0).getConfigHref());
+                            }
+                        }
+                    }
+                    i++;
                 }
             }
+
+
+
         } catch (Exception e) {
             logger.error("查询首页栏目操作失败", e);
             throw e;

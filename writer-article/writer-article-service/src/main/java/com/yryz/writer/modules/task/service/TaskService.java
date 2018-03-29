@@ -23,6 +23,8 @@ public interface TaskService extends BaseService {
 
    PageList<TaskVo> selectList(TaskDto taskDto);
 
+   List<TaskVo> selectAllList(TaskDto taskDto);
+
    TaskVo detail(Long taskId);
 
     RpcResponse<Boolean> acceptTask(Long kid);

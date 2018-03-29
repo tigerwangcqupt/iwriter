@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.indexurl.dao.persistence.IndexUrlConfigDao">
+
+	<!--BaseResultMap-->
+    <resultMap id="BaseResultMap" type="com.yryz.writer.modules.indexurl.entity.IndexUrlConfig">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="kid" property="kid" jdbcType="BIGINT"/>
+		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
+		<result column="create_user_id" property="createUserId" jdbcType="BIGINT"/>
+		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="BIGINT"/>
+		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
+		<result column="module_enum" property="moduleEnum" jdbcType="VARCHAR"/>
+		<result column="config_name" property="configName" jdbcType="VARCHAR"/>
+		<result column="config_desc" property="configDesc" jdbcType="VARCHAR"/>
+		<result column="config_type" property="configType" jdbcType="TINYINT"/>
+		<result column="img_url" property="imgUrl" jdbcType="VARCHAR"/>
+		<result column="config_href" property="configHref" jdbcType="VARCHAR"/>
+		<result column="sort" property="sort" jdbcType="INTEGER"/>
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP"/>
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+	
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">id,kid,create_date,last_update_date,create_user_id,last_update_user_id,shelve_flag,module_enum,config_name,config_desc,config_type,img_url,config_href,sort,begin_time,end_time
+    </sql>
+
+     <!-- 查询IndexUrlConfig详情 -->
+    <select id="selectByKid" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_index_url_config
+        where 1=1
+		and kid = #{kid,jdbcType=BIGINT}
+    </select>
+    
+    <!-- 删除IndexUrlConfig-->
+    <delete id="delete" parameterType="java.lang.Long">
+        update yryz_index_url_config
+        set del_flag = 1
+        where kid = #{kid,jdbcType=BIGINT}
+    </delete>
+  
+  
+  	<!-- 新增IndexUrlConfig-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.indexurl.entity.IndexUrlConfig">
+	    insert into yryz_index_url_config (kid,create_date,last_update_date,create_user_id,last_update_user_id,shelve_flag,module_enum,config_name,config_desc,config_type,img_url,config_href,sort,begin_time,end_time)
+	    values (
+	    	#{kid,jdbcType=BIGINT}
+			,NOW()
+			,NOW()
+				,#{createUserId,jdbcType=BIGINT}
+				,#{lastUpdateUserId,jdbcType=BIGINT}
+				,#{shelveFlag,jdbcType=TINYINT}
+				,#{moduleEnum,jdbcType=VARCHAR}
+				,#{configName,jdbcType=VARCHAR}
+				,#{configDesc,jdbcType=VARCHAR}
+				,#{configType,jdbcType=TINYINT}
+				,#{imgUrl,jdbcType=VARCHAR}
+				,#{configHref,jdbcType=VARCHAR}
+				,#{sort,jdbcType=INTEGER}
+				,#{beginTime,jdbcType=TIMESTAMP}
+				,#{endTime,jdbcType=TIMESTAMP}
+	    )
+	</insert>
+	
+	<!--按需新增IndexUrlConfig-->
+    <insert id="insertByPrimaryKeySelective"   parameterType="com.yryz.writer.modules.indexurl.entity.IndexUrlConfig">
+	    insert into yryz_index_url_config 
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			kid,
+	    </if>
+        <if test="createDate != null">
+			create_date,
+	    </if>
+        <if test="lastUpdateDate != null">
+			last_update_date,
+	    </if>
+        <if test="createUserId != null">
+			create_user_id,
+	    </if>
+        <if test="lastUpdateUserId != null">
+			last_update_user_id,
+	    </if>
+        <if test="shelveFlag != null">
+			shelve_flag,
+	    </if>
+        <if test="moduleEnum != null and moduleEnum != ''">
+			module_enum,
+	    </if>
+        <if test="configName != null and configName != ''">
+			config_name,
+	    </if>
+        <if test="configDesc != null and configDesc != ''">
+			config_desc,
+	    </if>
+        <if test="configType != null">
+			config_type,
+	    </if>
+        <if test="imgUrl != null and imgUrl != ''">
+			img_url,
+	    </if>
+        <if test="configHref != null and configHref != ''">
+			config_href,
+	    </if>
+        <if test="sort != null">
+			sort,
+	    </if>
+        <if test="beginTime != null">
+			begin_time,
+	    </if>
+        <if test="endTime != null">
+			end_time,
+	    </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="kid != null">
+			#{kid,jdbcType=BIGINT},
+	    </if>
+        <if test="createDate != null">
+			now(),
+	    </if>
+        <if test="lastUpdateDate != null">
+			#{lastUpdateDate,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="createUserId != null">
+			#{createUserId,jdbcType=BIGINT},
+	    </if>
+        <if test="lastUpdateUserId != null">
+			#{lastUpdateUserId,jdbcType=BIGINT},
+	    </if>
+        <if test="shelveFlag != null">
+			#{shelveFlag,jdbcType=TINYINT},
+	    </if>
+        <if test="moduleEnum != null and moduleEnum != ''">
+			#{moduleEnum,jdbcType=VARCHAR},
+	    </if>
+        <if test="configName != null and configName != ''">
+			#{configName,jdbcType=VARCHAR},
+	    </if>
+        <if test="configDesc != null and configDesc != ''">
+			#{configDesc,jdbcType=VARCHAR},
+	    </if>
+        <if test="configType != null">
+			#{configType,jdbcType=TINYINT},
+	    </if>
+        <if test="imgUrl != null and imgUrl != ''">
+			#{imgUrl,jdbcType=VARCHAR},
+	    </if>
+        <if test="configHref != null and configHref != ''">
+			#{configHref,jdbcType=VARCHAR},
+	    </if>
+        <if test="sort != null">
+			#{sort,jdbcType=INTEGER},
+	    </if>
+        <if test="beginTime != null">
+			#{beginTime,jdbcType=TIMESTAMP},
+	    </if>
+        <if test="endTime != null">
+			#{endTime,jdbcType=TIMESTAMP},
+	    </if>
+	    </trim>
+	</insert>
+	
+	
+	<!-- 按需修改IndexUrlConfig-->   
+    <update id="update" parameterType="com.yryz.writer.modules.indexurl.entity.IndexUrlConfig">
+        update yryz_index_url_config
+        <set>
+             <if test="createDate != null">
+    			create_date = #{createDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="lastUpdateDate != null">
+    			last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="createUserId != null">
+    			create_user_id = #{createUserId,jdbcType=BIGINT},
+    		</if>
+             <if test="lastUpdateUserId != null">
+    			last_update_user_id = #{lastUpdateUserId,jdbcType=BIGINT},
+    		</if>
+             <if test="shelveFlag != null">
+    			shelve_flag = #{shelveFlag,jdbcType=TINYINT},
+    		</if>
+            <if test="moduleEnum != null and moduleEnum != ''">
+    			module_enum = #{moduleEnum,jdbcType=VARCHAR},
+    		</if>
+            <if test="configName != null and configName != ''">
+    			config_name = #{configName,jdbcType=VARCHAR},
+    		</if>
+            <if test="configDesc != null and configDesc != ''">
+    			config_desc = #{configDesc,jdbcType=VARCHAR},
+    		</if>
+             <if test="configType != null">
+    			config_type = #{configType,jdbcType=TINYINT},
+    		</if>
+            <if test="imgUrl != null and imgUrl != ''">
+    			img_url = #{imgUrl,jdbcType=VARCHAR},
+    		</if>
+            <if test="configHref != null and configHref != ''">
+    			config_href = #{configHref,jdbcType=VARCHAR},
+    		</if>
+             <if test="sort != null">
+    			sort = #{sort,jdbcType=INTEGER},
+    		</if>
+             <if test="beginTime != null">
+    			begin_time = #{beginTime,jdbcType=TIMESTAMP},
+    		</if>
+             <if test="endTime != null">
+    			end_time = #{endTime,jdbcType=TIMESTAMP},
+    		</if>
+        </set>
+        where kid = #{kid,jdbcType=BIGINT}
+    </update>
+    
+    <!-- 查询IndexUrlConfig列表 -->
+    <select id="selectList" parameterType="com.yryz.writer.modules.indexurl.dto.IndexUrlConfigDto" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_index_url_config where 1=1
+		<if test="shelveFlag != null">
+			and shelve_flag = #{shelveFlag,jdbcType=TINYINT}
+		</if>
+    </select>
+    
+</mapper>
