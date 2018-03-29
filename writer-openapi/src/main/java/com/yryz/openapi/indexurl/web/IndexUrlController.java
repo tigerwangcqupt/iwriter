@@ -3,6 +3,7 @@ package com.yryz.openapi.indexurl.web;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 import com.yryz.openapi.index.web.IndexColumnController;
+import com.yryz.writer.common.Annotation.NotLogin;
 import com.yryz.writer.common.constant.CommonConstants;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.common.web.ResponseModel;
@@ -35,6 +36,7 @@ public class IndexUrlController extends BaseController {
 
     @Autowired
     private IndexUrlConfigApi indexUrlConfigApi;
+
 
     @ResponseBody
     @RequestMapping(value="/list", method = RequestMethod.GET)

@@ -2,6 +2,7 @@ package com.yryz.openapi.task.web;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.constant.CommonConstants;
 import com.yryz.writer.common.web.BaseController;
 import com.yryz.writer.modules.task.TaskApi;
 import com.yryz.writer.modules.task.dto.TaskDto;
@@ -30,6 +31,7 @@ public class TaskController extends BaseController {
     public RpcResponse<PageList<TaskVo>> list(TaskDto taskDto) {
         String userId = request.getHeader("userId");
         taskDto.setWriterId(Long.valueOf(userId));
+        taskDto.setShelveFlag(CommonConstants.SHELVE_YES);
         //app端进入
         taskDto.setAppOrAdmin(0);
         return taskApi.list(taskDto);
