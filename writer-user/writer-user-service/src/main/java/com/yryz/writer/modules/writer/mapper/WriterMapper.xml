@@ -14,7 +14,6 @@
 		<result column="user_name" property="userName" jdbcType="VARCHAR"/>
 		<result column="identity_card" property="identityCard" jdbcType="VARCHAR"/>
 		<result column="identity_card_photo" property="identityCardPhoto" jdbcType="VARCHAR"/>
-		<result column="handheld_photo" property="handheldPhoto" jdbcType="VARCHAR"/>
 		<result column="provice" property="provice" jdbcType="VARCHAR"/>
 		<result column="city" property="city" jdbcType="VARCHAR"/>
 		<result column="tel" property="tel" jdbcType="VARCHAR"/>
@@ -29,7 +28,7 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,handheld_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
+	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
     </sql>
 
     <!-- 查询Writer详情 -->
@@ -47,7 +46,7 @@
   
   	<!-- 新增Writer-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.writer.entity.Writer">
-	    insert into yryz_writer (kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,handheld_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id)
+	    insert into yryz_writer (kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{account,jdbcType=VARCHAR}
@@ -58,7 +57,6 @@
 				,#{userName,jdbcType=VARCHAR}
 				,#{identityCard,jdbcType=VARCHAR}
 				,#{identityCardPhoto,jdbcType=VARCHAR}
-				,#{handheldPhoto,jdbcType=VARCHAR}
 				,#{provice,jdbcType=VARCHAR}
 				,#{city,jdbcType=VARCHAR}
 				,#{tel,jdbcType=VARCHAR}
@@ -104,9 +102,6 @@
         <if test="identityCardPhoto != null and identityCardPhoto != ''">
 			identity_card_photo,
 	    </if>
-		<if test="handheldPhoto != null and handheldPhoto != ''">
-			handheld_photo,
-		</if>
         <if test="provice != null and provice != ''">
 			provice,
 	    </if>
@@ -169,9 +164,6 @@
         <if test="identityCardPhoto != null and identityCardPhoto != ''">
 			#{identityCardPhoto,jdbcType=VARCHAR},
 	    </if>
-		<if test="handheldPhoto != null and handheldPhoto != ''">
-			#{handheldPhoto,jdbcType=VARCHAR},
-		</if>
         <if test="provice != null and provice != ''">
 			#{provice,jdbcType=VARCHAR},
 	    </if>
@@ -253,9 +245,6 @@
             <if test="identityCardPhoto != null and identityCardPhoto != ''">
     			identity_card_photo = #{identityCardPhoto,jdbcType=VARCHAR},
     		</if>
-			<if test="handheldPhoto != null and handheldPhoto != ''">
-				handheld_photo = #{handheldPhoto,jdbcType=VARCHAR},
-			</if>
             <if test="provice != null and provice != ''">
     			provice = #{provice,jdbcType=VARCHAR},
     		</if>
@@ -394,7 +383,6 @@
 		w.user_bank_cart,
 		w.identity_card,
 		w.identity_card_photo,
-		w.handheld_photo,
 		w.provice,
 		w.city,
 		w.email,

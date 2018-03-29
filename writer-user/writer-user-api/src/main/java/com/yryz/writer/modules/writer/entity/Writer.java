@@ -130,19 +130,6 @@ public class Writer extends GenericEntity{
 	 */
 	private String userBankCart;
 
-	/**
-	 * 身份证手持照片
-	 */
-	private  String handheldPhoto;
-
-	public String getHandheldPhoto() {
-		return handheldPhoto;
-	}
-
-	public void setHandheldPhoto(String handheldPhoto) {
-		this.handheldPhoto = handheldPhoto;
-	}
-
 	public String getProfitSn() {
 		return profitSn;
 	}
