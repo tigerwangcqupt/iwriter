@@ -101,14 +101,14 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
         List<WriterAdminVo> list = writerDao.selectWriterList(writerDto);
         if(list != null && list.size() > 0) {
             for(WriterAdminVo writerAdminVo : list){
-
                 //设置手持照片
                 BankDto bankDto = new BankDto();
                 bankDto.setCreateUserId(String.valueOf(writerAdminVo.getKid()));
                 BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
                 if(bankVo != null){
-                    writerAdminVo.setHandheldPhoto(bankVo.getHandheldPhoto());
                     writerAdminVo.setUserName(bankVo.getUserName());
+                }else{
+                    writerAdminVo.setUserName("");
                 }
             }
         }
@@ -347,8 +347,24 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
 
     @Override
     public PageList<WriterAdminRefProfit> selectAdminProfitList(WriterDto writerDto) {
+
         PageUtils.startPage(writerDto.getCurrentPage(), writerDto.getPageSize());
-        return new PageModel<WriterAdminRefProfit>().getPageList(writerDao.selectAdminProfitList(writerDto));
+        List<WriterAdminRefProfit> list = writerDao.selectAdminProfitList(writerDto);
+        if(list != null && list.size() > 0) {
+            for(WriterAdminRefProfit writerAdminVo : list){
+                //设置手持照片
+                BankDto bankDto = new BankDto();
+                bankDto.setCreateUserId(String.valueOf(writerAdminVo.getKid()));
+                BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
+                if(bankVo != null){
+                    writerAdminVo.setUserName(bankVo.getUserName());
+                }else{
+                    writerAdminVo.setUserName("");
+                }
+            }
+        }
+
+        return new PageModel<WriterAdminRefProfit>().getPageList(list);
     }
 
     @Override
