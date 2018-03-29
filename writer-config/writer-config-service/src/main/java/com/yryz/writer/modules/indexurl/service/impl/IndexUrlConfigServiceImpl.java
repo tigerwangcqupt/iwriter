@@ -40,7 +40,9 @@ public class IndexUrlConfigServiceImpl extends BaseServiceImpl implements IndexU
         if(list != null && list.size() > 0) {
             for(IndexUrlConfig indexUrlConfig : list){
                 IndexUrlConfigVo indexUrlConfigVo = new IndexUrlConfigVo();
-                //IndexUrlConfig to IndexUrlConfigVo
+                BeanUtils.copyProperties(indexUrlConfig,indexUrlConfigVo);
+                indexUrlConfigVo.setStartDate(DateUtil.getString(indexUrlConfig.getBeginTime()));
+                indexUrlConfigVo.setEndDate(DateUtil.getString(indexUrlConfig.getEndTime()));
                 indexUrlConfigVoList.add(indexUrlConfigVo);
             }
         }

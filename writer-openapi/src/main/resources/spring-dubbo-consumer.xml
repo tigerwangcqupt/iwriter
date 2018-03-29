@@ -71,4 +71,8 @@
                      interface="com.yryz.writer.modules.platform.SmsCommonApi" registry="yryz-new"
                      check="false" timeout="10000" retries="0"/>
 
+    <dubbo:reference id="indexUrlConfigApiApi"
+                     interface="com.yryz.writer.modules.indexurl.IndexUrlConfigApi" registry="yryz-new"
+                     check="false" timeout="10000" retries="0"/>
+
 </beans>
