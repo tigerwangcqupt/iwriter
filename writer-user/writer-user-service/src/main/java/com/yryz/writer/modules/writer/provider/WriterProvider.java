@@ -73,7 +73,7 @@ public class WriterProvider implements WriterApi {
 
 	/**
 	*  获取Writer明细
-	*  @param  writerId
+	*  @param  kid
 	*  @return
 	* */
 	public RpcResponse<WriterVo> detail(Long kid) {
@@ -96,6 +96,13 @@ public class WriterProvider implements WriterApi {
 				if(bankVo != null){
 					writerVo.setHandheldPhoto(bankVo.getHandheldPhoto());
 					writerVo.setUserName(bankVo.getUserName());
+					writerVo.setIdentityCard(bankVo.getUserCart());
+					writerVo.setProvice(bankVo.getProvice());
+					writerVo.setProviceName(bankVo.getProviceName());
+					writerVo.setCity(bankVo.getCity());
+					writerVo.setCityName(bankVo.getCityName());
+					writerVo.setTel(writerVo.getPhone());
+					writerVo.setEmail(writerVo.getEmail());
 				}
 
 			}
