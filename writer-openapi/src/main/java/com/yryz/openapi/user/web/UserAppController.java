@@ -163,7 +163,7 @@ public class UserAppController extends BaseController {
             user.setPhone(custRegister.getCustPhone());
             user.setAccount(custRegister.getCustPhone());
             user.setUserStatus(2);
-            user.setPhone(custRegister.getCustPhone());//设置联系方式
+            user.setTel(custRegister.getCustPhone());//设置联系方式
             RpcResponse<Long> rpcResponseRegister = writerApi.register(user);
             Long kid = isSuccess(rpcResponseRegister);
 
