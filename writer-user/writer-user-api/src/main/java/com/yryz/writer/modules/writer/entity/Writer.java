@@ -1,6 +1,7 @@
 package com.yryz.writer.modules.writer.entity;
 
 import com.yryz.writer.common.entity.GenericEntity;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -134,6 +135,19 @@ public class Writer extends GenericEntity{
 	 * 是否实名认证
 	 */
 	private Integer certificationFlag;
+
+	/**
+	 * 身份证手持照片
+	 */
+	private  String handheldPhoto;
+
+	public String getHandheldPhoto() {
+		return handheldPhoto;
+	}
+
+	public void setHandheldPhoto(String handheldPhoto) {
+		this.handheldPhoto = handheldPhoto;
+	}
 
 	public Integer getCertificationFlag() {
 		return certificationFlag;

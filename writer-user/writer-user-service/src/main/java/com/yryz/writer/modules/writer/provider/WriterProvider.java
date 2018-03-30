@@ -88,23 +88,6 @@ public class WriterProvider implements WriterApi {
 				if(cityVo!=null){
 					writerVo.setCityName(cityVo.getCityName());
 				}
-
-				//设置手持照片
-				BankDto bankDto = new BankDto();
-				bankDto.setCreateUserId(String.valueOf(kid));
-				BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
-				if(bankVo != null){
-					writerVo.setHandheldPhoto(bankVo.getHandheldPhoto());
-					writerVo.setUserName(bankVo.getUserName());
-					writerVo.setIdentityCard(bankVo.getUserCart());
-					writerVo.setProvice(bankVo.getProvice());
-					writerVo.setProviceName(bankVo.getProviceName());
-					writerVo.setCity(bankVo.getCity());
-					writerVo.setCityName(bankVo.getCityName());
-					writerVo.setTel(writerVo.getPhone());
-					writerVo.setEmail(writerVo.getEmail());
-				}
-
 			}
 			return ResponseModel.returnObjectSuccess(writerVo);
 		} catch (Exception e) {
@@ -115,7 +98,7 @@ public class WriterProvider implements WriterApi {
 	
 	/**
 	*  获取Writer明细
-	*  @param  writerId
+	*  @param  kid
 	*  @return
 	* */
 	public RpcResponse<WriterAdminVo> getWriterDetail(Long kid) {
@@ -129,15 +112,6 @@ public class WriterProvider implements WriterApi {
 				CityVo cityVo = cityApi.selectCity(writerAdminVo.getCity()).getData();
 				if(cityVo!=null){
 					writerAdminVo.setCityName(cityVo.getCityName());
-				}
-
-				//设置手持照片
-				BankDto bankDto = new BankDto();
-				bankDto.setCreateUserId(String.valueOf(kid));
-				BankVo bankVo = bankApi.selectByParameters(bankDto).getData();
-				if(bankVo != null){
-					writerAdminVo.setHandheldPhoto(bankVo.getHandheldPhoto());
-					writerAdminVo.setUserName(bankVo.getUserName());
 				}
 			}
 			return ResponseModel.returnObjectSuccess(writerAdminVo);

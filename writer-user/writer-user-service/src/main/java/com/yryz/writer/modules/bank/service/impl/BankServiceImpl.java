@@ -231,6 +231,15 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             if(null != bank.getHandheldPhoto() && bank.getHandheldPhoto().trim().length() > 0){
                 writer.setCertificationFlag(1);//已实名认证
             }
+
+
+            //更新银行卡信息到写手表
+            writer.setHandheldPhoto(bank.getHandheldPhoto());
+            writer.setUserName(bank.getUserName());
+            writer.setIdentityCard(bank.getUserCart());
+            writer.setProvice(bank.getProvice());
+            writer.setCity(bank.getCity());
+
             writerService.update(writer);
         }catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -274,6 +283,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             Writer writer = new Writer();
             writer.setKid(Long.valueOf(bank.getCreateUserId()));
             writer.setUserBankCart(bank.getUserBankCart());
+
+            //更新银行卡信息到写手表
+            writer.setHandheldPhoto(bank.getHandheldPhoto());
+            writer.setUserName(bank.getUserName());
+            writer.setIdentityCard(bank.getUserCart());
+            writer.setProvice(bank.getProvice());
+            writer.setCity(bank.getCity());
             writerService.update(writer);
 
             bankDao.update(bank);

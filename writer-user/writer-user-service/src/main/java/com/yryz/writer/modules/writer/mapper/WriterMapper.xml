@@ -27,10 +27,11 @@
 		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
 		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
 		<result column="last_update_user_id" property="lastUpdateUserId" jdbcType="VARCHAR"/>
+		<result column="handheld_photo" property="handheldPhoto" jdbcType="VARCHAR"/>
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,certification_flag,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id
+	<sql id="Base_Column_List">id,kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,certification_flag,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id,handheld_photo
     </sql>
 
     <!-- 查询Writer详情 -->
@@ -48,7 +49,7 @@
   
   	<!-- 新增Writer-->
     <insert id="insert"  parameterType="com.yryz.writer.modules.writer.entity.Writer">
-	    insert into yryz_writer (kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,certification_flag,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id)
+	    insert into yryz_writer (kid,account,pwd,nick_name,head_img,phone,user_name,identity_card,identity_card_photo,provice,city,tel,email,user_status,certification_flag,device_id,jpush_registration_id,create_date,create_user_id,last_update_date,last_update_user_id,handheld_photo)
 	    values (
 	    	#{kid,jdbcType=BIGINT}
 				,#{account,jdbcType=VARCHAR}
@@ -71,6 +72,7 @@
 				,#{createUserId,jdbcType=VARCHAR}
 			,NOW()
 				,#{lastUpdateUserId,jdbcType=VARCHAR}
+				,#{handheldPhoto,jdbcType=VARCHAR}
 	    )
 	</insert>
 	
@@ -141,6 +143,9 @@
         <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
 			last_update_user_id,
 	    </if>
+		<if test="handheldPhoto != null and handheldPhoto != ''">
+			handheld_photo,
+		</if>
 	    </trim>
 	    <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="kid != null">
@@ -221,6 +226,9 @@
 			</if>
 			<if test="lastUpdateDate != null">
 				#{lastUpdateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="handheldPhoto != null and handheldPhoto != ''">
+				#{handheldPhoto,jdbcType=VARCHAR},
 			</if>
 	    </trim>
 	</insert>
@@ -324,6 +332,10 @@
 			<if test="userBankCart != null">
 				user_bank_cart = #{userBankCart},
 			</if>
+			<if test="handheldPhoto != null and handheldPhoto!=''">
+				handheld_photo = #{handheldPhoto}
+			</if>
+
         </set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
@@ -389,6 +401,7 @@
 		w.user_name,
 		w.phone,
 		w.remark,
+		w.handheld_photo,
 		h.audit_date,
 		h.apply_date,
 		w.create_date AS register_date,
