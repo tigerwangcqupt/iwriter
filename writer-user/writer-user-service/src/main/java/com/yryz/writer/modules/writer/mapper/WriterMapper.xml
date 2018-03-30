@@ -270,7 +270,7 @@
     			user_status = #{userStatus,jdbcType=TINYINT},
     		</if>
 			<if test="certificationFlag != null">
-				user_status = #{certificationFlag,jdbcType=TINYINT},
+				certification_flag = #{certificationFlag,jdbcType=TINYINT},
 			</if>
 
             <if test="deviceId != null and deviceId != ''">
