@@ -565,10 +565,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         }
 
         //是否实名认证
-        WriterVo writerVo = writerService.detail(userId);
+       /* WriterVo writerVo = writerService.detail(userId);
         if(writerVo != null){
             profitStaticsVo.setCertificationFlag(writerVo.getCertificationFlag());
-        }
+        }*/
 
 
 
