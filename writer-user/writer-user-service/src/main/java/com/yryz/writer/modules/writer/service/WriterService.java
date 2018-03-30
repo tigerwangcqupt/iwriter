@@ -45,6 +45,8 @@ public interface WriterService extends BaseService {
 
    Writer selectByPhone(String phone);
 
+    Writer selectByKid(Long kid) ;
+
    String getImageCode (String phone);
 
    Boolean checkImageCode(String phone, String imageCode);

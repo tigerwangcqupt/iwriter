@@ -1,6 +1,7 @@
 package com.yryz.writer.modules.bank.service.impl;
 
 import com.alibaba.dubbo.rpc.RpcContext;
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.qstone.entity.base.constants.AccountConstants;
 import com.yryz.qstone.entity.base.dto.BankCardDto;
 import com.yryz.qstone.entity.base.model.Owner;
@@ -25,10 +26,13 @@ import com.yryz.writer.modules.bank.service.BankService;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
+import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.province.ProvinceApi;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
+import com.yryz.writer.modules.writer.WriterStatisticsApi;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.entity.WriterStatistics;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
 import org.apache.commons.collections.CollectionUtils;
@@ -70,6 +74,13 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
 
     @Autowired
     private WriterService writerService;
+
+    @Autowired
+    private ProfitApi profitApi;
+
+    @Autowired
+    private WriterStatisticsApi writerStatisticsApi;
+
 
     @Value("${clientCode}")
     private String clientCode;
@@ -158,6 +169,30 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
                 throw new YyrzPcException(ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getCode(),ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getMsg(),
                         ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
             }
+
+
+            //绑定资金主体
+            Writer writerProfit = writerService.selectByKid(Long.parseLong(bank.getCreateUserId()));
+            if(null == writerProfit.getNickName() || "".equals(writerProfit.getNickName())){
+               writerProfit.setNickName(bank.getUserName());
+           }
+            RpcResponse<Writer> profitResult = profitApi.bindCapital(writerProfit);
+            if (!profitResult.success()) {
+                logger.error("profitApi bindCapital：绑定资金主体失败");
+                throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),
+                        ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg());
+            }
+
+            //写手审核通过初始化统计信息
+            WriterStatistics writerStatistics = new WriterStatistics();
+            writerStatistics.setWriterKid(writerProfit.getKid());
+            RpcResponse<WriterStatistics> rst = writerStatisticsApi.insert(writerStatistics);
+            if(!rst.success()){
+                logger.error("写手审核通过初始化统计信息接口调用失败");
+                throw new YyrzPcException(ExceptionEnum.Exception.getCode(),ExceptionEnum.Exception.getMsg(),
+                        ExceptionEnum.Exception.getErrorMsg());
+            }
+
             //资金主体外码
             Long ownerFcode = findOwnerByWriter(bank);
             if(null == ownerFcode){

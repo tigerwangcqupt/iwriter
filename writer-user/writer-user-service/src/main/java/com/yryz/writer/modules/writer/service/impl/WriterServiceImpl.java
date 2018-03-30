@@ -207,6 +207,12 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
     }
 
     @Override
+    public Writer selectByKid(Long kid) {
+        Writer writer = writerDao.selectByKid(Writer.class,kid);
+        return writer;
+    }
+
+    @Override
     public String getImageCode(String phone) {
         String code = null;
         try {
