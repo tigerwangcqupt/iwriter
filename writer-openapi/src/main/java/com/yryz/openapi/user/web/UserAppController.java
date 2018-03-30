@@ -18,8 +18,11 @@ import com.yryz.writer.modules.platform.SmsCommonApi;
 import com.yryz.writer.modules.platform.constants.SmsTypeEnum;
 import com.yryz.writer.modules.platform.dto.CustRegisterDto;
 import com.yryz.writer.modules.platform.vo.AuthInfoVo;
+import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.writer.WriterApi;
+import com.yryz.writer.modules.writer.WriterStatisticsApi;
 import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.entity.WriterStatistics;
 import com.yryz.writer.modules.writer.vo.WriterUserVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
 import org.apache.commons.lang3.StringUtils;
@@ -67,7 +70,11 @@ public class UserAppController extends BaseController {
     //要修改称新悠然一指的短信模板
     private static final String YRYZ_CHANNEL = "YRYZ";
 
+    @Autowired
+    private ProfitApi profitApi;
 
+    @Autowired
+    private WriterStatisticsApi writerStatisticsApi;
 
     /**
      * 获取短信验证码
@@ -170,6 +177,25 @@ public class UserAppController extends BaseController {
                     messagePush(user);
                 }
             }, 10, TimeUnit.SECONDS);*/
+
+
+            //通过审核，调用资金主题
+            RpcResponse<Writer> profitResult = profitApi.bindCapital(user);
+            if (!profitResult.success()) {
+                LOGGER.error("profitApi bindCapital：绑定资金主体失败");
+                throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),
+                        ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg());
+            }
+
+            //写手审核通过初始化统计信息
+            WriterStatistics writerStatistics = new WriterStatistics();
+            writerStatistics.setWriterKid(user.getKid());
+            RpcResponse<WriterStatistics> rst = writerStatisticsApi.insert(writerStatistics);
+            if(!rst.success()){
+                LOGGER.error("写手审核通过初始化统计信息接口调用失败");
+                throw new YyrzPcException(ExceptionEnum.Exception.getCode(),ExceptionEnum.Exception.getMsg(),
+                        ExceptionEnum.Exception.getErrorMsg());
+            }
 
             //输出参数
             WriterUserVo authInfoVo = new WriterUserVo();
