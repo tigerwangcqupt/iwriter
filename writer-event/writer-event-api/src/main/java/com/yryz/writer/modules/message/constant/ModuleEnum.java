@@ -54,7 +54,13 @@ public enum ModuleEnum {
     FANS("10007",
             "粉丝",
             "fans",
-            "/fans")
+            "/fans"),
+
+    /** 活动 */
+    ACTIVITY("10008",
+            "活动",
+            "activity",
+            "/activity")
     ;
 
     //编码
