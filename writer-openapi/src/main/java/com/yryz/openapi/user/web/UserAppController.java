@@ -20,8 +20,10 @@ import com.yryz.writer.modules.platform.dto.CustRegisterDto;
 import com.yryz.writer.modules.platform.vo.AuthInfoVo;
 import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.writer.WriterApi;
+import com.yryz.writer.modules.writer.WriterAuditApi;
 import com.yryz.writer.modules.writer.WriterStatisticsApi;
 import com.yryz.writer.modules.writer.entity.Writer;
+import com.yryz.writer.modules.writer.entity.WriterAudit;
 import com.yryz.writer.modules.writer.entity.WriterStatistics;
 import com.yryz.writer.modules.writer.vo.WriterUserVo;
 import com.yryz.writer.modules.writer.vo.WriterVo;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -159,7 +162,6 @@ public class UserAppController extends BaseController {
             user.setAccount(custRegister.getCustPhone());
             user.setPhone(custRegister.getCustPhone());
             user.setAccount(custRegister.getCustPhone());
-            user.setUserStatus(2);//默认注册成功，为审核通过用户
 
             RpcResponse<Long> rpcResponseRegister = writerApi.register(user);
             Long kid = isSuccess(rpcResponseRegister);

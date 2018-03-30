@@ -14,16 +14,15 @@ import com.yryz.writer.modules.id.api.IdAPI;
 import com.yryz.writer.modules.province.ProvinceApi;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.WriterApi;
-import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
-import com.yryz.writer.modules.writer.vo.WriterAdminVo;
-import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
-import com.yryz.writer.modules.writer.vo.WriterVo;
+import com.yryz.writer.modules.writer.WriterAuditApi;
+import com.yryz.writer.modules.writer.vo.*;
 import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
 import com.yryz.writer.modules.writer.service.WriterAuditService;
 import com.yryz.writer.modules.writer.service.WriterService;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -55,6 +54,8 @@ public class WriterProvider implements WriterApi {
 	@Autowired
 	private BankApi bankApi;
 
+	@Autowired
+	private WriterAuditApi writerAuditApi;
 	
 	/**
 	*  获取Writer明细
@@ -248,6 +249,12 @@ public class WriterProvider implements WriterApi {
 			Long kid = idAPI.getId("yryz_writer");
 			user.setKid(kid);
 			writerService.insertByPrimaryKeySelective(user);
+
+
+			//设置为写手审核成功
+			writerAuditApi.auditUser(user);
+
+
 			return ResponseModel.returnObjectSuccess(kid);
 		} catch (Exception e) {
 			logger.error("新增用户失败！" + e);

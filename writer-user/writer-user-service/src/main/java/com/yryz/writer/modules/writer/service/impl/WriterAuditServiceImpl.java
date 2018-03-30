@@ -9,6 +9,7 @@ import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
 
+import com.yryz.writer.modules.id.api.IdAPI;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +55,9 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
     
     @Autowired
     private WriterStatisticsApi writerStatisticsApi;
+
+	@Autowired
+	private IdAPI idAPI;
 
     protected BaseDao getDao() {
         return writerAuditDao;
@@ -162,8 +166,29 @@ public class WriterAuditServiceImpl extends BaseServiceImpl implements WriterAud
 		}
 		return 1;
 	}
-    
-    
-    
+
+
+	@Override
+	@Transactional
+	public int auditUser(Writer writer) {
+		// 新增审核信息
+		WriterAudit writerAudit = new WriterAudit();
+		Long kid = idAPI.getId("yryz_writer_audit_history");
+		writerAudit.setKid(kid);
+		writerAudit.setWriterKid(writer.getKid());
+		writerAudit.setUserName(writer.getUserName());
+		writerAudit.setIdentityCard(writer.getIdentityCard());
+		writerAudit.setIdentityCardPhoto(writer.getIdentityCardPhoto());
+		writerAudit.setProvice(writer.getProvice());
+		writerAudit.setCity(writer.getCity());
+		writerAudit.setTel(writer.getTel());
+		writerAudit.setEmail(writer.getEmail());
+		writerAudit.setAuditStatus(2);
+		writerAudit.setCreateUserId(writer.getKid().toString());
+		writerAudit.setLastUpdateUserId(writer.getKid().toString());
+		writerAuditDao.insertByPrimaryKeySelective(writerAudit);
+
+		return 1;
+	}
     
  }

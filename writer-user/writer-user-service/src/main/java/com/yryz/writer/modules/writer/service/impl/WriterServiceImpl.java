@@ -15,6 +15,7 @@ import com.yryz.component.rpc.dto.PageList;
 import com.yryz.writer.modules.bank.BankApi;
 import com.yryz.writer.modules.bank.dto.BankDto;
 import com.yryz.writer.modules.bank.vo.BankVo;
+import com.yryz.writer.modules.writer.WriterAuditApi;
 import com.yryz.writer.modules.writer.vo.WriterAdminRefProfit;
 import com.yryz.writer.modules.writer.vo.WriterAdminVo;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
@@ -64,6 +65,7 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
 
     @Autowired
     private BankApi bankApi;
+
 
     public final static int LOCK_EXPIRE_DEFAULT = 60;
 
@@ -163,7 +165,7 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
 					ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
 		}
 		// 更新写手信息
-		writer.setUserStatus(1);
+		writer.setUserStatus(2);
 		writerDao.update(writer);
 		// 新增审核信息
 		WriterAudit writerAudit = new WriterAudit();

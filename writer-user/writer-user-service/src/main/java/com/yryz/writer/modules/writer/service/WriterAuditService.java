@@ -2,6 +2,7 @@ package com.yryz.writer.modules.writer.service;
 
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.writer.dto.WriterAuditDto;
+import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.vo.WriterAuditVo;
 
 import java.util.List;
@@ -28,5 +29,7 @@ public interface WriterAuditService extends BaseService {
    WriterAuditVo detail(Long kid);
    
    int audit(WriterAuditVo writerAuditVo);
+
+   int auditUser(Writer writer);
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.vo.WriterAuditVo;
 import com.yryz.writer.modules.writer.dto.WriterAuditDto;
 import com.yryz.writer.modules.writer.entity.WriterAudit;
@@ -42,6 +43,6 @@ public interface WriterAuditApi {
     RpcResponse<List<WriterAuditVo>> exportList(WriterAuditDto writerAuditDto);
     
     RpcResponse<Integer> audit(WriterAuditVo WriterAuditVo);
-    
 
+    RpcResponse<Integer> auditUser(Writer writer);
 }
