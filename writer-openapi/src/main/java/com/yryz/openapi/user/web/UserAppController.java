@@ -162,7 +162,7 @@ public class UserAppController extends BaseController {
             user.setAccount(custRegister.getCustPhone());
             user.setPhone(custRegister.getCustPhone());
             user.setAccount(custRegister.getCustPhone());
-
+            user.setUserStatus(2);
             RpcResponse<Long> rpcResponseRegister = writerApi.register(user);
             Long kid = isSuccess(rpcResponseRegister);
 
