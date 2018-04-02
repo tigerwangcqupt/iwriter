@@ -11,6 +11,7 @@ import com.yryz.writer.modules.bank.vo.BankVo;
 import com.yryz.writer.modules.city.CityApi;
 import com.yryz.writer.modules.city.vo.CityVo;
 import com.yryz.writer.modules.id.api.IdAPI;
+import com.yryz.writer.modules.profit.ProfitApi;
 import com.yryz.writer.modules.province.ProvinceApi;
 import com.yryz.writer.modules.province.vo.ProvinceVo;
 import com.yryz.writer.modules.writer.WriterApi;
@@ -56,6 +57,9 @@ public class WriterProvider implements WriterApi {
 
 	@Autowired
 	private WriterAuditApi writerAuditApi;
+
+	@Autowired
+	private ProfitApi profitApi;
 	
 	/**
 	*  获取Writer明细
@@ -235,6 +239,17 @@ public class WriterProvider implements WriterApi {
 			//设置为写手审核成功
 			writerAuditApi.auditUser(user);
 
+			//绑定资金主体
+			if(null == user.getNickName() || "".equals(user.getNickName())){
+				user.setNickName(user.getPhone());
+			}
+
+			RpcResponse<Writer> profitResult = profitApi.bindCapital(user);
+			if (!profitResult.success()) {
+				logger.error("profitApi bindCapital：绑定资金主体失败");
+				throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),
+						ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg());
+			}
 
 			return ResponseModel.returnObjectSuccess(kid);
 		} catch (Exception e) {

@@ -170,22 +170,9 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
                         ExceptionEnum.NOT_FOUNTD_USERCARD_EXCEPTION.getErrorMsg());
             }
 
-
-            //绑定资金主体
-            Writer writerProfit = writerService.selectByKid(Long.parseLong(bank.getCreateUserId()));
-            if(null == writerProfit.getNickName() || "".equals(writerProfit.getNickName())){
-               writerProfit.setNickName(bank.getUserName());
-           }
-            RpcResponse<Writer> profitResult = profitApi.bindCapital(writerProfit);
-            if (!profitResult.success()) {
-                logger.error("profitApi bindCapital：绑定资金主体失败");
-                throw new YyrzPcException(ExceptionEnum.ADD_OWNER_EXCEPTION.getCode(),ExceptionEnum.ADD_OWNER_EXCEPTION.getMsg(),
-                        ExceptionEnum.ADD_OWNER_EXCEPTION.getErrorMsg());
-            }
-
             //写手审核通过初始化统计信息
             WriterStatistics writerStatistics = new WriterStatistics();
-            writerStatistics.setWriterKid(writerProfit.getKid());
+            writerStatistics.setWriterKid(Long.parseLong(bank.getCreateUserId()));
             RpcResponse<WriterStatistics> rst = writerStatisticsApi.insert(writerStatistics);
             if(!rst.success()){
                 logger.error("写手审核通过初始化统计信息接口调用失败");
