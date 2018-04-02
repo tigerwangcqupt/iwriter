@@ -55,6 +55,9 @@ public class IndexUrlConfigServiceImpl extends BaseServiceImpl implements IndexU
     public PageList<IndexUrlConfigVo> selectAdminList(IndexUrlConfigDto indexUrlConfigDto) {
         PageUtils.startPage(indexUrlConfigDto.getCurrentPage(), indexUrlConfigDto.getPageSize());
         List<IndexUrlConfig> list = indexUrlConfigDao.selectList(indexUrlConfigDto);
+
+        //PageList<IndexUrlConfig> pageList = new PageModel<IndexUrlConfig>().getPageList(list);
+
         List<IndexUrlConfigVo> indexUrlConfigVoList = new ArrayList <IndexUrlConfigVo>();
         if(list != null && list.size() > 0) {
             for(IndexUrlConfig indexUrlConfig : list){
@@ -65,7 +68,7 @@ public class IndexUrlConfigServiceImpl extends BaseServiceImpl implements IndexU
                 indexUrlConfigVoList.add(indexUrlConfigVo);
             }
         }
-        return new PageModel<IndexUrlConfigVo>().getPageList(indexUrlConfigVoList);
+        return new PageModel<IndexUrlConfigVo>().getPageList(list,indexUrlConfigVoList);
     }
 
 
