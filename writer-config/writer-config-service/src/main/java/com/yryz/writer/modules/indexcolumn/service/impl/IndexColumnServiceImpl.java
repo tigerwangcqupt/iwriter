@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.indexcolumn.service.impl;
 
+import com.yryz.writer.common.constant.CommonConstants;
 import com.yryz.writer.common.constant.ExceptionEnum;
 import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.utils.PageUtils;
@@ -8,14 +9,21 @@ import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.web.PageModel;
 import com.yryz.component.rpc.RpcResponse;
 import com.yryz.component.rpc.dto.PageList;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.writer.modules.indexcolumn.service.ValidateIndexColumnService;
 import com.yryz.writer.modules.indexcolumn.vo.IndexItemVo;
+import com.yryz.writer.modules.indexurl.constant.IndexUrlConfigConstants;
+import com.yryz.writer.modules.indexurl.dto.IndexUrlConfigDto;
+import com.yryz.writer.modules.indexurl.service.IndexUrlConfigService;
+import com.yryz.writer.modules.indexurl.vo.IndexUrlConfigVo;
 import com.yryz.writer.modules.message.MessageApi;
 import com.yryz.writer.modules.message.constant.ModuleEnum;
 import com.yryz.writer.modules.message.constant.ModuleEnumConstants;
 import com.yryz.writer.modules.message.dto.MessageDto;
 import com.yryz.writer.modules.message.vo.IndexTipsVo;
 import com.yryz.writer.modules.message.vo.MessageNumVo;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +53,9 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
 
     @Autowired
     private ValidateIndexColumnService validateIndexColumnService;
+
+    @Autowired
+    private IndexUrlConfigService indexUrlConfigService;
 
     protected BaseDao getDao() {
         return indexColumnDao;
@@ -97,6 +108,16 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
                     if (indexColumn == null) continue;
                     IndexItemVo indexItemVo = new IndexItemVo();
                     String columnName = indexColumn.getItemName();
+                    //判断活动
+                    if(StringUtils.isNotEmpty(columnName) && columnName.equals(ModuleEnum.ACTIVITY.getName())){
+                        IndexUrlConfigDto indexUrlConfigDto = new IndexUrlConfigDto();
+                        indexUrlConfigDto.setType(IndexUrlConfigConstants.TWOSTATUS);
+                        indexUrlConfigDto.setShelveFlag(CommonConstants.SHELVE_YES);
+                        PageList<IndexUrlConfigVo> result = indexUrlConfigService.selectList(indexUrlConfigDto);
+                        if(null != result && CollectionUtils.isEmpty(result.getEntities())){
+                             continue;
+                        }
+                    }
                     //栏目名称 中文
                     indexItemVo.setColumnName(columnName);
                     indexItemVo.setColumnUrl(indexColumn.getUrl());

@@ -53,6 +53,11 @@ public class ModuleEnumConstants {
      */
     public static final String FANS = ModuleEnum.FANS.getId();
 
+    /**
+     * 活动
+     */
+    public static final String ACTIVITY = ModuleEnum.ACTIVITY.getId();
+
     //全部ModuleEnum对象
     public static final Map<String, ModuleEnum> moduleEnumMap = new HashMap<>();
 
