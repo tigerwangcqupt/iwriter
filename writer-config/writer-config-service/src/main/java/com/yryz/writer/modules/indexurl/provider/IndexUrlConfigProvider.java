@@ -98,4 +98,14 @@ public class IndexUrlConfigProvider implements IndexUrlConfigApi {
 		}
 	}
 
+	@Override
+	public RpcResponse<Boolean> batchUpdateStatus(IndexUrlConfigDto indexUrlConfigDto) {
+		try {
+			return ResponseModel.returnListSuccess(indexUrlConfigService.batchUpdateStatus(indexUrlConfigDto));
+		} catch (Exception e) {
+			logger.error("批量修改url配置失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
 }

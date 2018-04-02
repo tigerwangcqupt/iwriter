@@ -30,4 +30,6 @@ public interface IndexUrlConfigService extends BaseService {
 
    public IndexUrlConfig updateIndexConfig(IndexUrlConfig indexUrlConfig);
 
+   public boolean batchUpdateStatus(IndexUrlConfigDto indexUrlConfigDto);
+
 }

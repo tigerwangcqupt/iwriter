@@ -10,6 +10,7 @@ import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.writer.modules.indexcolumn.dto.IndexColumnDto;
 import com.yryz.writer.modules.indexcolumn.vo.IndexColumnVo;
 import com.yryz.writer.modules.indexurl.IndexUrlConfigApi;
+import com.yryz.writer.modules.indexurl.constant.IndexUrlConfigConstants;
 import com.yryz.writer.modules.indexurl.dto.IndexUrlConfigDto;
 import com.yryz.writer.modules.indexurl.vo.IndexUrlConfigVo;
 import org.apache.commons.collections.CollectionUtils;
@@ -43,6 +44,7 @@ public class IndexUrlController extends BaseController {
     public RpcResponse<Map<String,Object>> list() {
         Map<String,Object> map = new HashMap<>();
         IndexUrlConfigDto indexUrlConfigDto = new IndexUrlConfigDto();
+        indexUrlConfigDto.setType(IndexUrlConfigConstants.TWOSTATUS);
         indexUrlConfigDto.setShelveFlag(CommonConstants.SHELVE_YES);
         RpcResponse<PageList<IndexUrlConfigVo>> result = indexUrlConfigApi.list(indexUrlConfigDto);
         if(result.success()){

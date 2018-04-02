@@ -58,4 +58,11 @@ public interface IndexUrlConfigApi {
 	 *  @return
 	 * */
 	RpcResponse<IndexUrlConfig> updateIndexConfig(IndexUrlConfig indexUrlConfig);
+
+	/**
+	 * 批量修改
+	 * @param indexUrlConfigDto
+	 * @return
+	 */
+	RpcResponse<Boolean> batchUpdateStatus(IndexUrlConfigDto indexUrlConfigDto);
 }
