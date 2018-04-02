@@ -243,6 +243,9 @@ public class WriterProvider implements WriterApi {
 			if(null == user.getNickName() || "".equals(user.getNickName())){
 				user.setNickName(user.getPhone());
 			}
+			if(null == user.getUserName() || "".equals(user.getUserName())){
+				user.setUserName(user.getPhone());
+			}
 
 			RpcResponse<Writer> profitResult = profitApi.bindCapital(user);
 			if (!profitResult.success()) {
