@@ -537,7 +537,7 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
         PageUtils.startPage(profitDto.getCurrentPage(), profitDto.getPageSize());
         List<ProfitDetailVo> list = profitDao.selectFlowList(profitDto);
         List<ProfitAdminVo> profitAdminVoList = fillProfitData(list);
-        return new PageModel<ProfitAdminVo>().getPageList(profitAdminVoList);
+        return new PageModel<ProfitAdminVo>().getPageList(list,profitAdminVoList);
     }
 
     @Override
