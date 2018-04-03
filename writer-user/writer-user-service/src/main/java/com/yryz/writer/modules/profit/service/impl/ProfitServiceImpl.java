@@ -167,10 +167,11 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
                 throw new YyrzPcException(ExceptionEnum.TX_NOTINT_EXCEPTION.getCode(),ExceptionEnum.TX_NOTINT_EXCEPTION.getMsg(),
                         ExceptionEnum.TX_NOTINT_EXCEPTION.getErrorMsg());
             }
-            //提现日期
-            Date settlementDate = new Date();
+
             //分布式锁控制用户频繁操作
             lockKey = DistributedLockUtils.lock(LOCK_PROFIT_ADD, profit.getWriterId()+"");
+            //提现日期
+            Date settlementDate = new Date();
             WriterDto writerDto = new WriterDto();
             writerDto.setKid(profit.getWriterId());
             WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
