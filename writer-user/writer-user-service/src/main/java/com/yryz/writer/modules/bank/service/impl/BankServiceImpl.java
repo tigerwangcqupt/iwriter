@@ -35,6 +35,7 @@ import com.yryz.writer.modules.writer.entity.Writer;
 import com.yryz.writer.modules.writer.entity.WriterStatistics;
 import com.yryz.writer.modules.writer.service.WriterService;
 import com.yryz.writer.modules.writer.vo.WriterCapitalVo;
+import com.yryz.writer.modules.writer.vo.WriterStatisticsVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -173,13 +174,19 @@ public class BankServiceImpl extends BaseServiceImpl implements BankService {
             //写手审核通过初始化统计信息
             WriterStatistics writerStatistics = new WriterStatistics();
             writerStatistics.setWriterKid(Long.parseLong(bank.getCreateUserId()));
-            RpcResponse<WriterStatistics> rst = writerStatisticsApi.insert(writerStatistics);
-            if(!rst.success()){
-                logger.error("写手审核通过初始化统计信息接口调用失败");
-                throw new YyrzPcException(ExceptionEnum.Exception.getCode(),ExceptionEnum.Exception.getMsg(),
-                        ExceptionEnum.Exception.getErrorMsg());
-            }
 
+            RpcResponse<WriterStatisticsVo> staticsRs = writerStatisticsApi.detail(Long.parseLong(bank.getCreateUserId()));
+            if(null != staticsRs && null != staticsRs.getData()){
+                WriterStatisticsVo writerStatisticsVo = staticsRs.getData();
+                if( (null == writerStatisticsVo) || (null == writerStatisticsVo.getKid())){
+                    RpcResponse<WriterStatistics> rst = writerStatisticsApi.insert(writerStatistics);
+                    if(!rst.success()){
+                        logger.error("写手审核通过初始化统计信息接口调用失败");
+                        throw new YyrzPcException(ExceptionEnum.Exception.getCode(),ExceptionEnum.Exception.getMsg(),
+                                ExceptionEnum.Exception.getErrorMsg());
+                    }
+                }
+            }
             //资金主体外码
             Long ownerFcode = findOwnerByWriter(bank);
             if(null == ownerFcode){
