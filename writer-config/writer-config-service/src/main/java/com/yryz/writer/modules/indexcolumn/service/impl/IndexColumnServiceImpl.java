@@ -108,7 +108,7 @@ public class IndexColumnServiceImpl extends BaseServiceImpl implements IndexColu
                     if (indexColumn == null) continue;
                     IndexItemVo indexItemVo = new IndexItemVo();
                     String columnName = indexColumn.getItemName();
-                    //判断活动
+                     //判断活动
                     if(StringUtils.isNotEmpty(columnName) && columnName.equals(ModuleEnum.ACTIVITY.getName())){
                         IndexUrlConfigDto indexUrlConfigDto = new IndexUrlConfigDto();
                         indexUrlConfigDto.setType(IndexUrlConfigConstants.TWOSTATUS);
