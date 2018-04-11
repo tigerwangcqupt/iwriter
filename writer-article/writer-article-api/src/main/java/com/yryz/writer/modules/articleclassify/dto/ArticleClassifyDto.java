@@ -48,6 +48,19 @@ public class ArticleClassifyDto extends PageList {
      */
     private  Integer delFlag;
 
+    /**
+     * 分类类型: 1:android;2:ios
+     */
+    private  Integer devType;
+
+    public Integer getDevType() {
+        return devType;
+    }
+
+    public void setDevType(Integer devType) {
+        this.devType = devType;
+    }
+
     public void setClassifyName(String classifyName) {
         this.classifyName = classifyName;
     }
