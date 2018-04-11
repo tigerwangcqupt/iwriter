@@ -15,6 +15,8 @@
 		<result column="last_stage_flag" property="lastStageFlag" jdbcType="TINYINT"/>
 		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
 		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
+		<result column="dev_type" property="devType" jdbcType="TINYINT"/>
+
 		<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
 		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
 		<result column="create_user_id" property="createUserId" jdbcType="VARCHAR"/>
@@ -22,7 +24,7 @@
     </resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,parent_id,icon,classify_name,classify_desc,recommend_flag,sort,last_stage_flag,shelve_flag,del_flag,create_date,last_update_date,create_user_id,last_update_user_id
+	<sql id="Base_Column_List">id,kid,parent_id,icon,classify_name,classify_desc,recommend_flag,sort,last_stage_flag,shelve_flag,del_flag,create_date,last_update_date,create_user_id,last_update_user_id,dev_type
     </sql>
 
      <!-- 查询ArticleClassify详情 -->
@@ -88,6 +90,9 @@
         <if test="shelveFlag != null">
 			shelve_flag,
 	    </if>
+		<if test="devType != null">
+			dev_type,
+		</if>
         <if test="delFlag != null">
 			del_flag,
 	    </if>
@@ -128,6 +133,9 @@
         <if test="shelveFlag != null">
 			#{shelveFlag,jdbcType=TINYINT},
 	    </if>
+		<if test="devType != null">
+			#{devType,jdbcType=TINYINT},
+		</if>
         <if test="delFlag != null">
 			#{delFlag,jdbcType=TINYINT},
 	    </if>
@@ -180,6 +188,10 @@
             <if test="lastUpdateUserId != null and lastUpdateUserId != ''">
     			last_update_user_id = #{lastUpdateUserId,jdbcType=VARCHAR},
     		</if>
+			<if test="devType != null">
+				dev_type = #{devType,jdbcType=TINYINT},
+			</if>
+
 			last_update_date = NOW()
         </set>
         where kid = #{kid,jdbcType=BIGINT}
@@ -193,6 +205,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="shelveFlag != null">
 				shelve_flag = #{shelveFlag,jdbcType=TINYINT}
+			</if>
+			<if test="devType != null">
+				dev_type = #{devType,jdbcType=TINYINT}
 			</if>
 			<if test="delFlag != null">
 				AND del_flag = #{delFlag,jdbcType=TINYINT}
@@ -253,6 +268,9 @@
 			</if>
 			<if test="delFlag != null">
 				AND del_flag = #{delFlag,jdbcType=TINYINT}
+			</if>
+			<if test="devType != null">
+				dev_type = #{devType,jdbcType=TINYINT}
 			</if>
 			<if test="classifyName != null and classifyName != ''">
 				AND classify_name like CONCAT('%',trim(#{classifyName}),'%')
@@ -333,6 +351,9 @@
 	      <if test="delFlag != null">
 	        And del_flag = #{delFlag,jdbcType=TINYINT}
 	      </if>
+		<if test="devType != null">
+			dev_type = #{devType,jdbcType=TINYINT}
+		</if>
 	      <if test="createDate != null">
 	        And create_date = #{createDate,jdbcType=TIMESTAMP}
 	      </if>

@@ -70,6 +70,19 @@ public class ArticleClassify extends GenericEntity {
 	 */
 	private String createUserNickName;
 
+	/**
+	 * 分类类型: 1:android;2:ios
+	 */
+	private  Integer devType;
+
+	public Integer getDevType() {
+		return devType;
+	}
+
+	public void setDevType(Integer devType) {
+		this.devType = devType;
+	}
+
 	public Long getParentId() {
 		return this.parentId;
 	}
