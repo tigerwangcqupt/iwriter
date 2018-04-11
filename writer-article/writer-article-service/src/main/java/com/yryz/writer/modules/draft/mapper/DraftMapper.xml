@@ -406,6 +406,9 @@
 		<if test="appId != null">
 			AND app_id = #{appId,jdbcType=BIGINT}
 		</if>
+		<if test="title != null and title != ''">
+			AND title LIKE CONCAT('%',#{title},'%')
+		</if>
 		<if test="orderStr != null and orderStr != ''">
 			${orderStr}
 		</if>
@@ -424,6 +427,9 @@
 		</if>
 		<if test="appId != null">
 			AND app_id = #{appId,jdbcType=BIGINT}
+		</if>
+		<if test="title != null and title != ''">
+			AND title LIKE CONCAT('%',#{title},'%')
 		</if>
 		<if test="orderStr != null and orderStr != ''">
 			${orderStr}

@@ -60,7 +60,7 @@ public class ProfitConstants {
     public static final Integer NOTWITHDRAWALSFLAG = 0;
 
     //提现最小金额
-    public static final Integer MIN_AMOUNT = 500;
+    public static final Integer MIN_AMOUNT = 30;
 
     //提现最大金额
     public static final Integer MAX_AMOUNT = 10000;
