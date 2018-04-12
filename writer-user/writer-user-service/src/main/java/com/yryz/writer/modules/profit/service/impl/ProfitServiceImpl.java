@@ -176,7 +176,10 @@ public class ProfitServiceImpl extends BaseServiceImpl implements ProfitService
             writerDto.setKid(profit.getWriterId());
             WriterCapitalVo writerModelVo =writerService.selectWriterByParameters(writerDto);
             //剩余可提现金额
-            BigDecimal withdrawAmount = writerModelVo.getWithdrawAmount();
+            BigDecimal withdrawAmount = new BigDecimal(0);
+            if(writerModelVo != null){
+                withdrawAmount = writerModelVo.getWithdrawAmount();
+            }
             //稿费的时候不去判断(提现的时候需要判断)
             if(profit.getSettlementType() != ProfitEnum.ROYALTIES_FEE.getCode()){
                 //提现金额区间(500--10000)

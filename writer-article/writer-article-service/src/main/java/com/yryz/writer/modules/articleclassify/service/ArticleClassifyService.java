@@ -89,6 +89,14 @@ public interface ArticleClassifyService extends BaseService {
    List<ArticleClassifyVo> getArticleClassifys(Long classifyId);
 
    /**
+    * 分类列表（classifyId==0 查询一级菜单）
+    * @param
+    * @return
+    */
+   List<ArticleClassifyVo> getArticleClassifys(Long classifyId,Integer deviceType);
+
+
+   /**
     * 交换权重
     * @param id
     * @param tid

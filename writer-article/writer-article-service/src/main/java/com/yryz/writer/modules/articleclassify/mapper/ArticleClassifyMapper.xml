@@ -252,6 +252,16 @@
 		ORDER BY recommend_flag DESC,sort ASC,last_update_date DESC
 	</select>
 
+	<select id="getArticleClassifysByIdAndDeviceType" resultType="com.yryz.writer.modules.articleclassify.entity.ArticleClassify">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM yryz_articleclassify
+		WHERE shelve_flag = 0 AND del_flag = 0
+		AND parent_id = #{articleClassifyId}
+		AND dev_type = #{deviceType}
+		ORDER BY recommend_flag DESC,sort ASC,last_update_date DESC
+	</select>
+
 	<select id="selectMaxSort" resultType="java.lang.Integer">
 		select MAX(sort) from yryz_articleclassify T
 		where T.recommend_flag = 1

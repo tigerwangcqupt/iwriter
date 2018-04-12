@@ -188,6 +188,17 @@ public class ArticleClassifyProvider implements ArticleClassifyApi ,AppArticleCl
 	}
 
 	@Override
+	public RpcResponse<List<ArticleClassifyVo>> getArticleClassifys(Long articleClassifyId,Integer deviceType) {
+		try {
+			return ResponseModel.returnListSuccess(articleClassifyService.getArticleClassifys(articleClassifyId,deviceType));
+		} catch (Exception e) {
+			logger.error("获取ArticleClassifyVo列表失败", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+
+	@Override
 	public RpcResponse<List<Long>> getArticleClassifyIds(Long articleClassifyId) {
 		try {
 			return ResponseModel.returnListSuccess(articleClassifyService.getArticleClassifyIds(articleClassifyId));

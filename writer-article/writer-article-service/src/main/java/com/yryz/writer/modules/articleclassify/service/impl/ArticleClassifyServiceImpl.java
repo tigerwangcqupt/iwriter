@@ -361,6 +361,22 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
     }
 
     @Override
+    public List<ArticleClassifyVo> getArticleClassifys(Long classifyId,Integer deviceType) {
+        List<ArticleClassify> list = articleClassifyDao.getArticleClassifysByIdAndDeviceType(classifyId,deviceType);
+        if(CollectionUtils.isNotEmpty(list)){
+            List<ArticleClassifyVo> listVo = new ArrayList<ArticleClassifyVo>();
+            list.forEach(c->{
+                ArticleClassifyVo vo = new ArticleClassifyVo();
+                BeanUtils.copyProperties(c,vo);
+                listVo.add(vo);
+            });
+            return listVo;
+        }
+        return null;
+    }
+
+
+    @Override
     @Transactional
     public Boolean setSort(Long id, Long tid) {
         try {

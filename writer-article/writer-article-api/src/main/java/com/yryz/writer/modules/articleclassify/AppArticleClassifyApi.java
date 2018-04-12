@@ -20,6 +20,8 @@ public interface AppArticleClassifyApi {
      * */
     RpcResponse<List<ArticleClassifyVo>> getArticleClassifys(Long articleClassifyId);
 
+    RpcResponse<List<ArticleClassifyVo>> getArticleClassifys(Long articleClassifyId,Integer deviceType);
+
     /**
      *  根据分类ids 查找文章的ids
      *  @param articleClassifyId 分类id

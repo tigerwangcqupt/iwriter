@@ -73,6 +73,9 @@ public interface ArticleClassifyDao extends BaseDao {
 
     List<ArticleClassify> getArticleClassifysById(@Param("articleClassifyId")Long classifyId);
 
+    List<ArticleClassify> getArticleClassifysByIdAndDeviceType(@Param("articleClassifyId")Long classifyId,@Param("deviceType")Integer deviceType);
+
+
     /**
      * 查询分类推荐的最大排序值
      *
