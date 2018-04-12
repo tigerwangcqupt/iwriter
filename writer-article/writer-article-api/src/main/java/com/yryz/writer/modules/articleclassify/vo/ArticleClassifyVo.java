@@ -77,7 +77,18 @@ public class ArticleClassifyVo implements Serializable {
     //内容数（文章总数）
     private Long articleAmount;
 
+    /**
+     * 分类类型: 1:android;2:ios
+     */
+    private  Integer devType;
 
+    public Integer getDevType() {
+        return devType;
+    }
+
+    public void setDevType(Integer devType) {
+        this.devType = devType;
+    }
 
 
     public String getClassifyName() {

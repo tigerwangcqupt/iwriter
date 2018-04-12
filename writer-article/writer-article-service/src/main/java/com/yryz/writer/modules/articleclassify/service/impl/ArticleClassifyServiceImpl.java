@@ -464,6 +464,7 @@ public class ArticleClassifyServiceImpl extends BaseServiceImpl implements Artic
         ArticleClassify condition = new ArticleClassify();
         condition.setClassifyName(articleClassify.getClassifyName());
         condition.setDelFlag(CommonConstants.DELETE_NO);
+        condition.setDevType(articleClassify.getDevType());
         // condition.setShelveFlag(CommonConstants.SHELVE_YES);
         List<ArticleClassify> checkList = articleClassifyDao.selectByCondition(condition);
 

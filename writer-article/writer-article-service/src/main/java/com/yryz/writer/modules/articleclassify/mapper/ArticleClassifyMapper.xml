@@ -207,7 +207,7 @@
 				shelve_flag = #{shelveFlag,jdbcType=TINYINT}
 			</if>
 			<if test="devType != null">
-				dev_type = #{devType,jdbcType=TINYINT}
+				AND dev_type = #{devType,jdbcType=TINYINT}
 			</if>
 			<if test="delFlag != null">
 				AND del_flag = #{delFlag,jdbcType=TINYINT}
@@ -270,7 +270,7 @@
 				AND del_flag = #{delFlag,jdbcType=TINYINT}
 			</if>
 			<if test="devType != null">
-				dev_type = #{devType,jdbcType=TINYINT}
+				AND dev_type = #{devType,jdbcType=TINYINT}
 			</if>
 			<if test="classifyName != null and classifyName != ''">
 				AND classify_name like CONCAT('%',trim(#{classifyName}),'%')
@@ -352,7 +352,7 @@
 	        And del_flag = #{delFlag,jdbcType=TINYINT}
 	      </if>
 		<if test="devType != null">
-			dev_type = #{devType,jdbcType=TINYINT}
+			And dev_type = #{devType,jdbcType=TINYINT}
 		</if>
 	      <if test="createDate != null">
 	        And create_date = #{createDate,jdbcType=TIMESTAMP}
