@@ -402,6 +402,7 @@
 			<foreach  item="item" collection="createUserIds" index="index"  open="(" separator="," close=")">
 				#{item}
 			</foreach>
+
 		</if>
 		<if test="appId != null">
 			AND app_id = #{appId,jdbcType=BIGINT}
