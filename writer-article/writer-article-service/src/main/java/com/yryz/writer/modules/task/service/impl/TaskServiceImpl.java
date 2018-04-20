@@ -176,6 +176,8 @@ public class TaskServiceImpl extends BaseServiceImpl implements TaskService {
             Date endDate = task.getEndDate();
             if (date.after(endDate)) {
                 taskVo.setTaskStatus(1);
+            }else if(task.getStartDate().after(date)){
+                taskVo.setTaskStatus(2);
             }
         }
 
