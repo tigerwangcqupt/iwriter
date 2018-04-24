@@ -263,6 +263,11 @@
             AND task_close_flag = 0)
             AND shelve_flag = 0
         </if>
+        <if test="status == 3">
+            AND start_date > NOW()
+            AND task_close_flag = 0
+            AND shelve_flag = 0
+        </if>
         <if test="status == 1">
             AND (end_date &lt;= NOW()
             OR (SELECT COUNT(DISTINCT create_user_id) FROM yryz_draft WHERE task_kid = a.kid AND draft_status != 0) &gt;= task_close_num
