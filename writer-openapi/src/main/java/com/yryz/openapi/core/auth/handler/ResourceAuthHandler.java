@@ -56,11 +56,11 @@ public class ResourceAuthHandler {
         //签名后的sign
         String sign = "";
         for(int i=0;i<paramNames.length;i++){
-            LOGGER.info(paramNames[i]+","+paramValues[i]);
+            LOGGER.info("客户端传过来的参数:"+paramNames[i]+","+paramValues[i]);
 
            if(AppConstants.originText.equals(paramNames[i])){
                 originText = paramValues[i].toString();
-
+                LOGGER.info("获得原文:"+originText);
                 //int diffMinutes = DateUtil.getDiffMinutes(timeStampDateStr,date);
                 //比对时间15s有效
 
