@@ -57,21 +57,25 @@ public class ResourceAuthHandler {
         String sign = "";
         for(int i=0;i<paramNames.length;i++){
             LOGGER.info(paramNames[i]+","+paramValues[i]);
-           /* 注释掉控制频率 wsy 2018-05-12
+
            if(AppConstants.originText.equals(paramNames[i])){
                 originText = paramValues[i].toString();
-                String timeStamp = originText.substring(originText.lastIndexOf("=")+1);
-                String timeStampDateStr = DateUtil.stampToDate(timeStamp);
+
                 //int diffMinutes = DateUtil.getDiffMinutes(timeStampDateStr,date);
                 //比对时间15s有效
-                int diffSeconds = DateUtil.getDiffSeconds(timeStampDateStr,date);
+
+               /* 注释掉控制频率 wsy 2018-05-12
+                String timeStamp = originText.substring(originText.lastIndexOf("=")+1);
+                String timeStampDateStr = DateUtil.stampToDate(timeStamp);
+                 int diffSeconds = DateUtil.getDiffSeconds(timeStampDateStr,date);
                 if(diffSeconds>AppConstants.diffSeconds){
                     LOGGER.error("调用接口频率过高！");
                     throw new YyrzPcException(ExceptionEnum.CallFrequentlyException.getCode(),ExceptionEnum.CallFrequentlyException.getMsg(),
                             ExceptionEnum.CallFrequentlyException.getErrorMsg());
                 }
+                  */
             }
-            */
+
             if(AppConstants.sign.equals(paramNames[i])){
                 sign = paramValues[i].toString();
             }
