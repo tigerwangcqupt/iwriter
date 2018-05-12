@@ -57,7 +57,8 @@ public class ResourceAuthHandler {
         String sign = "";
         for(int i=0;i<paramNames.length;i++){
             LOGGER.info(paramNames[i]+","+paramValues[i]);
-            if(AppConstants.originText.equals(paramNames[i])){
+           /* 注释掉控制频率 wsy 2018-05-12
+           if(AppConstants.originText.equals(paramNames[i])){
                 originText = paramValues[i].toString();
                 String timeStamp = originText.substring(originText.lastIndexOf("=")+1);
                 String timeStampDateStr = DateUtil.stampToDate(timeStamp);
@@ -70,6 +71,7 @@ public class ResourceAuthHandler {
                             ExceptionEnum.CallFrequentlyException.getErrorMsg());
                 }
             }
+            */
             if(AppConstants.sign.equals(paramNames[i])){
                 sign = paramValues[i].toString();
             }
