@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.trian.dao.persistence.WriterTrianDao">
+
+    <!-- 查询报名列表 -->
+    <select id="getList" parameterType="com.yryz.writer.modules.trian.dto.WriterTrianDto"
+            resultType="com.yryz.writer.modules.trian.vo.WriterTrianVo">
+        select * from yryz_writer_trian where 1=1
+        <if test=" nickName!= null and nickName!= ''">
+            and nick_name like CONCAT('%',trim(#{nickName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test=" phone!= null and phone!= ''">
+            and phone like CONCAT('%',trim(#{phone,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test=" specialtyArticle!= null and specialtyArticle!= ''">
+            and INSTR(specialty_article,CONCAT(trim(#{specialtyArticle,jdbcType=VARCHAR}),',')) &gt; 0
+        </if>
+        <if test=" trainMode!= null">
+            and train_mode = #{trainMode,jdbcType=TINYINT}
+        </if>
+        <if test=" trainTime!= null">
+            and train_time = #{trainTime,jdbcType=TINYINT}
+        </if>
+        <if test=" trainContent!= null and trainContent!= ''">
+            and train_content like CONCAT('%',trim(#{trainContent,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test=" draftPlan!= null and draftPlan!= ''">
+            and draft_plan like CONCAT('%',trim(#{draftPlan,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="startTime != null and startTime!= ''">
+            AND create_date &gt;= #{startTime,jdbcType=VARCHAR}
+        </if>
+        <if test="endTime != null and endTime!= ''">
+            AND create_date &gt;= #{endTime,jdbcType=VARCHAR}
+        </if>
+        order by create_date desc
+    </select>
+
+    <!-- 查询报名数量 -->
+    <select id="getCount" parameterType="com.yryz.writer.modules.trian.dto.WriterTrianDto"
+            resultType="java.lang.Integer">
+        select count(1) from yryz_writer_trian where 1=1
+        <if test=" nickName!= null and nickName!= ''">
+            and nick_name like CONCAT('%',trim(#{nickName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test=" phone!= null and phone!= ''">
+            and phone like CONCAT('%',trim(#{phone,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test=" specialtyArticle!= null and specialtyArticle!= ''">
+            and INSTR(specialty_article,CONCAT(trim(#{specialtyArticle,jdbcType=VARCHAR}),',')) &gt; 0
+        </if>
+        <if test=" trainMode!= null">
+            and train_mode = #{trainMode,jdbcType=TINYINT}
+        </if>
+        <if test=" trainTime!= null">
+            and train_time = #{trainTime,jdbcType=TINYINT}
+        </if>
+        <if test=" trainContent!= null and trainContent!= ''">
+            and train_content like CONCAT('%',trim(#{trainContent,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test=" draftPlan!= null and draftPlan!= ''">
+            and draft_plan like CONCAT('%',trim(#{draftPlan,jdbcType=VARCHAR}),'%')
+        </if>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+            parameterType="com.yryz.writer.modules.trian.entity.WriterTrian">
+        insert into yryz_writer_trian (kid,nick_name,phone,specialty_article,train_mode,train_time,train_content,draft_plan,create_date,create_user_id)
+        values (
+        #{kid,jdbcType=BIGINT}
+        ,#{nickName,jdbcType=VARCHAR}
+        ,#{phone,jdbcType=VARCHAR}
+        ,#{specialtyArticle,jdbcType=VARCHAR}
+        ,#{trainMode,jdbcType=TINYINT}
+        ,#{trainTime,jdbcType=TINYINT}
+        ,#{trainContent,jdbcType=VARCHAR}
+        ,#{draftPlan,jdbcType=VARCHAR}
+        ,NOW()
+        ,#{createUserId,jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>

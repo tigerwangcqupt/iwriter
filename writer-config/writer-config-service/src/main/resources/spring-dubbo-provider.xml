@@ -8,11 +8,11 @@
 	    http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 
-    <dubbo:service interface="com.yryz.writer.modules.province.ProvinceApi" ref="provinceProvider" />
-    
-    <dubbo:service interface="com.yryz.writer.modules.city.CityApi" ref="cityProvider" /> 
+    <dubbo:service interface="com.yryz.writer.modules.province.ProvinceApi" ref="provinceProvider"/>
 
-    <dubbo:service interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" ref="indexColumnProvider" />
+    <dubbo:service interface="com.yryz.writer.modules.city.CityApi" ref="cityProvider"/>
+
+    <dubbo:service interface="com.yryz.writer.modules.indexcolumn.IndexColumnApi" ref="indexColumnProvider"/>
 
     <!--ID发号服务-->
     <dubbo:service interface="com.yryz.writer.modules.id.api.IdAPI" ref="idAPI"/>
@@ -21,4 +21,6 @@
 
     <dubbo:service interface="com.yryz.writer.modules.indexurl.IndexUrlConfigApi" ref="indexUrlConfigProvider"/>
 
+    <!--新悠然一指config配置服务-->
+    <dubbo:service interface="com.yryz.writer.modules.config.api.ConfigApi" ref="configProvider"/>
 </beans>

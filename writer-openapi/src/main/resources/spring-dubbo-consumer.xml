@@ -80,4 +80,12 @@
                      interface="com.yryz.writer.modules.indexurl.IndexUrlConfigApi" registry="yryz-new"
                      check="false" timeout="10000" retries="0"/>
 
+    <!-- config -->
+    <dubbo:reference id="configApi"
+                     interface="com.yryz.writer.modules.config.api.ConfigApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
+
+    <dubbo:reference id="writerTrianApi"
+                     interface="com.yryz.writer.modules.trian.api.WriterTrianApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
 </beans>
