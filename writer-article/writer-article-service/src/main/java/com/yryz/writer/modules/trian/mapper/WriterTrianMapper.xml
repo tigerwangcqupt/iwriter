@@ -63,6 +63,11 @@
         </if>
     </select>
 
+    <!-- 查询详情 -->
+    <select id="selectByKid" resultType="com.yryz.writer.modules.trian.entity.WriterTrian" parameterType="java.lang.Long">
+        select * from yryz_writer_trian where kid = #{kid,jdbcType=BIGINT}
+    </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id"
             parameterType="com.yryz.writer.modules.trian.entity.WriterTrian">
         insert into yryz_writer_trian (kid,nick_name,phone,specialty_article,train_mode,train_time,train_content,draft_plan,create_date,create_user_id)

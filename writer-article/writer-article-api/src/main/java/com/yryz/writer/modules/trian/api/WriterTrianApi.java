@@ -37,4 +37,12 @@ public interface WriterTrianApi {
      * @return
      */
     RpcResponse<Integer> insert(WriterTrian writerTrian);
+
+    /**
+     * 根据kid查询写手培训报名记录
+     *
+     * @param kid
+     * @return
+     */
+    RpcResponse<WriterTrian> getByKid(Long kid);
 }

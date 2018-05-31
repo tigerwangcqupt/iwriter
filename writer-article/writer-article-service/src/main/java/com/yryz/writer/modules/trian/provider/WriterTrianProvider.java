@@ -71,4 +71,14 @@ public class WriterTrianProvider implements WriterTrianApi {
             return ResponseModel.returnException(e);
         }
     }
+
+    @Override
+    public RpcResponse<WriterTrian> getByKid(Long kid) {
+        try {
+            return ResponseModel.returnObjectSuccess(writerTrianService.get(WriterTrian.class, kid));
+        } catch (Exception e) {
+            logger.error("获取WriterTrian失败", e);
+            return ResponseModel.returnException(e);
+        }
+    }
 }

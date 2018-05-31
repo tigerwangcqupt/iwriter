@@ -11,6 +11,8 @@ import com.yryz.writer.modules.trian.entity.WriterTrian;
  */
 public class WriterTrianDto extends PageList {
 
+    private Long kid;
+
     /**
      * 昵称
      */
@@ -45,6 +47,14 @@ public class WriterTrianDto extends PageList {
     private String endTime;
 
     private String verifyCode;
+
+    public Long getKid() {
+        return kid;
+    }
+
+    public void setKid(Long kid) {
+        this.kid = kid;
+    }
 
     public String getNickName() {
         return nickName;
