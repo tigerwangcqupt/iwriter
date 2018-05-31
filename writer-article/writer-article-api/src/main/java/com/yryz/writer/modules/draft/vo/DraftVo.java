@@ -187,6 +187,17 @@ public class DraftVo implements Serializable {
      */
     private Integer assignStatus;
 
+    private Integer editCount;
+
+
+    public Integer getEditCount() {
+        return editCount;
+    }
+
+    public void setEditCount(Integer editCount) {
+        this.editCount = editCount;
+    }
+
     public String getAuditorUserId() {
         return auditorUserId;
     }

@@ -333,7 +333,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         draftVo.setAuditRemark(draft.getAuditRemark());
         draftVo.setAssignStatus(draft.getAssignStatus());
         draftVo.setAuditorUserId(draft.getAuditorUserId());
-
+        draftVo.setEditCount(draft.getEditCount());
 
         //聚合任务信息
         Long taskKid = draft.getTaskKid();
