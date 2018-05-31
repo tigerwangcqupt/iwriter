@@ -80,11 +80,6 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 throw new YyrzPcException("","未查询到相关草稿信息","");
             }
 
-            //判断修改次数
-            if(EDIT_MAX_COUNT <= dbRecord.getEditCount()){
-                throw new YyrzPcException("","已超过最大修改次数","");
-            }
-
             //判断审核人员是否一致
             String inAuditorUserId = in.getAuditorUserId();
             if(!inAuditorUserId.equalsIgnoreCase(dbRecord.getAuditorUserId())){
