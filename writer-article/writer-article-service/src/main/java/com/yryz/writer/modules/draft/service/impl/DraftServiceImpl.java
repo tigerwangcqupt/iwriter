@@ -276,7 +276,7 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 if(draft.getDraftStatus()==1){
                     //查询数据(修改次数加1）
                     Draft dbRecord = draftDao.selectByKid(Draft.class,draft.getKid());
-                    if(EDIT_MAX_COUNT >= dbRecord.getEditCount()){
+                    if(EDIT_MAX_COUNT <= dbRecord.getEditCount()){
                         throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "已超过稿件最大修改次数", "已超过稿件最大修改次数");
                     }
                     draft.setEditCount(dbRecord.getEditCount()+1);
