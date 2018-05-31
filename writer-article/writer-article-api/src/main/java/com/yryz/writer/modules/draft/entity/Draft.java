@@ -3,6 +3,7 @@ package com.yryz.writer.modules.draft.entity;
 import com.yryz.writer.common.entity.GenericEntity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author luohao
@@ -139,6 +140,92 @@ public class Draft extends GenericEntity {
      */
     private Integer waitShelve;
 
+    /**
+     * 审核次数
+     */
+    private Integer editCount;
+
+    /**
+     * 派搞状态
+     */
+    private Integer assignStatus;
+
+    /**
+     * 审核人员用户ID
+     */
+    private String auditorUserId;
+
+    /**
+     * 派搞人员用户ID
+     */
+    private String assignerUserId;
+
+    /**
+     * 备注信息
+     */
+    private String auditRemark;
+
+
+    private Date auditDate;
+
+    private Date assignerDate;
+
+
+    public Date getAuditDate() {
+        return auditDate;
+    }
+
+    public void setAuditDate(Date auditDate) {
+        this.auditDate = auditDate;
+    }
+
+    public Date getAssignerDate() {
+        return assignerDate;
+    }
+
+    public void setAssignerDate(Date assignerDate) {
+        this.assignerDate = assignerDate;
+    }
+
+    public String getAuditRemark() {
+        return auditRemark;
+    }
+
+    public void setAuditRemark(String auditRemark) {
+        this.auditRemark = auditRemark;
+    }
+
+    public Integer getEditCount() {
+        return editCount;
+    }
+
+    public void setEditCount(Integer editCount) {
+        this.editCount = editCount;
+    }
+
+    public Integer getAssignStatus() {
+        return assignStatus;
+    }
+
+    public void setAssignStatus(Integer assignStatus) {
+        this.assignStatus = assignStatus;
+    }
+
+    public String getAuditorUserId() {
+        return auditorUserId;
+    }
+
+    public void setAuditorUserId(String auditorUserId) {
+        this.auditorUserId = auditorUserId;
+    }
+
+    public String getAssignerUserId() {
+        return assignerUserId;
+    }
+
+    public void setAssignerUserId(String assignerUserId) {
+        this.assignerUserId = assignerUserId;
+    }
 
     public Integer getDraftType() {
         return this.draftType;

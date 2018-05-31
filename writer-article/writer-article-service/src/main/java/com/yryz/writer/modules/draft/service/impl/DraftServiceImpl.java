@@ -9,9 +9,11 @@ import com.yryz.writer.common.service.BaseServiceImpl;
 import com.yryz.writer.common.utils.DateUtil;
 import com.yryz.writer.common.utils.PageUtils;
 import com.yryz.writer.common.web.PageModel;
+import com.yryz.writer.modules.draft.dao.persistence.DraftAuditDao;
 import com.yryz.writer.modules.draft.dao.persistence.DraftDao;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.entity.Draft;
+import com.yryz.writer.modules.draft.entity.DraftAudit;
 import com.yryz.writer.modules.draft.service.DraftService;
 import com.yryz.writer.modules.draft.vo.DraftVo;
 import com.yryz.writer.modules.draft.vo.UserVo;
@@ -20,14 +22,14 @@ import com.yryz.writer.modules.task.dao.persistence.TaskDao;
 import com.yryz.writer.modules.task.entity.Task;
 import com.yryz.writer.modules.task.vo.AppVo;
 import com.yryz.writer.modules.task.vo.TaskVo;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 
 @Service
@@ -38,6 +40,9 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
     private DraftDao draftDao;
 
     @Autowired
+    private DraftAuditDao draftAuditDao;
+
+    @Autowired
     private IdAPI idAPI;
 
     @Autowired
@@ -45,6 +50,109 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
 
     protected BaseDao getDao() {
         return draftDao;
+    }
+
+    /**
+     * 最大审核次数
+     */
+    private static final int EDIT_MAX_COUNT = 3;
+
+    @Override
+    public <T> int update(T t) {
+
+        /**
+         * 查询草稿记录
+         * 判断草稿记录审核次数
+         * 判断当前审核人员是否为指派人员
+         * 新增审核日志记录
+         */
+        Draft in = (Draft) t;
+
+
+        /**
+         * 审核
+         */
+        if(in.getDraftStatus() != null){
+
+            //查询
+            Draft dbRecord = draftDao.selectByKid(Draft.class,in.getKid());
+            if(dbRecord == null){
+                throw new YyrzPcException("","未查询到相关草稿信息","");
+            }
+
+            //判断修改次数
+            if(EDIT_MAX_COUNT <= dbRecord.getEditCount()){
+                throw new YyrzPcException("","已超过最大修改次数","");
+            }
+
+            //判断审核人员是否一致
+            String inAuditorUserId = in.getAuditorUserId();
+            if(!inAuditorUserId.equalsIgnoreCase(dbRecord.getAuditorUserId())){
+                throw new YyrzPcException("","非指定审核人员不允许操作","");
+            }
+
+            //转换
+            DraftAudit audit = new DraftAudit();
+            try {
+                BeanUtils.copyProperties(audit,dbRecord);
+                audit.setKid(idAPI.getId("yryz_draft_audit_log"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            //设置 审核状态，审核人员,取值页面上述状态
+            audit.setAuditStatus(in.getDraftStatus());
+            audit.setCreateUserId(in.getAuditorUserId());
+            audit.setLastUpdateUserId(in.getAuditorUserId());
+            audit.setDraftKid(dbRecord.getKid());
+
+            audit.setReason(in.getReason());
+            audit.setSuggest(in.getSuggest());
+            audit.setAuditRemark(in.getAuditRemark());
+
+            audit.setDelFlag(0);
+            audit.setShelveFlag(0);
+
+            if(StringUtils.isBlank(audit.getReason())){
+                audit.setReason("");
+            }
+            if(StringUtils.isBlank(audit.getSuggest())){
+                audit.setSuggest("");
+            }
+            if(StringUtils.isBlank(audit.getAuditRemark())){
+                audit.setAuditRemark("");
+            }
+            //保存日志记录
+            draftAuditDao.insert(audit);
+            //保存审核时间
+            in.setAuditDate(new Date());
+        }
+        return super.update(in);
+    }
+
+
+    public Map<Long,List<DraftAudit>> getDraftAudits(List<Long> kids){
+
+        Map<Long,List<DraftAudit>> map = new HashMap<>();
+        if(CollectionUtils.isEmpty(kids)){
+            return map;
+        }
+
+        List<DraftAudit> list = draftAuditDao.selectByDraftKids(kids);
+        if(list==null){
+            return map;
+        }
+
+        List<DraftAudit> group = null;
+        for (DraftAudit audit : list) {
+            group = map.get(audit.getDraftKid());
+            if(group==null){
+                group = new ArrayList<>();
+                map.put(audit.getDraftKid(),group);
+            }
+            group.add(audit);
+        }
+        return  map;
     }
 
     public PageList<DraftVo> selectList(DraftDto draftDto) {
@@ -59,9 +167,11 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             createUserIds = draftDao.selectWriter(draftDto);
             draftDto.setCreateUserIds(createUserIds);
         }
+        //
+        Map<Long,List<DraftAudit>> auditLogMap = new HashMap<>();
 
         //获取状态,已发表需查询文章表,其余查询稿件表
-        //列表参数:0 全部,1 已发表,2 未通过,3 草稿,4 管理后台待审核,5 管理后台未通过 6，待上架 7，审核中
+        //列表参数:0 全部,1 已发表,2 未通过,3 草稿,4 管理后台待审核,5 管理后台未通过 6，待上架 7，审核中，
         Integer status = draftDto.getStatus();
         List<Draft> list = new ArrayList<>();
         switch (status) {
@@ -77,11 +187,15 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             case 3:
                 list = draftDao.selectDraught(draftDto);
                 break;
-            case 4:
-                list = draftDao.selectPendingForAdmin(draftDto);
-                break;
-            case 5:
-                list = draftDao.selectNotPassForAdmin(draftDto);
+            case 4:     //统一管理端查询
+                list = draftDao.selectAuditForAdmin(draftDto);
+                List<Long> kids = new ArrayList<>();
+                list.forEach(d->{
+                    kids.add(d.getKid());
+                });
+                //查询审核日志表
+                auditLogMap = this.getDraftAudits(kids);
+
                 break;
             case 6:
                 list = draftDao.selectWaitShelve(draftDto);
@@ -89,17 +203,19 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             case 7:
                 list = draftDao.selectAudit(draftDto);//审核中
                 break;
-
             default:
                 list = draftDao.selectList(draftDto);
                 break;
         }
+
 
         //查询稿件表
         List<DraftVo> draftVoList = new ArrayList<DraftVo>();
         if (list != null && list.size() > 0) {
             for (Draft draft : list) {
                 DraftVo draftVo = toDraftVo(draft);
+                //合并审核记录
+                draftVo.setDraftAudits(auditLogMap.get(draft.getKid()));
                 draftVoList.add(draftVo);
             }
         }
@@ -144,18 +260,38 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 }
             }
             Long kid = draft.getKid();
+
             if (kid == null) {
                 kid = idAPI.getId("yryz_draft");
                 draft.setKid(kid);
+                //新增时，修改次数为1
+                draft.setEditCount(1);
                 draftDao.insertByPrimaryKeySelective(draft);
             } else {
+                /**
+                 * 更新逻辑中有存草稿，发表
+                 */
+
+                //发表
+                if(draft.getDraftStatus()==1){
+                    //查询数据(修改次数加1）
+                    Draft dbRecord = draftDao.selectByKid(Draft.class,draft.getKid());
+                    if(EDIT_MAX_COUNT >= dbRecord.getEditCount()){
+                        throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "已超过稿件最大修改次数", "已超过稿件最大修改次数");
+                    }
+                    draft.setEditCount(dbRecord.getEditCount()+1);
+                }
                 draftDao.update(draft);
             }
-
             return kid;
         } catch (Exception E) {
             throw E;
         }
+    }
+
+    @Override
+    public Integer setAuditorUser(List<Long> kids, String auditorUserId, String assignerUserId) {
+        return draftDao.setAuditorUser(kids,auditorUserId,assignerUserId);
     }
 
     public List<AppVo> selectAppByAppliName(String appliName) {
@@ -199,6 +335,10 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
         draftVo.setLabelName(draft.getLabelName());
         draftVo.setShelveFlag(draft.getShelveFlag());
         draftVo.setDraftFee(draft.getDraftFee());
+        draftVo.setAuditRemark(draft.getAuditRemark());
+        draftVo.setAssignStatus(draft.getAssignStatus());
+        draftVo.setAuditorUserId(draft.getAuditorUserId());
+
 
         //聚合任务信息
         Long taskKid = draft.getTaskKid();

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.draft.dao.persistence.DraftAuditDao">
+
+	<!--Base_Column_List-->
+	<sql id="Base_Column_List">
+		kid,draft_kid,
+		title,content_html,content_source,video_url,cover_img_url,description,
+		audit_status,reason,suggest,audit_remark,
+		create_user_id,create_date,last_update_user_id,last_update_date,del_flag
+    </sql>
+
+  	<!-- 新增Draft-->
+    <insert id="insert"  parameterType="com.yryz.writer.modules.draft.entity.DraftAudit">
+
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+
+	    insert into yryz_draft_audit_log
+		(
+		<include refid="Base_Column_List" />
+		) values (
+	    	#{kid,jdbcType=BIGINT}
+			,#{draftKid,jdbcType=BIGINT}
+
+			,#{title,jdbcType=VARCHAR}
+			,#{contentHtml,jdbcType=VARCHAR}
+			,#{contentSource,jdbcType=VARCHAR}
+			,#{videoUrl,jdbcType=VARCHAR}
+			,#{coverImgUrl,jdbcType=VARCHAR}
+			,#{description,jdbcType=VARCHAR}
+
+			,#{auditStatus,jdbcType=TINYINT}
+			,#{reason,jdbcType=VARCHAR}
+			,#{suggest,jdbcType=VARCHAR}
+			,#{auditRemark,jdbcType=VARCHAR}
+
+			,#{createUserId,jdbcType=VARCHAR}
+			,NOW()
+			,#{lastUpdateUserId,jdbcType=VARCHAR}
+			,NOW()
+			,#{delFlag,jdbcType=TINYINT}
+	    )
+	</insert>
+
+
+	<select id="selectByDraftKids" parameterType="com.yryz.writer.modules.draft.entity.DraftAudit" resultType="com.yryz.writer.modules.draft.entity.DraftAudit">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM yryz_draft_audit_log
+		WHERE del_flag = 0
+		AND draft_kid in
+		<foreach item="item" index="index" collection="kids" open="("
+				 separator="," close=")">
+			#{item}
+		</foreach>
+		ORDER BY create_date ASC
+	</select>
+</mapper>

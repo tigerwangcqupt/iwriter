@@ -27,12 +27,37 @@ public class DraftDto extends PageList {
     private String userName;
     private String phone;
     private String remark;
+    /**
+     * 审核人员
+     */
+    private String auditorUserId;
 
-
+    /**
+     * 派稿状态
+     */
+    private Integer assignStatus;
+    /**
+     * 审核次数
+     */
+    private Integer editCount;
     /**
      * 生成排序字符串
      */
     private String orderStr;
+
+    /**
+     * 派稿开始时间
+     */
+    private String assignerBeginDate;
+
+    private String assignerEndDate;
+
+    /**
+     * 审核开始时间
+     */
+    private String auditBeginDate;
+
+    private String auditEndDate;
 
     /**
      * orderFiled
@@ -43,6 +68,62 @@ public class DraftDto extends PageList {
      * orderValue
      */
     private String orderValue;
+
+    public String getAssignerBeginDate() {
+        return assignerBeginDate;
+    }
+
+    public void setAssignerBeginDate(String assignerBeginDate) {
+        this.assignerBeginDate = assignerBeginDate;
+    }
+
+    public String getAssignerEndDate() {
+        return assignerEndDate;
+    }
+
+    public void setAssignerEndDate(String assignerEndDate) {
+        this.assignerEndDate = assignerEndDate;
+    }
+
+    public String getAuditBeginDate() {
+        return auditBeginDate;
+    }
+
+    public void setAuditBeginDate(String auditBeginDate) {
+        this.auditBeginDate = auditBeginDate;
+    }
+
+    public String getAuditEndDate() {
+        return auditEndDate;
+    }
+
+    public void setAuditEndDate(String auditEndDate) {
+        this.auditEndDate = auditEndDate;
+    }
+
+    public Integer getEditCount() {
+        return editCount;
+    }
+
+    public void setEditCount(Integer editCount) {
+        this.editCount = editCount;
+    }
+
+    public Integer getAssignStatus() {
+        return assignStatus;
+    }
+
+    public void setAssignStatus(Integer assignStatus) {
+        this.assignStatus = assignStatus;
+    }
+
+    public String getAuditorUserId() {
+        return auditorUserId;
+    }
+
+    public void setAuditorUserId(String auditorUserId) {
+        this.auditorUserId = auditorUserId;
+    }
 
     public String getTitle() {
         return title;

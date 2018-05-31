@@ -114,4 +114,8 @@ public class DraftProvider implements DraftApi {
         return ResponseModel.returnObjectSuccess(draftVo);
     }
 
+    @Override
+    public RpcResponse<Integer> setAuditorUser(List<Long> kids, String auditorUserId, String assignerUserId) {
+        return ResponseModel.returnObjectSuccess(draftService.setAuditorUser(kids,auditorUserId,assignerUserId));
+    }
 }

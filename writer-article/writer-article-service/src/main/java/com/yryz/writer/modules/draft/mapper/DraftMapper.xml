@@ -30,10 +30,23 @@
 		<result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP"/>
 		<result column="del_flag" property="delFlag" jdbcType="TINYINT"/>
 		<result column="shelve_flag" property="shelveFlag" jdbcType="TINYINT"/>
-    </resultMap>
+
+		<result column="edit_count" property="editCount" jdbcType="TINYINT"/>
+		<result column="assign_status" property="assignStatus" jdbcType="TINYINT"/>
+		<result column="auditor_user_id" property="auditorUserId" jdbcType="VARCHAR"/>
+		<result column="assigner_user_id" property="assignerUserId" jdbcType="VARCHAR"/>
+		<result column="audit_remark" property="auditRemark" jdbcType="VARCHAR"/>
+
+		<result column="assigner_date" property="assignerDate" jdbcType="TIMESTAMP"/>
+		<result column="audit_date" property="auditDate" jdbcType="TIMESTAMP"/>
+
+
+	</resultMap>
 	
 	<!--Base_Column_List-->
-	<sql id="Base_Column_List">id,kid,draft_type,task_flag,task_kid,title,content_html,content_source,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag
+	<sql id="Base_Column_List">
+		id,kid,draft_type,task_flag,task_kid,title,content_html,content_source,video_url,cover_img_url,description,app_id,app_name,classify_name,label_name,draft_status,reason,suggest,draft_fee,module_enum,create_user_id,create_date,last_update_user_id,last_update_date,del_flag,shelve_flag,
+		edit_count,assign_status,auditor_user_id,assigner_user_id,audit_remark,assigner_date,audit_date
     </sql>
 
      <!-- 查询Draft详情 -->
@@ -242,7 +255,22 @@
 	    </if>
 	    </trim>
 	</insert>
-	
+
+	<!---->
+	<update id="setAuditorUser" parameterType="com.yryz.writer.modules.draft.entity.Draft">
+		update yryz_draft set
+		assign_status = 1,
+		auditor_user_id = #{auditorUserId},
+		assigner_user_id = #{assignerUserId},
+		assigner_date = now()
+		where kid in
+		<foreach item="item" index="index" collection="kids" open="("
+				 separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+
 	
 	<!-- 按需修改Draft-->   
     <update id="update" parameterType="com.yryz.writer.modules.draft.entity.Draft">
@@ -320,7 +348,28 @@
              <if test="shelveFlag != null">
     			shelve_flag = #{shelveFlag,jdbcType=TINYINT},
     		</if>
-        </set>
+			<if test="editCount != null">
+				edit_count = #{editCount,jdbcType=TINYINT},
+			</if>
+			<if test="assignStatus != null">
+				assign_status = #{assignStatus,jdbcType=TINYINT},
+			</if>
+			<if test="auditorUserId != null">
+				auditor_user_id = #{auditorUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="assignerUserId != null">
+				assigner_user_id = #{assignerUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="auditRemark != null">
+				audit_remark = #{auditRemark,jdbcType=VARCHAR},
+			</if>
+			<if test="assignerDate != null">
+				assigner_date = #{assignerDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="auditDate != null">
+				audit_date = #{auditDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
         where kid = #{kid,jdbcType=BIGINT}
     </update>
     
@@ -393,10 +442,44 @@
     </select>
 
 	<!-- 管理后台查询待审核 -->
-    <select id="selectPendingForAdmin" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
+    <select id="selectAuditForAdmin" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
 		select
 		<include refid="Base_Column_List"/>
-        from yryz_draft WHERE draft_status = 1
+        from yryz_draft
+		WHERE 1=1
+
+		<if test="assignerBeginDate != null and assignerBeginDate != ''">
+			AND assigner_date >= #{assignerBeginDate,jdbcType=TIMESTAMP}
+		</if>
+
+		<if test="assignerEndDate != null and assignerEndDate != ''">
+			AND assigner_date &lt;= #{assignerEndDate,jdbcType=TIMESTAMP}
+		</if>
+
+		<if test="auditBeginDate != null and auditBeginDate != ''">
+			AND audit_date >= #{auditBeginDate,jdbcType=TIMESTAMP}
+		</if>
+
+		<if test="auditEndDate != null and auditEndDate !=''">
+			AND audit_date &lt;= #{auditEndDate,jdbcType=TIMESTAMP}
+		</if>
+
+		<if test="editCount != null and editCount != 0 ">
+			AND edit_count = #{editCount}
+		</if>
+
+		<if test="draftStatus != null">
+			AND draft_status = #{draftStatus}
+		</if>
+
+		<if test="assignStatus != null">
+			AND assign_status = #{assignStatus}
+		</if>
+
+		<if test="auditorUserId != null and auditorUserId !=''">
+			AND auditor_user_id = #{auditorUserId}
+		</if>
+
 		<if test="createUserIds != null">
 			AND create_user_id IN
 			<foreach  item="item" collection="createUserIds" index="index"  open="(" separator="," close=")">
@@ -415,27 +498,6 @@
 		</if>
     </select>
 
-	<!-- 管理后台查询未通过 -->
-    <select id="selectNotPassForAdmin" parameterType="com.yryz.writer.modules.draft.dto.DraftDto" resultType="com.yryz.writer.modules.draft.entity.Draft">
-		select
-		<include refid="Base_Column_List"/>
-		from yryz_draft WHERE draft_status = 2
-		<if test="createUserIds != null">
-			AND create_user_id IN
-			<foreach  item="item" collection="createUserIds" index="index"  open="(" separator="," close=")">
-				#{item}
-			</foreach>
-		</if>
-		<if test="appId != null">
-			AND app_id = #{appId,jdbcType=BIGINT}
-		</if>
-		<if test="title != null and title != ''">
-			AND title LIKE CONCAT('%',#{title},'%')
-		</if>
-		<if test="orderStr != null and orderStr != ''">
-			${orderStr}
-		</if>
-    </select>
 
     <select id="selectWriterByKid" parameterType="java.lang.String" resultType="com.yryz.writer.modules.draft.vo.DraftVo">
 		SELECT
