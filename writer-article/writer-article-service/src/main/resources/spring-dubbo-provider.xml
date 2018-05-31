@@ -21,4 +21,6 @@
     <dubbo:service interface="com.yryz.writer.modules.articlelabel.AppAritcleLableApi" ref="articleLabelProvider" />
 
     <dubbo:service interface="com.yryz.writer.modules.articleclassify.AppArticleClassifyApi" ref="articleClassifyProvider" />
+
+    <dubbo:service interface="com.yryz.writer.modules.trian.api.WriterTrianApi" ref="writerTrianProvider" />
 </beans>

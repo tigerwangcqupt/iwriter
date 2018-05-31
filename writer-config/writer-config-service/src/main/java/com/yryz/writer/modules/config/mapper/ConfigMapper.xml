@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.config.dao.persistence.ConfigDao">
+
+    <!--Base_Column_List-->
+    <sql id="Base_Column_List">id,comment_value,comment_name,comment_type
+    </sql>
+
+    <!-- 查询配置列表 -->
+    <select id="getList" parameterType="com.yryz.writer.modules.config.entity.Config"
+            resultType="com.yryz.writer.modules.config.entity.Config">
+        select
+        <include refid="Base_Column_List"/>
+        from yryz_config where 1=1
+        <if test=" commentValue!= null and  commentValue!= ''">
+            and comment_value = #{commentValue,jdbcType=VARCHAR}
+        </if>
+        <if test=" commentName!= null and  commentName!= ''">
+            and comment_name = #{commentName,jdbcType=VARCHAR}
+        </if>
+        <if test=" commentType!= null and  commentType!= ''">
+            and comment_type = #{commentType,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+</mapper>
