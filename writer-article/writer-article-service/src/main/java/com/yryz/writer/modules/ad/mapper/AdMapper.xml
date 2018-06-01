@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yryz.writer.modules.ad.dao.persistence.AdDao">
+
+    <select id="getList" parameterType="com.yryz.writer.modules.ad.dto.AdDto"
+            resultType="com.yryz.writer.modules.ad.entity.Ad">
+        select * from yryz_ad T WHERE 1=1
+        <if test="adTitle != null and adTitle!= ''">
+            AND ad_title like CONCAT('%',trim(#{adTitle,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="adKeyword != null and adKeyword!= ''">
+            AND ad_keyword = trim(#{adKeyword,jdbcType=VARCHAR})
+        </if>
+        <if test="startTime != null">
+            AND (start_time &gt;= #{startTime,jdbcType=TIMESTAMP} OR end_time &gt;= #{startTime,jdbcType=TIMESTAMP})
+        </if>
+        <if test="endTime != null">
+            AND (start_time &lt;= #{endTime,jdbcType=TIMESTAMP} OR end_time &lt;= #{endTime,jdbcType=TIMESTAMP})
+        </if>
+        <if test="status != null and status == 1">
+            AND start_time &gt; DATE_FORMAT(NOW(),'%Y-%m-%d') AND shelve_flag = 0
+        </if>
+        <if test="status != null and status == 2">
+            AND start_time &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d') AND end_time &gt;= DATE_FORMAT(NOW(),'%Y-%m-%d') AND shelve_flag = 0
+        </if>
+        <if test="status != null and status == 3">
+            AND end_time &lt; DATE_FORMAT(NOW(),'%Y-%m-%d') AND shelve_flag = 0
+        </if>
+        <if test="status != null and status == 4">
+            AND shelve_flag = 1
+        </if>
+        ORDER BY T.sort ASC
+    </select>
+</mapper>
