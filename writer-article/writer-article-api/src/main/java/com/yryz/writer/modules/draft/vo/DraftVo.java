@@ -1,8 +1,11 @@
 package com.yryz.writer.modules.draft.vo;
 
+import com.yryz.writer.modules.draft.entity.DraftAudit;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author luohao
@@ -165,6 +168,75 @@ public class DraftVo implements Serializable {
 
     //文章待上架状态
     private Integer waitShelve;
+
+    //审核通过结果备注
+    private String auditRemark;
+
+    //审核人员
+    private String auditorUserId;
+
+    //审核人员名称
+    private String auditorUserName;
+    /**
+     * 审核记录
+     */
+    private List<DraftAudit> draftAudits;
+
+    /**
+     * 派稿状态
+     */
+    private Integer assignStatus;
+
+    private Integer editCount;
+
+
+    public Integer getEditCount() {
+        return editCount;
+    }
+
+    public void setEditCount(Integer editCount) {
+        this.editCount = editCount;
+    }
+
+    public String getAuditorUserId() {
+        return auditorUserId;
+    }
+
+    public void setAuditorUserId(String auditorUserId) {
+        this.auditorUserId = auditorUserId;
+    }
+
+    public String getAuditorUserName() {
+        return auditorUserName;
+    }
+
+    public void setAuditorUserName(String auditorUserName) {
+        this.auditorUserName = auditorUserName;
+    }
+
+    public Integer getAssignStatus() {
+        return assignStatus;
+    }
+
+    public void setAssignStatus(Integer assignStatus) {
+        this.assignStatus = assignStatus;
+    }
+
+    public List<DraftAudit> getDraftAudits() {
+        return draftAudits;
+    }
+
+    public void setDraftAudits(List<DraftAudit> draftAudits) {
+        this.draftAudits = draftAudits;
+    }
+
+    public String getAuditRemark() {
+        return auditRemark;
+    }
+
+    public void setAuditRemark(String auditRemark) {
+        this.auditRemark = auditRemark;
+    }
 
     public Integer getShelveFlag() {
         return shelveFlag;

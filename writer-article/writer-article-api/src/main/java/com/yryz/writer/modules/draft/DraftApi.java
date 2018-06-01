@@ -60,4 +60,14 @@ public interface DraftApi {
 
 
     RpcResponse<DraftVo> detailInfo(Long kid);
+
+
+    /**
+     * 设置审核人员
+     * @param kids              稿件
+     * @param auditorUserId     审核人员
+     * @param assignerUserId    派稿人员
+     * @return
+     */
+    RpcResponse<Integer> setAuditorUser(List<Long> kids,String auditorUserId,String assignerUserId);
 }

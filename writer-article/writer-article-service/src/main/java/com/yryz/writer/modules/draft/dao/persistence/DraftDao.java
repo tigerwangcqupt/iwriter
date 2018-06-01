@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.draft.dao.persistence;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.modules.draft.entity.Draft;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.common.dao.BaseDao;
@@ -38,11 +39,12 @@ public interface DraftDao extends BaseDao {
     //待上架
     List<Draft> selectWaitShelve(DraftDto draftDto);
 
-    //管理后台查询待审核
-    List<Draft> selectPendingForAdmin(DraftDto draftDto);
+    //管理后台审核
+    List<Draft> selectAuditForAdmin(DraftDto draftDto);
 
-    //管理后台查询未通过
-    List<Draft> selectNotPassForAdmin(DraftDto draftDto);
+
+    Integer setAuditorUser(@Param("kids") List<Long> kids, @Param("auditorUserId")String auditorUserId, @Param("assignerUserId")String assignerUserId);
+
 
     DraftVo selectWriterByKid(@Param("kid") String kid);
 

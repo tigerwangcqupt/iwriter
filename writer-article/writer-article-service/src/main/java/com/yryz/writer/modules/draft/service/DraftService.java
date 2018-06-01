@@ -1,5 +1,6 @@
 package com.yryz.writer.modules.draft.service;
 
+import com.yryz.component.rpc.RpcResponse;
 import com.yryz.writer.common.service.BaseService;
 import com.yryz.writer.modules.draft.dto.DraftDto;
 import com.yryz.writer.modules.draft.entity.Draft;
@@ -32,4 +33,6 @@ public interface DraftService extends BaseService {
     List<UserVo> selectUserByUserName(String userName);
 
     DraftVo detailInfo(Long kid);
+
+    Integer setAuditorUser(List<Long> kids, String auditorUserId, String assignerUserId);
 }
