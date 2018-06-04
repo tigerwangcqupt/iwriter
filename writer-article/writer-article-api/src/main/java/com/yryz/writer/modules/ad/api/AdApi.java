@@ -13,5 +13,24 @@ import com.yryz.writer.modules.ad.entity.Ad;
  */
 public interface AdApi {
 
+    /**
+     * 查询-带分页
+     * @param adDto
+     * @return
+     */
     RpcResponse<PageList<Ad>> getList(AdDto adDto);
+
+    /**
+     * 新增
+     * @param ad
+     * @return
+     */
+    RpcResponse<Integer> insert(Ad ad);
+
+    /**
+     * 修改
+     * @param ad
+     * @return
+     */
+    RpcResponse<Integer> update(Ad ad);
 }

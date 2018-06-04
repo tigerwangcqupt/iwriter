@@ -27,5 +27,13 @@ public class adProvider implements AdApi {
         return ResponseModel.returnObjectSuccess(adService.getList(adDto));
     }
 
+    @Override
+    public RpcResponse<Integer> insert(Ad ad) {
+        return ResponseModel.returnObjectSuccess(adService.insert(ad));
+    }
 
+    @Override
+    public RpcResponse<Integer> update(Ad ad) {
+        return ResponseModel.returnObjectSuccess(adService.update(ad));
+    }
 }

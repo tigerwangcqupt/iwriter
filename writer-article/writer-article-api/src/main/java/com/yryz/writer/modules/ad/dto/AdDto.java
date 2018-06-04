@@ -39,7 +39,7 @@ public class AdDto extends PageList {
     private Byte shelveFlag;
 
     /**
-     * 1.待开始，2.进行中，3.已下架
+     * 1.待开始，2.进行中，3.已结束，4.已下架
      */
     private Integer status;
 
