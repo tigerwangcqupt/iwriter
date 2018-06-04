@@ -88,4 +88,8 @@
     <dubbo:reference id="writerTrianApi"
                      interface="com.yryz.writer.modules.trian.api.WriterTrianApi" registry="yryz-new" check="false" timeout="10000"
                      retries="0"/>
+
+    <dubbo:reference id="adApi"
+                     interface="com.yryz.writer.modules.ad.api.AdApi" registry="yryz-new" check="false" timeout="10000"
+                     retries="0"/>
 </beans>
