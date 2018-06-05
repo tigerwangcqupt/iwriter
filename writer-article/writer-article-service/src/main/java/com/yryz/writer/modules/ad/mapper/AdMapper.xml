@@ -18,14 +18,14 @@
             AND (start_time &lt;= #{endTime,jdbcType=TIMESTAMP} OR end_time &lt;= #{endTime,jdbcType=TIMESTAMP})
         </if>
         <if test="status != null and status == 1">
-            AND start_time &gt; DATE_FORMAT(NOW(),'%Y-%m-%d') AND shelve_flag = 0
+            AND start_time &gt; DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') AND shelve_flag = 0
         </if>
         <if test="status != null and status == 2">
-            AND start_time &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d') AND end_time &gt;= DATE_FORMAT(NOW(),'%Y-%m-%d') AND
+            AND start_time &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') AND end_time &gt;= DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') AND
             shelve_flag = 0
         </if>
         <if test="status != null and status == 3">
-            AND end_time &lt; DATE_FORMAT(NOW(),'%Y-%m-%d') AND shelve_flag = 0
+            AND end_time &lt; DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') AND shelve_flag = 0
         </if>
         <if test="status != null and status == 4">
             AND shelve_flag = 1
