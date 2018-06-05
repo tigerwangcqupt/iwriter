@@ -73,10 +73,23 @@
                 <version>1.8.11</version>
             </dependency>
 
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     
     <properties>
+        <dubbo.version>2.6.0</dubbo.version>
         <slf4j-api.version>1.7.7</slf4j-api.version>
         <logback.version>1.1.8</logback.version>
         <junit.version>4.12</junit.version>
