@@ -261,6 +261,10 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 draft.setKid(kid);
                 //新增时，修改次数为1
                 draft.setEditCount(1);
+                draft.setAssignStatus(0);
+                draft.setAuditRemark("");
+                draft.setAuditorUserId("");
+                draft.setAssignerUserId("");
                 draftDao.insertByPrimaryKeySelective(draft);
             } else {
                 /**
@@ -271,6 +275,9 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
                 if(draft.getDraftStatus()==1){
                     //查询数据(修改次数加1）
                     Draft dbRecord = draftDao.selectByKid(Draft.class,draft.getKid());
+                    if(dbRecord==null){
+                        throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "稿件不存在", "稿件不存在");
+                    }
                     if(EDIT_MAX_COUNT <= dbRecord.getEditCount()){
                         throw new YyrzPcException(ExceptionEnum.BusiException.getCode(), "已超过稿件最大修改次数", "已超过稿件最大修改次数");
                     }
