@@ -176,6 +176,9 @@
         <if test="shelveFlag != null">
 			shelve_flag,
 	    </if>
+		<if test="editCount != null">
+			edit_count,
+		</if>
 	    </trim>
 	    <trim prefix="values (" suffix=")" suffixOverrides=",">
         <if test="kid != null">
@@ -253,6 +256,9 @@
         <if test="shelveFlag != null">
 			#{shelveFlag,jdbcType=TINYINT},
 	    </if>
+		<if test="editCount != null">
+			#{editCount,jdbcType=TINYINT},
+		</if>
 	    </trim>
 	</insert>
 
