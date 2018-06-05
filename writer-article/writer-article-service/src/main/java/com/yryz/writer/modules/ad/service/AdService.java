@@ -16,4 +16,6 @@ import org.springframework.stereotype.Repository;
 public interface AdService extends BaseService {
 
     PageList<Ad> getList(AdDto adDto);
+
+    Integer getMaxSort();
 }

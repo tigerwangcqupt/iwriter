@@ -21,7 +21,8 @@
             AND start_time &gt; DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') AND shelve_flag = 0
         </if>
         <if test="status != null and status == 2">
-            AND start_time &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') AND end_time &gt;= DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') AND
+            AND start_time &lt;= DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') AND end_time &gt;= DATE_FORMAT(NOW(),'%Y-%m-%d
+            %H:%i:%s') AND
             shelve_flag = 0
         </if>
         <if test="status != null and status == 3">
@@ -33,8 +34,10 @@
         ORDER BY T.sort ASC
     </select>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.yryz.writer.modules.ad.entity.Ad" >
-        insert into yryz_ad(<if test="id != null">ID,</if>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+            parameterType="com.yryz.writer.modules.ad.entity.Ad">
+        insert into yryz_ad(
+        <if test="id != null">ID,</if>
         ad_picture
         ,uri_type
         ,ad_display
@@ -123,4 +126,8 @@
         </if>
         where ID=#{id, jdbcType=NUMERIC}
     </update>
+
+    <select id="getMaxSort" resultType="java.lang.Integer">
+      select max(sort) from yryz_ad T WHERE shelve_flag = 0
+    </select>
 </mapper>

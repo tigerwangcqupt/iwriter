@@ -17,4 +17,6 @@ import java.util.List;
 public interface AdDao extends BaseDao {
 
     List<Ad> getList(AdDto adDto);
+
+    Integer getMaxSort();
 }

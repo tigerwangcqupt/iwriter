@@ -29,6 +29,9 @@ public class adProvider implements AdApi {
 
     @Override
     public RpcResponse<Integer> insert(Ad ad) {
+        //设置新增广告的默认排序在最后
+        Integer sort = adService.getMaxSort();
+        ad.setSort(sort + 1);
         return ResponseModel.returnObjectSuccess(adService.insert(ad));
     }
 
