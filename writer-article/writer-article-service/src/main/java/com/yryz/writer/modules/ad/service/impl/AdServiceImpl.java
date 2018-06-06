@@ -36,4 +36,10 @@ public class AdServiceImpl extends BaseServiceImpl implements AdService {
         List<Ad> list = adDao.getList(adDto);
         return new PageModel<Ad>().getPageList(list);
     }
+
+    @Override
+    public Integer getMaxSort() {
+        return adDao.getMaxSort();
+    }
+
 }
