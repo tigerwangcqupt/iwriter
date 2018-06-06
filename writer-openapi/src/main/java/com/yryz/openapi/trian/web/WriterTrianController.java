@@ -59,7 +59,7 @@ public class WriterTrianController extends BaseController {
                         ExceptionEnum.ValidateException.getErrorMsg()));
             }
             //校验验证码
-            RpcResponse<Boolean> smsRes = smsCommonApi.checkVerifyCode(writerTrianDto.getPhone(), SmsTypeEnum.CODE_OTHER, writerTrianDto.getVerifyCode());
+            RpcResponse<Boolean> smsRes = smsCommonApi.checkVerifyCode(writerTrianDto.getPhone(), SmsTypeEnum.CODE_UNKNOW, writerTrianDto.getVerifyCode());
             if (smsRes.getData() != null && smsRes.getData()) {
                 WriterTrian writerTrian = new WriterTrian();
                 BeanUtils.copyProperties(writerTrianDto, writerTrian);
