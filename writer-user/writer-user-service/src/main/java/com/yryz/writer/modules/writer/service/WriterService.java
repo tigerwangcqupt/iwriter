@@ -79,4 +79,10 @@ public interface WriterService extends BaseService {
 
    String getUserPhoneVeriCode(String custId);
 
+   Integer validateUserLoginErrorCount(Writer user,String type);
+
+   Integer addUserLoginErrorCount(Writer user,String type);
+
+   Integer updateUserLoginErrorCount(Writer user,String type);
+
 }

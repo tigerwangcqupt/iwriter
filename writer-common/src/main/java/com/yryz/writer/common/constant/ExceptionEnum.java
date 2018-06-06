@@ -48,6 +48,7 @@ public enum ExceptionEnum {
     UN_SET_PASSWORD_("5028", "您未设置密码，请使用短信登录！", "您未设置密码，请使用短信登录！"),
     CELL_PHONE_NUMBER_ILLEGAL("5029", "手机号码不合法！", "手机号码不合法！"),
     ACCOUNT_PASSWORD_EQUAL_NEW_PASSWORD("5030", "请设置和原密码不一样的新密码！", "请设置和原密码不一样的新密码！"),
+    USER_LOGIN_ERROR_COUNT("5031", "您的登录密码已连续%s次输入错，请尝试其它的登录方式！", "您的登录密码已连续%s次输入错，请尝试其它的登录方式！"),
 
     ADD_OWNER_EXCEPTION("6001", "增加资金主体异常", "增加资金主体异常"),
 

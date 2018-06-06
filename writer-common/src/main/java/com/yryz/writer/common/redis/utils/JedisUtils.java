@@ -1061,4 +1061,23 @@ public class JedisUtils {
 		return ObjectUtils.unserialize(bytes);
 	}
 
+
+	/**
+	 * 获取redis ttl
+	 * @param key
+	 * @return
+	 */
+	public static Long ttl(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = getResource();
+		} catch (Exception e) {
+			logger.warn("ttl {}", key, e);
+		} finally {
+			returnResource(jedis);
+		}
+
+		return jedis.ttl(key);
+	}
+
 }

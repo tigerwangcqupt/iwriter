@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +40,7 @@ import com.yryz.writer.modules.writer.dto.WriterDto;
 import com.yryz.writer.modules.writer.service.WriterService;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -65,6 +63,12 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
 
     @Autowired
     private BankApi bankApi;
+
+    @Value("${user.login.userLoginErrorCount}")
+    private Integer userLoginErrorCount;
+
+    @Value("${user.login.userLoginErrorTime}")
+    private Integer userLoginErrorTime;
 
 
     public final static int LOCK_EXPIRE_DEFAULT = 60;
@@ -349,4 +353,85 @@ public class WriterServiceImpl extends BaseServiceImpl implements WriterService 
     public List<WriterAdminRefProfit> selectAllAdminProfitList(WriterDto writerDto) {
         return writerDao.selectAdminProfitList(writerDto);
     }
+
+
+
+
+    @Override
+    public Integer validateUserLoginErrorCount(Writer user,String type) {
+        String key = "yryz_writer_userLoginCount_"  + type + "_" + user.getPhone();
+        String keyLock = "yryz_writer_userLoginCount_time_lock_" + type + "_" + user.getPhone();
+
+        //test
+        //JedisUtils.set( keyLock,"lock",8);
+
+        Integer count = 0;
+        String value = JedisUtils.get(key);
+        if(!StringUtils.isBlank(value)){
+            count = Integer.parseInt(value);
+        }
+
+        //每10分钟，重新计算时间，次数也清零
+        Long time = JedisUtils.ttl(keyLock);
+        if(time != null && time.intValue() <= 0 && count >= userLoginErrorCount){
+            updateUserLoginErrorCount(user,type);
+            return 1;
+        }
+
+
+        //如果超过设置的最大登录次数，则给与文案提示信息
+        if(count >= userLoginErrorCount){
+            throw new YyrzPcException(ExceptionEnum.USER_LOGIN_ERROR_COUNT.getCode(),
+                    String.format(ExceptionEnum.USER_LOGIN_ERROR_COUNT.getMsg(),userLoginErrorCount),
+                    String.format(ExceptionEnum.USER_LOGIN_ERROR_COUNT.getErrorMsg(),userLoginErrorCount));
+        }
+
+        return 1;
+    }
+
+    /**
+     * 添加用户登录次数
+     * @param user
+     * @return
+     */
+    @Override
+    public Integer addUserLoginErrorCount(Writer user,String type) {
+        String key = "yryz_writer_userLoginCount_"  + type + "_" + user.getPhone();
+        String keyLock = "yryz_writer_userLoginCount_time_lock_" + type + "_" + user.getPhone();
+
+        String value = JedisUtils.get(key);
+
+        Integer count = 0;
+        if(!StringUtils.isBlank(value)){
+            count = Integer.parseInt(value);
+        }
+
+        count++;
+
+        JedisUtils.set(key,count+"",0);
+
+        //第三次的时候，开始计算时间，存放登录错误次数
+        if(count == userLoginErrorCount){
+            JedisUtils.set( keyLock,"lock",3600 * userLoginErrorTime);
+        }
+
+        return 1;
+    }
+
+    /**
+     * 修改用户登录次数
+     * @param user
+     * @return
+     */
+    @Override
+    public Integer updateUserLoginErrorCount(Writer user,String type) {
+        String key = "yryz_writer_userLoginCount_"  + type + "_" + user.getPhone();
+        String keyLock = "yryz_writer_userLoginCount_time_lock_" + type + "_" + user.getPhone();
+
+        JedisUtils.del(key);
+        JedisUtils.del(keyLock);
+        return 1;
+    }
+
+
 }

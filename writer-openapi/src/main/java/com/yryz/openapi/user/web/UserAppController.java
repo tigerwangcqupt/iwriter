@@ -14,6 +14,7 @@ import com.yryz.writer.common.exception.BaseException;
 import com.yryz.writer.common.exception.YyrzPcException;
 import com.yryz.writer.common.utils.ImageUtils;
 import com.yryz.writer.common.web.BaseController;
+import com.yryz.writer.common.web.ResponseModel;
 import com.yryz.writer.modules.platform.SmsCommonApi;
 import com.yryz.writer.modules.platform.constants.SmsTypeEnum;
 import com.yryz.writer.modules.platform.dto.CustRegisterDto;
@@ -306,21 +307,25 @@ public class UserAppController extends BaseController {
                     ExceptionEnum.IMAGE_CODE_ERROR.getErrorMsg());
         }
 
+        //查询用户
+        RpcResponse<Writer> userRpcResponse = writerApi.selectByPhone(custRegisterDto.getCustPhone());
+        Writer user = isSuccess(userRpcResponse);
+        if (user == null) {
+            throw new YyrzPcException(
+                    ExceptionEnum.USER_UNREGISTERED.getCode(),
+                    ExceptionEnum.USER_UNREGISTERED.getMsg(),
+                    ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
+        }
+
+        //判断是否10分钟内，登录错误次数超过三次
+        RpcResponse<Integer> userLoginErrorCountValidateRpcResponse = writerApi.validateUserLoginErrorCount(user,"1");
+        isSuccess(userLoginErrorCountValidateRpcResponse);
+
+
         //校验验证码
         RpcResponse<Boolean> rpcResponse = smsCommonApi.checkVerifyCode(custRegisterDto.getCustPhone(), custRegisterDto.getCode(), custRegisterDto.getVeriCode());
         Boolean aBoolean = isSuccessNotNull(rpcResponse);
         if (aBoolean){
-
-            //查询用户
-            RpcResponse<Writer> userRpcResponse = writerApi.selectByPhone(custRegisterDto.getCustPhone());
-            Writer user = isSuccess(userRpcResponse);
-            if (user == null) {
-                throw new YyrzPcException(
-                        ExceptionEnum.USER_UNREGISTERED.getCode(),
-                        ExceptionEnum.USER_UNREGISTERED.getMsg(),
-                        ExceptionEnum.USER_UNREGISTERED.getErrorMsg());
-            }
-
             RpcResponse<String> tokenRpcResponse = writerApi.addUserToken(String.valueOf(user.getKid()));
             String token = isSuccess(tokenRpcResponse);
             authInfoVo.setPhone(custRegisterDto.getCustPhone());
@@ -329,53 +334,20 @@ public class UserAppController extends BaseController {
             authInfoVo.setHeadImg(user.getHeadImg());
             authInfoVo.setNickName(user.getNickName());
 
+            //登录成功，则将用户登录错误次数在redis 置为0
+            writerApi.updateUserLoginErrorCount(user,"2");
+
             return new DubboResponse<WriterUserVo>(true, "200", "success", "", authInfoVo);
         }
+
+
         throw new YyrzPcException(
                 ExceptionEnum.PIN_ERROR.getCode(),
                 ExceptionEnum.PIN_ERROR.getMsg(),
                 ExceptionEnum.PIN_ERROR.getErrorMsg());
     }
 
-    /**
-     * 获取图形验证码图
-     * @param key
-     * @param response
-     */
-    @RequestMapping(value = "image", method = {RequestMethod.GET})
-    @NotLogin
-    public void image(String key,HttpServletResponse response){
 
-        Assert.notNull(key, "唯一标识不能为空！");
-        Assert.hasText(key, "唯一标识不能为空！");
-
-        //设置服务器到客户端的响应内容类型-〉mime图片格式
-        response.setContentType("image/jpeg");
-
-        //设置客户端浏览器显示图像不缓存
-        response.setHeader("pragma", "no-cache");
-        response.setHeader("cache-control", "no-cache");
-        response.setDateHeader("expires", 0);
-        try {
-            //查询用户
-            RpcResponse<String> userRpcResponse = writerApi.getImageCode(key);
-            String code = isSuccess(userRpcResponse);
-            ImageUtils.getSmsImgByCode(code, response);
-        }  catch (BaseException e) {
-            return;
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            return;
-        } finally {
-            try {
-                response.getOutputStream().flush();
-                response.getOutputStream().close();
-                return;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     /**
@@ -432,11 +404,24 @@ public class UserAppController extends BaseController {
                         ExceptionEnum.UN_SET_PASSWORD_.getErrorMsg());
             }
 
+
+            //判断是否10分钟内，登录错误次数超过三次
+            RpcResponse<Integer> userLoginErrorCountValidateRpcResponse = writerApi.validateUserLoginErrorCount(user,"1");
+            isSuccess(userLoginErrorCountValidateRpcResponse);
+
             if (password.equals(user.getPwd())) {
+
                 RpcResponse<String> tokenRpcResponse = writerApi.addUserToken(String.valueOf(user.getKid()));
                 String token = isSuccess(tokenRpcResponse);
                 authInfoVo.setToken(token);
+
+                //登录成功，则将用户登录错误次数在redis 置为0
+                writerApi.updateUserLoginErrorCount(user,"1");
             } else {
+                //判断是否10分钟内，登录错误次数超过三次
+                RpcResponse<Integer> userLoginErrorCountRpcResponse = writerApi.addUserLoginErrorCount(user,"1");
+                isSuccess(userLoginErrorCountRpcResponse);
+
                 throw new YyrzPcException(
                         ExceptionEnum.PASSWORD_ERROR.getCode(),
                         ExceptionEnum.PASSWORD_ERROR.getMsg(),
@@ -451,6 +436,45 @@ public class UserAppController extends BaseController {
         return new DubboResponse<WriterUserVo>(true, "200", "success", "", authInfoVo);
     }
 
+    /**
+     * 获取图形验证码图
+     * @param key
+     * @param response
+     */
+    @RequestMapping(value = "image", method = {RequestMethod.GET})
+    @NotLogin
+    public void image(String key,HttpServletResponse response){
+
+        Assert.notNull(key, "唯一标识不能为空！");
+        Assert.hasText(key, "唯一标识不能为空！");
+
+        //设置服务器到客户端的响应内容类型-〉mime图片格式
+        response.setContentType("image/jpeg");
+
+        //设置客户端浏览器显示图像不缓存
+        response.setHeader("pragma", "no-cache");
+        response.setHeader("cache-control", "no-cache");
+        response.setDateHeader("expires", 0);
+        try {
+            //查询用户
+            RpcResponse<String> userRpcResponse = writerApi.getImageCode(key);
+            String code = isSuccess(userRpcResponse);
+            ImageUtils.getSmsImgByCode(code, response);
+        }  catch (BaseException e) {
+            return;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return;
+        } finally {
+            try {
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * 修改密码
@@ -541,6 +565,7 @@ public class UserAppController extends BaseController {
                 writer.setKid(user.getKid());
                 writer.setPwd(custRegisterDto.getCustPwd());
                 writerApi.updateByPrimaryKeySelective(writer);
+
 
                 //自动登录，获取token
                 RpcResponse<String> tokenRpcResponse = writerApi.getUserToken(String.valueOf(user.getKid()));

@@ -384,4 +384,36 @@ public class WriterProvider implements WriterApi {
 		}
 	}
 
+
+
+
+	@Override
+	public RpcResponse<Integer> validateUserLoginErrorCount(Writer user,String type){
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.validateUserLoginErrorCount(user,type));
+		} catch (Exception e) {
+			logger.error("验证用户登录错误次数失败！", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Integer> addUserLoginErrorCount(Writer user,String type){
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.addUserLoginErrorCount(user,type));
+		} catch (Exception e) {
+			logger.error("添加用户登录错误次数失败！", e);
+			return ResponseModel.returnException(e);
+		}
+	}
+
+	@Override
+	public RpcResponse<Integer> updateUserLoginErrorCount(Writer user,String type){
+		try {
+			return ResponseModel.returnObjectSuccess(writerService.updateUserLoginErrorCount(user,type));
+		} catch (Exception e) {
+			logger.error("修改用户登录错误次数失败！", e);
+			return ResponseModel.returnException(e);
+		}
+	}
 }

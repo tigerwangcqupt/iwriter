@@ -162,4 +162,12 @@ public interface WriterApi {
 	RpcResponse<String> addUserPhoneVeriCode(String custId,String veriCode);
 
 	RpcResponse<String> getUserPhoneVeriCode(String custId);
+
+
+
+	RpcResponse<Integer> validateUserLoginErrorCount(Writer user,String type);
+
+	RpcResponse<Integer> addUserLoginErrorCount(Writer user,String type);
+
+	RpcResponse<Integer> updateUserLoginErrorCount(Writer user,String type);
 }
