@@ -259,8 +259,12 @@ public class DraftServiceImpl extends BaseServiceImpl implements DraftService {
             if (kid == null) {
                 kid = idAPI.getId("yryz_draft");
                 draft.setKid(kid);
-                //新增时，修改次数为1
-                draft.setEditCount(1);
+                //如果是新增时直接发稿，则修改次数设置为1，存草稿否则为0
+                if(draft.getDraftStatus()==1){
+                    draft.setEditCount(1);
+                }else{
+                    draft.setEditCount(0);
+                }
                 draft.setAssignStatus(0);
                 draft.setAuditRemark("");
                 draft.setAuditorUserId("");
