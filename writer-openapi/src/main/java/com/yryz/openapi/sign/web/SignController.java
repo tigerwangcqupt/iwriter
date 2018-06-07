@@ -44,10 +44,10 @@ public class SignController extends BaseController {
 
 
         //originText：a=1&b=2&timeStamp=123456
-        String originText = (String) map.get("originText");
-
-        Assert.notNull(originText, "原文不能为空");
+        Object originTextData =  map.get("originText");
+        Assert.notNull(originTextData, "原文不能为空");
         SignInfo signInfo = new SignInfo();
+        String originText = originTextData.toString();
         signInfo.setOriginText(originText);
         signInfo.setSign(Md5Utils.encode(originText+appSercet));
 
